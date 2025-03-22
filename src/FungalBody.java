@@ -1,10 +1,23 @@
-public class FungalBody {
-    private int currLevel;
-    private int shotSporesNum;
+public class FungalBody extends Entity {
 
-    public void shootSpore(){}
+    public FungalBody() {
+        super();
+        System.out.println("\t new FungalBody");
+    }
 
-    public void levelUp(){}
+    public void shootSpore() {
 
-    public void keepHyphalAlive(){}
+    }
+
+    public void levelUp() {
+
+    }
+
+    public void keepHyphalAlive() {
+
+    }
+
+    public void update() {
+        
+    }
 }

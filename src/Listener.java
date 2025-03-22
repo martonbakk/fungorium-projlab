@@ -1,1 +1,3 @@
-public interface Listener { abstract void update(); }
+public interface Listener {
+    abstract void update();
+}

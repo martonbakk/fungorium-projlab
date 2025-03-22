@@ -1,17 +1,21 @@
-import java.util.ArrayList;
-import java.util.List;
+
 
 public class GameLogic {
-    private List<Listener> listeners;
-    private Map map;
 
-    public GameLogic() {}
-
-    public void startGame() {}
-
-    public void timeTick() {}
-
-    public void addListener(Listener listener) {
-       
+    public GameLogic() {
+        System.out.println("\tnew GameLogic");
     }
+
+    public void startGame() {
+        System.out.println("-> generateMap()");
+    }
+
+    public void timeTick() {
+        System.out.println("-> timeTick()");
+    }
+
+    public void addListener() {
+        System.out.println("-> Listener added");
+    }
+
 }
