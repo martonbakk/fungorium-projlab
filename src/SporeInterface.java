@@ -1,4 +1,4 @@
-public interface ISpore {
+public interface SporeInterface {
 
     public void activateEffect();
 

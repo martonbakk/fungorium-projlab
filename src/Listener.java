@@ -1,7 +1,1 @@
-
-
-
-
-public interface Listener {
-    void update(); // Absztrakt metódus
-}
+public interface Listener { abstract void update(); }
