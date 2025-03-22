@@ -1,21 +1,23 @@
 import java.util.ArrayList;
 import java.util.List;
 
+public class GameLogic {
+    private List<Listener> listeners;
+    private Map map;
 
-
-public class GameLogic implements Listener{
-
-    private List<Entity> entityList = new ArrayList<>();
-    private Map gameMap;
-
-
-    public void startGame(){
-
+    public GameLogic() {
+        
     }
 
-    public void timeTick(){
-
+    public void startGame() {
+       
     }
 
+    public void timeTick() {
+        
+    }
 
+    public void addListener(Listener listener) {
+       
+    }
 }
