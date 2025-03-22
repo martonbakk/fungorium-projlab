@@ -3,19 +3,11 @@ public class HyphalTecton extends Tecton {
     private int lifeTime;
     private FungalBody fungalBody;
 
-    public HyphalTecton(String id) {
-       
-    }
+    public HyphalTecton(String id) {}
 
-    public void growFungus() {
-        
-    }
+    public void growFungus() {}
 
-    public void speedUpDevelopment() {
-        
-    }
+    public void speedUpDevelopment() {}
 
-    public void aging() {
-       
-    }
+    public void aging() {}
 }

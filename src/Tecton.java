@@ -10,38 +10,19 @@ public class Tecton {
     private List<Spore> addSpores;
     private List<Spore> decreaseSpores;
 
-    public Tecton(String id) {
-        this.id = id;
-        this.splitChance = 0.0;
-        this.occupiedByInsect = false;
-        this.occupiedByFungus = false;
-        this.connectedNeighbours = new ArrayList<>();
-        this.addSpores = new ArrayList<>();
-        this.decreaseSpores = new ArrayList<>();
-    }
+    public Tecton(){}
 
-    public void addSpore(Spore spore) {
-         
-    }
+    public Tecton(String id) {}
 
-    public void decreaseSpore(Spore spore) {
-        
-    }
+    public void addSpore(Spore spore) {}
 
-    public void disconnectTecton(Tecton tc) {
-        
-    }
+    public void decreaseSpore(Spore spore) {}
 
-    public void connectTecton(Tecton tc) {
-         
-    }
+    public void disconnectTecton(Tecton tc) {}
 
-    // Getters and setters
-    public String getId() {
-        return new String(" ");
-    }
+    public void connectTecton(Tecton tc) {}
 
-    public List<Tecton> getConnectedNeighbours() {
-        return new List<Tecton>();
-    }
+    public String getId() { return null; }
+
+    public List<Tecton> getConnectedNeighbours() { return null;}
 }
