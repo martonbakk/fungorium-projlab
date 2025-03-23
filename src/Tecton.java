@@ -4,7 +4,7 @@ import java.util.List;
 public class Tecton {
 
     public Tecton(){
-        System.out.println("Tecton created");
+        System.out.println("new Tecton created");
     }
 
     public void addSpore() {
@@ -23,7 +23,5 @@ public class Tecton {
         System.out.println("Hyphal grew");
     }
 
-    public String getId() { return null; }
-
-    public List<Tecton> getConnectedNeighbours() { return null;}
+    public void runSpecialEffect(){}
 }
