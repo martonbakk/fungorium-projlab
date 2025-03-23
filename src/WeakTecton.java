@@ -1,12 +1,31 @@
+import java.util.Scanner;
+
 public class WeakTecton extends Tecton{
-    private boolean hyphalExistsHere;
+
+    public WeakTecton () {
+        System.out.println("new WeakTecton created");
+    }
+
 
     public void runSpecialEffect(){
-        if (this.hyphalExistsHere) {
+       
+        System.out.println("Is there a Hyphal on this Tecton? Y/N");
+
+        Scanner scanner = new Scanner(System.in);
+        String answer = scanner.nextLine();
+
+        if (answer.equals("Y")) {
+
             System.out.println("Hyphal cannot grow here");
-        }else {
+
+        }else if (answer.equals("N")){
+            
             System.out.println("-> connectTecton()");
-            this.connectTecton(null);
+            
+            this.connectTecton();
+        
+        } else {
+            System.out.println("Wrong Input!");
         }
     }
 }

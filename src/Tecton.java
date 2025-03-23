@@ -2,39 +2,26 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Tecton {
-    private String id;
-    private double splitChance;
-    private boolean occupiedByInsect;
-    private boolean occupiedByFungus;
-    private List<Tecton> connectedNeighbours;
-    private List<Spore> addSpores;
-    private List<Spore> decreaseSpores;
 
     public Tecton(){
-        System.out.println("Tecton created");
+        System.out.println("new Tecton created");
     }
 
-    public Tecton(String id) {
-        System.out.println("Tecton created");
-    }
-
-    public void addSpore(Spore spore) {
+    public void addSpore() {
         System.out.println("Spore added to tecton");
     }
 
-    public void decreaseSpore(Spore spore) {
+    public void decreaseSpore() {
         System.out.println("Spore disappeared from tecton");
     }
 
-    public void disconnectTecton(Tecton tc) {
+    public void disconnectTecton() {
         System.out.println("Hyphal disappeared");
     }
 
-    public void connectTecton(Tecton tc) {
+    public void connectTecton() {
         System.out.println("Hyphal grew");
     }
 
-    public String getId() { return null; }
-
-    public List<Tecton> getConnectedNeighbours() { return null;}
+    public void runSpecialEffect(){}
 }
