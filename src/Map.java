@@ -1,7 +1,7 @@
 import java.util.Scanner;
 
 public class Map {
-    public void generateMap(int player) {
+    public void generateMap() {
 
         System.out.println("Create Tectons:");
         Tecton t1 = new Tecton();
@@ -22,7 +22,7 @@ public class Map {
         FungalBody fgb1 = new FungalBody();
     }
 
-    public void splitTecton(Tecton tc) {
+    public void splitTecton() {
         Scanner scanner = new Scanner(System.in);
 
         System.out.println("-> splitTecton()");
