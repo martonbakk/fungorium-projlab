@@ -1,8 +1,8 @@
 public class HyphalProtectorSpore extends Spore{
 
-    public HyphalProtectorSpore(int nutritionValue) {
-        super(nutritionValue);
-        //TODO Auto-generated constructor stub
+    public HyphalProtectorSpore() {
+        super();
+        System.out.println("new HyphalProtectorSpore Created");
     }
 
 }

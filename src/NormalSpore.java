@@ -1,3 +1,6 @@
 public class NormalSpore extends Spore {
-    public NormalSpore(int nutritionValue) { super(nutritionValue); }
+    public NormalSpore() {
+        super();
+        System.out.println("new NormalSpore Created");
+    }
 }
