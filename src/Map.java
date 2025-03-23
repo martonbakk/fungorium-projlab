@@ -10,15 +10,15 @@ public class Map {
         NoFungusTecton nft1 = new NoFungusTecton();
 
         System.out.println("Create Spores");
-        NormalSpore nsp1 = new NormalSpore();
-        SlowSpore slowsp1 = new SlowSpore();
-        SpeedSpore speedp1 = new SpeedSpore();
-        StunSpore stunsp1 = new StunSpore();
-        HyphalProtectorSpore hpsp1 = new HyphalProtectorSpore();
-        HungerSpore hsp1 = new HungerSpore();
+        NormalSpore nsp1 = new NormalSpore(1);
+        SlowSpore slowsp1 = new SlowSpore(1);
+        SpeedSpore speedp1 = new SpeedSpore(1);
+        StunSpore stunsp1 = new StunSpore(1);
+        HyphalProtectorSpore hpsp1 = new HyphalProtectorSpore(1);
+        HungerSpore hsp1 = new HungerSpore(1);
 
         Insect i1 = new Insect();
-        Hyphal h1 = new Hyphal();
+        Hyphal h1 = new Hyphal("id");
         FungalBody fgb1 = new FungalBody();
     }
 
