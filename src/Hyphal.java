@@ -1,8 +1,8 @@
 public class Hyphal extends Entity {
 
-    public Hyphal(String id) {
+    public Hyphal() {
         super();
-        System.out.println("\tnew Hyphal");
+        System.out.println("new Hyphal");
     }
 
     public void growFungus() {
