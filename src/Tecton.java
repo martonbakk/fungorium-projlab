@@ -3,7 +3,10 @@ import java.util.List;
 
 public class Tecton {
 
+    
+
     ArrayList<Spore> spores = new ArrayList<>();
+    ArrayList<Tecton> neighbours = new ArrayList<>();
     ArrayList<Tecton> connectedNeighbours = new ArrayList<>();
 
     public Tecton(){
@@ -24,6 +27,11 @@ public class Tecton {
 
     public void connectTecton() {
         System.out.println("Hyphal grew");
+    }
+
+    public ArrayList<Tecton> getNeighborLisTecton(){
+        System.out.println("neighbour s list returned");
+        return neighbours;
     }
 
     public void runSpecialEffect(){}
