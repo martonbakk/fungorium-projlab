@@ -5,9 +5,9 @@ public class Tecton {
 
     
 
-    ArrayList<Spore> spores = new ArrayList<>();
-    ArrayList<Tecton> neighbours = new ArrayList<>();
-    ArrayList<Tecton> connectedNeighbours = new ArrayList<>();
+    public ArrayList<Spore> spores = new ArrayList<>();
+    public ArrayList<Tecton> neighbours = new ArrayList<>();
+    public ArrayList<Tecton> connectedNeighbours = new ArrayList<>();
 
     public Tecton(){
         System.out.println("new Tecton created");
@@ -29,9 +29,8 @@ public class Tecton {
         System.out.println("Hyphal grew");
     }
 
-    public ArrayList<Tecton> getNeighborLisTecton(){
+    public void getNeighborLisTecton(){
         System.out.println("neighbour s list returned");
-        return neighbours;
     }
 
     public void runSpecialEffect(){}
