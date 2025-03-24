@@ -1,6 +1,11 @@
-
+import java.util.ArrayList;
 
 public class GameLogic {
+
+    ArrayList<Entity> entity = new ArrayList<>();
+
+    ArrayList<Listener> listeners = new ArrayList<>();
+
 
     public GameLogic() {
         System.out.println("\tnew GameLogic");
