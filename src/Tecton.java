@@ -3,6 +3,9 @@ import java.util.List;
 
 public class Tecton {
 
+    ArrayList<Spore> spores = new ArrayList<>();
+    ArrayList<Tecton> connectedNeighbours = new ArrayList<>();
+
     public Tecton(){
         System.out.println("new Tecton created");
     }
