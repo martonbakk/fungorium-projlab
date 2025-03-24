@@ -2,12 +2,24 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Scanner;
 
+/**
+ * A Program osztály a játék fő belépési pontját biztosítja, és egy interaktív tesztkörnyezetet valósít meg.
+ * Lehetővé teszi különböző játékmechanizmusok (pl. rovar mozgása, spóra fogyasztása, gombafonal növesztése)
+ * tesztelését egy egyszerű konzolos felületen keresztül.
+ */
 public class Program {
 
+    /** A játékobjektumokat tároló HashMap, amely kulcs-érték párokban menti az objektumokat a nevük alapján. */
     private static HashMap<String, Object> objectsMap = new HashMap<>();
+
+    /**
+     * A program fő metódusa, amely elindítja a tesztkörnyezetet.
+     * Egy ciklusban inicializálja a játékobjektumokat, kiírja a tesztlehetőségeket, és a felhasználó
+     * választása alapján futtatja a megfelelő tesztesetet.
+     * @param args A parancssori argumentumok (jelenleg nem használt).
+     */
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
-        
         
         while (true) {
             initialize();
@@ -15,7 +27,7 @@ public class Program {
             
             String answer = scanner.nextLine();
 
-            switch(answer){
+            switch(answer) {
                 case "0":
                     return;
                 case "1":
@@ -55,6 +67,10 @@ public class Program {
         }
     }
 
+    /**
+     * Inicializálja a játékobjektumokat, például tektonokat, spórákat, rovarokat, gombafonalakat és gombatesteket.
+     * Az objektumokat a HashMap-be helyezi, hogy később könnyen elérhetők legyenek a tesztesetek számára.
+     */
     private static void initialize() {
         Tecton t1 = new Tecton();
         ToxicTecton tt1 = new ToxicTecton();
@@ -90,39 +106,67 @@ public class Program {
         objectsMap.put("Hyphal", h1);
         objectsMap.put("Hyphal2", h2);
         objectsMap.put("FungalBody", fgb1);
-        
     }
 
-    private static void splitTecton(){
+    /**
+     * Egy tekton kettéhasadását teszteli.
+     * Létrehoz egy Map objektumot, és meghívja annak splitTecton() metódusát.
+     */
+    private static void splitTecton() {
         Map map = new Map();
         map.splitTecton();
     }
 
-    private static void insectEatsSpore(){
+    /**
+     * Egy rovar spóra elfogyasztását teszteli.
+     * Lekéri a rovart a HashMap-ből, és meghívja annak eatSpore() metódusát.
+     */
+    private static void insectEatsSpore() {
         Insect insect = (Insect)objectsMap.get("Insect");
         insect.eatSpore();
     }
     
+    /**
+     * Egy rovar mozgását teszteli.
+     * Lekéri a rovart a HashMap-ből, és meghívja annak move() metódusát.
+     */
     private static void moveInsect() {
         Insect insect = (Insect)objectsMap.get("Insect");
         insect.move();
     }
     
-    private static void insectCutHyphal(){
+    /**
+     * Egy rovar gombafonal elvágását teszteli.
+     * Lekéri a rovart a HashMap-ből, és meghívja annak cutHyphal() metódusát.
+     */
+    private static void insectCutHyphal() {
         Insect insect = (Insect)objectsMap.get("Insect");
         insect.cutHyphal();
     }
 
-    private static void speedUpHyphalDevelopment(){
+    /**
+     * Egy gombafonal fejlődésének felgyorsítását teszteli.
+     * Lekéri a gombafonalat a HashMap-ből, és meghívja annak speedUpDevelopment() metódusát.
+     */
+    private static void speedUpHyphalDevelopment() {
         Hyphal hyphal = (Hyphal)objectsMap.get("Hyphal");
         hyphal.speedUpDevelopment();
     }
 
-    private static void fungalBodyShootsSpore(){
+    /**
+     * Egy gombatest spóralövését teszteli.
+     * Lekéri a gombatestet a HashMap-ből, és meghívja annak shootSpore() metódusát.
+     */
+    private static void fungalBodyShootsSpore() {
         FungalBody fungus = (FungalBody)objectsMap.get("FungalBody");
         fungus.shootSpore();
     }
 
+    /**
+     * A gombafonalak életben tartását teszteli egy gombatest által.
+     * Lekéri a gombatestet és a gombafonalakat a HashMap-ből, majd meghívja a gombatest
+     * keepHyphalAlive() metódusát a gombafonalak listájával.
+     */
     private static void keepHyphalAlive() {
         FungalBody fungus = (FungalBody)objectsMap.get("FungalBody");
         Hyphal hyphal1 = (Hyphal)objectsMap.get("Hyphal");
@@ -136,24 +180,38 @@ public class Program {
         fungus.keepHyphalAlive(hyphallist);
     }
 
+    /**
+     * Egy gombafonal növesztését teszteli.
+     * Lekéri a tektonot a HashMap-ből, és meghívja annak connectTecton() metódusát.
+     */
     private static void growHyphal() {
         Tecton t1 = (Tecton)objectsMap.get("Tecton");
         t1.connectTecton();
     }
 
+    /**
+     * Egy gombatest növesztését teszteli.
+     * Lekéri a gombafonalat a HashMap-ből, és meghívja annak growFungus() metódusát.
+     */
     private static void growFungalBody() {
         Hyphal hyphal = (Hyphal)objectsMap.get("Hyphal");
         hyphal.growFungus();
     }
 
-
-
-    // TODO
+    /**
+     * Egy gombafonal öregedését és elhalását teszteli.
+     * Lekéri a gombafonalat a HashMap-ből, és meghívja annak aging() metódusát.
+     */
     private static void hyphalAging() {
         Hyphal hyphal1 = (Hyphal)objectsMap.get("Hyphal");
         hyphal1.aging();
     }
 
+    /**
+     * Kiírja a konzolra a választható teszteseteket.
+     * A felhasználó ezek közül választhat egy szám megadásával, amely meghatározza,
+     * hogy melyik játékmechanizmust teszteli a program.
+     */
     private static void printTestCases() {
         System.out.println("Choose Test");
         System.out.println("0. Exit");
@@ -168,5 +226,4 @@ public class Program {
         System.out.println("9. Keep Connected Hyphals Alive");
         System.out.println("10. Hyphal dies due to aging");
     }
-
 }
