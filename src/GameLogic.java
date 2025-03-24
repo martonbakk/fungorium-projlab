@@ -2,7 +2,7 @@ import java.util.ArrayList;
 
 public class GameLogic {
 
-    ArrayList<Entity> entitis = new ArrayList<>();
+    ArrayList<Entity> entities = new ArrayList<>();
 
     ArrayList<Listener> listeners = new ArrayList<>();
 
