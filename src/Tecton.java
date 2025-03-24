@@ -1,5 +1,6 @@
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Scanner;
 
 public class Tecton {
 
@@ -26,7 +27,14 @@ public class Tecton {
     }
 
     public void connectTecton() {
-        System.out.println("Hyphal grew");
+        Tecton t2;
+        t2 = this.neighbours.get(0);
+        System.out.println("-> connectTecton()");
+        connectedNeighbours.add(t2);
+        t2.connectedNeighbours.add(this);
+        
+        Hyphal h1=new Hyphal();
+        System.out.println("t1 and t2 connected!");
     }
 
     public void getNeighbor(){

@@ -7,8 +7,9 @@ public class Program {
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
         
-        initialize();
+        
         while (true) {
+            initialize();
             printTestCases();
             
             String answer = scanner.nextLine();
@@ -59,6 +60,9 @@ public class Program {
         WeakTecton wt1 = new WeakTecton();
         NoFungusTecton nft1 = new NoFungusTecton();
 
+        t1.neighbours.add(nft1);
+        nft1.neighbours.add(t1);
+
         NormalSpore nsp1 = new NormalSpore();
         SlowSpore slowsp1 = new SlowSpore();
         SpeedSpore speedsp1 = new SpeedSpore();
@@ -83,6 +87,7 @@ public class Program {
         objectsMap.put("Insect", i1);
         objectsMap.put("Hyphal", h1);
         objectsMap.put("FungalBody", fgb1);
+        
     }
 
     private static void splitTecton(){
