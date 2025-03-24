@@ -5,53 +5,54 @@ public class Program {
         Scanner scanner = new Scanner(System.in);
 
         while (true) {
-            
-        // fuggveny
-            
+            printTestCases();
             
             String answer = scanner.nextLine();
 
-            switch(answer){   
+            switch(answer){
+                case "0":
+                    return;
                 case "1":
-                    splitSkeleton();
+                    moveInsect();
+                    break;
                 case "2":
-                    insectSkeleton();
+                    insectEatsSpore();
+                    break;
                 case "3":
+                    insectCutHyphal();
+                    break;
                 case "4":
+                    speedUpHyphalDevelopment();
+                    break;
                 case "5":
+                    splitTecton();
+                    break;
                 case "6":
+                    fungalBodyShootsSpore();
+                    break;
                 case "7":
+                    break;
                 case "8":
+                    keepHyphalAlive();
+                    break;
                 case "9":
-                case "10":
-                case "11":
-                case "12":
-                case "13":
-                case "14":
-                case "15":
+                    break;
                 default:
-                System.out.println("Nincs ilyen teszt.");
+                    System.out.println("Nincs ilyen teszt.");
+                    break;
             }
-
-            break;
         }
-
-
     }
-
-
 
     private static void splitTecton(){
         Map map = new Map();
         map.splitTecton();
     }
 
-
     private static void insectEatsSpore(){
         Insect insect = new Insect();
         insect.eatSpore();
     }
-
     
     private static void moveInsect() {
         Insect insect = new Insect();
@@ -73,13 +74,20 @@ public class Program {
         fungus.shootSpore();
     }
 
-    private static void growHyphal(){
+    private static void keepHyphalAlive() {
+        FungalBody fungus = new FungalBody();
+        fungus.keepHyphalAlive();
+    }
+
+    // TODO
+    /*private static void growHyphal(){
         FungalBody fungus = new FungalBody();
         fungus.growHyphal();
-    }
+    }*/
 
     private static void printTestCases() {
         System.out.println("Choose Test");
+        System.out.println("0. Exit");
         System.out.println("1. Move Insect");
         System.out.println("2. Insect Eats Spore");
         System.out.println("3. Insect Cuts Hyphal");
