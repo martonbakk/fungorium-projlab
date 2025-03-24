@@ -1,6 +1,9 @@
+import java.util.ArrayList;
 import java.util.Scanner;
 
 public class Map {
+    ArrayList<Tecton> tectons = new ArrayList<>();
+
     public void generateMap() {
 
         System.out.println("Create Tectons:");
