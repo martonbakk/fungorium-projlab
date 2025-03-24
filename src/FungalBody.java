@@ -22,6 +22,7 @@ public class FungalBody extends Entity {
     }
 
     public void levelUp() {
+        System.out.println("-> levelUp()");
         int allapot = 1;  
         Scanner scanner = new Scanner(System.in);
 
@@ -33,7 +34,6 @@ public class FungalBody extends Entity {
             
             if (answer.equals("Y")) {
                 if (allapot < 3) {
-                    System.out.println("-> levelUp()");
                     allapot += 1;
                     System.out.println("Your fungus is now lvl " + allapot);
                 } else {
@@ -52,16 +52,18 @@ public class FungalBody extends Entity {
     }
 
 
-    public void keepHyphalAlive() {
+    public void keepHyphalAlive(ArrayList<Hyphal> hyphalList) {
         System.out.println("-> keepHyphalAlive()");
-
         System.out.println("-> getConnectedHyphals()");
 
-        System.out.println("Increase lifetime of all connected Hyphals.");
+        for (Hyphal element : hyphalList) {
+            element.increaseLifetime();
+        }
 
     }
 
     public void update() {
+        System.out.println("-> update()");
         System.out.println("FungalBody updated");
     }
 }

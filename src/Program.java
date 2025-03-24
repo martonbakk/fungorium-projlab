@@ -1,3 +1,4 @@
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Scanner;
 
@@ -42,7 +43,7 @@ public class Program {
                     growFungalBody();
                     break;
                 case "9":
-                keepHyphalAlive();
+                    keepHyphalAlive();
                     break;
                 case "10":
                     hyphalAging();
@@ -72,6 +73,7 @@ public class Program {
 
         Insect i1 = new Insect();
         Hyphal h1 = new Hyphal();
+        Hyphal h2 = new Hyphal();
         FungalBody fgb1 = new FungalBody();
 
         objectsMap.put("Tecton", t1);
@@ -86,6 +88,7 @@ public class Program {
         objectsMap.put("HungerSpore", hsp1);
         objectsMap.put("Insect", i1);
         objectsMap.put("Hyphal", h1);
+        objectsMap.put("Hyphal2", h2);
         objectsMap.put("FungalBody", fgb1);
         
     }
@@ -122,25 +125,33 @@ public class Program {
 
     private static void keepHyphalAlive() {
         FungalBody fungus = (FungalBody)objectsMap.get("FungalBody");
-        fungus.keepHyphalAlive();
+        Hyphal hyphal1 = (Hyphal)objectsMap.get("Hyphal");
+        Hyphal hyphal2 = (Hyphal)objectsMap.get("Hyphal2");
+
+        ArrayList<Hyphal> hyphallist = new ArrayList<>();
+        
+        hyphallist.add(hyphal1);
+        hyphallist.add(hyphal2);
+
+        fungus.keepHyphalAlive(hyphallist);
     }
 
-    // TODO
     private static void growHyphal() {
-        FungalBody fungus = (FungalBody)objectsMap.get("FungalBody");
-        //fungus.growHyphal();
+        Tecton t1 = (Tecton)objectsMap.get("Tecton");
+        t1.connectTecton();
     }
 
-    // TODO
     private static void growFungalBody() {
-        FungalBody fungus = (FungalBody)objectsMap.get("FungalBody");
-        //fungus.growFungalBody();
+        Hyphal hyphal = (Hyphal)objectsMap.get("Hyphal");
+        hyphal.growFungus();
     }
+
+
 
     // TODO
     private static void hyphalAging() {
-        Hyphal hyphal = (Hyphal)objectsMap.get("Hyphal");
-        //hyphal.aging()
+        Hyphal hyphal1 = (Hyphal)objectsMap.get("Hyphal");
+        hyphal1.aging();
     }
 
     private static void printTestCases() {

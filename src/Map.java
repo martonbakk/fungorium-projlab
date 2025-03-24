@@ -46,12 +46,16 @@ public class Map {
     }
 
     public void updateTectons() {
-        System.out.println("-> t1.getConnectedNeighborsList()");
-        
-        System.out.println("disconnectTecton(t1)");
-        System.out.println("Destroy t1");
-        System.out.println("Create new Tecton");
-        System.out.println("Create new Tecton");
+        System.out.println("Destroy FungalBody");
+        disconnectTecton();
+        Tecton t1=new Tecton();
+        Tecton t2=new Tecton();
     }
 
+    private void disconnectTecton(){
+        Tecton tct = new Tecton();
+        tct.getConnectedNeighbors();
+        System.out.println("Disconnect t1 neighbours");
+       
+    }
 }

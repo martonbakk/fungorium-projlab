@@ -3,9 +3,6 @@ import java.util.List;
 import java.util.Scanner;
 
 public class Tecton {
-
-    
-
     public ArrayList<Spore> spores = new ArrayList<>();
     public ArrayList<Tecton> neighbours = new ArrayList<>();
     public ArrayList<Tecton> connectedNeighbours = new ArrayList<>();
@@ -15,11 +12,31 @@ public class Tecton {
     }
 
     public void addSpore() {
+        System.out.println("-> addSpore()");
         System.out.println("Spore added to tecton");
     }
+    public ArrayList<Tecton>getConnectedNeighbors(){
+        System.out.println("->getConnectedNeighbors()");
+        return connectedNeighbours;
+    }
+    public void setOccupiedByFungus(){
+        System.out.println("-> setOccupiedByFungus()");
+        FungalBody fb = new FungalBody();
+    }
 
-    public void decreaseSpore() {
-        System.out.println("Spore disappeared from tecton");
+    public boolean decreaseSpore() {
+        System.out.println("-> decreaseSpore()");
+        System.out.println("Is there enough Spore on the tecton? Y/N");
+
+        Scanner scanner = new Scanner(System.in);
+        String answer = scanner.nextLine();
+
+        if (answer.equals("Y")) {
+            return true;
+        } else {
+            return false;
+        }
+
     }
 
     public void disconnectTecton() {
@@ -30,6 +47,7 @@ public class Tecton {
         Tecton t2;
         t2 = this.neighbours.get(0);
         System.out.println("-> connectTecton()");
+        
         connectedNeighbours.add(t2);
         t2.connectedNeighbours.add(this);
         
@@ -42,4 +60,7 @@ public class Tecton {
     }
 
     public void runSpecialEffect(){}
+
+
+    
 }

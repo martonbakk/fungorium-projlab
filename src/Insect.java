@@ -12,7 +12,7 @@ public class Insect extends Entity {
         System.out.println("-> move");
         Scanner scanner = new Scanner(System.in);
 
-        System.out.println("-> getConnectedNeighbors()");
+        baseLocation.getConnectedNeighbors();
         System.out.println("Can the Insect move? Y/N");
 
         String answer = scanner.nextLine();
@@ -48,22 +48,7 @@ public class Insect extends Entity {
             System.out.println("What type of Spore is on the Tecton? \n\t1. Normal\t2.Stun\t3.Slow\t4.Speed\t5.Hunger\t6.HyphalProtector");
             answer = scanner.nextLine();
             System.out.println("-> activateEffect()");
-            /*switch (answer) {
-                case "1":
-                    
-                    break;
-                case "2":
-                    break;
-                case "3":
-                    break;
-                case "4":
-                    break;
-                case "5":
-                    break;
-                case "6":
-                    break;
-            }*/
-
+            
         }
         else if (answer.equals("N")) {
             System.out.println("No Spore to eat!");

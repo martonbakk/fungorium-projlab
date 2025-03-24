@@ -8,7 +8,12 @@ public class Hyphal extends Entity {
     }
 
     public void growFungus() {
-        System.out.println("Hyphal is growing fungus");
+            if (baseLocation.decreaseSpore()){
+                System.out.println("Hyphal is growing fungus");
+                FungalBody fu = new FungalBody();
+            } else {
+                System.out.println("FungalBody cannot grow here");
+            }
 
     }
 
@@ -29,36 +34,31 @@ public class Hyphal extends Entity {
     }
 
     public void aging() {
-        Scanner scanner = new Scanner(System.in);
-
-
         System.out.println("->update");
-
-        System.out.println("\"Are there any connected fungalbodies? Y/N\"");    
-
-        String answer = scanner.nextLine();
-        boolean check=true;
-
-        if (answer.equals("Y")){
-            System.out.println("Hyphal does not age.");    
-
-        }            
+        System.out.println("Hyphals lifetime decreased by one."); 
         
-        if (answer.equals("N")){
-            System.out.println("->aging");    
+        
+        System.out.println("Was this the Hyphals last life point? Y/N"); 
+        
+        
+        Scanner scanner = new Scanner(System.in);
+        String answer = scanner.nextLine();
 
-            System.out.println("\"Does the hyphal have any more lives? Y/N\"");    
-            answer = scanner.nextLine();
+        if (answer.equals("Y")) {
 
-        if (answer.equals("N")){
-            System.out.println("Hyphal dies");    
-        }
+            System.out.println("Hyphal dies"); 
+        } 
 
-        }
-    
     }
 
     public void update() {
         System.out.println("Hyphal is updated");
     }
+
+    public void increaseLifetime() {
+        System.out.println("-> increaseLifetime()");
+        System.out.println("Hyphal lifetime is refilled to max");
+    }
+
+
 }
