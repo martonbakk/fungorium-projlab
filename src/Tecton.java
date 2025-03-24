@@ -29,7 +29,7 @@ public class Tecton {
         System.out.println("Hyphal grew");
     }
 
-    public void getNeighborLisTecton(){
+    public void getNeighborListTecton(){
         System.out.println("neighbour s list returned");
     }
 
