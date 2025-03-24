@@ -8,7 +8,7 @@ public class SlowSpore extends Spore{
     public void activateEffect(){
         System.out.println("Slow effect activated");
     }
-    
+
     public void spawnSpore(){
         System.out.println("SlowSpore is spawned");
     }
