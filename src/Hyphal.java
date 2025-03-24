@@ -51,7 +51,7 @@ public class Hyphal extends Entity {
             answer = scanner.nextLine();
 
         if (answer.equals("N")){
-            System.out.println("Hphal dies");    
+            System.out.println("Hyphal dies");    
         }
 
         }
