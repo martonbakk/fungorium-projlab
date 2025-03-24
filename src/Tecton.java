@@ -29,8 +29,8 @@ public class Tecton {
         System.out.println("Hyphal grew");
     }
 
-    public void getNeighborLisTecton(){
-        System.out.println("neighbour s list returned");
+    public void getNeighbor(){
+        System.out.println("-> getNeighbor()");
     }
 
     public void runSpecialEffect(){}

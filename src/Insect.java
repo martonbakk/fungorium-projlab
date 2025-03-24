@@ -40,10 +40,9 @@ public class Insect extends Entity {
 
         Scanner scanner = new Scanner(System.in);
 
-        String answer = scanner.nextLine();
-
         System.out.println("-> decreaseSpores()");
         System.out.println("Are there any Spores on the Tecton? Y/N");
+        String answer = scanner.nextLine();
 
         if (answer.equals("Y")) {
             System.out.println("What type of Spore is on the Tecton? \n\t1. Normal\t2.Stun\t3.Slow\t4.Speed\t5.Hunger\t6.HyphalProtector");
