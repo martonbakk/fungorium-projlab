@@ -1,5 +1,8 @@
+package Entities.Fungal;
 import java.util.ArrayList;
 import java.util.Scanner;
+
+import SporeInterface;
 
 /**
  * A FungalBody osztály a gombatestek adatait tárolja, és a fejlődéssel valamint spóraszórással kapcsolatos

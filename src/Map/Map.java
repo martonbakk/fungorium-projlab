@@ -1,5 +1,8 @@
+package Map;
 import java.util.ArrayList;
 import java.util.Scanner;
+
+import Map.Tecton.Tecton;
 
 /**
  * A Map osztály felelős a játékterep generálásáért, a tektonok kezelésére, azok kettéhasadásának

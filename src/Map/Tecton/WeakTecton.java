@@ -1,3 +1,4 @@
+package Map.Tecton;
 
 /**
  * A WeakTecton osztály olyan tektonokat reprezentál, amelyek nem engedélyezik, hogy egynél több gombafonal

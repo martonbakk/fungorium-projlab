@@ -1,3 +1,7 @@
+import Logic.Listener;
+import Map.Tecton.Tecton;
+
+package Entities;
 /**
  * Absztrakt osztály, amely az entitások és figurák közös alapadatait tárolja.
  * Az entitások a játékban szereplő egyedeket reprezentálják, például gombatesteket, spórákat vagy rovarokat.
