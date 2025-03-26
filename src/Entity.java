@@ -5,14 +5,9 @@
  */
 public abstract class Entity implements Listener {
 
-    /** Az a tekton, amelyen az entitás vagy figura éppen tartózkodik. */
     public Tecton baseLocation;
 
-    /**
-     * Az Entity osztály alapértelmezett konstruktora.
-     * Kiírja a konzolra, hogy egy új Entity objektum jött létre.
-     */
     public Entity() {
-        System.out.println("\tnew Entity");
+
     }
 }

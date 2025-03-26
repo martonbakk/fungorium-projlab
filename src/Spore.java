@@ -6,11 +6,7 @@
  */
 public abstract class Spore extends Entity implements SporeInterface {
 
-    /**
-     * A Spore osztály konstruktora.
-     * Kiírja a konzolra, hogy egy új Spore objektum jött létre.
-     */
     public Spore() {
-        System.out.println("New Spore Created");
+        
     }
 }
