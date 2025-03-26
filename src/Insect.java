@@ -41,52 +41,17 @@ public class Insect extends Entity {
         }
     }
 
-    /**
-     * A rovar spóra elfogyasztását kezeli.
-     * Interaktívan megkérdezi a felhasználótól, hogy vannak-e spórák a tektonon, és ha igen,
-     * milyen típusú spórát fogyaszt el a rovar. A spóra típusától függően aktiválja annak hatását.
-     */
     public void eatSpore() {
-        System.out.println("-> eatSpore()");
-        Scanner var1 = new Scanner(System.in);
-        System.out.println("-> decreaseSpores()");
-        System.out.println("Are there any Spores on the Tecton? Y/N");
-        String var2 = var1.nextLine();
-        if (var2.equals("Y")) {
-            System.out.println("What type of Spore is on the Tecton? \n\t1. Normal\t2.Stun\t3.Slow\t4.Speed\t5.Hunger\t6.HyphalProtector");
-            var2 = var1.nextLine();
-            System.out.println("-> activateEffect()");
-        } else if (var2.equals("N")) {
-            System.out.println("No Spore to eat!");
-        } else {
-            System.out.println("Wrong input");
-        }
+
     }
 
-    /**
-     * A rovar gombafonal elvágását kezeli.
-     * Interaktívan megkérdezi a felhasználótól, hogy a vágás képessége cooldown-on van-e.
-     * Ha nincs cooldown, a rovar elvágja a gombafonalat, különben hibaüzenetet ír ki.
-     */
     public void cutHyphal() {
-        System.out.println("-> cutHyphal()");
-        Scanner var1 = new Scanner(System.in);
-        System.out.println("Is cut on cooldown? Y/N");
-        String var2 = var1.nextLine();
-        if (var2.equals("Y")) {
-            System.out.println("Can't cut");
-        } else if (var2.equals("N")) {
-            System.out.println("-> disconnectTecton()");
-        } else {
-            System.out.println("Wrong input");
-        }
+
     }
 
-    /**
-     * Frissíti a rovar állapotát.
-     * A metódus a Listener interfészből származik, de ebben az implementációban üres.
-     */
+
     @Override
     public void update() {
+        
     }
 }
