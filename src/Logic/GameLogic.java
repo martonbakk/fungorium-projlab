@@ -1,4 +1,7 @@
+package Logic;
 import java.util.ArrayList;
+
+import Entities.Entity;
 
 /**
  * A GameLogic osztály felelős a játék alapvető elemeinek nyilvántartásáért és a játékbeli történések vezérléséért.

@@ -1,3 +1,4 @@
+package Logic;
 /**
  * A Listener interfész definiálja a játékban szereplő objektumok frissítési mechanizmusát.
  * Azok az osztályok, amelyek implementálják ezt az interfészt, kötelesek megvalósítani az update() metódust,

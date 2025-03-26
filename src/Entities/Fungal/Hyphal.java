@@ -1,3 +1,4 @@
+package Entities.Fungal;
 import java.util.Scanner;
 
 /**

@@ -1,3 +1,4 @@
+package Entities.Spore;
 /**
  * A HyphalProtectorSpore osztály egy specifikus spóra típust valósít meg, amely védő hatást fejt ki a gombafonalakra.
  * Ha egy rovar elfogyasztja, bizonyos ideig nem lesz képes gombafonalat vágni.
