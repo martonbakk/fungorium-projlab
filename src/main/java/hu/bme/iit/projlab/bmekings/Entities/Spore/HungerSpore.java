@@ -13,7 +13,7 @@ public class HungerSpore extends Spore {
     }
 
     public void activateEffect() {
-
+        
     }
 
 

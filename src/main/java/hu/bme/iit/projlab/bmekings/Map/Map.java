@@ -14,8 +14,8 @@ public class Map {
     ArrayList<Tecton> tectons = new ArrayList<>();
 
     public void generateMap() {
+        
     }
-
 
     public void splitTecton() {
 
