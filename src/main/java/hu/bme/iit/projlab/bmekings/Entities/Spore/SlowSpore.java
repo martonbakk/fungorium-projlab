@@ -1,5 +1,5 @@
 package main.java.hu.bme.iit.projlab.bmekings.Entities.Spore;
-
+import main.java.hu.bme.iit.projlab.bmekings.Map.Tecton.Tecton;
 /**
  * A SlowSpore osztály egy specifikus spóra típust valósít meg, amely lassító hatást fejt ki a rovarokra.
  * Ha egy rovar elfogyasztja, a rovar mozgási sebessége csökken, így lassabban tud mozogni a tektonok között.
@@ -7,9 +7,12 @@ package main.java.hu.bme.iit.projlab.bmekings.Entities.Spore;
  */
 public class SlowSpore extends Spore {
 
-
     public SlowSpore() {
         super();
+    }
+
+    public SlowSpore(int n, String id, Tecton baseLocation) {
+        super(n, id, baseLocation);
     }
 
 

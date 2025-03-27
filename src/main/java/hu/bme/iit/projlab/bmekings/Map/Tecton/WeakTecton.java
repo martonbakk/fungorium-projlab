@@ -6,11 +6,17 @@ package main.java.hu.bme.iit.projlab.bmekings.Map.Tecton;
  * A Tecton osztályból származik, és implementálja a Listener interfészt az ősosztályon keresztül.
  */
 public class WeakTecton extends Tecton {
+    private boolean hyphalExistHere;
 
-
-    public WeakTecton() {
+    public WeakTecton(){
+        super();
+        this.hyphalExistHere=false;
     }
 
+    public WeakTecton(boolean hyphalExistHere, String id, double splitChance, boolean occupiedByInsect, boolean occupiedByFungalBody) {
+        super(id, splitChance, occupiedByInsect, occupiedByFungalBody);
+        this.hyphalExistHere = hyphalExistHere;
+    }
 
     public void runSpecialEffect() {}
 }

@@ -1,5 +1,7 @@
 package main.java.hu.bme.iit.projlab.bmekings.Map.Tecton;
 import java.util.ArrayList;
+import java.util.HashMap;
+import main.java.hu.bme.iit.projlab.bmekings.Entities.Fungal.Hyphal;
 
 import main.java.hu.bme.iit.projlab.bmekings.Entities.Spore.Spore;
 /**
@@ -9,21 +11,33 @@ import main.java.hu.bme.iit.projlab.bmekings.Entities.Spore.Spore;
  * Implementálja a Listener interfészt, így minden leszármazottjának biztosítania kell az update() metódus implementációját.
  */
 public class Tecton {
-
-    /** A tektonon lévő spórák listája. */
     public ArrayList<Spore> spores = new ArrayList<>();
-
-    /** A tekton szomszédjainak listája. */
     public ArrayList<Tecton> neighbours = new ArrayList<>();
+    public HashMap<Tecton, ArrayList<Hyphal>> connectedNeighbours = new HashMap<>();
 
-    /** A tekton gombafonállal összekapcsolt szomszédjainak listája. */
-    public ArrayList<Tecton> connectedNeighbours = new ArrayList<>();
+    private String id;
+    private double splitChance;
+    private boolean occupiedByInsect;
+    private boolean occupiedByFungalBody;
+    
 
     public Tecton() {
+        this.id="";
+        this.splitChance=0;
+        this.occupiedByInsect=false;
+        this.occupiedByFungalBody=false;
 
     }
 
-    public void addSpore() {
+    public Tecton(String id, double splitChance, boolean occupiedByInsect, boolean occupiedByFungalBody) {
+        this.id=id;
+        this.splitChance=splitChance;
+        this.occupiedByInsect=occupiedByInsect;
+        this.occupiedByFungalBody=occupiedByFungalBody;
+
+    }
+
+    public void addSpore(Spore s) {
 
     }
 
@@ -31,24 +45,25 @@ public class Tecton {
         return new ArrayList<>();
     }
 
-    public void setOccupiedByFungus() {
+    public void setOccupiedByFungus(boolean b) {
 
     }
 
 
-    public boolean decreaseSpore() {
+    public boolean decreaseSpore(int n, int d) {
         return false;
     }
 
 
-    public void disconnectTecton() {
+    public void disconnectTecton(Tecton tc) {
     }
 
-    public void connectTecton() {
+    public void connectTecton(Tecton tc) {
 
     }
 
-    public void getNeighbor() {
+    public ArrayList<Tecton> getNeighbors() {
+        return new ArrayList<Tecton>();
     }
 
 

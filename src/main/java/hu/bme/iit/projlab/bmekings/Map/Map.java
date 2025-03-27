@@ -9,15 +9,17 @@ import main.java.hu.bme.iit.projlab.bmekings.Map.Tecton.Tecton;
  * és biztosítja a játék térbeli struktúrájának fenntartását.
  */
 public class Map {
-
-    /** A térképet alkotó tektonok listája. */
     ArrayList<Tecton> tectons = new ArrayList<>();
 
-    public void generateMap() {
+    public Map(){
+
+    }
+
+    public void generateMap(int player) {
         
     }
 
-    public void splitTecton() {
+    public void splitTecton(Tecton tc) {
 
     }
 
@@ -25,7 +27,4 @@ public class Map {
 
     }
 
-    private void disconnectTecton() {
-
-    }
 }

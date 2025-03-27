@@ -1,5 +1,6 @@
 package main.java.hu.bme.iit.projlab.bmekings.Entities.Spore;
 
+import main.java.hu.bme.iit.projlab.bmekings.Map.Tecton.Tecton;
 /**
  * A StunSpore osztály egy specifikus spóra típust valósít meg, amely bénító hatást fejt ki a rovarokra.
  * Ha egy rovar elfogyasztja, a rovar egy adott időtartamra lebénul, így nem tud mozogni vagy enni.
@@ -7,13 +8,16 @@ package main.java.hu.bme.iit.projlab.bmekings.Entities.Spore;
  */
 public class StunSpore extends Spore {
 
+    public StunSpore() {
+        super();
+    }
+
     /**
      * A StunSpore osztály konstruktora.
      * Meghívja az ősosztály konstruktorát, és kiírja a konzolra, hogy egy új StunSpore objektum jött létre.
      */
-    public StunSpore() {
-        super();
-        System.out.println("new StunSpore Created");
+    public StunSpore(int n, String id, Tecton baseLocation) {
+        super(n, id, baseLocation);
     }
 
     /**
@@ -22,7 +26,6 @@ public class StunSpore extends Spore {
      * és kiírja a konzolra, hogy a hatás aktiválódott.
      */
     public void activateEffect() {
-        System.out.println("Stun effect activated");
     }
 
     /**
@@ -30,7 +33,7 @@ public class StunSpore extends Spore {
      * A metódus kiírja a konzolra, hogy a StunSpore létrejött.
      */
     public void spawnSpore() {
-        System.out.println("StunSpore is spawned");
+
     }
 
     /**
@@ -39,6 +42,6 @@ public class StunSpore extends Spore {
      */
     @Override
     public void update() {
-        System.out.println("StunSpore is updated");
+        
     }
 }
