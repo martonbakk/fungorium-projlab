@@ -23,13 +23,13 @@ if ! command -v mvn &> /dev/null; then
     exit 1
 fi
 
-# 3. Buildeljük a projektet
+# 3. Buildeljük a projektet a tesztek futtatásával
 echo "Projekt buildelése Maven-nel..."
-mvn clean package -DskipTests
+mvn clean package
 
 # Ellenőrizzük, hogy a build sikeres volt-e
 if [ $? -ne 0 ]; then
-    echo "Hiba: A Maven build sikertelen!"
+    echo "Hiba: A Maven build sikertelen! Ellenőrizd a tesztek eredményét a target/surefire-reports mappában."
     exit 1
 fi
 
