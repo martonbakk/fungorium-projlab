@@ -1,7 +1,7 @@
 package main.java.hu.bme.iit.projlab.bmekings.Entities.Fungal;
 
 import java.util.ArrayList;
-
+import main.java.hu.bme.iit.projlab.bmekings.Map.Tecton.Tecton;
 import main.java.hu.bme.iit.projlab.bmekings.Entities.Entity;
 import main.java.hu.bme.iit.projlab.bmekings.Interface.SporeInterface.SporeInterface;
 
@@ -13,11 +13,25 @@ import main.java.hu.bme.iit.projlab.bmekings.Interface.SporeInterface.SporeInter
 public class FungalBody extends Entity {
 
     /** A gombatest által kilőtt spórák listája. */
-    ArrayList<SporeInterface> spores = new ArrayList<>();
-
-
+    private ArrayList<SporeInterface> spores = new ArrayList<>();
+    private int currLevel;
+    private int shotSporesNum;
+    private TypeCharacteristics characteristics;
+    
     public FungalBody() {
-        super();
+        super();  
+
+        this.characteristics = new TypeCharacteristics(0, 0, 0, 0);
+        this.currLevel = 0;
+        this.shotSporesNum = 0;
+    }
+
+    public FungalBody(int currLevel, int shotSporesNum, TypeCharacteristics characteristics, String id, Tecton baseLocation){
+        super(id, baseLocation);
+        
+        this.characteristics = characteristics;
+        this.currLevel = shotSporesNum;
+        this.shotSporesNum = currLevel;
     }
 
     
@@ -40,4 +54,19 @@ public class FungalBody extends Entity {
     public void update() {
         
     }
+
+    private class TypeCharacteristics{
+        int shoointRange;
+        int sporeProductionIntensity;
+        int startingHyphalNum;
+        int sporeCapacity;
+
+        public TypeCharacteristics(int shoointRange, int sporeProductionIntensity, int startingHyphalNum, int sporeCapacity) {
+            this.shoointRange = shoointRange;
+            this.sporeProductionIntensity = sporeProductionIntensity;
+            this.startingHyphalNum = startingHyphalNum;
+            this.sporeCapacity = sporeCapacity;
+        }
+    }
 }
+
