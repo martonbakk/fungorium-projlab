@@ -36,29 +36,38 @@ public class Hyphal extends Entity {
     }
 
     public void growFungus() {
-        
+        if(baseLocation.decreaseSpore(5, 2) != null) {
+            baseLocation.setOccupiedByFungus(true);
+        }
     }
 
     public void growFungusFromInsect() {
-        
+        baseLocation.setOccupiedByFungus(true);
     }
 
     public void speedUpDevelopment() {
-
+        if(baseLocation.decreaseSpore(2, 2) != null){
+            developTime--;
+        }
     }
 
-
     public void aging() {
-
+        lifeTime--;
     }
 
     public void eatInsect(){
-        
+        // tldr;
     }
+    
+    Tecton getConnectedTecton(){return connectedTecton;}
 
     @Override
     public void update() {
-        
+        aging();
+    }
+
+    void setLifeTime(int newLifeTime){
+        lifeTime=newLifeTime;
     }
 
 }

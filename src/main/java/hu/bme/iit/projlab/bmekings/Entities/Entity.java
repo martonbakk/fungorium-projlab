@@ -10,8 +10,8 @@ import main.java.hu.bme.iit.projlab.bmekings.Map.Tecton.Tecton;
  */
 public abstract class Entity implements Listener {
 
-    private String id;
-    private Tecton baseLocation;
+    protected String id;
+    protected Tecton baseLocation;
 
     public Entity() {
         this.id="";
@@ -22,4 +22,9 @@ public abstract class Entity implements Listener {
         this.id = id;
         this.baseLocation = baseLocation;
     }
+
+    public Tecton getBase(){
+        return baseLocation;
+    }
+
 }

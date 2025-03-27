@@ -38,7 +38,7 @@ public class Insect extends Entity {
     }
 
     public void move() {
-
+        
     }
 
     public void eatSpore() {
