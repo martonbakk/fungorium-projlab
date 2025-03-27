@@ -2,41 +2,47 @@
 
 # Projekt gyökérkönyvtár
 PROJECT_DIR=$(pwd)
-SRC_DIR="$PROJECT_DIR/src"
+TARGET_DIR="$PROJECT_DIR/target"
+ARTIFACT_ID="fungorium-app"
+VERSION="1.0-SNAPSHOT"
+JAR_FILE="$TARGET_DIR/$ARTIFACT_ID-$VERSION.jar"
 
-# Ellenőrizzük, hogy a src mappa létezik-e
-if [ ! -d "$SRC_DIR" ]; then
-    echo "Hiba: A 'src' mappa nem található a $PROJECT_DIR könyvtárban!"
-    exit 1
-fi
-
-# Navigáljunk a src mappába
-cd "$SRC_DIR" || exit 1
-
-# Ellenőrizzük, hogy a Java telepítve van-e
-if ! command -v javac &> /dev/null; then
-    echo "Hiba: A 'javac' parancs nem található. Kérlek, telepítsd a Java Development Kit-et (JDK)!"
-    exit 1
-fi
-
+# 1. Ellenőrizzük, hogy a Java telepítve van-e
 if ! command -v java &> /dev/null; then
-    echo "Hiba: A 'java' parancs nem található. Kérlek, telepítsd a Java Runtime Environment-et (JRE)!"
+    echo "Hiba: A 'java' parancs nem található. Kérlek, telepítsd a Java-t (JDK)!"
     exit 1
 fi
 
-# Fordítsuk le az összes Java fájlt
-echo "Fordítás folyamatban..."
-javac *.java
+# Ellenőrizzük a Java verzióját
+JAVA_VERSION=$(java -version 2>&1 | awk -F '"' '/version/ {print $2}')
+echo "Java verzió: $JAVA_VERSION"
 
-# Ellenőrizzük, hogy a fordítás sikeres volt-e
+# 2. Ellenőrizzük, hogy a Maven telepítve van-e
+if ! command -v mvn &> /dev/null; then
+    echo "Hiba: A 'mvn' parancs nem található. Kérlek, telepítsd a Maven-t!"
+    exit 1
+fi
+
+# 3. Buildeljük a projektet a tesztek futtatásával
+echo "Projekt buildelése Maven-nel..."
+mvn clean package
+
+# Ellenőrizzük, hogy a build sikeres volt-e
 if [ $? -ne 0 ]; then
-    echo "Hiba: A fordítás sikertelen!"
+    echo "Hiba: A Maven build sikertelen! Ellenőrizd a tesztek eredményét a target/surefire-reports mappában."
     exit 1
 fi
 
-# Futtassuk a Program osztályt
-echo "Program futtatása..."
-java Program
+# 4. Ellenőrizzük, hogy a JAR fájl létezik-e
+if [ ! -f "$JAR_FILE" ]; then
+    echo "Hiba: A JAR fájl nem található: $JAR_FILE"
+    echo "Ellenőrizd, hogy a pom.xml helyesen van-e konfigurálva, és a build sikeresen lefutott!"
+    exit 1
+fi
+
+# 5. Futtassuk a JAR fájlt
+echo "Projekt futtatása..."
+java -jar "$JAR_FILE"
 
 # Ellenőrizzük, hogy a futtatás sikeres volt-e
 if [ $? -ne 0 ]; then
