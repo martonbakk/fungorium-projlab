@@ -53,6 +53,7 @@ public class Hyphal extends Entity {
 
     public void aging() {
         lifeTime--;
+        
     }
 
     public void eatInsect(){
