@@ -1,6 +1,6 @@
-package hu.bme.iit.projlab.bmekings;
+package main.java.hu.bme.iit.projlab.bmekings.Program;
 
-public class Main {
+public class Program {
     public static void main(String[] args) {
         System.out.println("Hello, World!");
     }
