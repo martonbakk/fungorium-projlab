@@ -2,6 +2,7 @@ package main.java.hu.bme.iit.projlab.bmekings.Entities.Fungal;
 
 import main.java.hu.bme.iit.projlab.bmekings.Entities.Entity;
 import main.java.hu.bme.iit.projlab.bmekings.Map.Tecton.Tecton;
+
 /**
  * A Hyphal osztály a játékban lévő gombafonalak adatait tárolja, és a gombafonalakkal kapcsolatos fontos műveleteket kezeli.
  * A gombafonalak a gombatestekből nőnek ki, és a tektonok közötti kapcsolódást biztosítják, lehetővé téve a gombák terjeszkedését
@@ -32,7 +33,6 @@ public class Hyphal extends Entity {
         this.developTime = developTime;
         this.lifeTime = lifeTime;
         this.cutTime = cutTime;
-        
     }
 
     public void growFungus() {
@@ -53,7 +53,6 @@ public class Hyphal extends Entity {
 
     public void aging() {
         lifeTime--;
-        
     }
 
     public void eatInsect(){
@@ -70,5 +69,4 @@ public class Hyphal extends Entity {
     void setLifeTime(int newLifeTime){
         lifeTime=newLifeTime;
     }
-
 }
