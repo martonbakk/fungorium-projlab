@@ -1,4 +1,4 @@
-package hu.bme.iit.projlab.bmekings.EntitiesTest;
+package hu.bme.iit.projlab.bmekings.Entities.InsectTest;
 
 import org.junit.jupiter.api.Test;
 

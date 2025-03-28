@@ -1,8 +1,8 @@
-package main.java.hu.bme.iit.projlab.bmekings.Entities.Insect;
+package hu.bme.iit.projlab.bmekings.Entities.Insect;
 
-import main.java.hu.bme.iit.projlab.bmekings.Entities.Fungal.Hyphal;
-import main.java.hu.bme.iit.projlab.bmekings.Map.Tecton.Tecton;
-import main.java.hu.bme.iit.projlab.bmekings.Entities.Entity;
+import hu.bme.iit.projlab.bmekings.Entities.Fungal.Hyphal;
+import hu.bme.iit.projlab.bmekings.Map.Tecton.Tecton;
+import hu.bme.iit.projlab.bmekings.Entities.Entity;
 /**
  * Az Insect osztály a rovarok kezelésére szolgál a játékban.
  * A rovarokat a rovarászok irányítják, és fő feladatuk a spórák elfogyasztása, valamint a gombafonalak elvágása.

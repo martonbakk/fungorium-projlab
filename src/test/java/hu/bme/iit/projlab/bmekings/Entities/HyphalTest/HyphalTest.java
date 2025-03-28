@@ -1,4 +1,4 @@
-package hu.bme.iit.projlab.bmekings.EntitiesTest;
+package hu.bme.iit.projlab.bmekings.Entities.HyphalTest;
 
 import org.junit.jupiter.api.Test;
 
