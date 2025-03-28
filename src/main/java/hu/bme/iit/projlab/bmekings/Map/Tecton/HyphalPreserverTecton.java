@@ -1,4 +1,4 @@
-package main.java.hu.bme.iit.projlab.bmekings.Map.Tecton;
+package hu.bme.iit.projlab.bmekings.Map.Tecton;
 
 /**
  * A HyphalPreserverTecton osztály a Tecton egy specifikus 

@@ -1,4 +1,4 @@
-package main.java.hu.bme.iit.projlab.bmekings.Interface.SporeInterface;
+package hu.bme.iit.projlab.bmekings.Interface.SporeInterface;
 
 /**
  * A ISpore interfész definiálja a spórák alapvető viselkedését a játékban.

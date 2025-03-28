@@ -1,4 +1,4 @@
-package main.java.hu.bme.iit.projlab.bmekings.Map.Tecton;
+package hu.bme.iit.projlab.bmekings.Map.Tecton;
 
 /**
  * A WeakTecton osztály olyan tektonokat reprezentál, amelyek nem engedélyezik, hogy egynél több gombafonal

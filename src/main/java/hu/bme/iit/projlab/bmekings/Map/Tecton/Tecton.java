@@ -1,11 +1,11 @@
-package main.java.hu.bme.iit.projlab.bmekings.Map.Tecton;
+package hu.bme.iit.projlab.bmekings.Map.Tecton;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import main.java.hu.bme.iit.projlab.bmekings.Entities.Fungal.Hyphal;
-import main.java.hu.bme.iit.projlab.bmekings.Entities.Fungal.FungalBody;
-import main.java.hu.bme.iit.projlab.bmekings.Interface.SporeInterface.SporeInterface;
+import hu.bme.iit.projlab.bmekings.Entities.Fungal.Hyphal;
+import hu.bme.iit.projlab.bmekings.Entities.Fungal.FungalBody;
+import hu.bme.iit.projlab.bmekings.Interface.SporeInterface.SporeInterface;
 
 /**
  * A Tecton osztály a Fungorium bolygó felszínét alkotó egységeket reprezentálja, amelyek különböző

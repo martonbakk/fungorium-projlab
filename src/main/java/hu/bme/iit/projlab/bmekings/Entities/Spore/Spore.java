@@ -1,8 +1,8 @@
-package main.java.hu.bme.iit.projlab.bmekings.Entities.Spore;
+package hu.bme.iit.projlab.bmekings.Entities.Spore;
 
-import main.java.hu.bme.iit.projlab.bmekings.Entities.Entity;
-import main.java.hu.bme.iit.projlab.bmekings.Interface.SporeInterface.SporeInterface;
-import main.java.hu.bme.iit.projlab.bmekings.Map.Tecton.Tecton;
+import hu.bme.iit.projlab.bmekings.Entities.Entity;
+import hu.bme.iit.projlab.bmekings.Interface.SporeInterface.SporeInterface;
+import hu.bme.iit.projlab.bmekings.Map.Tecton.Tecton;
 
 /**
  * A Spore absztrakt osztály a különböző típusú spórák közös tulajdonságait és viselkedését definiálja.

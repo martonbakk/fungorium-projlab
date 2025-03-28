@@ -1,4 +1,4 @@
-package hu.bme.iit.projlab.bmekings.Logic;
+package  hu.bme.iit.projlab.bmekings.LogicTest;
 
 import org.junit.jupiter.api.Test;
 

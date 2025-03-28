@@ -1,10 +1,10 @@
-package main.java.hu.bme.iit.projlab.bmekings.Logic;
+package hu.bme.iit.projlab.bmekings.Logic;
 
 import java.util.ArrayList;
 
-import main.java.hu.bme.iit.projlab.bmekings.Interface.Listener.Listener;
-import main.java.hu.bme.iit.projlab.bmekings.Entities.Entity;
-import main.java.hu.bme.iit.projlab.bmekings.Map.Map;
+import hu.bme.iit.projlab.bmekings.Interface.Listener.Listener;
+import hu.bme.iit.projlab.bmekings.Entities.Entity;
+import hu.bme.iit.projlab.bmekings.Map.Map;
 
 
 /**

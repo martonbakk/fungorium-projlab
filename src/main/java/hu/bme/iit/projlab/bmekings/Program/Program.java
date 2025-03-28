@@ -1,4 +1,4 @@
-package main.java.hu.bme.iit.projlab.bmekings.Program;
+package hu.bme.iit.projlab.bmekings.Program;
 
 public class Program {
     public static void main(String[] args) {

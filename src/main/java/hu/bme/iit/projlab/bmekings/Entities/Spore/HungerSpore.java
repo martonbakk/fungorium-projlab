@@ -1,5 +1,6 @@
-package main.java.hu.bme.iit.projlab.bmekings.Entities.Spore;
-import main.java.hu.bme.iit.projlab.bmekings.Map.Tecton.Tecton;
+package hu.bme.iit.projlab.bmekings.Entities.Spore;
+
+import hu.bme.iit.projlab.bmekings.Map.Tecton.Tecton;
 /**
  * A HungerSpore osztály egy specifikus spóra típust valósít meg, amely éheztető hatást fejt ki a rovarokra.
  * Ha egy rovar elfogyasztja, csökkenti a rovar telítettségi szintjét, így a rovar több spórát tud fogyasztani.

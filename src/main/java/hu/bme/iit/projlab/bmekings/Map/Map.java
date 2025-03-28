@@ -1,7 +1,8 @@
-package main.java.hu.bme.iit.projlab.bmekings.Map;
+package hu.bme.iit.projlab.bmekings.Map;
+
 import java.util.ArrayList;
 
-import main.java.hu.bme.iit.projlab.bmekings.Map.Tecton.Tecton;
+import hu.bme.iit.projlab.bmekings.Map.Tecton.Tecton;
 
 /**
  * A Map osztály felelős a játékterep generálásáért, a tektonok kezelésére, azok kettéhasadásának

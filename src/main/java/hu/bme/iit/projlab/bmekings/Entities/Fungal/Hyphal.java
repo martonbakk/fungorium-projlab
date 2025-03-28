@@ -1,7 +1,7 @@
-package main.java.hu.bme.iit.projlab.bmekings.Entities.Fungal;
+package hu.bme.iit.projlab.bmekings.Entities.Fungal;
 
-import main.java.hu.bme.iit.projlab.bmekings.Entities.Entity;
-import main.java.hu.bme.iit.projlab.bmekings.Map.Tecton.Tecton;
+import hu.bme.iit.projlab.bmekings.Entities.Entity;
+import hu.bme.iit.projlab.bmekings.Map.Tecton.Tecton;
 
 /**
  * A Hyphal osztály a játékban lévő gombafonalak adatait tárolja, és a gombafonalakkal kapcsolatos fontos műveleteket kezeli.

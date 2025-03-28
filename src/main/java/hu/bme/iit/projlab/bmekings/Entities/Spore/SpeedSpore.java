@@ -1,5 +1,6 @@
-package main.java.hu.bme.iit.projlab.bmekings.Entities.Spore;
-import main.java.hu.bme.iit.projlab.bmekings.Map.Tecton.Tecton;
+package hu.bme.iit.projlab.bmekings.Entities.Spore;
+
+import hu.bme.iit.projlab.bmekings.Map.Tecton.Tecton;
 /**
  * A SpeedSpore osztály egy specifikus spóra típust valósít meg, amely gyorsító hatást fejt ki a rovarokra.
  * Ha egy rovar elfogyasztja, a rovar mozgási sebessége nő, így gyorsabban tud mozogni a tektonok között.

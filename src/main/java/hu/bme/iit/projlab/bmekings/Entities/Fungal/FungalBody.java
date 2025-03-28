@@ -1,4 +1,4 @@
-package main.java.hu.bme.iit.projlab.bmekings.Entities.Fungal;
+package hu.bme.iit.projlab.bmekings.Entities.Fungal;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
@@ -7,9 +7,9 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Set;
 
-import main.java.hu.bme.iit.projlab.bmekings.Map.Tecton.Tecton;
-import main.java.hu.bme.iit.projlab.bmekings.Entities.Entity;
-import main.java.hu.bme.iit.projlab.bmekings.Interface.SporeInterface.SporeInterface;
+import hu.bme.iit.projlab.bmekings.Map.Tecton.Tecton;
+import hu.bme.iit.projlab.bmekings.Entities.Entity;
+import hu.bme.iit.projlab.bmekings.Interface.SporeInterface.SporeInterface;
 
 /**
  * A FungalBody osztály a gombatestek adatait tárolja, és a fejlődéssel valamint spóraszórással kapcsolatos

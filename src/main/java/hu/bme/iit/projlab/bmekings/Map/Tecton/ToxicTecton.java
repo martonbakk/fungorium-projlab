@@ -1,4 +1,4 @@
-package main.java.hu.bme.iit.projlab.bmekings.Map.Tecton;
+package hu.bme.iit.projlab.bmekings.Map.Tecton;
 
 /**
  * A ToxicTecton osztály olyan tektonokat reprezentál, amelyeken a gombafonalak egy idő után felszívódnak.

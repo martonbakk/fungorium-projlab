@@ -1,6 +1,6 @@
-package main.java.hu.bme.iit.projlab.bmekings.Entities.Spore;
+package hu.bme.iit.projlab.bmekings.Entities.Spore;
 
-import main.java.hu.bme.iit.projlab.bmekings.Map.Tecton.Tecton;
+import hu.bme.iit.projlab.bmekings.Map.Tecton.Tecton;
 
 /**
  * A DuplicateSpore osztály egy specifikus spóra típust valósít meg, amely az őt elfogyasztó rovart osztódásra készteti.

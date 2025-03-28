@@ -1,4 +1,4 @@
-package main.java.hu.bme.iit.projlab.bmekings.Interface.Listener;
+package hu.bme.iit.projlab.bmekings.Interface.Listener;
 
 /**
  * A Listener interfész definiálja a játékban szereplő objektumok frissítési mechanizmusát.

@@ -1,6 +1,6 @@
-package main.java.hu.bme.iit.projlab.bmekings.Entities.Spore;
+package hu.bme.iit.projlab.bmekings.Entities.Spore;
 
-import main.java.hu.bme.iit.projlab.bmekings.Map.Tecton.Tecton;
+import hu.bme.iit.projlab.bmekings.Map.Tecton.Tecton;
 /**
  * A StunSpore osztály egy specifikus spóra típust valósít meg, amely bénító hatást fejt ki a rovarokra.
  * Ha egy rovar elfogyasztja, a rovar egy adott időtartamra lebénul, így nem tud mozogni vagy enni.
