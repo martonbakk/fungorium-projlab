@@ -1,15 +1,15 @@
 package hu.bme.iit.projlab.bmekings.Entities.Fungal;
 
 import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.Queue;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.LinkedList;
+import java.util.Queue;
 import java.util.Set;
 
-import hu.bme.iit.projlab.bmekings.Map.Tecton.Tecton;
 import hu.bme.iit.projlab.bmekings.Entities.Entity;
 import hu.bme.iit.projlab.bmekings.Interface.SporeInterface.SporeInterface;
+import hu.bme.iit.projlab.bmekings.Map.Tecton.Tecton;
 
 /**
  * A FungalBody osztály a gombatestek adatait tárolja, és a fejlődéssel valamint spóraszórással kapcsolatos
@@ -19,7 +19,8 @@ import hu.bme.iit.projlab.bmekings.Interface.SporeInterface.SporeInterface;
 public class FungalBody extends Entity {
 
     /** A gombatest által kilőtt spórák listája. */
-    private Queue<SporeInterface> spores = new LinkedList<>();
+    private Queue<SporeInterface> spores;
+    private ArrayList<Hyphal> hyphalList;
     private int currLevel;              // jelenlegi szint 
     private int shotSporesNum;          // a kiloheto sporak szama
     private TypeCharacteristics characteristics;
@@ -29,15 +30,19 @@ public class FungalBody extends Entity {
         super();  
 
         this.characteristics = new TypeCharacteristics(0, 0, 0, 0);
+        this.hyphalList=new ArrayList<>();
+        this.spores = new LinkedList<>();
         this.currLevel = 0;
         this.shotSporesNum = 0;
         this.callNum = 0;
     }
 
-    public FungalBody(int currLevel, int shotSporesNum, TypeCharacteristics characteristics, String id, Tecton baseLocation){
+    public FungalBody(int currLevel, int shotSporesNum, TypeCharacteristics characteristics, ArrayList<Hyphal> hyphalList, Queue<SporeInterface> spores,String id, Tecton baseLocation){
         super(id, baseLocation);
         
         this.characteristics = characteristics;
+        this.hyphalList = hyphalList;
+        this.spores=spores;
         this.currLevel = shotSporesNum;
         this.shotSporesNum = currLevel;
         this.callNum = 0;
@@ -51,7 +56,6 @@ public class FungalBody extends Entity {
     }
     
     public void levelUp() {
-        
         if (currLevel == 3) {
             System.out.println("Elérted a maximális szintet (3)!");
             return;
@@ -76,7 +80,7 @@ public class FungalBody extends Entity {
      * Koncepció a következő:
      * A fonál base és szomszéd tektonját elmentjük, végig megynük utána a szomszéd szomszédjával. 
      */
-    public void keepHyphalAlive(ArrayList<Hyphal> hyphalList) {
+    public void keepHyphalAlive() {
         HashMap<Tecton, Set<Tecton>> neighbours = new HashMap<>();
         Set<Hyphal> hyphalSet = new HashSet<>();
         Set<Tecton> visited = new HashSet<>();
@@ -88,7 +92,7 @@ public class FungalBody extends Entity {
 
         while (!queue.isEmpty()) {
             Tecton currentTecton = queue.poll();
-            for (Hyphal hyphal : hyphalList) {
+            for (Hyphal hyphal : this.hyphalList) {
                 Tecton base = hyphal.getBase();
                 Tecton connected = hyphal.getConnectedTecton();
                 if (base.equals(currentTecton) || connected.equals(currentTecton)) {
@@ -111,10 +115,9 @@ public class FungalBody extends Entity {
         }
     }
 
-  
     @Override
     public void update() {
-        // tldr;
+        keepHyphalAlive();
     }
 
     private class TypeCharacteristics{

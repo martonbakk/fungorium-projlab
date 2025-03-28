@@ -1,6 +1,8 @@
 package hu.bme.iit.projlab.bmekings.Entities.Spore;
 
+import hu.bme.iit.projlab.bmekings.Entities.Insect.Insect;
 import hu.bme.iit.projlab.bmekings.Map.Tecton.Tecton;
+
 /**
  * A NormalSpore osztály egy alapvető spóra típust valósít meg, amely hatással van az azt elfogyasztó rovarra.
  * A spóra elfogyasztása növeli a rovar telítettségi szintjét.
@@ -16,7 +18,7 @@ public class NormalSpore extends Spore {
         super(n, id, baseLocation);
     }
 
-    public void activateEffect() {
+    public void activateEffect(Insect targetInsect) {
     }
 
     public void spawnSpore() {
@@ -24,5 +26,10 @@ public class NormalSpore extends Spore {
 
     @Override
     public void update() {
+    }
+
+    @Override
+    public int getNutritionValue(){
+        return 0;
     }
 }

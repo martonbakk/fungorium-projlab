@@ -2,6 +2,8 @@ package hu.bme.iit.projlab.bmekings.Map.Tecton;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Queue;
+import java.util.LinkedList;
 
 import hu.bme.iit.projlab.bmekings.Entities.Fungal.Hyphal;
 import hu.bme.iit.projlab.bmekings.Entities.Fungal.FungalBody;
@@ -14,7 +16,7 @@ import hu.bme.iit.projlab.bmekings.Interface.SporeInterface.SporeInterface;
  * Implementálja a Listener interfészt, így minden leszármazottjának biztosítania kell az update() metódus implementációját.
  */
 public class Tecton {
-    public ArrayList<SporeInterface> spores = new ArrayList<>();
+    private Queue<SporeInterface> spores = new LinkedList<>();
     public ArrayList<Tecton> neighbours = new ArrayList<>();
     public HashMap<Tecton, ArrayList<Hyphal>> connectedNeighbours = new HashMap<>();
 
@@ -40,8 +42,8 @@ public class Tecton {
 
     }
 
-    public void addSpore(SporeInterface s) {
-        spores.add(s);
+    public void addSpore(SporeInterface spore) {
+        spores.add(spore);
     }
 
     public ArrayList<Tecton> getConnectedNeighbors() {
@@ -51,27 +53,19 @@ public class Tecton {
     public void setOccupiedByFungus(boolean b) {
         if (b && !occupiedByFungalBody) {
             FungalBody newFungalBody = new FungalBody();
-            //entities.add(newFungalBody);
             occupiedByFungalBody = true;
         } else if (!b){
             
         }
     }
 
-
-    public ArrayList<SporeInterface> decreaseSpore(int n, int d) {
+    public ArrayList<SporeInterface> decreaseSpore(int sporesNeed) {
         ArrayList<SporeInterface> sporeList = null;
+        if (spores.size() < sporesNeed) return null; 
 
-        if (n < d) {
-            return null;
+        for (int i = 0; i < sporesNeed; i++) {
+            sporeList.add(spores.poll());
         }
-
-        if (spores.size() >= n ) {
-            for (int i = 0; i < d; i++) {
-                spores.remove(i);
-            }
-        }
-        
         return sporeList;
     }
 
@@ -87,9 +81,9 @@ public class Tecton {
         return new ArrayList<Tecton>();
     }
 
+    public SporeInterface getNextSporeToEat(){return spores.peek();}
 
     public void runSpecialEffect() {}
-
     
 
 }

@@ -1,5 +1,7 @@
 package hu.bme.iit.projlab.bmekings.Interface.SporeInterface;
 
+
+import hu.bme.iit.projlab.bmekings.Entities.Insect.Insect;
 /**
  * A ISpore interfész definiálja a spórák alapvető viselkedését a játékban.
  * Azok az osztályok, amelyek implementálják ezt az interfészt, kötelesek megvalósítani
@@ -12,7 +14,7 @@ public interface SporeInterface {
      * A metódust minden implementáló osztálynak meg kell valósítania, hogy meghatározza,
      * milyen hatást gyakorol a spóra a rovarra, amely elfogyasztja.
      */
-    public void activateEffect();
+    public void activateEffect(Insect targetInsect);
 
     /**
      * Létrehozza (spawnolja) a spórát a játékban.
@@ -20,4 +22,7 @@ public interface SporeInterface {
      * a spóra megjelenését a játékterepen.
      */
     public void spawnSpore();
+
+
+    public int getNutritionValue();
 }

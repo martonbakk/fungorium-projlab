@@ -36,7 +36,7 @@ public class Hyphal extends Entity {
     }
 
     public void growFungus() {
-        if(baseLocation.decreaseSpore(5, 2) != null) {
+        if(baseLocation.decreaseSpore(2) != null) {
             baseLocation.setOccupiedByFungus(true);
         }
     }
@@ -46,20 +46,27 @@ public class Hyphal extends Entity {
     }
 
     public void speedUpDevelopment() {
-        if(baseLocation.decreaseSpore(2, 2) != null){
-            developTime--;
+        if(baseLocation.decreaseSpore(2) != null){
+            developTime-=2;
+            if(developTime<=0){
+                developed=true;
+            }
         }
     }
 
     public void aging() {
         lifeTime--;
+        developTime--;
+        if(developTime<=0){
+            developed=true;
+        }
     }
 
     public void eatInsect(){
-        // tldr;
+        //tldr;
     }
     
-    Tecton getConnectedTecton(){return connectedTecton;}
+    Tecton getConnectedTecton(){ return connectedTecton; }
 
     @Override
     public void update() {

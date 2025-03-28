@@ -4,6 +4,7 @@ import hu.bme.iit.projlab.bmekings.Entities.Entity;
 import hu.bme.iit.projlab.bmekings.Interface.SporeInterface.SporeInterface;
 import hu.bme.iit.projlab.bmekings.Map.Tecton.Tecton;
 
+
 /**
  * A Spore absztrakt osztály a különböző típusú spórák közös tulajdonságait és viselkedését definiálja.
  * A spórák a gombatestek által termelt egységek, amelyek új gombafonalak és gombatestek fejlődését segítik,

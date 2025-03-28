@@ -1,6 +1,8 @@
 package hu.bme.iit.projlab.bmekings.Entities.Spore;
 
+import hu.bme.iit.projlab.bmekings.Entities.Insect.Insect;
 import hu.bme.iit.projlab.bmekings.Map.Tecton.Tecton;
+
 /**
  * A SlowSpore osztály egy specifikus spóra típust valósít meg, amely lassító hatást fejt ki a rovarokra.
  * Ha egy rovar elfogyasztja, a rovar mozgási sebessége csökken, így lassabban tud mozogni a tektonok között.
@@ -17,7 +19,7 @@ public class SlowSpore extends Spore {
     }
 
 
-    public void activateEffect() {
+    public void activateEffect(Insect targetInsect) {
 
     }
 
@@ -28,5 +30,10 @@ public class SlowSpore extends Spore {
     @Override
     public void update() {
         
+    }
+
+    @Override
+    public int getNutritionValue(){
+        return 0;
     }
 }

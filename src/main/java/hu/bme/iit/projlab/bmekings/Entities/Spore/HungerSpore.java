@@ -1,6 +1,8 @@
 package hu.bme.iit.projlab.bmekings.Entities.Spore;
 
+import hu.bme.iit.projlab.bmekings.Entities.Insect.Insect;
 import hu.bme.iit.projlab.bmekings.Map.Tecton.Tecton;
+
 /**
  * A HungerSpore osztály egy specifikus spóra típust valósít meg, amely éheztető hatást fejt ki a rovarokra.
  * Ha egy rovar elfogyasztja, csökkenti a rovar telítettségi szintjét, így a rovar több spórát tud fogyasztani.
@@ -16,7 +18,7 @@ public class HungerSpore extends Spore {
         super(n,id,baseLocation);
     }
 
-    public void activateEffect() {
+    public void activateEffect(Insect targetInsect) {
         
     }
 
@@ -27,5 +29,10 @@ public class HungerSpore extends Spore {
     @Override
     public void update() {
 
+    }
+
+    @Override
+    public int getNutritionValue(){
+        return 0;
     }
 }

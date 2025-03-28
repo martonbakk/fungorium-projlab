@@ -1,6 +1,8 @@
 package hu.bme.iit.projlab.bmekings.Entities.Spore;
 
+import hu.bme.iit.projlab.bmekings.Entities.Insect.Insect;
 import hu.bme.iit.projlab.bmekings.Map.Tecton.Tecton;
+
 
 /**
  * A HyphalProtectorSpore osztály egy specifikus spóra típust valósít meg, amely védő hatást fejt ki a gombafonalakra.
@@ -17,7 +19,7 @@ public class HyphalProtectorSpore extends Spore {
         super(n, id, baseLocation);
     }
 
-    public void activateEffect() {
+    public void activateEffect(Insect targInsect) {
 
     }
 
@@ -29,5 +31,10 @@ public class HyphalProtectorSpore extends Spore {
     @Override
     public void update() {
         
+    }
+
+    @Override
+    public int getNutritionValue(){
+        return 0;
     }
 }

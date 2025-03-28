@@ -1,5 +1,6 @@
 package hu.bme.iit.projlab.bmekings.Entities.Spore;
 
+import hu.bme.iit.projlab.bmekings.Entities.Insect.Insect;
 import hu.bme.iit.projlab.bmekings.Map.Tecton.Tecton;
 /**
  * A StunSpore osztály egy specifikus spóra típust valósít meg, amely bénító hatást fejt ki a rovarokra.
@@ -25,7 +26,7 @@ public class StunSpore extends Spore {
      * A metódus egy adott időtartamra megállítja a rovart, amely elfogyasztotta a spórát,
      * és kiírja a konzolra, hogy a hatás aktiválódott.
      */
-    public void activateEffect() {
+    public void activateEffect(Insect targetInsect) {
     }
 
     /**
@@ -43,5 +44,10 @@ public class StunSpore extends Spore {
     @Override
     public void update() {
         
+    }
+    
+    @Override
+    public int getNutritionValue(){
+        return 0;
     }
 }

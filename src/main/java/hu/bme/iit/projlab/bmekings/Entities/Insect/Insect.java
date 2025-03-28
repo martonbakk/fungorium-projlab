@@ -1,8 +1,10 @@
 package hu.bme.iit.projlab.bmekings.Entities.Insect;
 
-import hu.bme.iit.projlab.bmekings.Entities.Fungal.Hyphal;
-import hu.bme.iit.projlab.bmekings.Map.Tecton.Tecton;
 import hu.bme.iit.projlab.bmekings.Entities.Entity;
+import hu.bme.iit.projlab.bmekings.Entities.Fungal.Hyphal;
+import hu.bme.iit.projlab.bmekings.Interface.SporeInterface.SporeInterface;
+import hu.bme.iit.projlab.bmekings.Map.Tecton.Tecton;
+
 /**
  * Az Insect osztály a rovarok kezelésére szolgál a játékban.
  * A rovarokat a rovarászok irányítják, és fő feladatuk a spórák elfogyasztása, valamint a gombafonalak elvágása.
@@ -15,8 +17,8 @@ public class Insect extends Entity {
     private int movingCD;
     private int stomachLimit;
     private int currStomachFullness;
-    private boolean cutCooldown;
-
+    private int cutCooldown;
+    
     public Insect() {
         super();
 
@@ -24,34 +26,41 @@ public class Insect extends Entity {
         this.movingCD = 0;
         this.stomachLimit = 0;
         this.currStomachFullness = 0;
-        this.cutCooldown = false;
+        this.cutCooldown = 0;
     }
 
-    public Insect(int movingSpeed, int movingCD, int stomachLimit, boolean cutCooldown, String id, Tecton baseLocation){
+    public Insect(int movingSpeed, int movingCD, int stomachLimit, int currStomachFullness, int cutCooldown, String id, Tecton baseLocation){
         super(id, baseLocation);
 
         this.movingSpeed = movingSpeed;
         this.movingCD = movingCD;
         this.stomachLimit = stomachLimit;
-        this.currStomachFullness = stomachLimit;
+        this.currStomachFullness = currStomachFullness;
         this.cutCooldown = cutCooldown;
     }
 
-    public void move() {
-        
+    public void move(Tecton targetTecton) {
+        // movingSpeed ????? TICK / TURN BASED
+        if(movingCD==0){
+            this.baseLocation=targetTecton;
+        }
     }
 
     public void eatSpore() {
-
+        SporeInterface sporeToEat=this.baseLocation.getNextSporeToEat();
+        if(this.currStomachFullness+sporeToEat.getNutritionValue() <this.stomachLimit){
+            this.baseLocation.decreaseSpore(1);
+            sporeToEat.activateEffect(this);
+        }
     }
 
     public void cutHyphal(Hyphal h) {
-
+        
     }
-
 
     @Override
     public void update() {
-        
+        movingCD--;     // 0 alá ne menjen
+        cutCooldown--;  // 0 alá ne menjen
     }
 }
