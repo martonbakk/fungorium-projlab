@@ -32,7 +32,7 @@ public class FungalBody extends Entity {
         this.characteristics = new TypeCharacteristics(0, 0, 0, 0);
         this.hyphalList=new ArrayList<>();
         this.spores = new LinkedList<>();
-        this.currLevel = 0;
+        this.currLevel = 1;
         this.shotSporesNum = 0;
         this.callNum = 0;
     }
@@ -43,10 +43,21 @@ public class FungalBody extends Entity {
         this.characteristics = characteristics;
         this.hyphalList = hyphalList;
         this.spores=spores;
-        this.currLevel = shotSporesNum;
-        this.shotSporesNum = currLevel;
+        this.currLevel = currLevel;
+        this.shotSporesNum = shotSporesNum;
         this.callNum = 0;
     }
+
+    /// occupiedByFungalbody-hoz kell
+    public FungalBody(TypeCharacteristics characteristics,String id, Tecton baseLocation){
+        super(id,baseLocation); 
+        this.characteristics = characteristics;
+        this.hyphalList=new ArrayList<>();
+        this.spores = new LinkedList<>();
+        this.currLevel = 1;
+        this.callNum = 0;
+    }
+
 
     // FLAG VALTOZAS AZ UML BEN PLUSZ PARAMÉTER
     public void shootSpore(Tecton tecton) {

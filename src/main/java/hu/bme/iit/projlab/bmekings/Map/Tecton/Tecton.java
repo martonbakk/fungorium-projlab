@@ -4,10 +4,13 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Queue;
 import java.util.LinkedList;
+import java.util.List;
 
 import hu.bme.iit.projlab.bmekings.Entities.Fungal.Hyphal;
 import hu.bme.iit.projlab.bmekings.Entities.Fungal.FungalBody;
 import hu.bme.iit.projlab.bmekings.Interface.SporeInterface.SporeInterface;
+import hu.bme.iit.projlab.bmekings.Player.Mycologist.Mycologist;
+
 
 /**
  * A Tecton osztály a Fungorium bolygó felszínét alkotó egységeket reprezentálja, amelyek különböző
@@ -19,12 +22,12 @@ public class Tecton {
     private Queue<SporeInterface> spores = new LinkedList<>();
     public ArrayList<Tecton> neighbours = new ArrayList<>();
     public HashMap<Tecton, ArrayList<Hyphal>> connectedNeighbours = new HashMap<>();
-
+    
     private String id;
     private double splitChance;
     private boolean occupiedByInsect;
-    private boolean occupiedByFungalBody;
-    
+    private boolean occupiedByFungalBody; 
+    private FungalBody fungalBody;
 
     public Tecton() {
         this.id="";
@@ -50,14 +53,17 @@ public class Tecton {
         return new ArrayList<>();
     }
 
-    public void setOccupiedByFungus(boolean b) {
-        if (b && !occupiedByFungalBody) {
-            FungalBody newFungalBody = new FungalBody();
-            occupiedByFungalBody = true;
-        } else if (!b){
-            
+    public void createFungalBody( Mycologist player) {
+        if (fungalBody != null) {
+            fungalBody = new FungalBody(player.getTypeCharacteristics(),12,this);
         }
     }
+
+    public void destroyFungalBody(){
+        fungalBody.destroy();
+        fungalBody = null;
+    }
+
 
     public ArrayList<SporeInterface> decreaseSpore(int sporesNeed) {
         ArrayList<SporeInterface> sporeList = null;
@@ -70,11 +76,29 @@ public class Tecton {
     }
 
 
-    public void disconnectTecton(Tecton tc) {
+    public void disconnectTecton(Tecton tc, Hyphal hyphal) {
+        for (HashMap.Entry<Tecton, ArrayList<Hyphal>> entry : connectedNeighbours.entrySet()) {
+        Tecton key = entry.getKey();
+        ArrayList<Hyphal> value = entry.getValue();
+
+        if (key.equals(tc)) {
+            // Itt történik valami, ha a Tecton kulcs megegyezik a tc-vel
+            System.out.println("Találtunk egyezést: " + tc);
+            for (Hyphal h : value) {
+                if (hyphal.equals(h)){
+                    /// Ezt kell törölni
+                    /// Kell a hyphalnak is egy destroy függvény
+                    key.disconnectTecton(this,hyphal);
+                    this.connectedNeighbours.remove(key,h);
+                }
+            }
+        }
     }
 
-    public void connectTecton(Tecton tc) {
+    }
 
+    public void connectTecton(Tecton tc, Mycologist player) {
+        connectedNeighbours.append();
     }
 
     public ArrayList<Tecton> getNeighbors() {

@@ -1,5 +1,8 @@
 package hu.bme.iit.projlab.bmekings.Entities.Insect;
 
+import java.util.ArrayList;
+
+import hu.bme.iit.projlab.bmekings.Effects.Effect.Effect;
 import hu.bme.iit.projlab.bmekings.Entities.Entity;
 import hu.bme.iit.projlab.bmekings.Entities.Fungal.Hyphal;
 import hu.bme.iit.projlab.bmekings.Interface.SporeInterface.SporeInterface;
@@ -11,13 +14,14 @@ import hu.bme.iit.projlab.bmekings.Map.Tecton.Tecton;
  * A rovarok mozgásához gombafonalakra van szükségük, és különböző akciókat végezhetnek a játék során.
  * Az Entity absztrakt osztályból származik, így örökli annak attribútumait és metódusait.
  */
-public class Insect extends Entity {
+public class Insect extends Entity{
 
     private int movingSpeed;
     private int movingCD;
     private int stomachLimit;
     private int currStomachFullness;
     private int cutCooldown;
+    private ArrayList<Effect> activeEffects;
     
     public Insect() {
         super();
@@ -27,6 +31,7 @@ public class Insect extends Entity {
         this.stomachLimit = 0;
         this.currStomachFullness = 0;
         this.cutCooldown = 0;
+        this.activeEffects = new ArrayList<>();
     }
 
     public Insect(int movingSpeed, int movingCD, int stomachLimit, int currStomachFullness, int cutCooldown, String id, Tecton baseLocation){
@@ -62,5 +67,35 @@ public class Insect extends Entity {
     public void update() {
         movingCD--;     // 0 alá ne menjen
         cutCooldown--;  // 0 alá ne menjen
+        
+        // Kiszedes egy ido utan meg kell hogy valosuljon
+        for(Effect item: activeEffects){
+            //remove ha lejar az ideje
+        }
+    }
+
+    public void applyEffect(Effect effect) {
+        activeEffects.add(effect);
+    }
+
+    public void hungerEffectActivate(int stomachRateDecrease){
+        if (this.currStomachFullness-stomachRateDecrease<0){
+            this.currStomachFullness=0;
+        }else{
+            this.currStomachFullness-=stomachRateDecrease;
+        }
+    }
+
+    public void HyhalEffectActivate(int coolDown){
+        this.cutCooldown=coolDown;
+    }
+
+    public void SpeedEffectActivate(int speed, boolean stunned){
+        if(stunned){
+            this.movingCD=10;
+        }else{
+            // feltetel, hogy ne legyen minusz a sebesseg
+            this.movingSpeed=speed;
+        }
     }
 }
