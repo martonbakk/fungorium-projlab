@@ -55,13 +55,12 @@ public class Tecton {
 
     public void createFungalBody( Mycologist player) {
         if (fungalBody != null) {
-            fungalBody = new FungalBody(player.getTypeCharacteristics(),12,this);
+            //fungalBody = new FungalBody(player.getTypeCharacteristics(),12,this);
         }
     }
 
-    public void destroyFungalBody(){
-        fungalBody.destroy();
-        fungalBody = null;
+    FungalBody destroyFungalBody(){
+        return fungalBody;
     }
 
 
@@ -78,27 +77,30 @@ public class Tecton {
 
     public void disconnectTecton(Tecton tc, Hyphal hyphal) {
         for (HashMap.Entry<Tecton, ArrayList<Hyphal>> entry : connectedNeighbours.entrySet()) {
-        Tecton key = entry.getKey();
-        ArrayList<Hyphal> value = entry.getValue();
+            Tecton key = entry.getKey();
+            ArrayList<Hyphal> value = entry.getValue();
 
-        if (key.equals(tc)) {
-            // Itt történik valami, ha a Tecton kulcs megegyezik a tc-vel
-            System.out.println("Találtunk egyezést: " + tc);
-            for (Hyphal h : value) {
-                if (hyphal.equals(h)){
-                    /// Ezt kell törölni
-                    /// Kell a hyphalnak is egy destroy függvény
-                    key.disconnectTecton(this,hyphal);
-                    this.connectedNeighbours.remove(key,h);
+            if (key.equals(tc)) {
+                // Itt történik valami, ha a Tecton kulcs megegyezik a tc-vel
+                System.out.println("Találtunk egyezést: " + tc);
+                for (Hyphal h : value) {
+                    if (hyphal.equals(h)){
+                        /// Ezt kell törölni
+                        /// Kell a hyphalnak is egy destroy függvény
+                        key.disconnectTecton(this,hyphal);
+                        this.connectedNeighbours.remove(key,h);
+                    }
                 }
             }
         }
     }
 
+    public void setOccupiedByFungus(boolean value){
+        occupiedByFungalBody=value;
     }
 
     public void connectTecton(Tecton tc, Mycologist player) {
-        connectedNeighbours.append();
+        //connectedNeighbours.append(tc, );
     }
 
     public ArrayList<Tecton> getNeighbors() {
