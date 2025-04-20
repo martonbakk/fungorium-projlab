@@ -2,21 +2,25 @@ package hu.bme.iit.projlab.bmekings.Program;
 
 import java.util.Scanner;
 
+import hu.bme.iit.projlab.bmekings.Logic.Ticker.Ticker;
 import hu.bme.iit.projlab.bmekings.Map.Tecton.Tecton;
+import hu.bme.iit.projlab.bmekings.Logic.Ticker.Ticker;
 
 public class Program {
     public static void main(String[] args) {
+        Ticker ticker = new Ticker(1000);   // 1 sec
         boolean running = true;
         Scanner scanner = new Scanner(System.in);
 
         String input;
-
+        ticker.start();
         while (running) {
             input = scanner.nextLine();
             consoleActions(input);
 
             if (input.equals("exit")) {
                 running = false;
+                ticker.stop();
             }
         }
         scanner.close();
