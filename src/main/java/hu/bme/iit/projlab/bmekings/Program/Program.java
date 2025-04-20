@@ -172,7 +172,7 @@ public class Program {
     // ○ -lt [szám]: megváltoztatja az élettartama
     // ○ -ct [szám]: megváltoztatja azt az időt, ami után meghal, ha
     // elvágták
-    private void setFungus(String[] splitInput) {
+    private static void setFungus(String[] splitInput) {
         fungus = new FungalBody(); // flagek!!!!!
     }
 
@@ -195,7 +195,6 @@ public class Program {
     private static void setSpore(String[] splitInput) {
         spore = new SlowSpore(); // flageknek megfelelően be kell majd álltani
     }
-
 
     // -------------------- JÁTÉKBELI ESEMÉNYEK: ---------------------
 
