@@ -136,8 +136,6 @@ public class Mycologist extends Player{
         }
     }
 
-    
-
     private void growHyhal(Tecton tecton){
         if (checkControlledFungus()){
             return;
@@ -155,5 +153,7 @@ public class Mycologist extends Player{
             this.controlledFunguses.remove(fungalToDestroy);
         }
     }
+   
+   
     // getTypeCharacteristics(){}
 }

@@ -171,6 +171,7 @@ public class FungalBody extends Entity {
             return;
         }
 
+        // Ez a beégetett konstruktor paraméter szerintem nem jó konstrukció, valahogy ezt egységesen kellene beállítani szerintem pl static-al mas ötlet?
         Hyphal newHyphal = new Hyphal(connected, false, 3000, 3000, 300,this.baseLocation);
         
         // Mindkettőhöz hozzáadjuk a másikat?? Szerintem igen
