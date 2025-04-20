@@ -102,9 +102,9 @@ public class Program {
         case "/splittecton":
             splitTecton(splitInput);
             break;
-            case "exit":
+        case "exit":
             System.out.println("Program leállítása...");
-                break;
+            break;
         default:
             System.out.println("Rossz input!");
         }
