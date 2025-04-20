@@ -2,9 +2,9 @@ package hu.bme.iit.projlab.bmekings.Program;
 
 import java.util.Scanner;
 import java.util.ArrayList;
-import java.util.List;
 
 import hu.bme.iit.projlab.bmekings.Entities.Fungal.FungalBody;
+import hu.bme.iit.projlab.bmekings.Entities.Fungal.Hyphal;
 import hu.bme.iit.projlab.bmekings.Entities.Spore.SlowSpore;
 import hu.bme.iit.projlab.bmekings.Interface.SporeInterface.SporeInterface;
 import hu.bme.iit.projlab.bmekings.Logic.GameLogic.GameLogic;
@@ -12,16 +12,22 @@ import hu.bme.iit.projlab.bmekings.Map.Tecton.Tecton;
 import hu.bme.iit.projlab.bmekings.Player.Entomologist.Entomologist;
 import hu.bme.iit.projlab.bmekings.Player.Mycologist.Mycologist;
 public class Program {
+    // jatek inicializalasa
     private static GameLogic gameLogic = new GameLogic(1000, 2);
     private static ArrayList<Entomologist> entomologistPlayers = new ArrayList<>();
     private static ArrayList<Mycologist> mycologistPlayers = new ArrayList<>();
     private static Params params = new Params();
+    // tesztek inicializalasa
+    private static FungalBody fungus= new FungalBody();
+    private static SporeInterface spore= new SlowSpore();
+
      public static void main(String[] args) {
         boolean running = true;
         Scanner scanner = new Scanner(System.in);
         String input;
 
-        gameLogic.startGame(); //ticker start 1 sec see initialization
+        gameLogic.startGame(); //ticker start 1 sec 2 player, see initialization
+        initBasePlayers();
         while (running) {
             input = scanner.nextLine();
             consoleActions(input);
@@ -32,6 +38,13 @@ public class Program {
             }
         }
         scanner.close();
+    }
+
+    private static void initBasePlayers(){
+        String[] args1={"/addEntomologist", "e1"};
+        String[] args2={"/addMycologist","m1"};
+        addEntomologist(args1);
+        addMycologist(args2);
     }
 
     private static void consoleActions(String input) {
@@ -118,43 +131,16 @@ public class Program {
         }
     }
 
-
     // ● [string]: az Entomológus id-je
     private static void addEntomologist(String[] splitInput) {
         entomologistPlayers.add(new Entomologist(splitInput[1]));
+        System.out.println("Entomológus hozzáadva: " + splitInput[1]);
     }
-
 
     // ● [string]: az Mycologist id-je
     private static void addMycologist(String[] splitInput) {
         mycologistPlayers.add(new Mycologist(splitInput[1]));
-    }
-
-    private static void SelectTectionToDoActions(){
-        ArrayList<String> tectonIds = new ArrayList<>();
-        tectonIds.add("tecton1");
-        params.selectedTectons=gameLogic.map.getTectons(tectonIds);
-    }
-
-
-    // ● [string]: az Entitás id-je
-    // ● -n [szám]: a Spóra tápértéke
-    // ● -t [string]: a Spóra típusa, a string értéke lehet:
-    // ○ normal
-    // ○ slow
-    // ○ hunger
-    // ○ dupe
-    // ○ speed
-    // ○ stun
-    // ○ hyphalp
-    private static void addSpore(String[] splitInput) {
-        SporeInterface spore = new SlowSpore();
-        
-        params.sporeToAdd = spore;            // TODO: melyik spora tipus?
-        int playerIndexInMyCologistPlayers=0; // TODO: melyik mycologistnak adjuk hozzá?
-
-        // Mycologistban megy vegbe a hozzadas
-        mycologistPlayers.get(playerIndexInMyCologistPlayers).SelectAction(7, params);
+        System.out.println("Mycologist hozzáadva: " + splitInput[1]);
     }
 
     // ● [string]: az Entitás id-je
@@ -169,16 +155,10 @@ public class Program {
     //  ○ -lt [szám]: az élettartama
     //  ○ -ct [szám]: az az idő, ami után meghal, ha elvágták
     private static void addFungus(String[] splitInput) {
-        FungalBody fungus = new FungalBody(); // flageknek megfelelően be kell majd álltani
+       FungalBody fungus = new FungalBody(); // flageknek megfelelően be kell majd álltani
+
         // A base-t a mapból szedjük ki!!!!!!!!!!!!!!!!!!!!!!!!!!
-        params.selectedFungus = fungus;       //TODO: Milyen tipusu gombat akarunk hozzaadni?
-        mycologistPlayers.get(0).SelectAction(3,params); // TODO: melyik mycologistnak adjuk hozzá?
     }
-
-   
-    
-    
-
 
     // ● [string]: megadja, mely gombatest attribútumát változtatja
     // ● -fb
@@ -192,46 +172,71 @@ public class Program {
     // ○ -lt [szám]: megváltoztatja az élettartama
     // ○ -ct [szám]: megváltoztatja azt az időt, ami után meghal, ha
     // elvágták
-    private static void setFungus(String[] splitInput) {
-        
+    private void setFungus(String[] splitInput) {
+        fungus = new FungalBody(); // flagek!!!!!
+    }
+
+
+    // ● [string]: az Entitás id-je
+    // ● -n [szám]: a Spóra tápértéke
+    // ● -t [string]: a Spóra típusa, a string értéke lehet:
+    // ○ normal
+    // ○ slow
+    // ○ hunger
+    // ○ dupe
+    // ○ speed
+    // ○ stun
+    // ○ hyphalp
+    private static void addSpore(String[] splitInput) {
     }
 
     // ● -id [string]: megadja mely Spóra attribútumát változtatja meg
     // ● -n [szám]: megváltoztatja a Spóra tápértékét
     private static void setSpore(String[] splitInput) {
-        
+        spore = new SlowSpore(); // flageknek megfelelően be kell majd álltani
     }
 
+
+    // -------------------- JÁTÉKBELI ESEMÉNYEK: ---------------------
 
     // ● [string]: a gombatest id-je
     // ● [string]: a tektonok id-jei
     private static void shootSpore(String[] splitInput) {
-        
+        int playerIndexInMyCologistPlayers=0; // TODO: melyik mycologistnak adjuk hozzá? Beállítottam tesztre, hogy az első elsőt vegye mind a kettő csapatból
+        params.selectedTectons=null;// TODO: melyik tektonokat adjuk hozzá?
+        mycologistPlayers.get(playerIndexInMyCologistPlayers).SelectAction(6, params); // TODO: melyik mycologistnak adjuk hozzá?
     }
 
-
-
     // ● [string]: a fonál id-je
+    // Grow fungalBody
     private static void growFb(String[] splitInput) {
-        
+        int playerIndexInMyCologistPlayers=0; // TODO: melyik mycologistnak adjuk hozzá? Beállítottam tesztre, hogy az első elsőt vegye mind a kettő csapatból
+        FungalBody fungus = new FungalBody(); // flageknek megfelelően be kell majd álltani
+        // A base-t a mapból szedjük ki!!!!!!!!!!!!!!!!!!!!!!!!!!
+        params.selectedFungus = fungus;       //TODO: Milyen tipusu gombat akarunk hozzaadni?
+        mycologistPlayers.get(playerIndexInMyCologistPlayers).SelectAction(3, params); // TODO: melyik mycologistnak adjuk hozzá?
     }
 
     // ● [string]: a gombatest id-je
     // ● [string]: a tekton id-je
     private static void growH(String[] splitInput) {
-        
+        int playerIndexInMyCologistPlayers=0; // TODO: melyik mycologistnak adjuk hozzá? Beállítottam tesztre, hogy az első elsőt vegye mind a kettő csapatból
+        Tecton tecton = new Tecton(); // flageknek megfelelően be kell majd álltani
+        // A hova akarjuk azt a mapból szedjük ki!!!!!!!!!!!!!!!!!!!!!!!!!!
+        params.selectedTecton = tecton;       //TODO: Milyen tipusu gombat akarunk hozzaadni?
+        mycologistPlayers.get(playerIndexInMyCologistPlayers).SelectAction(4,params); // TODO: melyik mycologistnak adjuk hozzá?
     }
-
-
     
     // ● [string]: a fonál id-je
     private static void speedUpDev(String[] splitInput) {
-        
+        int playerIndexInMyCologistPlayers=0; // TODO: melyik mycologistnak adjuk hozzá? Beállítottam tesztre, hogy az első elsőt vegye mind a kettő csapatból
+        Hyphal hyphal = new Hyphal(); // flageknek megfelelően be kell majd álltani
+        params.selectedHyphal = hyphal;       //TODO: Milyen tipusu gombat akarunk hozzaadni?
+        mycologistPlayers.get(playerIndexInMyCologistPlayers).SelectAction(7, params); // TODO: melyik mycologistnak adjuk hozzá?
     }
 
 
-
-
+    // --------------ROVARÁSZ----------------
 
 
     // ● [string]: az Entitás id-je
@@ -243,8 +248,6 @@ public class Program {
     private static void addInsect(String[] splitInput) {
         
     }
-
-    
 
 
     // ● [string]: megadja mely Rovar attribútumát változtatja meg

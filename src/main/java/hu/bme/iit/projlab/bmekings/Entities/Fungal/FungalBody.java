@@ -5,9 +5,17 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.Queue;
+import java.util.Random;
 import java.util.Set;
 
 import hu.bme.iit.projlab.bmekings.Entities.Entity;
+import hu.bme.iit.projlab.bmekings.Entities.Spore.DuplicateSpore;
+import hu.bme.iit.projlab.bmekings.Entities.Spore.HungerSpore;
+import hu.bme.iit.projlab.bmekings.Entities.Spore.NormalSpore;
+import hu.bme.iit.projlab.bmekings.Entities.Spore.SlowSpore;
+import hu.bme.iit.projlab.bmekings.Entities.Spore.SpeedSpore;
+import hu.bme.iit.projlab.bmekings.Entities.Spore.Spore;
+import hu.bme.iit.projlab.bmekings.Entities.Spore.StunSpore;
 import hu.bme.iit.projlab.bmekings.Interface.SporeInterface.SporeInterface;
 import hu.bme.iit.projlab.bmekings.Map.Tecton.Tecton;
 
@@ -58,14 +66,53 @@ public class FungalBody extends Entity {
         this.callNum = 0;
     }
 
+    public Boolean checkShootingRange(Tecton tecton) {
+        if (baseLocation.equals(tecton)) {
+            return true;
+        }
+        Queue<Tecton> queue = new LinkedList<>();
+        HashMap<Tecton, Integer> distances = new HashMap<>();
+    
+        queue.add(baseLocation);
+        distances.put(baseLocation, 0);
+    
+        // BFS 
+        while (!queue.isEmpty()) {
+            Tecton current = queue.poll();
+            int currentDistance = distances.get(current);
+            
+            if (currentDistance >= this.characteristics.shootingRange) {
+                continue;
+            }
+            for (Tecton neighbor : current.neighbours) {
+                if (!distances.containsKey(neighbor)) {
+                    distances.put(neighbor, currentDistance + 1);
+                    queue.add(neighbor);
+    
+                    
+                    if (neighbor.equals(tecton)) {
+                        return false;
+                    }
+                }
+            }
+        }
+        System.out.println("A gombatest nem tudja elérni a megadott tekton-t!");
+        return true; 
+    }
 
     // FLAG VALTOZAS AZ UML BEN PLUSZ PARAMÉTER
     public void shootSpore(Tecton tecton) {
+        if(checkShootingRange(tecton)){
+            return;
+        }
+
         if(this.spores.isEmpty()){
             System.out.println("Nincs spóra a gombatestben!");
         }
         for (int i=0; i<this.shotSporesNum; i++){
-            tecton.addSpore(spores.poll());
+            SporeInterface spore = this.spores.poll();
+            spore.setBaseLocation(tecton);
+            tecton.addSpore(spore);
             this.shotSporesNum--;
             if(this.spores.isEmpty()){
                 System.out.println("Nincs több spóra a gombatestben!");
@@ -146,11 +193,38 @@ public class FungalBody extends Entity {
     @Override
     public void update() {
         keepHyphalAlive();
+        AddSpore();
 
+        this.shotSporesNum=10; // A kilőhető spórák számát vissza kell állítani a kezdeti értékre DE NEM BIZTOS HOGY EZT ÍGY KÉNE
         // egy adott idokozonkent majd amugy is termel sporat itt akkor random lehetne hozzaadogatni az AddSproe-val a sporakat
     }
 
-    public void AddSpore(SporeInterface spore) {
+    public void AddSpore() {
+        Random random = new Random();
+        int sporeType = random.nextInt(11); 
+        // default a NormalSpore mert arra legyen a legtöbb esély
+        SporeInterface spore;
+        switch (sporeType) {
+            case 0:
+                spore = new SlowSpore(); 
+                break;
+            case 1:
+                spore = new DuplicateSpore(); 
+                break;
+            case 2:
+                spore = new HungerSpore();
+                break;
+            case 3:
+                spore = new SpeedSpore(); 
+                break;
+            case 4:
+                spore = new StunSpore(); 
+                break;
+            default:
+                spore = new NormalSpore(); 
+                break;
+            }
+
         spores.add(spore);
     }
 
