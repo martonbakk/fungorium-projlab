@@ -2,6 +2,7 @@ package hu.bme.iit.projlab.bmekings.Interface.SporeInterface;
 
 
 import hu.bme.iit.projlab.bmekings.Entities.Insect.Insect;
+import hu.bme.iit.projlab.bmekings.Map.Tecton.Tecton;
 /**
  * A ISpore interfész definiálja a spórák alapvető viselkedését a játékban.
  * Azok az osztályok, amelyek implementálják ezt az interfészt, kötelesek megvalósítani
@@ -25,4 +26,6 @@ public interface SporeInterface {
 
 
     public int getNutritionValue();
+
+    public boolean isBaseLocation(Tecton baseLocation);
 }

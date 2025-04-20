@@ -27,4 +27,8 @@ public abstract class Entity implements Listener {
         return baseLocation;
     }
 
+    public String getId() {
+        return id;
+    }
+
 }

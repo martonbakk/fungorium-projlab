@@ -4,13 +4,18 @@ import java.util.Scanner;
 import java.util.ArrayList;
 import java.util.List;
 
+import hu.bme.iit.projlab.bmekings.Entities.Fungal.FungalBody;
+import hu.bme.iit.projlab.bmekings.Entities.Spore.SlowSpore;
+import hu.bme.iit.projlab.bmekings.Interface.SporeInterface.SporeInterface;
 import hu.bme.iit.projlab.bmekings.Logic.GameLogic.GameLogic;
+import hu.bme.iit.projlab.bmekings.Map.Tecton.Tecton;
 import hu.bme.iit.projlab.bmekings.Player.Entomologist.Entomologist;
 import hu.bme.iit.projlab.bmekings.Player.Mycologist.Mycologist;
 public class Program {
     private static GameLogic gameLogic = new GameLogic(1000, 2);
     private static ArrayList<Entomologist> entomologistPlayers = new ArrayList<>();
     private static ArrayList<Mycologist> mycologistPlayers = new ArrayList<>();
+    private static Params params = new Params();
      public static void main(String[] args) {
         boolean running = true;
         Scanner scanner = new Scanner(System.in);
@@ -125,30 +130,12 @@ public class Program {
         mycologistPlayers.add(new Mycologist(splitInput[1]));
     }
 
-    // ● [string]: az Entitás id-je
-    // ● [string]: az Entitás tektonja
-    // ● -fb: gomba testet adunk hozzá
-    // ○ -l [szám]: a Gombatest szintje
-    // ○ -s [szám]: a kilőhető Spórák száma
-    // ● -h: fonalat adunk hozzá
-    // ○ -t [tecton]: az a Tecton, amivel össze van kötve
-    // ○ -d [bool]: flag, amely jelzi, hogy ki van e nőve vagy nem
-    // ○ -dt [szám]: az az idő, ami a kinövéshez kell
-    // ○ -lt [szám]: az élettartama
-    // ○ -ct [szám]: az az idő, ami után meghal, ha elvágták
-    private static void addFungus(String[] splitInput) {
-       
+    private static void SelectTectionToDoActions(){
+        ArrayList<String> tectonIds = new ArrayList<>();
+        tectonIds.add("tecton1");
+        params.selectedTectons=gameLogic.map.getTectons(tectonIds);
     }
-    
-    // ● [string]: az Entitás id-je
-    // ● [string]: az Entitás tektonja
-    // ● -ms [szám]: a Rovar mozgási sebessége
-    // ● -mcd [szám]: a Rovar mozgásának cooldown-ja
-    // ● -sl [szám]: a Rovar telítettségének maximális értéke
-    // ● -ccd [szám]: a fonalvágás cooldown-ja
-    private static void addInsect(String[] splitInput) {
-        
-    }
+
 
     // ● [string]: az Entitás id-je
     // ● -n [szám]: a Spóra tápértéke
@@ -161,8 +148,37 @@ public class Program {
     // ○ stun
     // ○ hyphalp
     private static void addSpore(String[] splitInput) {
+        SporeInterface spore = new SlowSpore();
         
+        params.sporeToAdd = spore;            // TODO: melyik spora tipus?
+        int playerIndexInMyCologistPlayers=0; // TODO: melyik mycologistnak adjuk hozzá?
+
+        // Mycologistban megy vegbe a hozzadas
+        mycologistPlayers.get(playerIndexInMyCologistPlayers).SelectAction(7, params);
     }
+
+    // ● [string]: az Entitás id-je
+    // ● [string]: az Entitás tektonja
+    // ● -fb: gomba testet adunk hozzá
+    //  ○ -l [szám]: a Gombatest szintje
+    //  ○ -s [szám]: a kilőhető Spórák száma
+    // ● -h: fonalat adunk hozzá
+    //  ○ -t [tecton]: az a Tecton, amivel össze van kötve
+    //  ○ -d [bool]: flag, amely jelzi, hogy ki van e nőve vagy nem
+    //  ○ -dt [szám]: az az idő, ami a kinövéshez kell
+    //  ○ -lt [szám]: az élettartama
+    //  ○ -ct [szám]: az az idő, ami után meghal, ha elvágták
+    private static void addFungus(String[] splitInput) {
+        FungalBody fungus = new FungalBody(); // flageknek megfelelően be kell majd álltani
+        // A base-t a mapból szedjük ki!!!!!!!!!!!!!!!!!!!!!!!!!!
+        params.selectedFungus = fungus;       //TODO: Milyen tipusu gombat akarunk hozzaadni?
+        mycologistPlayers.get(0).SelectAction(3,params); // TODO: melyik mycologistnak adjuk hozzá?
+    }
+
+   
+    
+    
+
 
     // ● [string]: megadja, mely gombatest attribútumát változtatja
     // ● -fb
@@ -180,6 +196,57 @@ public class Program {
         
     }
 
+    // ● -id [string]: megadja mely Spóra attribútumát változtatja meg
+    // ● -n [szám]: megváltoztatja a Spóra tápértékét
+    private static void setSpore(String[] splitInput) {
+        
+    }
+
+
+    // ● [string]: a gombatest id-je
+    // ● [string]: a tektonok id-jei
+    private static void shootSpore(String[] splitInput) {
+        
+    }
+
+
+
+    // ● [string]: a fonál id-je
+    private static void growFb(String[] splitInput) {
+        
+    }
+
+    // ● [string]: a gombatest id-je
+    // ● [string]: a tekton id-je
+    private static void growH(String[] splitInput) {
+        
+    }
+
+
+    
+    // ● [string]: a fonál id-je
+    private static void speedUpDev(String[] splitInput) {
+        
+    }
+
+
+
+
+
+
+    // ● [string]: az Entitás id-je
+    // ● [string]: az Entitás tektonja
+    // ● -ms [szám]: a Rovar mozgási sebessége
+    // ● -mcd [szám]: a Rovar mozgásának cooldown-ja
+    // ● -sl [szám]: a Rovar telítettségének maximális értéke
+    // ● -ccd [szám]: a fonalvágás cooldown-ja
+    private static void addInsect(String[] splitInput) {
+        
+    }
+
+    
+
+
     // ● [string]: megadja mely Rovar attribútumát változtatja meg
     // ● -ms [szám]: megváltoztatja a Rovar mozgási sebességét
     // ● -mcd [szám]: megváltoztatja a Rovar mozgásának cooldown-ját
@@ -190,11 +257,7 @@ public class Program {
         
     }
 
-    // ● -id [string]: megadja mely Spóra attribútumát változtatja meg
-    // ● -n [szám]: megváltoztatja a Spóra tápértékét
-    private static void setSpore(String[] splitInput) {
-        
-    }
+    
 
     // ● [string]: megadja mely Tecton attribútumát változtatja meg
     // ● -sc [double]: megváltoztatja a kettétörés esélyét
@@ -234,27 +297,13 @@ public class Program {
         
     }
 
-    // ● [string]: a gombatest id-je
-    // ● [string]: a tektonok id-jei
-    private static void shootSpore(String[] splitInput) {
-        
-    }
+    
 
     // ● [string]: a gombatest id-je
     private static void levelUp(String[] splitInput) {
         
     }
 
-    // ● [string]: a fonál id-je
-    private static void growFb(String[] splitInput) {
-        
-    }
-
-    // ● [string]: a gombatest id-je
-    // ● [string]: a tekton id-je
-    private static void growH(String[] splitInput) {
-        
-    }
     
     // ● [string]: a rovar id-je
     // ● [string]: a tekton id-je
@@ -271,11 +320,6 @@ public class Program {
     // ● [string]: a fonal id-je
     // ● [string]: a rovar id-je
     private static void eatInsect(String[] splitInput) {
-        
-    }
-
-    // ● [string]: a fonál id-je
-    private static void speedUpDev(String[] splitInput) {
         
     }
 

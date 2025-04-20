@@ -5,8 +5,10 @@ import java.util.List;
 import hu.bme.iit.projlab.bmekings.Entities.Fungal.Hyphal;
 import hu.bme.iit.projlab.bmekings.Entities.Insect.Insect;
 import hu.bme.iit.projlab.bmekings.Entities.Spore.Spore;
+import hu.bme.iit.projlab.bmekings.Interface.SporeInterface.SporeInterface;
 import hu.bme.iit.projlab.bmekings.Map.Tecton.Tecton;
 import hu.bme.iit.projlab.bmekings.Player.Player;
+import hu.bme.iit.projlab.bmekings.Program.Params;
 
 public class Entomologist extends Player{
     private List<Insect> controlledInsects;
@@ -17,7 +19,7 @@ public class Entomologist extends Player{
     }
 
     @Override
-    public void SelectAction(int actionType, Object object ){
+    public void SelectAction(int actionType, Params param ){
         switch (actionType) {
             case 1:
                 // selectInsect
@@ -26,13 +28,13 @@ public class Entomologist extends Player{
                 // selectTecton
                 break;
             case 3:
-                MoveInsect((Tecton) object);
+                MoveInsect(param.selectedTecton);
                 break;
             case 4:
-                EatSporeInsect((List<Spore>) object, 0);
+                EatSporeInsect(param.selectedSpores, param.sporeNum);
                 break;
             case 5:
-                CutHyphalInsect((Hyphal) object);
+                CutHyphalInsect(param.selectedHyphal);
                 break;
             default:
                 System.out.println("Invalid action type");
@@ -41,7 +43,7 @@ public class Entomologist extends Player{
 
     public void MoveInsect(Tecton tectonToStepOn){}
 
-    public void EatSporeInsect(List<Spore> spore, int sporeNum){}
+    public void EatSporeInsect(List<SporeInterface> spore, int sporeNum){}
 
     public void CutHyphalInsect(Hyphal hyphalToCut){}
 }

@@ -25,7 +25,7 @@ public class FungalBody extends Entity {
     private int shotSporesNum;          // a kiloheto sporak szama
     private TypeCharacteristics characteristics;
     private int callNum;                // hívasok száma, ugye a leveUpnal mindig 3 hívás egyenlő egy szintel (currLevel)
-    
+
     public FungalBody() {
         super();  
 
@@ -61,14 +61,31 @@ public class FungalBody extends Entity {
 
     // FLAG VALTOZAS AZ UML BEN PLUSZ PARAMÉTER
     public void shootSpore(Tecton tecton) {
+        if(this.spores.isEmpty()){
+            System.out.println("Nincs spóra a gombatestben!");
+        }
         for (int i=0; i<this.shotSporesNum; i++){
             tecton.addSpore(spores.poll());
+            this.shotSporesNum--;
+            if(this.spores.isEmpty()){
+                System.out.println("Nincs több spóra a gombatestben!");
+                break;
+            }
+            if (this.shotSporesNum == 0) {
+                System.out.println("Nem tudsz kilőni több spórát!");
+                break;
+            }
         }
     }
     
+    public ArrayList<Hyphal> getHyphalList() {
+        return this.hyphalList;
+    }
+
     public void levelUp() {
         if (currLevel == 3) {
             System.out.println("Elérted a maximális szintet (3)!");
+            this.shotSporesNum++;
             return;
         }
 
@@ -129,6 +146,38 @@ public class FungalBody extends Entity {
     @Override
     public void update() {
         keepHyphalAlive();
+
+        // egy adott idokozonkent majd amugy is termel sporat itt akkor random lehetne hozzaadogatni az AddSproe-val a sporakat
+    }
+
+    public void AddSpore(SporeInterface spore) {
+        spores.add(spore);
+    }
+
+
+    /*
+     * Ezt itt csekkoljátok le, nem fix, hogy jó....
+     * Mindenféleképp a csekk logikától az összekötésig, hogy a BFS jól működjön
+     */
+    public void growHyphal(Tecton connected) {
+        //Tecton connectedTecton, 
+        //boolean developed, 
+        //int developTime, 
+        //int lifeTime, 
+        //int cutTime, 
+        //Tecton baseLocation
+        if(this.baseLocation.connectedNeighbours.get(connected)!=null){
+            System.out.println("Ez a fonál már létezik!");
+            return;
+        }
+
+        Hyphal newHyphal = new Hyphal(connected, false, 3000, 3000, 300,this.baseLocation);
+        
+        // Mindkettőhöz hozzáadjuk a másikat?? Szerintem igen
+        this.baseLocation.connectedNeighbours.get(this.baseLocation).add(newHyphal);
+        connected.connectedNeighbours.get(this.baseLocation).add(newHyphal);
+        
+        this.hyphalList.add(newHyphal);
     }
 
     private class TypeCharacteristics{

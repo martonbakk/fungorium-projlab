@@ -31,4 +31,16 @@ public class Map {
 
     }
 
+    public ArrayList<Tecton> getTectons(ArrayList<String> tectonIds) {
+        ArrayList<Tecton> result = new ArrayList<>();
+        for (Tecton tecton : tectons) {
+            for (String id : tectonIds) {
+                if (tecton.getId().equals(id)) {
+                    result.add(tecton);
+                }
+            }
+        }
+        return result;
+    }
+
 }

@@ -29,6 +29,10 @@ public class Tecton {
     private boolean occupiedByFungalBody; 
     private FungalBody fungalBody;
 
+    public String getId() {
+        return id;
+    }   
+
     public Tecton() {
         this.id="";
         this.splitChance=0;
@@ -59,7 +63,7 @@ public class Tecton {
         }
     }
 
-    FungalBody destroyFungalBody(){
+    public FungalBody destroyFungalBody(){
         return fungalBody;
     }
 
@@ -97,6 +101,10 @@ public class Tecton {
 
     public void setOccupiedByFungus(boolean value){
         occupiedByFungalBody=value;
+    }
+
+    public boolean isOccupiedByFungus(){
+        return occupiedByFungalBody;
     }
 
     public void connectTecton(Tecton tc, Mycologist player) {

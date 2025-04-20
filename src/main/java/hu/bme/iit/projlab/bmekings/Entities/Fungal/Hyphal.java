@@ -14,6 +14,11 @@ public class Hyphal extends Entity {
     private int developTime;
     private int lifeTime;
     private int cutTime;
+    private static int hyhalIds = 0;
+
+    private static void hyphalIdGenerator() {
+        hyhalIds++;
+    }
 
     public Hyphal() {
         super();
@@ -25,8 +30,8 @@ public class Hyphal extends Entity {
         this.cutTime = 0;
     }
 
-    public Hyphal(Tecton connectedTecton, boolean developed, int developTime, int lifeTime, int cutTime, String id, Tecton baseLocation){
-        super(id, baseLocation);
+    public Hyphal(Tecton connectedTecton, boolean developed, int developTime, int lifeTime, int cutTime, Tecton baseLocation){
+        super("Hyphal" + hyhalIds, baseLocation);
         
         this.connectedTecton = connectedTecton;
         this.developed = developed;

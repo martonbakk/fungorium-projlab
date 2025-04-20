@@ -14,6 +14,7 @@ import hu.bme.iit.projlab.bmekings.Map.Tecton.Tecton;
 public abstract class Spore extends Entity implements SporeInterface {
 
     private int nutritionValue;
+    private Tecton baseLocation;
 
     public Spore(){
         super();
@@ -24,4 +25,8 @@ public abstract class Spore extends Entity implements SporeInterface {
         super(id, baseLocation);
         nutritionValue = n;
     }
+
+    public boolean isBaseLocation(Tecton baseLocation) {
+        return this.baseLocation.getId().equals(baseLocation.getId());
+    }    
 }

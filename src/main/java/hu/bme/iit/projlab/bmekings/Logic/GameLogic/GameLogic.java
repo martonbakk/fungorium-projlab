@@ -19,7 +19,7 @@ public class GameLogic {
     /** A játékban szereplő Listener interfészt implementáló objektumok listája, amelyek frissítéseket kapnak. */
     private ArrayList<Listener> listeners = new ArrayList<>();
 
-    private Map map;
+    public Map map;
 
     public GameLogic(int TickInterval, int playerNum) {
         ticker = new Ticker(TickInterval); 
