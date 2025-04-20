@@ -14,10 +14,6 @@ public class Program {
     private static ArrayList<Entomologist> entomologistPlayers = new ArrayList<>();
     private static ArrayList<Mycologist> mycologistPlayers = new ArrayList<>();
      public static void main(String[] args) {
-         //1sec ticker, 2 player
-        entomologistPlayers.add(new Entomologist());
-        mycologistPlayers.add(new Mycologist());
-
         boolean running = true;
         Scanner scanner = new Scanner(System.in);
         String input;
@@ -121,26 +117,14 @@ public class Program {
 
 
     // ● [string]: az Entomológus id-je
-    // ● -n [string]: az Entomológus neve
-    // ● -t [string]: az Entomológus tektonja
-    // ● -ms [szám]: az Entomológus mozgási sebessége
-    // ● -mcd [szám]: az Entomológus mozgásának cooldown-ja
-    // ● -sl [szám]: az Entomológus telítettségének maximális értéke
-    // ● -ccd [szám]: a fonalvágás cooldown-ja
     private static void addEntomologist(String[] splitInput) {
-        
+        entomologistPlayers.add(new Entomologist(splitInput[1]));
     }
 
 
     // ● [string]: az Entomológus id-je
-    // ● -n [string]: az Entomológus neve
-    // ● -t [string]: az Entomológus tektonja
-    // ● -ms [szám]: az Entomológus mozgási sebessége
-    // ● -mcd [szám]: az Entomológus mozgásának cooldown-ja
-    // ● -sl [szám]: az Entomológus telítettségének maximális értéke
-    // ● -ccd [szám]: a fonalvágás cooldown-ja
     private static void addMycologist(String[] splitInput) {
-        
+        mycologistPlayers.add(new Mycologist(splitInput[1]));
     }
 
     // ● [string]: az Entitás id-je

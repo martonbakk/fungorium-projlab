@@ -11,6 +11,10 @@ public class Mycologist extends Player{
     List<FungalBody> controlledFunguses;
     // Fungus type lekezelese hianyzik
 
+    public Mycologist(String playerId) {
+        super(playerId);
+    }
+
     @Override
     public void SelectAction(){}
 

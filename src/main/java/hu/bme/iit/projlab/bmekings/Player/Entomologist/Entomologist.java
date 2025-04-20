@@ -12,6 +12,10 @@ public class Entomologist extends Player{
     private List<Insect> controlledInsects;
     // Rovar tipusat is kezzeljuk le valahogy
 
+    public Entomologist(String playerId) {
+        super(playerId);
+    }
+
     @Override
     public void SelectAction(){}
 
