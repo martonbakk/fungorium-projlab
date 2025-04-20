@@ -17,7 +17,10 @@ public class Map {
     }
 
     public void generateMap(int player) {
-        
+        for (int i = 0; i < player; i++) {
+            Tecton tc = new Tecton();   //random uj tektonokat bele kell rakni
+            tectons.add(tc);
+        }
     }
 
     public void splitTecton(Tecton tc) {

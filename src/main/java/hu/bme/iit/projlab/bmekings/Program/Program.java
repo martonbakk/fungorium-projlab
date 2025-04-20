@@ -1,26 +1,35 @@
 package hu.bme.iit.projlab.bmekings.Program;
 
 import java.util.Scanner;
+import java.lang.reflect.Array;
+import java.util.ArrayList;
+import java.util.List;
 
-import hu.bme.iit.projlab.bmekings.Logic.Ticker.Ticker;
-import hu.bme.iit.projlab.bmekings.Map.Tecton.Tecton;
-import hu.bme.iit.projlab.bmekings.Logic.Ticker.Ticker;
+import hu.bme.iit.projlab.bmekings.Logic.GameLogic.GameLogic;
+import hu.bme.iit.projlab.bmekings.Player.Entomologist.Entomologist;
+import hu.bme.iit.projlab.bmekings.Player.Mycologist.Mycologist;
 
 public class Program {
-    public static void main(String[] args) {
-        Ticker ticker = new Ticker(1000);   // 1 sec
+    private static GameLogic gameLogic = new GameLogic(1000, 2);
+    private static ArrayList<Entomologist> entomologistPlayers = new ArrayList<>();
+    private static ArrayList<Mycologist> mycologistPlayers = new ArrayList<>();
+     public static void main(String[] args) {
+         //1sec ticker, 2 player
+        entomologistPlayers.add(new Entomologist());
+        mycologistPlayers.add(new Mycologist());
+
         boolean running = true;
         Scanner scanner = new Scanner(System.in);
-
         String input;
-        ticker.start();
+
+        gameLogic.startGame(); //ticker start 1 sec see initialization
         while (running) {
             input = scanner.nextLine();
             consoleActions(input);
 
             if (input.equals("exit")) {
                 running = false;
-                ticker.stop();
+                gameLogic.stopGame();
             }
         }
         scanner.close();
@@ -30,6 +39,12 @@ public class Program {
         String[] splitInput = input.split(" ");
 
         switch (splitInput[0]) {
+        case "/addMycologist":
+            addMycologist(splitInput);
+            break;
+        case "/addEntomologist":
+            addEntomologist(splitInput);
+            break;
         case "/addfungus":
             addFungus(splitInput);
             break;
@@ -38,9 +53,6 @@ public class Program {
             break;
         case "/addspore":
             addSpore(splitInput);
-            break;
-        case "/addtecton":
-            addTecton(splitInput);
             break;
         case "/setfungus":
             setFungus(splitInput);
@@ -68,9 +80,6 @@ public class Program {
             break;
         case "/checkout":
             checkout(splitInput);
-            break;
-        case "/generatemap":
-            generateMap(splitInput);
             break;
         case "/shootsp":
             shootSpore(splitInput);
@@ -111,6 +120,29 @@ public class Program {
     }
 
 
+    // ● [string]: az Entomológus id-je
+    // ● -n [string]: az Entomológus neve
+    // ● -t [string]: az Entomológus tektonja
+    // ● -ms [szám]: az Entomológus mozgási sebessége
+    // ● -mcd [szám]: az Entomológus mozgásának cooldown-ja
+    // ● -sl [szám]: az Entomológus telítettségének maximális értéke
+    // ● -ccd [szám]: a fonalvágás cooldown-ja
+    private static void addEntomologist(String[] splitInput) {
+        
+    }
+
+
+    // ● [string]: az Entomológus id-je
+    // ● -n [string]: az Entomológus neve
+    // ● -t [string]: az Entomológus tektonja
+    // ● -ms [szám]: az Entomológus mozgási sebessége
+    // ● -mcd [szám]: az Entomológus mozgásának cooldown-ja
+    // ● -sl [szám]: az Entomológus telítettségének maximális értéke
+    // ● -ccd [szám]: a fonalvágás cooldown-ja
+    private static void addMycologist(String[] splitInput) {
+        
+    }
+
     // ● [string]: az Entitás id-je
     // ● [string]: az Entitás tektonja
     // ● -fb: gomba testet adunk hozzá
@@ -147,18 +179,6 @@ public class Program {
     // ○ stun
     // ○ hyphalp
     private static void addSpore(String[] splitInput) {
-        
-    }
-
-    // ● [string]: a Tecton id-ja
-    // ● [string]: a tekton típusa
-    // ○ normal
-    // ○ toxic
-    // ○ weak
-    // ○ nofungus
-    // ○ hyphalpres
-    // ● -sc [double]: a kettétörési esélye
-    private static void addTecton(String[] splitInput) {
         
     }
 
@@ -229,12 +249,6 @@ public class Program {
 
     // ● [string]: a példány id-je
     private static void checkout(String[] splitInput) {
-        
-    }
-
-    // Létrehoz egy véletlenszerű pályát Tektonokkal, Gombatestekkel, Fonalakkal,
-    // Rovarokkal és Spórákkal
-    private static void generateMap(String[] splitInput) {
         
     }
 

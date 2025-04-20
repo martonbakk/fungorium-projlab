@@ -3,6 +3,7 @@ package hu.bme.iit.projlab.bmekings.Logic.GameLogic;
 import java.util.ArrayList;
 
 import hu.bme.iit.projlab.bmekings.Interface.Listener.Listener;
+import hu.bme.iit.projlab.bmekings.Logic.Ticker.Ticker;
 import hu.bme.iit.projlab.bmekings.Entities.Entity;
 import hu.bme.iit.projlab.bmekings.Map.Map;
 
@@ -13,35 +14,34 @@ import hu.bme.iit.projlab.bmekings.Map.Map;
  * Kompozíciós kapcsolatban áll a Map osztállyal (egy az egyhez) és az Entity osztállyal (egy a többhöz).
  */
 public class GameLogic {
-
-    /** A játékban szereplő entitások listája, például gombatestek, spórák vagy rovarok. */
-    private ArrayList<Entity> entities = new ArrayList<>();
-
+    /** A játékidő telését vezérlő ticker objektum. */
+    private Ticker ticker;
     /** A játékban szereplő Listener interfészt implementáló objektumok listája, amelyek frissítéseket kapnak. */
     private ArrayList<Listener> listeners = new ArrayList<>();
 
     private Map map;
 
-    public GameLogic() {
-        
+    public GameLogic(int TickInterval, int playerNum) {
+        ticker = new Ticker(TickInterval); 
+        map = new Map();
+        map.generateMap(playerNum); 
     }
 
     public GameLogic(ArrayList<Entity> entities, ArrayList<Listener> listeners, Map map) {
-        this.entities=entities;
         this.listeners=listeners;
         this.map = map;
     }
     
     public void startGame() {
-        
+        ticker.start();
     }
-    
-    public void timeTick() {
-
-    }
-
    
     public void addListener(Listener l) {
-
+        ticker.addListener(l);
+        listeners.add(l);
     }
+
+    public void stopGame() {
+        ticker.stop();
+    }   
 }
