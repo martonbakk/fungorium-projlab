@@ -9,6 +9,7 @@ import hu.bme.iit.projlab.bmekings.Player.Player;
 
 public class Mycologist extends Player{
     List<FungalBody> controlledFunguses;
+    Object fungus; // Fungus type lekezelese hianyzik
     // Fungus type lekezelese hianyzik
 
     public Mycologist(String playerId) {
@@ -16,17 +17,45 @@ public class Mycologist extends Player{
     }
 
     @Override
-    public void SelectAction(){}
+    public void SelectAction(int actionType, Object object) {
+        switch (actionType) {
+            case 1:
+                // selectFungus
+                break;
+            case 2:
+                // selectHyphal
+                break;
+            case 3:
+                growFungus((FungalBody) object);
+                break;
+            case 4:
+                // growHyphal
+                break;
+            case 5:
+                // selectTectons
+                break;
+            case 6:
+                // destroyFungus
+                break;
+            default:
+                System.out.println("Invalid action type");
+        }
+        
+    }
 
-    void selectFungus(FungalBody fungus){}
+    private void selectFungus(FungalBody fungus){}
 
-    void selectHyphal(Hyphal hyphal){}
+    private void selectHyphal(Hyphal hyphal){}
 
-    void growHyhal(Tecton tecton){}
+    private void growFungus(FungalBody fungus){
+        controlledFunguses.add(fungus);
+    }
 
-    void selectTectons(List<Tecton> tectons){}
+    private void growHyhal(Tecton tecton){}
 
-    void destroyFungus(FungalBody fungalToDestroy){}
+    private void selectTectons(List<Tecton> tectons){}
+
+    private void destroyFungus(FungalBody fungalToDestroy){}
 
     // getTypeCharacteristics(){}
 }

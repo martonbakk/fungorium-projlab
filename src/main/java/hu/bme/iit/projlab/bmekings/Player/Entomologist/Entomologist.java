@@ -17,7 +17,27 @@ public class Entomologist extends Player{
     }
 
     @Override
-    public void SelectAction(){}
+    public void SelectAction(int actionType, Object object ){
+        switch (actionType) {
+            case 1:
+                // selectInsect
+                break;
+            case 2:
+                // selectTecton
+                break;
+            case 3:
+                MoveInsect((Tecton) object);
+                break;
+            case 4:
+                EatSporeInsect((List<Spore>) object, 0);
+                break;
+            case 5:
+                CutHyphalInsect((Hyphal) object);
+                break;
+            default:
+                System.out.println("Invalid action type");
+        }
+    }
 
     public void MoveInsect(Tecton tectonToStepOn){}
 

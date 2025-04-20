@@ -1,14 +1,12 @@
 package hu.bme.iit.projlab.bmekings.Program;
 
 import java.util.Scanner;
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.List;
 
 import hu.bme.iit.projlab.bmekings.Logic.GameLogic.GameLogic;
 import hu.bme.iit.projlab.bmekings.Player.Entomologist.Entomologist;
 import hu.bme.iit.projlab.bmekings.Player.Mycologist.Mycologist;
-
 public class Program {
     private static GameLogic gameLogic = new GameLogic(1000, 2);
     private static ArrayList<Entomologist> entomologistPlayers = new ArrayList<>();
@@ -122,7 +120,7 @@ public class Program {
     }
 
 
-    // ● [string]: az Entomológus id-je
+    // ● [string]: az Mycologist id-je
     private static void addMycologist(String[] splitInput) {
         mycologistPlayers.add(new Mycologist(splitInput[1]));
     }
@@ -139,7 +137,7 @@ public class Program {
     // ○ -lt [szám]: az élettartama
     // ○ -ct [szám]: az az idő, ami után meghal, ha elvágták
     private static void addFungus(String[] splitInput) {
-
+       
     }
     
     // ● [string]: az Entitás id-je
