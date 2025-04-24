@@ -16,6 +16,7 @@ public class Entomologist extends Player{
 
     public Entomologist(String playerId) {
         super(playerId);
+        //this.playerId=IDGenerator.generateID("E");
     }
     public List<Insect> getControlledInsects() { return controlledInsects; }
 

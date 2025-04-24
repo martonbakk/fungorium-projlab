@@ -50,19 +50,19 @@ public class Tecton {
     public void setOccupiedByFungus(boolean value) { occupiedByFungalBody = value; }
 
     public Tecton() {
-        this.id=IDGenerator.generateID("T");
+        //this.id=IDGenerator.generateID("T");
+        this.id = "";
         this.splitChance=0;
         this.occupiedByInsect=false;
         this.occupiedByFungalBody=false;
     }
 
     public Tecton(String id, double splitChance, boolean occupiedByInsect, boolean occupiedByFungalBody) {
+        //this.id=IDGenerator.generateID("T");
         this.id=id;
         this.splitChance=splitChance;
         this.occupiedByInsect=occupiedByInsect;
         this.occupiedByFungalBody=occupiedByFungalBody;
-        
-
     }
 
     public void addSpore(SporeInterface spore) {

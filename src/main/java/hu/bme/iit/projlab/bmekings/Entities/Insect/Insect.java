@@ -29,6 +29,7 @@ public class Insect extends Entity{
     public Insect() {
         super();
 
+        //this.id=IDGenerator.generateID("I");
         this.movingSpeed = 0;
         this.movingCD = 0;
         this.stomachLimit = 0;
@@ -40,6 +41,7 @@ public class Insect extends Entity{
     public Insect(int movingSpeed, int movingCD, int stomachLimit, int currStomachFullness, int cutCooldown, String id, Tecton baseLocation){
         super(id, baseLocation);
 
+        //this.id=IDGenerator.generateID("I");
         this.movingSpeed = movingSpeed;
         this.movingCD = movingCD;
         this.stomachLimit = stomachLimit;

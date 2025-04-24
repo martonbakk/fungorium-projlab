@@ -7,6 +7,7 @@ import hu.bme.iit.projlab.bmekings.Entities.Entity;
 import hu.bme.iit.projlab.bmekings.Entities.Entity.*;
 import hu.bme.iit.projlab.bmekings.Entities.Fungal.FungalBody;
 import hu.bme.iit.projlab.bmekings.Entities.Fungal.Hyphal;
+import hu.bme.iit.projlab.bmekings.Entities.Fungal.FungalBody.TypeCharacteristics;
 import hu.bme.iit.projlab.bmekings.Entities.Insect.Insect;
 import hu.bme.iit.projlab.bmekings.Entities.Spore.SlowSpore;
 import hu.bme.iit.projlab.bmekings.Entities.Spore.Spore;
@@ -67,10 +68,13 @@ public class Program {
         case "/addEntomologist":
             addEntomologist(splitInput);
             break;
-        case "/addfungus":
-            addFungus(splitInput);
+        case "/addFungalBody":
+            addFungalBody(splitInput);
             break;
-        case "/addinsect":
+        case "/addHyphal":
+            addHyphal(splitInput);
+            break;
+        case "/addInsect":
             addInsect(splitInput);
             break;
         case "/addspore":
@@ -158,19 +162,127 @@ public class Program {
 
     // ● [string]: az Entitás id-je
     // ● [string]: az Entitás tektonja
-    // ● -fb: gomba testet adunk hozzá
-    //  ○ -l [szám]: a Gombatest szintje
-    //  ○ -s [szám]: a kilőhető Spórák száma
-    // ● -h: fonalat adunk hozzá
-    //  ○ -t [tecton]: az a Tecton, amivel össze van kötve
+    // ● -l [szám]: a Gombatest szintje
+    // ● -s [szám]: a kilőhető Spórák száma
+
+    // /addFungalBody FB-02 T-02
+    // 0/addFungalBody [1]FB-03 [2]T-03 [3]-l [4]1
+    // /addFungalBody FB-04 T-04 -s 10
+    // [0]/addFungalBody [1]FB-01 [2]T-01 [3]-l [4]1 [5]-s [6]10
+    // TODO kérdes: hogyan adjuk meg, hogy melyik játékos csinálta? még egy paraméter?
+    private static void addFungalBody(String[] splitInput) {
+        if (splitInput.length < 4) {
+            // IMO így kéne hozzáadni, nem tudom mennyire baj, hogy a Mycologist dolgai public-ok e
+            for (Tecton t : gameLogic.map.getAllTectons()) {
+                if (t.getId().equals(splitInput[2]) && !t.isOccupiedByInsect()) {
+                    // default értékék, bármi lehet ami reasonable
+                    mycologistPlayers.get(0).growFungalBody(new FungalBody(splitInput[1], t, 1, 10, 4, 4, 4, 4));
+                    return;
+                }
+            }
+        }
+        // TODO hozzáadni a többit is a Mycologist-hoz
+        else if (splitInput.length < 6) {
+            if (splitInput[3].equals("-l")) {
+                for (Tecton t : gameLogic.map.getAllTectons()) {
+                    if (t.getId().equals(splitInput[2]) && !t.isOccupiedByInsect()) {
+                        FungalBody fungus = new FungalBody(splitInput[1], t, Integer.parseInt(splitInput[4]), 10, 4, 4, 4, 4);
+                        System.out.println("Új objektum FungalBody [" + splitInput[1] + "] létrejött");
+                        // myc-hoz adás
+                        return;
+                    }
+                }
+            }
+            else if (splitInput[3].equals("-s")) {
+                for (Tecton t : gameLogic.map.getAllTectons()) {
+                    if (t.getId().equals(splitInput[2]) && !t.isOccupiedByInsect()) {
+                        FungalBody fungus = new FungalBody(splitInput[1], t, 1, Integer.parseInt(splitInput[4]), 4, 4, 4, 4);
+                        System.out.println("Új objektum FungalBody [" + splitInput[1] + "] létrejött");
+                        // myc-hoz adás
+                        return;
+                    }
+                }
+            }
+            else {
+                System.out.println("Nincs ilyen paraméter!");
+            }
+        }
+        else if (splitInput.length < 8) {
+            if (splitInput[3].equals("-l") && splitInput[5].equals("-s")) {
+                for (Tecton t : gameLogic.map.getAllTectons()) {
+                    if (t.getId().equals(splitInput[2]) && !t.isOccupiedByInsect()) {
+                        FungalBody fungus = new FungalBody(splitInput[1], t, Integer.parseInt(splitInput[4]), Integer.parseInt(splitInput[6]), 4, 4, 4, 4);
+                        System.out.println("Új objektum FungalBody [" + splitInput[1] + "] létrejött");
+                        // myc-hoz adás
+                        return;
+                    }
+                }
+            }
+            else if (splitInput[3].equals("-s") && splitInput[5].equals("-l")) {
+                for (Tecton t : gameLogic.map.getAllTectons()) {
+                    if (t.getId().equals(splitInput[2]) && !t.isOccupiedByInsect()) {
+                        FungalBody fungus = new FungalBody(splitInput[1], t, Integer.parseInt(splitInput[6]), Integer.parseInt(splitInput[4]), 4, 4, 4, 4);
+                        System.out.println("Új objektum FungalBody [" + splitInput[1] + "] létrejött");
+                        // myc-hoz adás
+                        return;
+                    }
+                }
+            }
+            else {
+                System.out.println("Nincs ilyen paraméter!");
+            }
+        }
+        else {
+            System.out.println("Nincs ilyen paraméter!");
+        }
+    }
+
+    // ● [string]: az Entitás id-je
+    // ● [string]: az Entitás tektonja
+    // ● -t [tecton]: az a Tecton, amivel össze van kötve
     //  ○ -d [bool]: flag, amely jelzi, hogy ki van e nőve vagy nem
     //  ○ -dt [szám]: az az idő, ami a kinövéshez kell
     //  ○ -lt [szám]: az élettartama
     //  ○ -ct [szám]: az az idő, ami után meghal, ha elvágták
-    private static void addFungus(String[] splitInput) {
-       FungalBody fungus = new FungalBody(); // flageknek megfelelően be kell majd álltani
+    // [0]/addHyphal [1]H-01 [2]T-01 [3]-t [4]T-02
+    // [0]/addHyphal [1]H-02 [2]T-01 [3]-t [4]T-02 [5]-d [6]true 
+    // [0]/addHyphal [1]H-01 [2]T-01 [3]-t [4]T-02 [5]-d [6]true [7]-lt [8]8
+    // [0]/addHyphal [1]H-04 [2]T-01 [3]-t [4]T-02 [5]-d [6]true [7]-lt [8]10 [9]-ct 6
+    // [0]/addHyphal [1]H-05 [2]T-02 [3]-t [4]T-03 [5]-d [6]false [7]-dt [8]3 [9]-lt [10]10 [11]-ct 6
 
-        // A base-t a mapból szedjük ki!!!!!!!!!!!!!!!!!!!!!!!!!!
+    // TODO itt is, melyik mycologisthoz adjuk hozzá
+    private static void addHyphal(String[] splitInput) {
+        if (splitInput.length < 6) {
+            for (Tecton t1 : gameLogic.map.getAllTectons()) {
+                if (t1.getId().equals(splitInput[2])) {
+                    for (Tecton t2 : gameLogic.map.getAllTectons()) {
+                        if (t2.getId().equals(splitInput[4])) {
+                            Hyphal hyphal = new Hyphal(splitInput[1], t1, t2, 10, 10, 10);
+                        }
+                    }
+                }
+            }
+        }
+        else {
+            /* TODO */
+            switch (splitInput[5]) {
+                case "-d":
+                    
+                    break;
+                case "-dt":
+                    
+                    break;
+                case "-lt":
+                    
+                    break;
+                case "-ct":
+                    
+                    break;
+                default:
+                    break;
+            }
+
+        }
     }
 
     // ● [string]: megadja, mely gombatest attribútumát változtatja

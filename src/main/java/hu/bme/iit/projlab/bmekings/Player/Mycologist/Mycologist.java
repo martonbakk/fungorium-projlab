@@ -18,6 +18,9 @@ public class Mycologist extends Player{
 
     public Mycologist(String playerId) {
         super(playerId);
+        //this.playerId=IDGenerator.generateID("M");
+        this.controlledFunguses = new ArrayList<>();
+        this.hyphalList = new ArrayList<>();
     }
 
     public ArrayList<FungalBody> getControlledFunguses() { return controlledFunguses; }

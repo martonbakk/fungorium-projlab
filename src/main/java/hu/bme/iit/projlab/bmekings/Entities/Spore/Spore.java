@@ -18,11 +18,13 @@ public abstract class Spore extends Entity implements SporeInterface {
 
     public Spore(){
         super();
+        //this.id=IDGenerator.generateID("SP");
         this.nutritionValue=0;
     }
 
     public Spore(int n, String id, Tecton baseLocation) {
         super(id, baseLocation);
+        //this.id=IDGenerator.generateID("SP");
         nutritionValue = n;
     }
 

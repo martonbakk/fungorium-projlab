@@ -25,7 +25,7 @@ public class Hyphal extends Entity {
 
     public Hyphal() {
         super();
-
+        //this.id=IDGenerator.generateID("T");
         this.connectedTecton = new Tecton(); 
         this.developed = false;
         this.developTime  = 0;
@@ -33,9 +33,20 @@ public class Hyphal extends Entity {
         this.cutTime = 0;
     }
 
+    // Szerintem kéne egy ilyen konstruktor
+    public Hyphal(String id, Tecton baseLocation, Tecton connectedTecon, int developTime, int lifeTime, int cutTime) {
+        super(id, baseLocation);
+        //this.id=IDGenerator.generateID("T");
+        this.connectedTecton = connectedTecon;
+        this.developed = true;
+        this.developTime  = developTime;
+        this.lifeTime = lifeTime;
+        this.cutTime = cutTime;
+    }
+
     public Hyphal(Tecton connectedTecton, boolean developed, int developTime, int lifeTime, int cutTime, Tecton baseLocation){
         super("Hyphal" + hyphalIds, baseLocation);
-        
+        //this.id=IDGenerator.generateID("T");
         this.connectedTecton = connectedTecton;
         this.developed = developed;
         this.developTime = developTime;

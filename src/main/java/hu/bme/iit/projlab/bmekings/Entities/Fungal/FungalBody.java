@@ -40,6 +40,7 @@ public class FungalBody extends Entity {
     public FungalBody() {
         super();  
 
+        //this.id=IDGenerator.generateID("FB");
         this.characteristics = new TypeCharacteristics(0, 0, 0, 0);
         this.spores = new LinkedList<>();
         this.currLevel = 1;
@@ -49,12 +50,23 @@ public class FungalBody extends Entity {
 
     public FungalBody(int currLevel, int shotSporesNum, TypeCharacteristics characteristics, Queue<SporeInterface> spores,String id, Tecton baseLocation){
         super(id, baseLocation);
-        
+        //this.id=IDGenerator.generateID("FB");
         this.characteristics = characteristics;
         this.spores=spores;
         this.currLevel = currLevel;
         this.shotSporesNum = shotSporesNum;
         this.callNum = 0;
+    }
+
+    public FungalBody(String id, Tecton baseLocation, int currLevel, int shotSporesNum, int shootingRange, int sporeProductionIntensity, int startingHyphalNum, int sporeCapacity) {
+        super(id, baseLocation);
+        //this.id=IDGenerator.generateID("FB");
+        this.spores = new LinkedList<>();
+        this.characteristics = new TypeCharacteristics(shootingRange, sporeProductionIntensity, startingHyphalNum, sporeCapacity);
+        this.currLevel = currLevel;
+        this.shotSporesNum = shotSporesNum;
+        this.callNum = 0;
+        System.out.println("asd");
     }
 
     /// occupiedByFungalbody-hoz kell
@@ -70,7 +82,7 @@ public class FungalBody extends Entity {
 
     public int getShotSporesNum() { return shotSporesNum; }
 
-    public TypeCharacteristics getCharacteristics() {return characteristics; }
+    public TypeCharacteristics getCharacteristics() { return characteristics; }
 
     public Boolean checkShootingRange(Tecton tecton) {
         if (baseLocation.equals(tecton)) {
