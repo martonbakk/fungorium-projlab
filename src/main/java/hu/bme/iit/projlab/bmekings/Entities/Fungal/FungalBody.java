@@ -1,5 +1,6 @@
 package hu.bme.iit.projlab.bmekings.Entities.Fungal;
 
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -17,7 +18,10 @@ import hu.bme.iit.projlab.bmekings.Entities.Spore.SpeedSpore;
 import hu.bme.iit.projlab.bmekings.Entities.Spore.Spore;
 import hu.bme.iit.projlab.bmekings.Entities.Spore.StunSpore;
 import hu.bme.iit.projlab.bmekings.Interface.SporeInterface.SporeInterface;
+import hu.bme.iit.projlab.bmekings.Logic.GameLogic.GameLogic;
 import hu.bme.iit.projlab.bmekings.Map.Tecton.Tecton;
+import hu.bme.iit.projlab.bmekings.Player.Mycologist.Mycologist;
+
 
 /**
  * A FungalBody osztály a gombatestek adatait tárolja, és a fejlődéssel valamint spóraszórással kapcsolatos
@@ -28,7 +32,6 @@ public class FungalBody extends Entity {
 
     /** A gombatest által kilőtt spórák listája. */
     private Queue<SporeInterface> spores;
-    private ArrayList<Hyphal> hyphalList;
     private int currLevel;              // jelenlegi szint 
     private int shotSporesNum;          // a kiloheto sporak szama
     private TypeCharacteristics characteristics;
@@ -38,18 +41,16 @@ public class FungalBody extends Entity {
         super();  
 
         this.characteristics = new TypeCharacteristics(0, 0, 0, 0);
-        this.hyphalList=new ArrayList<>();
         this.spores = new LinkedList<>();
         this.currLevel = 1;
         this.shotSporesNum = 0;
         this.callNum = 0;
     }
 
-    public FungalBody(int currLevel, int shotSporesNum, TypeCharacteristics characteristics, ArrayList<Hyphal> hyphalList, Queue<SporeInterface> spores,String id, Tecton baseLocation){
+    public FungalBody(int currLevel, int shotSporesNum, TypeCharacteristics characteristics, Queue<SporeInterface> spores,String id, Tecton baseLocation){
         super(id, baseLocation);
         
         this.characteristics = characteristics;
-        this.hyphalList = hyphalList;
         this.spores=spores;
         this.currLevel = currLevel;
         this.shotSporesNum = shotSporesNum;
@@ -57,14 +58,19 @@ public class FungalBody extends Entity {
     }
 
     /// occupiedByFungalbody-hoz kell
-    public FungalBody(TypeCharacteristics characteristics,String id, Tecton baseLocation){
+    public FungalBody(TypeCharacteristics characteristics, String id, Tecton baseLocation){
         super(id,baseLocation); 
         this.characteristics = characteristics;
-        this.hyphalList=new ArrayList<>();
         this.spores = new LinkedList<>();
         this.currLevel = 1;
         this.callNum = 0;
     }
+
+    public int getCurrLvl() { return currLevel; }
+
+    public int getShotSporesNum() { return shotSporesNum; }
+
+    public TypeCharacteristics getCharacteristics() {return characteristics; }
 
     public Boolean checkShootingRange(Tecton tecton) {
         if (baseLocation.equals(tecton)) {
@@ -125,9 +131,9 @@ public class FungalBody extends Entity {
         }
     }
     
-    public ArrayList<Hyphal> getHyphalList() {
-        return this.hyphalList;
-    }
+    //public ArrayList<Hyphal> getHyphalList() {
+    //    return this.hyphalList;
+    //}
 
     public void levelUp() {
         if (currLevel == 3) {
@@ -160,6 +166,10 @@ public class FungalBody extends Entity {
         Set<Hyphal> hyphalSet = new HashSet<>();
         Set<Tecton> visited = new HashSet<>();
         Queue<Tecton> queue = new LinkedList<>();
+        
+        Mycologist player  = this.getOwner();
+        
+        ArrayList<Hyphal> hyphalList = player.getHyphalList();
 
         Tecton startTecton = this.baseLocation;
         queue.add(startTecton);
@@ -167,7 +177,7 @@ public class FungalBody extends Entity {
 
         while (!queue.isEmpty()) {
             Tecton currentTecton = queue.poll();
-            for (Hyphal hyphal : this.hyphalList) {
+            for (Hyphal hyphal : hyphalList) {
                 Tecton base = hyphal.getBase();
                 Tecton connected = hyphal.getConnectedTecton();
                 if (base.equals(currentTecton) || connected.equals(currentTecton)) {
@@ -249,13 +259,23 @@ public class FungalBody extends Entity {
         Hyphal newHyphal = new Hyphal(connected, false, 3000, 3000, 300,this.baseLocation);
         
         // Mindkettőhöz hozzáadjuk a másikat?? Szerintem igen
-        this.baseLocation.connectedNeighbours.get(this.baseLocation).add(newHyphal);
-        connected.connectedNeighbours.get(this.baseLocation).add(newHyphal);
+       
+        // Ezt nem a tectonon belül kellene megoldani?????
+        //this.baseLocation.connectedNeighbours.get(this.baseLocation).add(newHyphal);
+        //connected.connectedNeighbours.get(this.baseLocation).add(newHyphal);
+
         
-        this.hyphalList.add(newHyphal);
+
+        baseLocation.connectTecton(connected, newHyphal);
+        /// mycologist list
+        /// gamelogic entitilist
+
+        Mycologist player = this.getOwner();
+        
+        player.getHyphalList().add(newHyphal);
     }
 
-    private class TypeCharacteristics{
+    public class TypeCharacteristics{
         int shootingRange;
         int sporeProductionIntensity;
         int startingHyphalNum;
@@ -267,5 +287,26 @@ public class FungalBody extends Entity {
             this.startingHyphalNum = startingHyphalNum;
             this.sporeCapacity = sporeCapacity;
         }
+
+       public int getShootingRange() { return shootingRange; }
+       
+       public int getSporeProductionIntensity() { return sporeProductionIntensity; }
+       
+       public int getStartingHyphalNum() { return startingHyphalNum; }
+       
+       public int getSporeCapacity() { return sporeCapacity; }
+    }
+
+
+    public Mycologist getOwner(){
+        Mycologist player = null;
+        for (Mycologist mycologist : GameLogic.getMycologists()){
+            for (FungalBody fungalbody : mycologist.getControlledFunguses()){
+                if (this == fungalbody){
+                    player = mycologist;
+                }
+            }
+        }
+        return player;
     }
 }

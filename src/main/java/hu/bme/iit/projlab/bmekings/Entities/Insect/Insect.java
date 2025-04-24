@@ -7,6 +7,9 @@ import hu.bme.iit.projlab.bmekings.Entities.Entity;
 import hu.bme.iit.projlab.bmekings.Entities.Fungal.Hyphal;
 import hu.bme.iit.projlab.bmekings.Interface.SporeInterface.SporeInterface;
 import hu.bme.iit.projlab.bmekings.Map.Tecton.Tecton;
+import hu.bme.iit.projlab.bmekings.Player.Entomologist.Entomologist;
+import hu.bme.iit.projlab.bmekings.Logic.GameLogic.GameLogic;
+
 
 /**
  * Az Insect osztály a rovarok kezelésére szolgál a játékban.
@@ -22,7 +25,7 @@ public class Insect extends Entity{
     private int currStomachFullness;
     private int cutCooldown;
     private ArrayList<Effect> activeEffects;
-    
+
     public Insect() {
         super();
 
@@ -43,6 +46,18 @@ public class Insect extends Entity{
         this.currStomachFullness = currStomachFullness;
         this.cutCooldown = cutCooldown;
     }
+
+    public int getMovingSpeed() { return movingSpeed; }
+    
+    public int getMovingCD() { return movingCD; }
+    
+    public int getStomachLimit() { return stomachLimit; }
+    
+    public int getCurrStomachFullness() { return currStomachFullness; }
+    
+    public int getCutCooldown() { return cutCooldown; }
+
+    public ArrayList<Effect> getActiveEffects() { return activeEffects; }
 
     public void move(Tecton targetTecton) {
         // movingSpeed ????? TICK / TURN BASED
@@ -98,4 +113,21 @@ public class Insect extends Entity{
             this.movingSpeed=speed;
         }
     }
+
+    public void DestroyInsect() {
+        // 1. Eltávolítás az Entomologist controlledInsects listájából
+        // Gamelogic entomolgist listabol
+        
+        for (Entomologist entomologist : GameLogic.getEntomologists()){
+            for (Insect insect : entomologist.getControlledInsects()){
+                if (this == insect){
+                    entomologist.deleteControlledInsect(this);
+                }
+            }
+        }
+
+        // 2. Eltávolítás a GameLogic entityList-jéből
+        GameLogic.getEntityList().remove(this);
+    }
+
 }

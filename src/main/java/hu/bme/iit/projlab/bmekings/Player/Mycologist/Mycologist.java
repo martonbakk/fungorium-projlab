@@ -1,5 +1,6 @@
 package hu.bme.iit.projlab.bmekings.Player.Mycologist;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import hu.bme.iit.projlab.bmekings.Entities.Fungal.FungalBody;
@@ -9,7 +10,8 @@ import hu.bme.iit.projlab.bmekings.Player.Player;
 import hu.bme.iit.projlab.bmekings.Program.Params;
 
 public class Mycologist extends Player{
-    private List<FungalBody> controlledFunguses;
+    private ArrayList<FungalBody> controlledFunguses;
+    private ArrayList<Hyphal> hyphalList;
     private FungalBody selectedFungus;
     private Hyphal selectedHyphal;
     // Fungus type lekezelese hianyzik
@@ -17,6 +19,10 @@ public class Mycologist extends Player{
     public Mycologist(String playerId) {
         super(playerId);
     }
+
+    public ArrayList<FungalBody> getControlledFunguses() { return controlledFunguses; }
+
+    public ArrayList<Hyphal> getHyphalList() { return hyphalList; }
 
     @Override
     public void SelectAction(int actionType, Params params) {
@@ -31,7 +37,7 @@ public class Mycologist extends Player{
                 growFungalBody(params.selectedFungus);
                 break;
             case 4:
-                growHyphal(params.selectedTecton);
+                growHyphalAction(params.selectedTecton);
                 break;
             case 5:
                 destroyFungus(params.selectedFungus);
@@ -64,7 +70,7 @@ public class Mycologist extends Player{
     }
 
     private boolean checkControlledFungusHyphal(){
-        boolean checkControlledFungus= this.selectedFungus.getHyphalList().isEmpty();
+        boolean checkControlledFungus= hyphalList.isEmpty();
         if (checkControlledFungus) {
             System.out.println("Nincs a gombatestnek fonala...");
         }
@@ -97,7 +103,7 @@ public class Mycologist extends Player{
         this.selectedFungus=null;
     }
 
-    private void growFungalBody(FungalBody fungus){
+    public void growFungalBody(FungalBody fungus){
         if (fungus.getBase().isOccupiedByFungus()){
             System.out.println("Tecton already has a fungus...");
             return;
@@ -116,7 +122,7 @@ public class Mycologist extends Player{
             return;
         }
 
-        for (Hyphal controlledHyphal : this.selectedFungus.getHyphalList()) {
+        for (Hyphal controlledHyphal : hyphalList) {
             if (controlledHyphal.getId().equals(hyphal.getId())) {
                 this.selectedHyphal = controlledHyphal;
                 break;  // egyszerre egyhez tudjuk hozzaadni ne menjen tovabb a loop
@@ -137,7 +143,7 @@ public class Mycologist extends Player{
         }
     }
 
-    private void growHyphal(Tecton tecton){
+    private void growHyphalAction(Tecton tecton){
         if (checkControlledFungus()){
             return;
         }

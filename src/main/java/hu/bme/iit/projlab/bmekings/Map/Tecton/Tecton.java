@@ -9,7 +9,9 @@ import java.util.List;
 import hu.bme.iit.projlab.bmekings.Entities.Fungal.Hyphal;
 import hu.bme.iit.projlab.bmekings.Entities.Fungal.FungalBody;
 import hu.bme.iit.projlab.bmekings.Interface.SporeInterface.SporeInterface;
+import hu.bme.iit.projlab.bmekings.Player.Entomologist.Entomologist;
 import hu.bme.iit.projlab.bmekings.Player.Mycologist.Mycologist;
+import hu.bme.iit.projlab.bmekings.Logic.IDGenerator.IDGenerator;
 
 
 /**
@@ -29,16 +31,29 @@ public class Tecton {
     private boolean occupiedByFungalBody; 
     private FungalBody fungalBody;
 
-    public String getId() {
-        return id;
-    }   
+    public String getId() { return id; }
+
+    public double getSplitChance() { return splitChance; }
+
+    public boolean isOccupiedByFungus() { return occupiedByFungalBody; }
+
+    public boolean isOccupiedByInsect() { return occupiedByInsect; }
+
+    public Queue<SporeInterface> getSpores() { return spores; }
+
+    public ArrayList<Tecton> getNeighbors() { return neighbours; }
+
+    public HashMap<Tecton, ArrayList<Hyphal>> getConnectedNeighbors() { return connectedNeighbours; }
+
+    public SporeInterface getNextSporeToEat() { return spores.peek(); }
+
+    public void setOccupiedByFungus(boolean value) { occupiedByFungalBody = value; }
 
     public Tecton() {
-        this.id="";
+        this.id=IDGenerator.generateID("T");
         this.splitChance=0;
         this.occupiedByInsect=false;
         this.occupiedByFungalBody=false;
-
     }
 
     public Tecton(String id, double splitChance, boolean occupiedByInsect, boolean occupiedByFungalBody) {
@@ -46,6 +61,7 @@ public class Tecton {
         this.splitChance=splitChance;
         this.occupiedByInsect=occupiedByInsect;
         this.occupiedByFungalBody=occupiedByFungalBody;
+        
 
     }
 
@@ -53,20 +69,16 @@ public class Tecton {
         spores.add(spore);
     }
 
-    public ArrayList<Tecton> getConnectedNeighbors() {
-        return new ArrayList<>();
-    }
-
-    public void createFungalBody( Mycologist player) {
+    public boolean createFungalBody(Mycologist player) {
         if (fungalBody != null) {
             //fungalBody = new FungalBody(player.getTypeCharacteristics(),12,this);
-        }
+        }//minden
+        return true; // valamit muszáj visszaadnunk
     }
 
     public FungalBody destroyFungalBody(){
         return fungalBody;
     }
-
 
     public ArrayList<SporeInterface> decreaseSpore(int sporesNeed) {
         ArrayList<SporeInterface> sporeList = null;
@@ -77,7 +89,6 @@ public class Tecton {
         }
         return sporeList;
     }
-
 
     public void disconnectTecton(Tecton tc, Hyphal hyphal) {
         for (HashMap.Entry<Tecton, ArrayList<Hyphal>> entry : connectedNeighbours.entrySet()) {
@@ -99,25 +110,21 @@ public class Tecton {
         }
     }
 
-    public void setOccupiedByFungus(boolean value){
-        occupiedByFungalBody=value;
-    }
-
-    public boolean isOccupiedByFungus(){
-        return occupiedByFungalBody;
-    }
-
-    public void connectTecton(Tecton tc, Mycologist player) {
+    public void connectTecton(Tecton tc, Hyphal newHyphal) {
         //connectedNeighbours.append(tc, );
     }
 
-    public ArrayList<Tecton> getNeighbors() {
-        return new ArrayList<Tecton>();
-    }
-
-    public SporeInterface getNextSporeToEat(){return spores.peek();}
-
     public void runSpecialEffect() {}
-    
+
+    // még nagyon nem végleges, csak a generateMaphez kell valami
+    public boolean createInsect(Entomologist player){
+        if(!occupiedByInsect){
+            // itt kreáljuk
+            return true;
+        } else {
+            // itt nem
+            return false;
+        }
+    }
 
 }

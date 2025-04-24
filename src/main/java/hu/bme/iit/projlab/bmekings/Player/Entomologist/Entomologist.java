@@ -17,6 +17,7 @@ public class Entomologist extends Player{
     public Entomologist(String playerId) {
         super(playerId);
     }
+    public List<Insect> getControlledInsects() { return controlledInsects; }
 
     @Override
     public void SelectAction(int actionType, Params param ){
@@ -46,4 +47,16 @@ public class Entomologist extends Player{
     public void EatSporeInsect(List<SporeInterface> spore, int sporeNum){}
 
     public void CutHyphalInsect(Hyphal hyphalToCut){}
+
+    
+
+    public void deleteControlledInsect(Insect controlledInsect){
+        controlledInsects.remove(controlledInsect);
+    }
+
+    //placeholder !!!
+    public void addInsect(Insect insect){
+        controlledInsects.add(insect);
+    }
+
 }

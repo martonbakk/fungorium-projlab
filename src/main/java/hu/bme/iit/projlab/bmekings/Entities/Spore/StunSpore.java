@@ -27,6 +27,7 @@ public class StunSpore extends Spore {
      * és kiírja a konzolra, hogy a hatás aktiválódott.
      */
     public void activateEffect(Insect targetInsect) {
+        
     }
 
     /**

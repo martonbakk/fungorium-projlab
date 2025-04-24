@@ -6,6 +6,8 @@ import hu.bme.iit.projlab.bmekings.Interface.Listener.Listener;
 import hu.bme.iit.projlab.bmekings.Logic.Ticker.Ticker;
 import hu.bme.iit.projlab.bmekings.Entities.Entity;
 import hu.bme.iit.projlab.bmekings.Map.Map;
+import hu.bme.iit.projlab.bmekings.Player.Entomologist.*;
+import hu.bme.iit.projlab.bmekings.Player.Mycologist.*;
 
 
 /**
@@ -18,13 +20,17 @@ public class GameLogic {
     private Ticker ticker;
     /** A játékban szereplő Listener interfészt implementáló objektumok listája, amelyek frissítéseket kapnak. */
     private ArrayList<Listener> listeners = new ArrayList<>();
+    private static ArrayList<Mycologist> mycologists = new ArrayList<>();
+    private static ArrayList<Entomologist> entomologists = new ArrayList<>();
+    private static ArrayList<Entity> entityList = new ArrayList<>();
+     
 
     public Map map;
 
     public GameLogic(int TickInterval, int playerNum) {
         ticker = new Ticker(TickInterval); 
         map = new Map();
-        map.generateMap(playerNum); 
+        map.generateMap(this); 
     }
 
     public GameLogic(ArrayList<Entity> entities, ArrayList<Listener> listeners, Map map) {
@@ -43,5 +49,18 @@ public class GameLogic {
 
     public void stopGame() {
         ticker.stop();
-    }   
+    }
+
+    public static ArrayList<Entomologist> getEntomologists(){
+        return entomologists;
+    }
+
+    public static ArrayList<Mycologist> getMycologists(){
+        return mycologists;
+    }
+
+    public static ArrayList<Entity> getEntityList(){
+        return entityList;
+    }
+
 }

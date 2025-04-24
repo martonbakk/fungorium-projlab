@@ -1,7 +1,10 @@
 package hu.bme.iit.projlab.bmekings.Entities.Fungal;
 
 import hu.bme.iit.projlab.bmekings.Entities.Entity;
+import hu.bme.iit.projlab.bmekings.Entities.Insect.Insect;
+import hu.bme.iit.projlab.bmekings.Logic.GameLogic.GameLogic;
 import hu.bme.iit.projlab.bmekings.Map.Tecton.Tecton;
+import hu.bme.iit.projlab.bmekings.Player.Mycologist.Mycologist;
 
 /**
  * A Hyphal osztály a játékban lévő gombafonalak adatait tárolja, és a gombafonalakkal kapcsolatos fontos műveleteket kezeli.
@@ -14,10 +17,10 @@ public class Hyphal extends Entity {
     private int developTime;
     private int lifeTime;
     private int cutTime;
-    private static int hyhalIds = 0;
+    private static int hyphalIds = 0;
 
     private static void hyphalIdGenerator() {
-        hyhalIds++;
+        hyphalIds++;
     }
 
     public Hyphal() {
@@ -31,7 +34,7 @@ public class Hyphal extends Entity {
     }
 
     public Hyphal(Tecton connectedTecton, boolean developed, int developTime, int lifeTime, int cutTime, Tecton baseLocation){
-        super("Hyphal" + hyhalIds, baseLocation);
+        super("Hyphal" + hyphalIds, baseLocation);
         
         this.connectedTecton = connectedTecton;
         this.developed = developed;
@@ -40,15 +43,31 @@ public class Hyphal extends Entity {
         this.cutTime = cutTime;
     }
 
-    public void growFungus() {
-        if(baseLocation.decreaseSpore(2) != null) {
-            baseLocation.setOccupiedByFungus(true);
+    public Tecton getConnectedTecton() { return connectedTecton; }
+
+    public boolean getDeveloped() { return developed; }
+
+    public int getDevelopTime() { return developTime; }
+
+    public int getLifeTime() { return lifeTime; }
+
+    public int getCutTime() { return cutTime; }
+
+    public void setLifeTime(int newLifeTime) { lifeTime=newLifeTime; }
+
+    public void growFungus(Tecton tecton, String grownFrom) {
+        Mycologist player;
+        for (Mycologist mycologist : GameLogic.getMycologists()){
+            for (Hyphal hyphal : mycologist.getHyphalList()){
+                if (this == hyphal){
+                    player = mycologist;
+                }
+            }
         }
+        // EZ MAJD KELL !!!!!!!!!!!!!!!!
+        //tecton.createFungalBody(player, "insect");
     }
 
-    public void growFungusFromInsect() {
-        baseLocation.setOccupiedByFungus(true);
-    }
 
     public void speedUpDevelopment() {
         if(baseLocation.decreaseSpore(2) != null){
@@ -67,18 +86,18 @@ public class Hyphal extends Entity {
         }
     }
 
-    public void eatInsect(){
-        //tldr;
+    public void eatInsect(Insect stunnedInsect){
+        Tecton currLoc = stunnedInsect.getBase();
+
+        stunnedInsect.DestroyInsect();
+
+        /// itt jon a growFungusFromInsect()
+        //growFungus(currLoc, );
+
     }
-    
-    Tecton getConnectedTecton(){ return connectedTecton; }
 
     @Override
     public void update() {
         aging();
-    }
-
-    void setLifeTime(int newLifeTime){
-        lifeTime=newLifeTime;
     }
 }
