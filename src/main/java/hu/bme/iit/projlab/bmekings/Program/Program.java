@@ -8,6 +8,7 @@ import hu.bme.iit.projlab.bmekings.Entities.Fungal.Hyphal;
 import hu.bme.iit.projlab.bmekings.Entities.Spore.SlowSpore;
 import hu.bme.iit.projlab.bmekings.Interface.SporeInterface.SporeInterface;
 import hu.bme.iit.projlab.bmekings.Logic.GameLogic.GameLogic;
+import hu.bme.iit.projlab.bmekings.Map.Map;
 import hu.bme.iit.projlab.bmekings.Map.Tecton.Tecton;
 import hu.bme.iit.projlab.bmekings.Player.Entomologist.Entomologist;
 import hu.bme.iit.projlab.bmekings.Player.Mycologist.Mycologist;
@@ -20,6 +21,7 @@ public class Program {
     // tesztek inicializalasa
     private static FungalBody fungus= new FungalBody();
     private static SporeInterface spore= new SlowSpore();
+    private static Map map = new Map(); 
 
      public static void main(String[] args) {
         boolean running = true;
@@ -65,6 +67,9 @@ public class Program {
             break;
         case "/addspore":
             addSpore(splitInput);
+            break;
+        case "/addTecton":
+            addTecton(splitInput);
             break;
         case "/setfungus":
             setFungus(splitInput);
@@ -259,7 +264,20 @@ public class Program {
         
     }
 
-    
+    // --------------TECTON----------------
+
+
+    // ● [string]: a Tecton id-ja
+    // ● [string]: a tekton típusa
+    // ○ normal
+    // ○ toxic
+    // ○ weak
+    // ○ nofungus
+    // ○ hyphalpres
+    // ● -sc [double]: a kettétörési esélye
+    private static void addTecton(String[] splitInput) {
+
+    }
 
     // ● [string]: megadja mely Tecton attribútumát változtatja meg
     // ● -sc [double]: megváltoztatja a kettétörés esélyét
