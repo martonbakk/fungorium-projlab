@@ -63,4 +63,12 @@ public class GameLogic {
         return entityList;
     }
 
+    public static void deleteEntity(Entity entity){
+        entityList.remove(entity);
+    }
+
+    public static void addEntity(Entity entity){
+        entityList.add(entity);
+    }
+
 }

@@ -129,7 +129,7 @@ public class Insect extends Entity{
         }
 
         // 2. Eltávolítás a GameLogic entityList-jéből
-        GameLogic.getEntityList().remove(this);
+        GameLogic.deleteEntity(this);
     }
 
 }

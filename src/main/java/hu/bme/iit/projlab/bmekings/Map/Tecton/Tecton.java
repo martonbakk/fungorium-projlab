@@ -11,6 +11,7 @@ import hu.bme.iit.projlab.bmekings.Entities.Fungal.FungalBody;
 import hu.bme.iit.projlab.bmekings.Interface.SporeInterface.SporeInterface;
 import hu.bme.iit.projlab.bmekings.Player.Entomologist.Entomologist;
 import hu.bme.iit.projlab.bmekings.Player.Mycologist.Mycologist;
+import hu.bme.iit.projlab.bmekings.Logic.GameLogic.GameLogic;
 import hu.bme.iit.projlab.bmekings.Logic.IDGenerator.IDGenerator;
 
 
@@ -50,8 +51,7 @@ public class Tecton {
     public void setOccupiedByFungus(boolean value) { occupiedByFungalBody = value; }
 
     public Tecton() {
-        //this.id=IDGenerator.generateID("T");
-        this.id = "";
+        this.id=IDGenerator.generateID("T");
         this.splitChance=0;
         this.occupiedByInsect=false;
         this.occupiedByFungalBody=false;
@@ -65,20 +65,54 @@ public class Tecton {
         this.occupiedByFungalBody=occupiedByFungalBody;
     }
 
+    public Tecton( double splitChance, boolean occupiedByInsect, boolean occupiedByFungalBody) {
+        this.id=IDGenerator.generateID("T");
+        this.splitChance=splitChance;
+        this.occupiedByInsect=occupiedByInsect;
+        this.occupiedByFungalBody=occupiedByFungalBody;
+    }
+
+
+    
     public void addSpore(SporeInterface spore) {
         spores.add(spore);
     }
 
-    public boolean createFungalBody(Mycologist player) {
-        if (fungalBody != null) {
-            //fungalBody = new FungalBody(player.getTypeCharacteristics(),12,this);
-        }//minden
-        return true; // valamit muszáj visszaadnunk
+
+    public boolean createFungalBody(Mycologist player, String grownFrom) {
+        // add to mycologist, tecton, entity
+        // grownFrom = "insect", grownFrom = "spore", grownFrom = "init"
+        if(this.isOccupiedByFungus())
+            return false;
+        
+
+        if ( grownFrom.equals("spore") && spores.size()<2) {
+            return false;
+        } else if (grownFrom.equals("spore")) {
+            spores.poll();
+            spores.poll();
+        }                       
+        //// int currLevel, int shotSporesNum, TypeCharacteristics characteristics, Queue<SporeInterface> spores,String id, Tecton baseLocation
+        FungalBody newfungalBody = new FungalBody(1,0,player.getTypeCharacteristics(), null,this );  //megkell oldani a charachteristicst
+
+        GameLogic.addEntity(fungalBody);
+
+        occupiedByFungalBody=true;
+
+        fungalBody=newfungalBody;
+
+        player.addFungus(newfungalBody);
+        
+        return true;
     }
 
-    public FungalBody destroyFungalBody(){
-        return fungalBody;
+    /// hianyos
+    public void destroyFungalBody(){
+        fungalBody=null;
+        setOccupiedByFungus(false);
     }
+
+    
 
     public ArrayList<SporeInterface> decreaseSpore(int sporesNeed) {
         ArrayList<SporeInterface> sporeList = null;
@@ -89,7 +123,7 @@ public class Tecton {
         }
         return sporeList;
     }
-
+    /*
     public void disconnectTecton(Tecton tc, Hyphal hyphal) {
         for (HashMap.Entry<Tecton, ArrayList<Hyphal>> entry : connectedNeighbours.entrySet()) {
             Tecton key = entry.getKey();
@@ -108,7 +142,23 @@ public class Tecton {
                 }
             }
         }
+    }*/
+
+    public void disconnectTecton(Tecton tc, Hyphal hyphal) {
+    // Ellenőrizzük, hogy a tc létezik-e a connectedNeighbours-ben
+        ArrayList<Hyphal> hyphals = connectedNeighbours.get(tc);
+        if (hyphals != null) {
+        // Töröljük a megadott hyphal-t a listából
+            hyphals.removeIf(h -> h.equals(hyphal));
+        // Ha a lista üres lett, töröljük a Tecton kulcsot a HashMap-ből
+            if (hyphals.isEmpty()) {
+            connectedNeighbours.remove(tc);
+            }
+        // Hívjuk meg a másik Tecton disconnectTecton metódusát (reciprok kapcsolat)
+            tc.disconnectTecton(this, hyphal);
+        // Opcionálisan: hívjuk a Hyphal destroy metódusát, ha létezik
     }
+}
 
     public void connectTecton(Tecton tc, Hyphal newHyphal) {
         //connectedNeighbours.append(tc, );

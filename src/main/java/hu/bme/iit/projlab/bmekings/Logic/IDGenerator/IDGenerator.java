@@ -10,4 +10,5 @@ public class IDGenerator {
         idCounters.put(type, idCounters.get(type) + 1);
         return String.format("%s-%02d", type, counter);
     } 
+
 }

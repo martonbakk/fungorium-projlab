@@ -10,6 +10,7 @@ import java.util.Random;
 import java.util.Set;
 
 import hu.bme.iit.projlab.bmekings.Entities.Entity;
+import hu.bme.iit.projlab.bmekings.Entities.Insect.Insect;
 import hu.bme.iit.projlab.bmekings.Entities.Spore.DuplicateSpore;
 import hu.bme.iit.projlab.bmekings.Entities.Spore.HungerSpore;
 import hu.bme.iit.projlab.bmekings.Entities.Spore.NormalSpore;
@@ -19,7 +20,9 @@ import hu.bme.iit.projlab.bmekings.Entities.Spore.Spore;
 import hu.bme.iit.projlab.bmekings.Entities.Spore.StunSpore;
 import hu.bme.iit.projlab.bmekings.Interface.SporeInterface.SporeInterface;
 import hu.bme.iit.projlab.bmekings.Logic.GameLogic.GameLogic;
+import hu.bme.iit.projlab.bmekings.Logic.IDGenerator.IDGenerator;
 import hu.bme.iit.projlab.bmekings.Map.Tecton.Tecton;
+import hu.bme.iit.projlab.bmekings.Player.Entomologist.Entomologist;
 import hu.bme.iit.projlab.bmekings.Player.Mycologist.Mycologist;
 
 
@@ -48,14 +51,14 @@ public class FungalBody extends Entity {
         this.callNum = 0;
     }
 
-    public FungalBody(int currLevel, int shotSporesNum, TypeCharacteristics characteristics, Queue<SporeInterface> spores,String id, Tecton baseLocation){
-        super(id, baseLocation);
-        //this.id=IDGenerator.generateID("FB");
+    public FungalBody(int currLevel, int shotSporesNum, TypeCharacteristics characteristics, Queue<SporeInterface> spores, Tecton baseLocation){
+        super(IDGenerator.generateID("FB"), baseLocation);
         this.characteristics = characteristics;
         this.spores=spores;
         this.currLevel = currLevel;
         this.shotSporesNum = shotSporesNum;
         this.callNum = 0;
+        
     }
 
     public FungalBody(String id, Tecton baseLocation, int currLevel, int shotSporesNum, int shootingRange, int sporeProductionIntensity, int startingHyphalNum, int sporeCapacity) {
@@ -287,27 +290,7 @@ public class FungalBody extends Entity {
         player.getHyphalList().add(newHyphal);
     }
 
-    public class TypeCharacteristics{
-        int shootingRange;
-        int sporeProductionIntensity;
-        int startingHyphalNum;
-        int sporeCapacity;
-
-        public TypeCharacteristics(int shootingRange, int sporeProductionIntensity, int startingHyphalNum, int sporeCapacity) {
-            this.shootingRange = shootingRange;
-            this.sporeProductionIntensity = sporeProductionIntensity;
-            this.startingHyphalNum = startingHyphalNum;
-            this.sporeCapacity = sporeCapacity;
-        }
-
-       public int getShootingRange() { return shootingRange; }
-       
-       public int getSporeProductionIntensity() { return sporeProductionIntensity; }
-       
-       public int getStartingHyphalNum() { return startingHyphalNum; }
-       
-       public int getSporeCapacity() { return sporeCapacity; }
-    }
+ 
 
 
     public Mycologist getOwner(){
@@ -321,4 +304,18 @@ public class FungalBody extends Entity {
         }
         return player;
     }
+
+
+    public void destroyFungus(){
+        // gombasz
+        Mycologist owner = this.getOwner();
+        owner.destroyFungus(this);
+
+        // entity
+        GameLogic.deleteEntity(this);
+
+        // tecton 
+        this.baseLocation.destroyFungalBody();
+    }
+    
 }

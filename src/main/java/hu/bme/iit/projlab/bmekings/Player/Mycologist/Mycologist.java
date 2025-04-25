@@ -5,6 +5,7 @@ import java.util.List;
 
 import hu.bme.iit.projlab.bmekings.Entities.Fungal.FungalBody;
 import hu.bme.iit.projlab.bmekings.Entities.Fungal.Hyphal;
+import hu.bme.iit.projlab.bmekings.Entities.Fungal.TypeCharacteristics;
 import hu.bme.iit.projlab.bmekings.Map.Tecton.Tecton;
 import hu.bme.iit.projlab.bmekings.Player.Player;
 import hu.bme.iit.projlab.bmekings.Program.Params;
@@ -14,6 +15,8 @@ public class Mycologist extends Player{
     private ArrayList<Hyphal> hyphalList;
     private FungalBody selectedFungus;
     private Hyphal selectedHyphal;
+    private TypeCharacteristics typeCharacteristics;
+    
     // Fungus type lekezelese hianyzik
 
     public Mycologist(String playerId) {
@@ -21,11 +24,25 @@ public class Mycologist extends Player{
         //this.playerId=IDGenerator.generateID("M");
         this.controlledFunguses = new ArrayList<>();
         this.hyphalList = new ArrayList<>();
+        
+        this.typeCharacteristics = new TypeCharacteristics();
     }
+
+    public Mycologist(String playerId, int shootingRange, int sporeProductionIntensity, int startingHyphalNum, int sporeCapacity) {
+        super(playerId);
+        //this.playerId=IDGenerator.generateID("M");
+        this.controlledFunguses = new ArrayList<>();
+        this.hyphalList = new ArrayList<>();
+        
+        this.typeCharacteristics = new TypeCharacteristics(shootingRange,sporeProductionIntensity,startingHyphalNum,sporeCapacity);
+    }
+
 
     public ArrayList<FungalBody> getControlledFunguses() { return controlledFunguses; }
 
     public ArrayList<Hyphal> getHyphalList() { return hyphalList; }
+
+    public TypeCharacteristics getTypeCharacteristics(){ return this.typeCharacteristics; }
 
     @Override
     public void SelectAction(int actionType, Params params) {
@@ -154,7 +171,7 @@ public class Mycologist extends Player{
         this.selectedFungus=null;
     }
 
-    private void destroyFungus(FungalBody fungalToDestroy){
+    public void destroyFungus(FungalBody fungalToDestroy){
         if (checkControlledFungus()){
             return;
         }
@@ -165,5 +182,12 @@ public class Mycologist extends Player{
         }
     }
 
-    // getTypeCharacteristics(){}
+    public void removeHyphal(Hyphal hyphal){
+        hyphalList.remove(hyphal);
+    }
+
+    public void addFungus(FungalBody fungalToDestroy){
+        controlledFunguses.add(fungalToDestroy);
+    }
+
 }
