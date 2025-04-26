@@ -28,6 +28,7 @@ public abstract class Entity implements Listener {
     public Entity(String id, Tecton baseLocation) {
         this.id = id;
         this.baseLocation = baseLocation;
+        System.out.println("Új obekjtum [" + id + "] létrejött!");
     }
 
     public Tecton getBase(){

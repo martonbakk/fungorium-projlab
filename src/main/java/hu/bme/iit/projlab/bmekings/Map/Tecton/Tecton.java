@@ -72,12 +72,9 @@ public class Tecton {
         this.occupiedByFungalBody=occupiedByFungalBody;
     }
 
-
-    
     public void addSpore(SporeInterface spore) {
         spores.add(spore);
     }
-
 
     public boolean createFungalBody(Mycologist player, String grownFrom) {
         // add to mycologist, tecton, entity
@@ -112,8 +109,6 @@ public class Tecton {
         setOccupiedByFungus(false);
     }
 
-    
-
     public ArrayList<SporeInterface> decreaseSpore(int sporesNeed) {
         ArrayList<SporeInterface> sporeList = null;
         if (spores.size() < sporesNeed) return null; 
@@ -145,7 +140,7 @@ public class Tecton {
     }*/
 
     public void disconnectTecton(Tecton tc, Hyphal hyphal) {
-    // Ellenőrizzük, hogy a tc létezik-e a connectedNeighbours-ben
+        // Ellenőrizzük, hogy a tc létezik-e a connectedNeighbours-ben
         ArrayList<Hyphal> hyphals = connectedNeighbours.get(tc);
         if (hyphals != null) {
         // Töröljük a megadott hyphal-t a listából
@@ -157,11 +152,31 @@ public class Tecton {
         // Hívjuk meg a másik Tecton disconnectTecton metódusát (reciprok kapcsolat)
             tc.disconnectTecton(this, hyphal);
         // Opcionálisan: hívjuk a Hyphal destroy metódusát, ha létezik
+        }
     }
-}
 
     public void connectTecton(Tecton tc, Hyphal newHyphal) {
-        //connectedNeighbours.append(tc, );
+        if (!neighbours.contains(tc)) {
+            System.out.println("Megkapott tekton nem szomszédos!");
+            return;
+        }
+
+        // Ellenőrizzük, hogy a két tekton össze van e már kötve
+        ArrayList<Hyphal> hyphals = connectedNeighbours.get(tc);
+        if (hyphals != null) {
+            // Ha össze van frissítsük a hyphal listát
+            hyphals.add(newHyphal);
+        }
+        // Ha még nincs, vegyük fel a HashMapbe
+        else {
+            hyphals = new ArrayList<>();
+            hyphals.add(newHyphal);
+            connectedNeighbours.put(tc, hyphals);
+        }
+
+        for (Hyphal h : hyphals) {
+            System.out.println(h.getId());
+        }
     }
 
     public void runSpecialEffect() {}

@@ -37,12 +37,13 @@ public class Mycologist extends Player{
         this.typeCharacteristics = new TypeCharacteristics(shootingRange,sporeProductionIntensity,startingHyphalNum,sporeCapacity);
     }
 
-
     public ArrayList<FungalBody> getControlledFunguses() { return controlledFunguses; }
 
     public ArrayList<Hyphal> getHyphalList() { return hyphalList; }
 
     public TypeCharacteristics getTypeCharacteristics(){ return this.typeCharacteristics; }
+
+    public void setTypeCharacteristics(TypeCharacteristics characteristics) { typeCharacteristics = characteristics; }
 
     @Override
     public void SelectAction(int actionType, Params params) {

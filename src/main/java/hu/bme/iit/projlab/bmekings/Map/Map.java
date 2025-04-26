@@ -59,7 +59,7 @@ public class Map {
             for(int j = 0; j < 2; j++){
                 int idx = random.nextInt(tectons.size());
                 Tecton baseTecton = tectons.get(idx);
-                if(!baseTecton.createFungalBody(mycologists.get(i))){
+                if(!baseTecton.createFungalBody(mycologists.get(i), "generateMap")){
                     j--;
                 }
             }

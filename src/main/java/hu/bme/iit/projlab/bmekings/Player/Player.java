@@ -17,4 +17,8 @@ public abstract class Player{
         this.playerId = playerId;
         this.score = 0;
     }
+
+    public String getPlayerID() { return playerId; }
+
+    public int getScore() { return score; }
 };

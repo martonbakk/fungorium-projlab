@@ -265,7 +265,9 @@ public class FungalBody extends Entity {
         //int lifeTime, 
         //int cutTime, 
         //Tecton baseLocation
-        if(this.baseLocation.connectedNeighbours.get(connected)!=null){
+        
+        // Ezt nem a tectonon belül kell?
+        if (this.baseLocation.connectedNeighbours.get(connected)!=null){
             System.out.println("Ez a fonál már létezik!");
             return;
         }
@@ -279,19 +281,14 @@ public class FungalBody extends Entity {
         //this.baseLocation.connectedNeighbours.get(this.baseLocation).add(newHyphal);
         //connected.connectedNeighbours.get(this.baseLocation).add(newHyphal);
 
-        
-
         baseLocation.connectTecton(connected, newHyphal);
-        /// mycologist list
-        /// gamelogic entitilist
 
         Mycologist player = this.getOwner();
         
         player.getHyphalList().add(newHyphal);
+
+        GameLogic.getEntityList().add(newHyphal);
     }
-
- 
-
 
     public Mycologist getOwner(){
         Mycologist player = null;
