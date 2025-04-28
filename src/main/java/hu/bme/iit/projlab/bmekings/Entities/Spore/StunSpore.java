@@ -1,6 +1,7 @@
 package hu.bme.iit.projlab.bmekings.Entities.Spore;
 
 import hu.bme.iit.projlab.bmekings.Entities.Insect.Insect;
+import hu.bme.iit.projlab.bmekings.Logic.GameLogic.GameLogic;
 import hu.bme.iit.projlab.bmekings.Map.Tecton.Tecton;
 /**
  * A StunSpore osztály egy specifikus spóra típust valósít meg, amely bénító hatást fejt ki a rovarokra.
@@ -21,6 +22,10 @@ public class StunSpore extends Spore {
         super(n, id, baseLocation);
     }
 
+    public StunSpore(int n, Tecton baseLocation) {
+        super(n, baseLocation);
+    }
+
     /**
      * Aktiválja a spóra bénító hatását.
      * A metódus egy adott időtartamra megállítja a rovart, amely elfogyasztotta a spórát,
@@ -35,7 +40,8 @@ public class StunSpore extends Spore {
      * A metódus kiírja a konzolra, hogy a StunSpore létrejött.
      */
     public void spawnSpore() {
-
+        GameLogic.addEntity(this);
+        baseLocation.addSpore(this);
     }
 
     /**

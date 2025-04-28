@@ -13,6 +13,10 @@ public class HyphalPreserverTecton extends Tecton {
         super( id,  splitChance,  occupiedByInsect,  occupiedByFungalBody);
     }
 
+    public HyphalPreserverTecton(double splitChance, boolean occupiedByInsect, boolean occupiedByFungalBody) {
+        super(splitChance,  occupiedByInsect,  occupiedByFungalBody);
+    }
+
     public HyphalPreserverTecton() {
         super();
     }

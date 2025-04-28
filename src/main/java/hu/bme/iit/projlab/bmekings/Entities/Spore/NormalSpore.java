@@ -18,6 +18,10 @@ public class NormalSpore extends Spore {
         super(n, id, baseLocation);
     }
 
+    public NormalSpore(int n, Tecton baseLocation) {
+        super(n, baseLocation);
+    }
+
     public void activateEffect(Insect targetInsect) {
     }
 

@@ -18,6 +18,11 @@ public class ToxicTecton extends Tecton {
         this.hyphalDestroyTime = hyphalDestroyTime;
     }
 
+    public ToxicTecton(double hyphalDestroyTime, double splitChance, boolean occupiedByInsect, boolean occupiedByFungalBody) {
+        super(splitChance, occupiedByInsect, occupiedByFungalBody);
+        this.hyphalDestroyTime = hyphalDestroyTime;
+    }
+
     public void runSpecialEffect() {
 
     }

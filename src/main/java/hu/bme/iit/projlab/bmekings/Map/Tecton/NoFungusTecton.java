@@ -14,6 +14,10 @@ public class NoFungusTecton extends Tecton {
         super( id,  splitChance,  occupiedByInsect,  occupiedByFungalBody);
     }
 
+    public NoFungusTecton(double splitChance, boolean occupiedByInsect, boolean occupiedByFungalBody) {
+        super(splitChance,  occupiedByInsect,  occupiedByFungalBody);
+    }
+
     public NoFungusTecton(){
         super();
     }

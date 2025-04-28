@@ -1,6 +1,5 @@
 package hu.bme.iit.projlab.bmekings.Entities.Fungal;
 
-import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -10,19 +9,16 @@ import java.util.Random;
 import java.util.Set;
 
 import hu.bme.iit.projlab.bmekings.Entities.Entity;
-import hu.bme.iit.projlab.bmekings.Entities.Insect.Insect;
 import hu.bme.iit.projlab.bmekings.Entities.Spore.DuplicateSpore;
 import hu.bme.iit.projlab.bmekings.Entities.Spore.HungerSpore;
 import hu.bme.iit.projlab.bmekings.Entities.Spore.NormalSpore;
 import hu.bme.iit.projlab.bmekings.Entities.Spore.SlowSpore;
 import hu.bme.iit.projlab.bmekings.Entities.Spore.SpeedSpore;
-import hu.bme.iit.projlab.bmekings.Entities.Spore.Spore;
 import hu.bme.iit.projlab.bmekings.Entities.Spore.StunSpore;
 import hu.bme.iit.projlab.bmekings.Interface.SporeInterface.SporeInterface;
 import hu.bme.iit.projlab.bmekings.Logic.GameLogic.GameLogic;
 import hu.bme.iit.projlab.bmekings.Logic.IDGenerator.IDGenerator;
 import hu.bme.iit.projlab.bmekings.Map.Tecton.Tecton;
-import hu.bme.iit.projlab.bmekings.Player.Entomologist.Entomologist;
 import hu.bme.iit.projlab.bmekings.Player.Mycologist.Mycologist;
 
 
@@ -273,7 +269,7 @@ public class FungalBody extends Entity {
         }
 
         // Ez a beégetett konstruktor paraméter szerintem nem jó konstrukció, valahogy ezt egységesen kellene beállítani szerintem pl static-al mas ötlet?
-        Hyphal newHyphal = new Hyphal(connected, false, 3000, 3000, 300,this.baseLocation);
+        Hyphal newHyphal = new Hyphal(connected, false, 3000, 3000, 300, this.baseLocation);
         
         // Mindkettőhöz hozzáadjuk a másikat?? Szerintem igen
        
@@ -287,7 +283,7 @@ public class FungalBody extends Entity {
         
         player.getHyphalList().add(newHyphal);
 
-        GameLogic.getEntityList().add(newHyphal);
+        GameLogic.addEntity(newHyphal);
     }
 
     public Mycologist getOwner(){

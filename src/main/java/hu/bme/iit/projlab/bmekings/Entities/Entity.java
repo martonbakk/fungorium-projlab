@@ -1,14 +1,6 @@
 package hu.bme.iit.projlab.bmekings.Entities;
-import java.util.Collection;
-
-import hu.bme.iit.projlab.bmekings.Entities.Fungal.FungalBody;
-import hu.bme.iit.projlab.bmekings.Entities.Fungal.Hyphal;
-import hu.bme.iit.projlab.bmekings.Entities.Insect.Insect;
 import hu.bme.iit.projlab.bmekings.Interface.Listener.Listener;
-import hu.bme.iit.projlab.bmekings.Logic.GameLogic.GameLogic;
 import hu.bme.iit.projlab.bmekings.Map.Tecton.Tecton;
-import hu.bme.iit.projlab.bmekings.Player.Entomologist.Entomologist;
-import hu.bme.iit.projlab.bmekings.Player.Mycologist.Mycologist;
 
 /**
  * Absztrakt osztály, amely az entitások és figurák közös alapadatait tárolja.
@@ -28,7 +20,7 @@ public abstract class Entity implements Listener {
     public Entity(String id, Tecton baseLocation) {
         this.id = id;
         this.baseLocation = baseLocation;
-        System.out.println("Új obekjtum [" + id + "] létrejött!");
+        System.out.println("Új objektum [" + id + "] létrejött!");
     }
 
     public Tecton getBase(){

@@ -187,6 +187,10 @@ public class Mycologist extends Player{
         hyphalList.remove(hyphal);
     }
 
+    public void addHyphal(Hyphal hyphal){
+        hyphalList.add(hyphal);
+    }
+
     public void addFungus(FungalBody fungalToDestroy){
         controlledFunguses.add(fungalToDestroy);
     }

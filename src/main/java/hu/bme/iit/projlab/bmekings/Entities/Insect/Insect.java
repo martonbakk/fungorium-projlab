@@ -6,9 +6,10 @@ import hu.bme.iit.projlab.bmekings.Effects.Effect.Effect;
 import hu.bme.iit.projlab.bmekings.Entities.Entity;
 import hu.bme.iit.projlab.bmekings.Entities.Fungal.Hyphal;
 import hu.bme.iit.projlab.bmekings.Interface.SporeInterface.SporeInterface;
+import hu.bme.iit.projlab.bmekings.Logic.GameLogic.GameLogic;
 import hu.bme.iit.projlab.bmekings.Map.Tecton.Tecton;
 import hu.bme.iit.projlab.bmekings.Player.Entomologist.Entomologist;
-import hu.bme.iit.projlab.bmekings.Logic.GameLogic.GameLogic;
+import hu.bme.iit.projlab.bmekings.Player.Mycologist.Mycologist;
 
 
 /**
@@ -24,6 +25,7 @@ public class Insect extends Entity{
     private int stomachLimit;
     private int currStomachFullness;
     private int cutCooldown;
+    private Mycologist owner;
     private ArrayList<Effect> activeEffects;
 
     public Insect() {
@@ -77,7 +79,7 @@ public class Insect extends Entity{
     }
 
     public void cutHyphal(Hyphal h) {
-        
+        h.destroyHyphal();
     }
 
     @Override
@@ -130,6 +132,11 @@ public class Insect extends Entity{
 
         // 2. Eltávolítás a GameLogic entityList-jéből
         GameLogic.deleteEntity(this);
+    }
+
+    public void createInsect(){
+        GameLogic.addEntity(this);
+        baseLocation.addInsect(this);
     }
 
 }

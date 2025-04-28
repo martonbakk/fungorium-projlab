@@ -19,6 +19,10 @@ public class HyphalProtectorSpore extends Spore {
         super(n, id, baseLocation);
     }
 
+    public HyphalProtectorSpore(int n, Tecton baseLocation) {
+        super(n, baseLocation);
+    }
+
     public void activateEffect(Insect targInsect) {
 
     }

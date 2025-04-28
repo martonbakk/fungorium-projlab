@@ -18,6 +18,10 @@ public class SpeedSpore extends Spore {
         super(n, id, baseLocation);
     }
 
+    public SpeedSpore(int n, Tecton baseLocation) {
+        super(n, baseLocation);
+    }
+
 
     public void activateEffect(Insect targetInsect) {
     }

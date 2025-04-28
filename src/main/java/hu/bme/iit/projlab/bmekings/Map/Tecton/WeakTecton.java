@@ -18,5 +18,10 @@ public class WeakTecton extends Tecton {
         this.hyphalExistHere = hyphalExistHere;
     }
 
+    public WeakTecton(boolean hyphalExistHere, double splitChance, boolean occupiedByInsect, boolean occupiedByFungalBody) {
+        super(splitChance, occupiedByInsect, occupiedByFungalBody);
+        this.hyphalExistHere = hyphalExistHere;
+    }
+
     public void runSpecialEffect() {}
 }

@@ -23,7 +23,19 @@ if ! command -v mvn &> /dev/null; then
     exit 1
 fi
 
-# 3. Buildeljük a projektet a tesztek futtatásával
+# 3. Ellenőrizzük, hogy a 'test' flag meg van-e adva
+if [ "$1" = "test" ]; then
+    echo "Tesztek futtatása Maven-nel..."
+    mvn test
+    if [ $? -ne 0 ]; then
+        echo "Hiba: A tesztek futtatása sikertelen! Ellenőrizd a tesztek eredményét a target/surefire-reports mappában."
+        exit 1
+    fi
+    echo "Tesztek sikeresen lefutottak!"
+    exit 0
+fi
+
+# 4. Buildeljük a projektet a tesztek futtatásával
 echo "Projekt buildelése Maven-nel..."
 mvn clean package
 
@@ -33,14 +45,14 @@ if [ $? -ne 0 ]; then
     exit 1
 fi
 
-# 4. Ellenőrizzük, hogy a JAR fájl létezik-e
+# 5. Ellenőrizzük, hogy a JAR fájl létezik-e
 if [ ! -f "$JAR_FILE" ]; then
     echo "Hiba: A JAR fájl nem található: $JAR_FILE"
     echo "Ellenőrizd, hogy a pom.xml helyesen van-e konfigurálva, és a build sikeresen lefutott!"
     exit 1
 fi
 
-# 5. Futtassuk a JAR fájlt
+# 6. Futtassuk a JAR fájlt
 echo "Projekt futtatása..."
 java -jar "$JAR_FILE"
 

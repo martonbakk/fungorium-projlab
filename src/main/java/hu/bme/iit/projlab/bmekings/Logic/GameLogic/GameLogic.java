@@ -2,12 +2,12 @@ package hu.bme.iit.projlab.bmekings.Logic.GameLogic;
 
 import java.util.ArrayList;
 
+import hu.bme.iit.projlab.bmekings.Entities.Entity;
 import hu.bme.iit.projlab.bmekings.Interface.Listener.Listener;
 import hu.bme.iit.projlab.bmekings.Logic.Ticker.Ticker;
-import hu.bme.iit.projlab.bmekings.Entities.Entity;
 import hu.bme.iit.projlab.bmekings.Map.Map;
-import hu.bme.iit.projlab.bmekings.Player.Entomologist.*;
-import hu.bme.iit.projlab.bmekings.Player.Mycologist.*;
+import hu.bme.iit.projlab.bmekings.Player.Entomologist.Entomologist;
+import hu.bme.iit.projlab.bmekings.Player.Mycologist.Mycologist;
 
 
 /**
@@ -25,15 +25,15 @@ public class GameLogic {
     private static ArrayList<Entity> entityList = new ArrayList<>();
      
 
-    public Map map;
+    public Map map = new Map();
 
     public GameLogic(int TickInterval, int playerNum) {
-        ticker = new Ticker(TickInterval); 
-        map = new Map();
-        map.generateMap(this); 
+        ticker = new Ticker(TickInterval);
+        map.generateMap(); 
     }
 
     public GameLogic(ArrayList<Entity> entities, ArrayList<Listener> listeners, Map map) {
+        this.entityList = entities;
         this.listeners=listeners;
         this.map = map;
     }
@@ -69,6 +69,14 @@ public class GameLogic {
 
     public static void addEntity(Entity entity){
         entityList.add(entity);
+    }
+
+    public static void addEntomologist(Entomologist player){
+        entomologists.add(player);
+    }
+
+    public static void addMycologist(Mycologist player){
+        mycologists.add(player);
     }
 
 }

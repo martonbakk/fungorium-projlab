@@ -4,12 +4,13 @@ import java.util.List;
 
 import hu.bme.iit.projlab.bmekings.Entities.Fungal.Hyphal;
 import hu.bme.iit.projlab.bmekings.Entities.Insect.Insect;
-import hu.bme.iit.projlab.bmekings.Entities.Spore.Spore;
 import hu.bme.iit.projlab.bmekings.Interface.SporeInterface.SporeInterface;
+import hu.bme.iit.projlab.bmekings.Logger.ClassLabel;
 import hu.bme.iit.projlab.bmekings.Map.Tecton.Tecton;
 import hu.bme.iit.projlab.bmekings.Player.Player;
 import hu.bme.iit.projlab.bmekings.Program.Params;
 
+@ClassLabel("Entomologist")
 public class Entomologist extends Player{
     private List<Insect> controlledInsects;
     // Rovar tipusat is kezzeljuk le valahogy

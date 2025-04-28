@@ -2,17 +2,16 @@ package hu.bme.iit.projlab.bmekings.Map.Tecton;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Queue;
 import java.util.LinkedList;
-import java.util.List;
+import java.util.Queue;
 
-import hu.bme.iit.projlab.bmekings.Entities.Fungal.Hyphal;
 import hu.bme.iit.projlab.bmekings.Entities.Fungal.FungalBody;
+import hu.bme.iit.projlab.bmekings.Entities.Fungal.Hyphal;
 import hu.bme.iit.projlab.bmekings.Interface.SporeInterface.SporeInterface;
-import hu.bme.iit.projlab.bmekings.Player.Entomologist.Entomologist;
-import hu.bme.iit.projlab.bmekings.Player.Mycologist.Mycologist;
 import hu.bme.iit.projlab.bmekings.Logic.GameLogic.GameLogic;
 import hu.bme.iit.projlab.bmekings.Logic.IDGenerator.IDGenerator;
+import hu.bme.iit.projlab.bmekings.Player.Entomologist.Entomologist;
+import hu.bme.iit.projlab.bmekings.Player.Mycologist.Mycologist;
 
 
 /**
@@ -180,7 +179,7 @@ public class Tecton {
     }
 
     public void runSpecialEffect() {}
-
+/*
     // még nagyon nem végleges, csak a generateMaphez kell valami
     public boolean createInsect(Entomologist player){
         if(!occupiedByInsect){
@@ -190,6 +189,10 @@ public class Tecton {
             // itt nem
             return false;
         }
+    }*/
+
+   public boolean addInsect(Entomologist player){
+        occupiedByInsect=true;
     }
 
 }

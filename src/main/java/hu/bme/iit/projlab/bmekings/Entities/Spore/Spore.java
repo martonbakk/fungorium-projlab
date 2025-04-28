@@ -2,6 +2,7 @@ package hu.bme.iit.projlab.bmekings.Entities.Spore;
 
 import hu.bme.iit.projlab.bmekings.Entities.Entity;
 import hu.bme.iit.projlab.bmekings.Interface.SporeInterface.SporeInterface;
+import hu.bme.iit.projlab.bmekings.Logic.IDGenerator.IDGenerator;
 import hu.bme.iit.projlab.bmekings.Map.Tecton.Tecton;
 
 
@@ -14,7 +15,7 @@ import hu.bme.iit.projlab.bmekings.Map.Tecton.Tecton;
 public abstract class Spore extends Entity implements SporeInterface {
 
     private int nutritionValue;
-    private Tecton baseLocation;
+    protected Tecton baseLocation;
 
     public Spore(){
         super();
@@ -25,6 +26,11 @@ public abstract class Spore extends Entity implements SporeInterface {
     public Spore(int n, String id, Tecton baseLocation) {
         super(id, baseLocation);
         //this.id=IDGenerator.generateID("SP");
+        nutritionValue = n;
+    }
+
+    public Spore(int n, Tecton baseLocation) {
+        super(IDGenerator.generateID("SP"), baseLocation);
         nutritionValue = n;
     }
 

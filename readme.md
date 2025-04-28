@@ -41,6 +41,7 @@ Ha mindent jól csináltál, látnod kell a Maven verzióját és a Java verzió
 ### 2.1. Script futtatása 
 - Add futtatási jogosultságot a run.sh scripthez: chmod +x run.sh
 - Futtasd a scriptet a projekt gyökeréből: ./run.sh
+- Csak tesztek futtatása: Ha csak a teszteket szeretnéd futtatni, használd a test flaget: ./run.sh test
 ### 2.2 Mit csinál a script?
 - Ellenőrzi, hogy a Java és a Maven telepítve van-e.
 - Buildeli a projektet a mvn clean package paranccsal, amely:

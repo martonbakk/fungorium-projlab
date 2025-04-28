@@ -1,16 +1,14 @@
 package hu.bme.iit.projlab.bmekings.Program;
 
-import java.util.Scanner;
 import java.util.ArrayList;
+import java.util.Scanner;
 
 import hu.bme.iit.projlab.bmekings.Entities.Entity;
-import hu.bme.iit.projlab.bmekings.Entities.Entity.*;
 import hu.bme.iit.projlab.bmekings.Entities.Fungal.FungalBody;
 import hu.bme.iit.projlab.bmekings.Entities.Fungal.Hyphal;
 import hu.bme.iit.projlab.bmekings.Entities.Fungal.TypeCharacteristics;
 import hu.bme.iit.projlab.bmekings.Entities.Insect.Insect;
 import hu.bme.iit.projlab.bmekings.Entities.Spore.SlowSpore;
-import hu.bme.iit.projlab.bmekings.Entities.Spore.Spore;
 import hu.bme.iit.projlab.bmekings.Interface.SporeInterface.SporeInterface;
 import hu.bme.iit.projlab.bmekings.Logic.GameLogic.GameLogic;
 import hu.bme.iit.projlab.bmekings.Map.Map;
@@ -23,9 +21,9 @@ import hu.bme.iit.projlab.bmekings.Player.Entomologist.Entomologist;
 import hu.bme.iit.projlab.bmekings.Player.Mycologist.Mycologist;
 public class Program {
     // jatek inicializalasa
-    private static GameLogic gameLogic = new GameLogic(1000, 2);
     private static ArrayList<Entomologist> entomologistPlayers = new ArrayList<>();
     private static ArrayList<Mycologist> mycologistPlayers = new ArrayList<>();
+    private static GameLogic gameLogic;
     private static Params params = new Params();
     // tesztek inicializalasa
     private static FungalBody fungus= new FungalBody();
@@ -36,9 +34,10 @@ public class Program {
         boolean running = true;
         Scanner scanner = new Scanner(System.in);
         String input;
-
-        gameLogic.startGame(); //ticker start 1 sec 2 player, see initialization
+        
         initBasePlayers();
+        gameLogic = new GameLogic(1000, 2);
+        gameLogic.startGame(); //ticker start 1 sec 2 player, see initialization
         while (running) {
             input = scanner.nextLine();
             consoleActions(input);
@@ -52,8 +51,8 @@ public class Program {
     }
 
     private static void initBasePlayers(){
-        String[] args1={"/addEntomologist", "e1"};
-        String[] args2={"/addMycologist","m1"};
+        String[] args1={"/addEntomologist", "E-01"};
+        String[] args2={"/addMycologist","M-01"};
         addEntomologist(args1);
         addMycologist(args2);
     }
@@ -150,7 +149,10 @@ public class Program {
 
     // ● [string]: az Entomológus id-je
     private static void addEntomologist(String[] splitInput) {
-        entomologistPlayers.add(new Entomologist(splitInput[1]));
+        Entomologist player = new Entomologist(splitInput[1]);
+        MethodLogger.logCurrentMethod(player, "Entomológus hozzáadva");
+        entomologistPlayers.add(player);
+        GameLogic.addEntomologist(player);
         System.out.println("Entomológus hozzáadva: " + splitInput[1]);
     }
 
@@ -159,6 +161,7 @@ public class Program {
         Mycologist player = new Mycologist(splitInput[1]);
         player.setTypeCharacteristics(new TypeCharacteristics(1, 1, 1, 1));
         mycologistPlayers.add(player);
+        GameLogic.addMycologist(player);
         System.out.println("Mycologist hozzáadva: " + splitInput[1]);
     }
 
@@ -176,6 +179,11 @@ public class Program {
             if (m.getPlayerID().equals(splitInput[1])) {
                 player = m;
             }
+        }
+
+        if (player == null) {
+            System.out.println("Nincs ilyen játékos!");
+            return;
         }
 
         if (splitInput.length < 4) {
@@ -242,11 +250,11 @@ public class Program {
     //  ○ -dt [szám]: az az idő, ami a kinövéshez kell
     //  ○ -lt [szám]: az élettartama
     //  ○ -ct [szám]: az az idő, ami után meghal, ha elvágták
-    // [0]/addHyphal [1]M-01 [2]T-01 [3]T-02
-    // [0]/addH8phal [1]H-02 [2]T-01 [3]T-02 [4]-d [5]true 
-    // [0]/addHyphal [1]H-01 [2]T-01 [3]T-02 [4]-d [5]true [6]-lt [7]8
-    // [0]/addHyphal [1]H-04 [2]T-01 [3]T-02 [4]-d [5]true [6]-lt [7]10 [8]-ct [9]6
-    // [0]/addHyphal [1]H-05 [2]T-02 [3]T-03 [4]-d [5]false [6]-dt [7]3 [8]-lt [9]10 [10]-ct [11]6
+    
+    // [0]/addHyphal [1]M-01 [2]T-01 [3]T-02 [4]-d [5]true 
+    // [0]/addHyphal [1]M-01 [2]T-01 [3]T-02 [4]-d [5]true [6]-lt [7]8
+    // [0]/addHyphal [1]M-01 [2]T-01 [3]T-02 [4]-d [5]true [6]-lt [7]10 [8]-ct [9]6
+    // [0]/addHyphal [1]M-01 [2]T-02 [3]T-03 [4]-d [5]false [6]-dt [7]3 [8]-lt [9]10 [10]-ct [11]6
 
     // TODO itt is, melyik mycologisthoz adjuk hozzá
 
@@ -261,6 +269,12 @@ public class Program {
             }
         }
 
+        if (player == null) {
+            System.out.println("Nincs ilyen játékos!");
+            return;
+        }
+
+        // [0]/addHyphal [1]M-01 [2]T-01 [3]T-02
         if (splitInput.length < 5) {
             for (Tecton t1 : gameLogic.map.getAllTectons()) {
                 if (t1.getId().equals(splitInput[2])) {
@@ -277,20 +291,73 @@ public class Program {
         }
         else {
             /* TODO */
-            switch (splitInput[5]) {
+            switch (splitInput[4]) {
                 case "-d":
-                    
+                    switch (splitInput[6]) {
+                        case "-dt":
+
+                            break;
+                        case "-lt":
+
+                            break;
+                        case "-ct":
+                            
+                            break;
+                        default:
+                            System.out.println("Nincs ilyen paraméter!");
+                            break;
+                    }
                     break;
                 case "-dt":
-                    
+                    switch (splitInput[6]) {
+                        case "-d":
+
+                            break;
+                        case "-lt":
+
+                            break;
+                        case "-ct":
+                            
+                            break;
+                        default:
+                            System.out.println("Nincs ilyen paraméter!");
+                            break;
+                    }
                     break;
                 case "-lt":
-                    
+                    switch (splitInput[6]) {
+                        case "-dt":
+
+                            break;
+                        case "-d":
+
+                            break;
+                        case "-ct":
+                            
+                            break;
+                        default:
+                            System.out.println("Nincs ilyen paraméter!");
+                            break;
+                    }
                     break;
                 case "-ct":
-                    
+                    switch (splitInput[6]) {
+                        case "-dt":
+
+                            break;
+                        case "-lt":
+
+                            break;
+                        case "-d":
+                            
+                            break;
+                        default:
+                            System.out.println("Nincs ilyen paraméter!");
+                            break;
+                    }
                     break;
                 default:
+                    System.out.println("Nincs ilyen paraméter!");
                     break;
             }
 
@@ -535,12 +602,12 @@ public class Program {
         "/cuthyphal",
         "/splittecton",
         "exit"
-    };
+        };
 
-    System.out.println("Elerheto parancsok:");
-    for (String command : commands) {
-        System.out.println(command);
-    }
+        System.out.println("Elerheto parancsok:");
+        for (String command : commands) {
+            System.out.println(command);
+        }
     }
 
     // ● [string]: a kimenetet tároló fájl neve
@@ -595,6 +662,11 @@ public class Program {
                             msg = t.isOccupiedByFungus() ? "true" : "false";
 
                             System.out.println("OccupiedByFungus: " + msg);
+
+                            System.out.println("Neighbours: ");
+                            for(Tecton tct : t.getNeighbors()){
+                                System.out.print(""+tct.getId());
+                            }
                         }
                         break;
                     case "s":
