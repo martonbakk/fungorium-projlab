@@ -35,7 +35,9 @@ public class FungalBody extends Entity {
     private int shotSporesNum;          // a kiloheto sporak szama
     private TypeCharacteristics characteristics;
     private int callNum;                // hívasok száma, ugye a leveUpnal mindig 3 hívás egyenlő egy szintel (currLevel)
+    private Mycologist owner;
 
+//kosntrukktorba az owner felvetele!!!
     public FungalBody() {
         super();  
 
@@ -47,16 +49,17 @@ public class FungalBody extends Entity {
         this.callNum = 0;
     }
 
-    public FungalBody(int currLevel, int shotSporesNum, TypeCharacteristics characteristics, Queue<SporeInterface> spores, Tecton baseLocation){
+    public FungalBody(int currLevel, int shotSporesNum, TypeCharacteristics characteristics, Queue<SporeInterface> spores, Tecton baseLocation, Mycologist owner){
         super(IDGenerator.generateID("FB"), baseLocation);
         this.characteristics = characteristics;
         this.spores=spores;
         this.currLevel = currLevel;
         this.shotSporesNum = shotSporesNum;
         this.callNum = 0;
+        this.owner=owner;
         
     }
-
+/*
     public FungalBody(String id, Tecton baseLocation, int currLevel, int shotSporesNum, int shootingRange, int sporeProductionIntensity, int startingHyphalNum, int sporeCapacity) {
         super(id, baseLocation);
         //this.id=IDGenerator.generateID("FB");
@@ -66,11 +69,11 @@ public class FungalBody extends Entity {
         this.shotSporesNum = shotSporesNum;
         this.callNum = 0;
         System.out.println("asd");
-    }
+    }*/
 
     /// occupiedByFungalbody-hoz kell
-    public FungalBody(TypeCharacteristics characteristics, String id, Tecton baseLocation){
-        super(id,baseLocation); 
+    public FungalBody(TypeCharacteristics characteristics, Tecton baseLocation){
+        super(IDGenerator.generateID("FB"),baseLocation); 
         this.characteristics = characteristics;
         this.spores = new LinkedList<>();
         this.currLevel = 1;
@@ -178,9 +181,9 @@ public class FungalBody extends Entity {
         Set<Tecton> visited = new HashSet<>();
         Queue<Tecton> queue = new LinkedList<>();
         
-        Mycologist player  = this.getOwner();
+        //Mycologist player  = this.getOwner();
         
-        ArrayList<Hyphal> hyphalList = player.getHyphalList();
+        ArrayList<Hyphal> hyphalList = owner.getHyphalList();
 
         Tecton startTecton = this.baseLocation;
         queue.add(startTecton);
@@ -269,7 +272,7 @@ public class FungalBody extends Entity {
         }
 
         // Ez a beégetett konstruktor paraméter szerintem nem jó konstrukció, valahogy ezt egységesen kellene beállítani szerintem pl static-al mas ötlet?
-        Hyphal newHyphal = new Hyphal(connected, false, 3000, 3000, 300, this.baseLocation);
+        Hyphal newHyphal = new Hyphal(connected, false, 3000, 3000, 300, this.baseLocation, this.owner);
         
         // Mindkettőhöz hozzáadjuk a másikat?? Szerintem igen
        
@@ -279,13 +282,13 @@ public class FungalBody extends Entity {
 
         baseLocation.connectTecton(connected, newHyphal);
 
-        Mycologist player = this.getOwner();
+        //Mycologist player = this.getOwner();
         
-        player.getHyphalList().add(newHyphal);
+        owner.addHyphal(newHyphal);
 
         GameLogic.addEntity(newHyphal);
     }
-
+/*
     public Mycologist getOwner(){
         Mycologist player = null;
         for (Mycologist mycologist : GameLogic.getMycologists()){
@@ -297,11 +300,11 @@ public class FungalBody extends Entity {
         }
         return player;
     }
-
+*/
 
     public void destroyFungus(){
         // gombasz
-        Mycologist owner = this.getOwner();
+        //Mycologist owner = this.getOwner();
         owner.destroyFungus(this);
 
         // entity

@@ -83,12 +83,16 @@ public class Map {
                 }
             }
         }
+        ArrayList<Tecton> availableTectons = tectons; 
+        // only used to avoid placing several insects on the same tecton in
+        // the generateMap() function 
         for (int i = 0; i < entomologists.size(); i++){
-            int idx = random.nextInt(tectons.size());
-            Tecton baseTecton = tectons.get(idx);
-            if(!baseTecton.addInsect(entomologists.get(i))){
-                i--;
-            }
+            int idx = random.nextInt(availableTectons.size());
+            Tecton baseTecton = availableTectons.get(idx);
+            availableTectons.remove(idx);
+            
+            //baseTecton.addInsect(entomologists.get(i));
+            
             for(int j = 0; i < 3; i++){
                 idx = random.nextInt(tectons.size());
                 baseTecton = tectons.get(idx);
@@ -122,12 +126,18 @@ public class Map {
         }
     }
 
-    public void splitTecton(Tecton tc) {
-        
+    public void splitTecton(Tecton tecton) {
+        if(tecton.isOccupiedByInsect())
+            return;
+        tecton.destroyFungalBody();
+        updateTectons(tecton);
     }
 
-    public void updateTectons() {
-
+    public void updateTectons(Tecton tecton) {
+        ArrayList<Tecton> connectedTectons = (ArrayList<Tecton>)tecton.getConnectedNeighbors().keySet();
+        for(Tecton t : connectedTectons){
+            ///t.disconnectTecton(tecton, t.getConnectedNeighbors().get(tecton));
+        }
     }
 
     public ArrayList<Tecton> getTectons(ArrayList<String> tectonIds) {

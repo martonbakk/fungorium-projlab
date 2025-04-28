@@ -24,10 +24,7 @@ public class NormalSpore extends Spore {
 
     public void activateEffect(Insect targetInsect) {
     }
-
-    public void spawnSpore() {
-    }
-
+    
     @Override
     public void update() {
     }

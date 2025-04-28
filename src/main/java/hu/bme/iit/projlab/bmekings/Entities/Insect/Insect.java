@@ -7,9 +7,9 @@ import hu.bme.iit.projlab.bmekings.Entities.Entity;
 import hu.bme.iit.projlab.bmekings.Entities.Fungal.Hyphal;
 import hu.bme.iit.projlab.bmekings.Interface.SporeInterface.SporeInterface;
 import hu.bme.iit.projlab.bmekings.Logic.GameLogic.GameLogic;
+import hu.bme.iit.projlab.bmekings.Logic.IDGenerator.IDGenerator;
 import hu.bme.iit.projlab.bmekings.Map.Tecton.Tecton;
 import hu.bme.iit.projlab.bmekings.Player.Entomologist.Entomologist;
-import hu.bme.iit.projlab.bmekings.Player.Mycologist.Mycologist;
 
 
 /**
@@ -25,7 +25,7 @@ public class Insect extends Entity{
     private int stomachLimit;
     private int currStomachFullness;
     private int cutCooldown;
-    private Mycologist owner;
+    private Entomologist owner;
     private ArrayList<Effect> activeEffects;
 
     public Insect() {
@@ -39,9 +39,9 @@ public class Insect extends Entity{
         this.cutCooldown = 0;
         this.activeEffects = new ArrayList<>();
     }
-
-    public Insect(int movingSpeed, int movingCD, int stomachLimit, int currStomachFullness, int cutCooldown, String id, Tecton baseLocation){
-        super(id, baseLocation);
+//rovarasz felvetel konstruktorba!!!
+    public Insect(int movingSpeed, int movingCD, int stomachLimit, int currStomachFullness, int cutCooldown, Tecton baseLocation, Entomologist owner){
+        super(IDGenerator.generateID("I"), baseLocation);
 
         //this.id=IDGenerator.generateID("I");
         this.movingSpeed = movingSpeed;
@@ -49,6 +49,19 @@ public class Insect extends Entity{
         this.stomachLimit = stomachLimit;
         this.currStomachFullness = currStomachFullness;
         this.cutCooldown = cutCooldown;
+        this.owner=owner;
+    }
+
+    public Insect(Insect parentInsect){
+        super(IDGenerator.generateID("I"), parentInsect.getBase());
+
+        //this.id=IDGenerator.generateID("I");
+        this.movingSpeed = parentInsect.getMovingSpeed();
+        this.movingCD = parentInsect.getMovingCD();
+        this.stomachLimit = parentInsect.getStomachLimit();
+        this.currStomachFullness = parentInsect.getCurrStomachFullness();
+        this.cutCooldown = parentInsect.getCutCooldown();
+        this.owner=parentInsect.owner;
     }
 
     public int getMovingSpeed() { return movingSpeed; }
@@ -60,6 +73,8 @@ public class Insect extends Entity{
     public int getCurrStomachFullness() { return currStomachFullness; }
     
     public int getCutCooldown() { return cutCooldown; }
+
+    public Entomologist getEntomologist(){ return  owner;}
 
     public ArrayList<Effect> getActiveEffects() { return activeEffects; }
 
@@ -121,7 +136,7 @@ public class Insect extends Entity{
     public void DestroyInsect() {
         // 1. Eltávolítás az Entomologist controlledInsects listájából
         // Gamelogic entomolgist listabol
-        
+        /*
         for (Entomologist entomologist : GameLogic.getEntomologists()){
             for (Insect insect : entomologist.getControlledInsects()){
                 if (this == insect){
@@ -129,7 +144,8 @@ public class Insect extends Entity{
                 }
             }
         }
-
+        */
+        owner.deleteControlledInsect(this);
         // 2. Eltávolítás a GameLogic entityList-jéből
         GameLogic.deleteEntity(this);
     }
@@ -137,6 +153,7 @@ public class Insect extends Entity{
     public void createInsect(){
         GameLogic.addEntity(this);
         baseLocation.addInsect(this);
+        owner.addInsect(this);
     }
 
 }

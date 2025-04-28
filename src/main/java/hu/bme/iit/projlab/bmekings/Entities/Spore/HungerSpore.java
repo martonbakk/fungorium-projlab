@@ -26,10 +26,6 @@ public class HungerSpore extends Spore {
         
     }
 
-    public void spawnSpore() {
-        
-    }
-
     @Override
     public void update() {
 

@@ -22,14 +22,9 @@ public class DuplicateSpore extends Spore {
     }
 
     public void activateEffect(Insect targetInsect) {
-        
+        Insect newInsect=new Insect(targetInsect);
+        newInsect.createInsect();
     }
-
-
-    public void spawnSpore() {
-        
-    }
-
 
     @Override
     public void update() {

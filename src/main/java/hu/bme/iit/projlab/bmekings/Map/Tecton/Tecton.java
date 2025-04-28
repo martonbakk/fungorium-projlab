@@ -7,10 +7,10 @@ import java.util.Queue;
 
 import hu.bme.iit.projlab.bmekings.Entities.Fungal.FungalBody;
 import hu.bme.iit.projlab.bmekings.Entities.Fungal.Hyphal;
+import hu.bme.iit.projlab.bmekings.Entities.Insect.Insect;
 import hu.bme.iit.projlab.bmekings.Interface.SporeInterface.SporeInterface;
 import hu.bme.iit.projlab.bmekings.Logic.GameLogic.GameLogic;
 import hu.bme.iit.projlab.bmekings.Logic.IDGenerator.IDGenerator;
-import hu.bme.iit.projlab.bmekings.Player.Entomologist.Entomologist;
 import hu.bme.iit.projlab.bmekings.Player.Mycologist.Mycologist;
 
 
@@ -24,6 +24,7 @@ public class Tecton {
     private Queue<SporeInterface> spores = new LinkedList<>();
     public ArrayList<Tecton> neighbours = new ArrayList<>();
     public HashMap<Tecton, ArrayList<Hyphal>> connectedNeighbours = new HashMap<>();
+    private ArrayList<Insect> insects = new ArrayList<>();
     
     private String id;
     private double splitChance;
@@ -45,7 +46,7 @@ public class Tecton {
 
     public HashMap<Tecton, ArrayList<Hyphal>> getConnectedNeighbors() { return connectedNeighbours; }
 
-    public SporeInterface getNextSporeToEat() { return spores.peek(); }
+    public SporeInterface getNextSporeToEat() { SporeInterface spore=spores.peek(); spores.peek().destroySpore(); return spore;}
 
     public void setOccupiedByFungus(boolean value) { occupiedByFungalBody = value; }
 
@@ -85,11 +86,13 @@ public class Tecton {
         if ( grownFrom.equals("spore") && spores.size()<2) {
             return false;
         } else if (grownFrom.equals("spore")) {
-            spores.poll();
-            spores.poll();
+            spores.peek().destroySpore();
+            spores.peek().destroySpore();
+
+            
         }                       
         //// int currLevel, int shotSporesNum, TypeCharacteristics characteristics, Queue<SporeInterface> spores,String id, Tecton baseLocation
-        FungalBody newfungalBody = new FungalBody(1,0,player.getTypeCharacteristics(), null,this );  //megkell oldani a charachteristicst
+        FungalBody newfungalBody = new FungalBody(1,0,player.getTypeCharacteristics(), null,this, player );  //megkell oldani a charachteristicst
 
         GameLogic.addEntity(fungalBody);
 
@@ -191,8 +194,14 @@ public class Tecton {
         }
     }*/
 
-   public boolean addInsect(Entomologist player){
+   public void addInsect(Insect insect){
         occupiedByInsect=true;
+        insects.add(insect);
     }
+
+    public void removeSpore(SporeInterface spore){
+        spores.remove();
+    }
+    
 
 }
