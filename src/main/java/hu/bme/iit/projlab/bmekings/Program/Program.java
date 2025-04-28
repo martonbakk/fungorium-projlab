@@ -150,7 +150,6 @@ public class Program {
     // ● [string]: az Entomológus id-je
     private static void addEntomologist(String[] splitInput) {
         Entomologist player = new Entomologist(splitInput[1]);
-        MethodLogger.logCurrentMethod(player, "Entomológus hozzáadva");
         entomologistPlayers.add(player);
         GameLogic.addEntomologist(player);
         System.out.println("Entomológus hozzáadva: " + splitInput[1]);
