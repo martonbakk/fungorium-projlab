@@ -13,7 +13,7 @@ if ! command -v java &> /dev/null; then
     exit 1
 fi
 
-# Ellenőrizzük a Java verzióját
+# Java verzió kiírás
 JAVA_VERSION=$(java -version 2>&1 | awk -F '"' '/version/ {print $2}')
 echo "Java verzió: $JAVA_VERSION"
 
@@ -23,40 +23,44 @@ if ! command -v mvn &> /dev/null; then
     exit 1
 fi
 
-# 3. Ellenőrizzük, hogy a 'test' flag meg van-e adva
+# 3. Ha a "test" flag van megadva, csak tesztelünk
 if [ "$1" = "test" ]; then
     echo "Tesztek futtatása Maven-nel..."
     mvn test
     if [ $? -ne 0 ]; then
-        echo "Hiba: A tesztek futtatása sikertelen! Ellenőrizd a tesztek eredményét a target/surefire-reports mappában."
+        echo "Hiba: A tesztek futtatása sikertelen! Nézd meg a target/surefire-reports mappát."
         exit 1
     fi
     echo "Tesztek sikeresen lefutottak!"
     exit 0
 fi
 
-# 4. Buildeljük a projektet a tesztek futtatásával
-echo "Projekt buildelése Maven-nel..."
-mvn clean package
+# 4. Első futtatásnál mvn clean install, utána clean package
+if [ ! -d "$TARGET_DIR" ]; then
+    echo "Első futtatás: 'mvn clean install' futtatása..."
+    mvn clean install
+else
+    echo "Projekt buildelése Maven-nel (clean package)..."
+    mvn clean package
+fi
 
-# Ellenőrizzük, hogy a build sikeres volt-e
+# Ellenőrizzük a build eredményét
 if [ $? -ne 0 ]; then
-    echo "Hiba: A Maven build sikertelen! Ellenőrizd a tesztek eredményét a target/surefire-reports mappában."
+    echo "Hiba: A Maven build sikertelen! Ellenőrizd a logot."
     exit 1
 fi
 
 # 5. Ellenőrizzük, hogy a JAR fájl létezik-e
 if [ ! -f "$JAR_FILE" ]; then
     echo "Hiba: A JAR fájl nem található: $JAR_FILE"
-    echo "Ellenőrizd, hogy a pom.xml helyesen van-e konfigurálva, és a build sikeresen lefutott!"
+    echo "Ellenőrizd a pom.xml-t és a build eredményt!"
     exit 1
 fi
 
-# 6. Futtassuk a JAR fájlt
+# 6. Fut a program
 echo "Projekt futtatása..."
 java -jar "$JAR_FILE"
 
-# Ellenőrizzük, hogy a futtatás sikeres volt-e
 if [ $? -ne 0 ]; then
     echo "Hiba: A program futtatása sikertelen!"
     exit 1
