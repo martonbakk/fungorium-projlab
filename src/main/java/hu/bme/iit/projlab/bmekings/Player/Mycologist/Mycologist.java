@@ -6,10 +6,12 @@ import java.util.List;
 import hu.bme.iit.projlab.bmekings.Entities.Fungal.FungalBody;
 import hu.bme.iit.projlab.bmekings.Entities.Fungal.Hyphal;
 import hu.bme.iit.projlab.bmekings.Entities.Fungal.TypeCharacteristics;
+import hu.bme.iit.projlab.bmekings.Logger.Loggable;
 import hu.bme.iit.projlab.bmekings.Map.Tecton.Tecton;
 import hu.bme.iit.projlab.bmekings.Player.Player;
 import hu.bme.iit.projlab.bmekings.Program.Params;
 
+@Loggable("Mycologist")
 public class Mycologist extends Player{
     private ArrayList<FungalBody> controlledFunguses;
     private ArrayList<Hyphal> hyphalList;
@@ -37,14 +39,19 @@ public class Mycologist extends Player{
         this.typeCharacteristics = new TypeCharacteristics(shootingRange,sporeProductionIntensity,startingHyphalNum,sporeCapacity);
     }
 
+    @Loggable
     public ArrayList<FungalBody> getControlledFunguses() { return controlledFunguses; }
 
+    @Loggable
     public ArrayList<Hyphal> getHyphalList() { return hyphalList; }
 
+    @Loggable
     public TypeCharacteristics getTypeCharacteristics(){ return this.typeCharacteristics; }
 
+    @Loggable
     public void setTypeCharacteristics(TypeCharacteristics characteristics) { typeCharacteristics = characteristics; }
 
+    @Loggable
     @Override
     public void SelectAction(int actionType, Params params) {
         switch (actionType) {
@@ -55,18 +62,21 @@ public class Mycologist extends Player{
                 selectHyphal(params.selectedHyphal);
                 break;
             case 3:
-                growFungalBody(params.selectedFungus);
+                growFungalBody(params.selectedTecton);
                 break;
             case 4:
-                growHyphalAction(params.selectedTecton);
+                growFungalBodyFromSpore(params.selectedTecton);
                 break;
             case 5:
-                destroyFungus(params.selectedFungus);
+                growHyphalAction(params.selectedTecton);
                 break;
             case 6:
-                shootSpore(params.selectedTectons);
+                destroyFungus(params.selectedFungus);
                 break;
             case 7:
+                shootSpore(params.selectedTectons);
+                break;
+            case 8:
                 speedUpDevelopment(params.selectedHyphal);
                 break;
             default:
@@ -74,6 +84,7 @@ public class Mycologist extends Player{
         }
     }
 
+    @Loggable
     private boolean checkControlledFunguses(){
         boolean checkControlledFungus= this.controlledFunguses.isEmpty();
         if (checkControlledFungus) {
@@ -82,6 +93,7 @@ public class Mycologist extends Player{
         return checkControlledFungus;
     }
 
+    @Loggable
     private boolean checkControlledFungus(){
         boolean checkControlledFungus= this.selectedFungus == null;
         if (checkControlledFungus) {
@@ -90,6 +102,7 @@ public class Mycologist extends Player{
         return checkControlledFungus;
     }
 
+    @Loggable
     private boolean checkControlledFungusHyphal(){
         boolean checkControlledFungus= hyphalList.isEmpty();
         if (checkControlledFungus) {
@@ -98,6 +111,7 @@ public class Mycologist extends Player{
         return checkControlledFungus;
     }
 
+    @Loggable
     private boolean checkSelectedHyhpal(){
         boolean checkControlledFungus= this.selectedHyphal == null;
         if (checkControlledFungus) {
@@ -106,6 +120,7 @@ public class Mycologist extends Player{
         return checkControlledFungus;
     }
 
+    @Loggable
     private void speedUpDevelopment(Hyphal selectedHyphal){
         if (checkSelectedHyhpal()){
             return;
@@ -114,6 +129,7 @@ public class Mycologist extends Player{
         this.selectedHyphal=null;
     }
 
+    @Loggable
     private void shootSpore(List<Tecton> selectedTectons){
         if(checkControlledFungus()){
             return;
@@ -123,7 +139,8 @@ public class Mycologist extends Player{
         }
         this.selectedFungus=null;
     }
-
+    
+    /*
     public void growFungalBody(FungalBody fungus){
         if (fungus.getBase().isOccupiedByFungus()){
             System.out.println("Tecton already has a fungus...");
@@ -132,8 +149,19 @@ public class Mycologist extends Player{
             fungus.getBase().setOccupiedByFungus(true);
             this.controlledFunguses.add(fungus);
         }
+    }*/
+
+    @Loggable
+    public void growFungalBody(Tecton tecton){
+        tecton.createFungalBody(this);
     }
 
+    @Loggable
+    public void growFungalBodyFromSpore(Tecton tecton){
+        tecton.createFungalBodyFromSpore(this);
+    }
+
+    @Loggable
     private void selectHyphal(Hyphal hyphal){
         if (checkControlledFungus()){
             return;
@@ -150,7 +178,8 @@ public class Mycologist extends Player{
             }
         }
     }
-    
+
+    @Loggable
     private void selectFungus(FungalBody fungus){
         if(checkControlledFunguses()){
             return;
@@ -164,7 +193,8 @@ public class Mycologist extends Player{
         }
     }
 
-    private void growHyphalAction(Tecton tecton){
+    @Loggable
+    public void growHyphalAction(Tecton tecton){
         if (checkControlledFungus()){
             return;
         }
@@ -172,6 +202,7 @@ public class Mycologist extends Player{
         this.selectedFungus=null;
     }
 
+    @Loggable
     public void destroyFungus(FungalBody fungalToDestroy){
         if (checkControlledFungus()){
             return;
@@ -183,16 +214,19 @@ public class Mycologist extends Player{
         }
     }
 
+    @Loggable
     public void removeHyphal(Hyphal hyphal){
         hyphalList.remove(hyphal);
     }
 
+    @Loggable
     public void addHyphal(Hyphal hyphal){
         hyphalList.add(hyphal);
     }
 
-    public void addFungus(FungalBody fungalToDestroy){
-        controlledFunguses.add(fungalToDestroy);
+    @Loggable
+    public void addFungus(FungalBody fungalToAdd){
+        controlledFunguses.add(fungalToAdd);
     }
 
 }

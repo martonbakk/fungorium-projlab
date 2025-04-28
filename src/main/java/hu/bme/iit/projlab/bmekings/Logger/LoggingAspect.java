@@ -1,13 +1,20 @@
 package hu.bme.iit.projlab.bmekings.Logger;
 
+import java.lang.reflect.Method;
+
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Before;
+import org.aspectj.lang.reflect.MethodSignature;
 
 import hu.bme.iit.projlab.bmekings.Player.Player;
+import hu.bme.iit.projlab.bmekings.Entities.Entity;
+import hu.bme.iit.projlab.bmekings.Map.Tecton.Tecton;
+import hu.bme.iit.projlab.bmekings.Map.Map;
 
 @Aspect
 public class LoggingAspect {
+
     @Before("execution(* *(..)) && @annotation(hu.bme.iit.projlab.bmekings.Logger.Loggable)")
     public void logMethodCall(JoinPoint joinPoint) {
         Object target = joinPoint.getTarget();
@@ -18,21 +25,27 @@ public class LoggingAspect {
         String className = (classLabel != null && !classLabel.value().isEmpty()) ? classLabel.value() : target.getClass().getSimpleName();
 
         // PlayerId kiolvasása
-        String playerId = "unknown";
+        String targetID = "unknown";
         if (target instanceof Player player) {
-            playerId = player.getPlayerID();
+            targetID = player.getPlayerID();
+        }
+        if (target instanceof Entity entity){
+            targetID = entity.getId();
         }
 
-        // Metódus annotációjának kiolvasása
-        Loggable loggable = null;
-        try {
-            loggable = target.getClass()
-                .getMethod(methodName, joinPoint.getSignature().getDeclaringType().getMethods()[0].getParameterTypes())
-                .getAnnotation(Loggable.class);
-        } catch (NoSuchMethodException e) {
-            // Ha a metódus nem található, csendben kilépünk
-            return;
+        if (target instanceof Tecton tecton){
+            targetID = "Meg nem mukodik";//tecton.getId();
         }
+        if (target instanceof Map){
+            targetID = "MP1";
+        }
+
+        // Most: helyesen szerezd meg a Method objektumot
+        MethodSignature signature = (MethodSignature) joinPoint.getSignature();
+        Method method = signature.getMethod();
+
+        // A metódus annotációját kérdezzük
+        Loggable loggable = method.getAnnotation(Loggable.class);
 
         // Metódus nevének meghatározása
         String finalMethodName = methodName;
@@ -41,6 +54,6 @@ public class LoggingAspect {
         }
 
         // Naplózás
-        MethodLogger.logMethodCall(className, playerId, finalMethodName);
+        MethodLogger.logMethodCall(className, targetID, finalMethodName);
     }
 }

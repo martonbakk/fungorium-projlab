@@ -1,5 +1,7 @@
 package hu.bme.iit.projlab.bmekings.Map.Tecton;
 
+import hu.bme.iit.projlab.bmekings.Logger.Loggable;
+
 /**
  * A NoFungusTecton osztály a Tecton egy speciális leszármazottja, 
  * amely egy olyan terepelemet reprezentál, ahol gombás testek nem tudnak megtelepedni.
@@ -8,21 +10,21 @@ package hu.bme.iit.projlab.bmekings.Map.Tecton;
  * Kétféle konstruktor érhető el: egy paraméteres, amellyel az objektum azonnal 
  * inicializálható, valamint egy paraméter nélküli alapértelmezett konstruktor.
  */
+
+@Loggable("NoFungusTecton")
 public class NoFungusTecton extends Tecton {
-
-    public NoFungusTecton(String id, double splitChance, boolean occupiedByInsect, boolean occupiedByFungalBody) {
-        super( id,  splitChance,  occupiedByInsect,  occupiedByFungalBody);
-    }
-
     public NoFungusTecton(double splitChance, boolean occupiedByInsect, boolean occupiedByFungalBody) {
         super(splitChance,  occupiedByInsect,  occupiedByFungalBody);
+        this.flags.fungalApproved=10;
     }
 
     public NoFungusTecton(){
         super();
+        this.flags.fungalApproved=10;
     }
 
-    public void runSpecialEffect() {
-
+    @Loggable
+    public Flags runSpecialEffect() {
+        return this.flags;
     }
 }

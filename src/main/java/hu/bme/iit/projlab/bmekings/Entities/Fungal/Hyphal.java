@@ -2,6 +2,7 @@ package hu.bme.iit.projlab.bmekings.Entities.Fungal;
 
 import hu.bme.iit.projlab.bmekings.Entities.Entity;
 import hu.bme.iit.projlab.bmekings.Entities.Insect.Insect;
+import hu.bme.iit.projlab.bmekings.Logger.Loggable;
 import hu.bme.iit.projlab.bmekings.Logic.GameLogic.GameLogic;
 import hu.bme.iit.projlab.bmekings.Logic.IDGenerator.IDGenerator;
 import hu.bme.iit.projlab.bmekings.Map.Tecton.Tecton;
@@ -12,6 +13,7 @@ import hu.bme.iit.projlab.bmekings.Player.Mycologist.Mycologist;
  * A gombafonalak a gombatestekből nőnek ki, és a tektonok közötti kapcsolódást biztosítják, lehetővé téve a gombák terjeszkedését
  * és a rovarok mozgását. Az Entity absztrakt osztályból származik, így örökli annak attribútumait és metódusait.
  */
+@Loggable("Hyphal")
 public class Hyphal extends Entity {
     private Tecton connectedTecton;
     private boolean developed;
@@ -44,33 +46,36 @@ public class Hyphal extends Entity {
         this.owner=owner;
     }
 
+    @Loggable
     public Tecton getConnectedTecton() { return connectedTecton; }
 
+    @Loggable
     public boolean getDeveloped() { return developed; }
 
+    @Loggable
     public int getDevelopTime() { return developTime; }
 
+    @Loggable
     public int getLifeTime() { return lifeTime; }
 
+    @Loggable
     public int getCutTime() { return cutTime; }
 
+    @Loggable
     public void setLifeTime(int newLifeTime) { lifeTime=newLifeTime; }
 
-    public void growFungus(Tecton tecton, String grownFrom) {
-        /*
-        Mycologist player=null;
-        for (Mycologist mycologist : GameLogic.getMycologists()){
-            for (Hyphal hyphal : mycologist.getHyphalList()){
-                if (this == hyphal){
-                    player = mycologist;
-                }
-            }
-        }
-        */
-        tecton.createFungalBody(owner, grownFrom);
+    @Loggable
+    public void growFungus(Tecton tecton) {
+        tecton.createFungalBody(owner);
+    }
+
+    @Loggable
+    public void growFungusFromSpore(Tecton tecton) {
+        tecton.createFungalBodyFromSpore(owner);
     }
 
 
+    @Loggable
     public void speedUpDevelopment() {
         if(baseLocation.decreaseSpore(2) != null){
             developTime-=2;
@@ -80,28 +85,37 @@ public class Hyphal extends Entity {
         }
     }
 
+    @Loggable
     public void aging() {
-        lifeTime--;
+        dying();
         developTime--;
         if(developTime<=0){
             developed=true;
         }
     }
 
+    @Loggable
+    public void dying() {
+        lifeTime--;
+    }
+
+    @Loggable
     public void eatInsect(Insect stunnedInsect){
         Tecton currLoc = stunnedInsect.getBase();
 
         stunnedInsect.DestroyInsect();
 
         /// itt jon a growFungusFromInsect()
-        growFungus(currLoc, "insect");
+        growFungus(currLoc);
     }
 
+    @Loggable
     @Override
     public void update() {
         aging();
     }
 
+    @Loggable
     public void destroyHyphal(){
         // entity
         GameLogic.deleteEntity(this);
@@ -115,6 +129,7 @@ public class Hyphal extends Entity {
         owner.removeHyphal(this);
         }
 
+    @Loggable
     public Mycologist getOwner(){
         Mycologist player = null;
         for (Mycologist mycologist : GameLogic.getMycologists()){
@@ -125,6 +140,10 @@ public class Hyphal extends Entity {
             }
         }
         return player;
+    }
+
+    public void hyphalHeal(){
+        lifeTime++;
     }
 
         

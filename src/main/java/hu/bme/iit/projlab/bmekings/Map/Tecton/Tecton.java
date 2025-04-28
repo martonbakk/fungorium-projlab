@@ -1,5 +1,6 @@
 package hu.bme.iit.projlab.bmekings.Map.Tecton;
 
+import java.util.Objects;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -8,7 +9,9 @@ import java.util.Queue;
 import hu.bme.iit.projlab.bmekings.Entities.Fungal.FungalBody;
 import hu.bme.iit.projlab.bmekings.Entities.Fungal.Hyphal;
 import hu.bme.iit.projlab.bmekings.Entities.Insect.Insect;
+import hu.bme.iit.projlab.bmekings.Interface.Listener.Listener;
 import hu.bme.iit.projlab.bmekings.Interface.SporeInterface.SporeInterface;
+import hu.bme.iit.projlab.bmekings.Logger.Loggable;
 import hu.bme.iit.projlab.bmekings.Logic.GameLogic.GameLogic;
 import hu.bme.iit.projlab.bmekings.Logic.IDGenerator.IDGenerator;
 import hu.bme.iit.projlab.bmekings.Player.Mycologist.Mycologist;
@@ -20,7 +23,9 @@ import hu.bme.iit.projlab.bmekings.Player.Mycologist.Mycologist;
  * tárolásáért, valamint a tektonok gombafonal menti kapcsolódásának kezeléséért.
  * Implementálja a Listener interfészt, így minden leszármazottjának biztosítania kell az update() metódus implementációját.
  */
-public class Tecton {
+
+@Loggable("Tecton")
+public class Tecton implements Listener{
     private Queue<SporeInterface> spores = new LinkedList<>();
     public ArrayList<Tecton> neighbours = new ArrayList<>();
     public HashMap<Tecton, ArrayList<Hyphal>> connectedNeighbours = new HashMap<>();
@@ -32,67 +37,85 @@ public class Tecton {
     private boolean occupiedByFungalBody; 
     private FungalBody fungalBody;
 
+    protected Flags flags;
+
+    public class Flags{
+        public int fungalApproved;
+        public int hyphalApproved;
+        public int oneHyphalApproved;
+
+        public Flags(){
+            fungalApproved=0;
+            hyphalApproved=0;
+            oneHyphalApproved=0;
+        }
+    }
+
+    @Loggable
     public String getId() { return id; }
 
+    @Loggable
     public double getSplitChance() { return splitChance; }
 
+    @Loggable
     public boolean isOccupiedByFungus() { return occupiedByFungalBody; }
 
+    @Loggable
     public boolean isOccupiedByInsect() { return occupiedByInsect; }
 
+    @Loggable
     public Queue<SporeInterface> getSpores() { return spores; }
 
+    @Loggable
     public ArrayList<Tecton> getNeighbors() { return neighbours; }
 
+    @Loggable
     public HashMap<Tecton, ArrayList<Hyphal>> getConnectedNeighbors() { return connectedNeighbours; }
 
-    public SporeInterface getNextSporeToEat() {  return spores.peek();}
+    @Loggable
+    public SporeInterface getNextSporeToEat() {  return spores.peek(); }
+    
+    @Loggable
+    public FungalBody getFungalBody() { return fungalBody; }
 
+    @Loggable
     public void setOccupiedByFungus(boolean value) { occupiedByFungalBody = value; }
 
+    @Loggable
+    public void setSplitChance(double d) { splitChance = d; }
+
+
     public Tecton() {
-        this.id=IDGenerator.generateID("T");
+        this.id=IDGenerator.generateID("T"); 
         this.splitChance=0;
         this.occupiedByInsect=false;
         this.occupiedByFungalBody=false;
+        this.flags=new Flags();
     }
 
-    public Tecton(String id, double splitChance, boolean occupiedByInsect, boolean occupiedByFungalBody) {
-        //this.id=IDGenerator.generateID("T");
-        this.id=id;
-        this.splitChance=splitChance;
-        this.occupiedByInsect=occupiedByInsect;
-        this.occupiedByFungalBody=occupiedByFungalBody;
-    }
-
-    public Tecton( double splitChance, boolean occupiedByInsect, boolean occupiedByFungalBody) {
+    public Tecton(double splitChance, boolean occupiedByInsect, boolean occupiedByFungalBody) {
         this.id=IDGenerator.generateID("T");
         this.splitChance=splitChance;
         this.occupiedByInsect=occupiedByInsect;
         this.occupiedByFungalBody=occupiedByFungalBody;
+        this.flags=new Flags();
+
+        System.out.println("Új objektum [" + id + "] létrejött");
     }
 
+    @Loggable
     public void addSpore(SporeInterface spore) {
         spores.add(spore);
     }
 
-    public boolean createFungalBody(Mycologist player, String grownFrom) {
-        // add to mycologist, tecton, entity
-        // grownFrom = "insect", grownFrom = "spore", grownFrom = "init"
+    @Loggable
+    public boolean createFungalBody(Mycologist player) {
+        //if tectontype alllows
+
         if(this.isOccupiedByFungus())
             return false;
-        
-
-        if ( grownFrom.equals("spore") && spores.size()<2) {
-            return false;
-        } else if (grownFrom.equals("spore")) {
-            spores.peek().destroySpore();
-            spores.peek().destroySpore();
-
-            
-        }                       
-        //// int currLevel, int shotSporesNum, TypeCharacteristics characteristics, Queue<SporeInterface> spores,String id, Tecton baseLocation
-        FungalBody newfungalBody = new FungalBody(1,0,player.getTypeCharacteristics(), null,this, player );  //megkell oldani a charachteristicst
+                                 
+        FungalBody newfungalBody = new FungalBody(1, 0, player.getTypeCharacteristics(), null, this, player);  //megkell oldani a charachteristicst
 
         GameLogic.addEntity(fungalBody);
 
@@ -105,12 +128,27 @@ public class Tecton {
         return true;
     }
 
+    @Loggable
+    public boolean createFungalBodyFromSpore(Mycologist player) {
+        if(this.isOccupiedByFungus())
+            return false;
+
+        if (spores.size()<2)
+            return false;
+        spores.peek().destroySpore();
+        spores.peek().destroySpore();           
+                               
+        return createFungalBody(player);
+    }
+
     /// hianyos
+    @Loggable
     public void destroyFungalBody(){
         fungalBody=null;
         setOccupiedByFungus(false);
     }
 
+    @Loggable
     public ArrayList<SporeInterface> decreaseSpore(int sporesNeed) {
         ArrayList<SporeInterface> sporeList = null;
         if (spores.size() < sporesNeed) return null; 
@@ -141,11 +179,13 @@ public class Tecton {
         }
     }*/
 
+    @Loggable
     public void disconnectTecton(Tecton tc, Hyphal hyphal) {
         // Ellenőrizzük, hogy a tc létezik-e a connectedNeighbours-ben
         ArrayList<Hyphal> hyphals = connectedNeighbours.get(tc);
         if (hyphals != null) {
         // Töröljük a megadott hyphal-t a listából
+            hyphals.remove(hyphal);
             hyphals.removeIf(h -> h.equals(hyphal));
         // Ha a lista üres lett, töröljük a Tecton kulcsot a HashMap-ből
             if (hyphals.isEmpty()) {
@@ -157,11 +197,13 @@ public class Tecton {
         }
     }
 
-    public void connectTecton(Tecton tc, Hyphal newHyphal) {
+    @Loggable
+    public void connectTecton(Tecton tc, Mycologist owner) {
         if (!neighbours.contains(tc)) {
             System.out.println("Megkapott tekton nem szomszédos!");
             return;
         }
+        Hyphal newHyphal = new Hyphal(tc, false, 3000, 3000, 300, this, owner);
 
         // Ellenőrizzük, hogy a két tekton össze van e már kötve
         ArrayList<Hyphal> hyphals = connectedNeighbours.get(tc);
@@ -176,12 +218,14 @@ public class Tecton {
             connectedNeighbours.put(tc, hyphals);
         }
 
-        for (Hyphal h : hyphals) {
-            System.out.println(h.getId());
-        }
+        owner.addHyphal(newHyphal);
+        GameLogic.addEntity(newHyphal);
     }
 
-    public void runSpecialEffect() {}
+    @Loggable
+    public Flags runSpecialEffect() {
+        return this.flags;
+    }
 /*
     // még nagyon nem végleges, csak a generateMaphez kell valami
     public boolean createInsect(Entomologist player){
@@ -194,14 +238,41 @@ public class Tecton {
         }
     }*/
 
-   public void addInsect(Insect insect){
+    @Loggable
+    public void addInsect(Insect insect){
         occupiedByInsect=true;
         insects.add(insect);
     }
 
+    @Loggable
     public void removeSpore(SporeInterface spore){
         spores.remove();
     }
-    
 
+    @Loggable
+    public void removeNeighbor(Tecton tecton){
+        neighbours.remove(tecton);
+    }
+
+    @Loggable
+    public void setNeighbors(ArrayList<Tecton> newNeighbors){
+        neighbours = newNeighbors;
+    }
+    
+    public void update() {
+        runSpecialEffect();
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Tecton tecton = (Tecton) o;
+        return id.equals(tecton.getId());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
+    }
 }

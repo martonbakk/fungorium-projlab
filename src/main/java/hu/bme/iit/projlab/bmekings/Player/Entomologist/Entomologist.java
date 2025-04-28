@@ -5,10 +5,12 @@ import java.util.List;
 import hu.bme.iit.projlab.bmekings.Entities.Fungal.Hyphal;
 import hu.bme.iit.projlab.bmekings.Entities.Insect.Insect;
 import hu.bme.iit.projlab.bmekings.Interface.SporeInterface.SporeInterface;
+import hu.bme.iit.projlab.bmekings.Logger.Loggable;
 import hu.bme.iit.projlab.bmekings.Map.Tecton.Tecton;
 import hu.bme.iit.projlab.bmekings.Player.Player;
 import hu.bme.iit.projlab.bmekings.Program.Params;
 
+@Loggable("Entomologist")
 public class Entomologist extends Player{
     private List<Insect> controlledInsects;
     // Rovar tipusat is kezzeljuk le valahogy
@@ -19,6 +21,7 @@ public class Entomologist extends Player{
     }
     public List<Insect> getControlledInsects() { return controlledInsects; }
 
+    @Loggable
     @Override
     public void SelectAction(int actionType, Params param ){
         switch (actionType) {
@@ -42,19 +45,22 @@ public class Entomologist extends Player{
         }
     }
 
+    @Loggable
     public void MoveInsect(Tecton tectonToStepOn){}
 
+    @Loggable
     public void EatSporeInsect(List<SporeInterface> spore, int sporeNum){}
 
+    @Loggable
     public void CutHyphalInsect(Hyphal hyphalToCut){}
 
-    
-
+    @Loggable
     public void deleteControlledInsect(Insect controlledInsect){
         controlledInsects.remove(controlledInsect);
     }
 
     //placeholder !!!
+    @Loggable
     public void addInsect(Insect insect){
         controlledInsects.add(insect);
     }

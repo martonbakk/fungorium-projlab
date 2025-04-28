@@ -24,7 +24,7 @@ public class HyphalProtectorSpore extends Spore {
     }
 
     public void activateEffect(Insect targInsect) {
-
+        //targInsect.increaseHyphalCoolDown(10);
     }
 
     @Override

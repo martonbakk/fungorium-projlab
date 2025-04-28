@@ -6,6 +6,7 @@ import hu.bme.iit.projlab.bmekings.Effects.Effect.Effect;
 import hu.bme.iit.projlab.bmekings.Entities.Entity;
 import hu.bme.iit.projlab.bmekings.Entities.Fungal.Hyphal;
 import hu.bme.iit.projlab.bmekings.Interface.SporeInterface.SporeInterface;
+import hu.bme.iit.projlab.bmekings.Logger.Loggable;
 import hu.bme.iit.projlab.bmekings.Logic.GameLogic.GameLogic;
 import hu.bme.iit.projlab.bmekings.Logic.IDGenerator.IDGenerator;
 import hu.bme.iit.projlab.bmekings.Map.Tecton.Tecton;
@@ -18,6 +19,8 @@ import hu.bme.iit.projlab.bmekings.Player.Entomologist.Entomologist;
  * A rovarok mozgásához gombafonalakra van szükségük, és különböző akciókat végezhetnek a játék során.
  * Az Entity absztrakt osztályból származik, így örökli annak attribútumait és metódusait.
  */
+
+@Loggable("Insect")
 public class Insect extends Entity{
 
     private int movingSpeed;
@@ -27,6 +30,32 @@ public class Insect extends Entity{
     private int cutCooldown;
     private Entomologist owner;
     private ArrayList<Effect> activeEffects;
+
+    @Loggable
+    public void increaseMovingSpeed(int speed){
+        this.movingSpeed+=speed;    
+    }
+
+    @Loggable
+    public void decreaseMovingSpeed(int speed){
+        this.movingSpeed-=speed;
+        if (movingSpeed<0)
+            movingSpeed=0;
+    }
+
+    @Loggable
+    public void inreaseHyphalCoolDown(int cd){
+        this.movingSpeed+=cd;
+    }
+
+    @Loggable
+    public void increaseHunger(int cd){
+        this.currStomachFullness-=cd;
+    }
+
+    public void stunEffect(int cd){
+        this.movingCD=cd;
+    }
 
     public Insect() {
         super();
@@ -64,20 +93,28 @@ public class Insect extends Entity{
         this.owner=parentInsect.owner;
     }
 
+    @Loggable
     public int getMovingSpeed() { return movingSpeed; }
     
+    @Loggable
     public int getMovingCD() { return movingCD; }
     
+    @Loggable
     public int getStomachLimit() { return stomachLimit; }
     
+    @Loggable
     public int getCurrStomachFullness() { return currStomachFullness; }
     
+    @Loggable
     public int getCutCooldown() { return cutCooldown; }
 
+    @Loggable
     public Entomologist getEntomologist(){ return  owner;}
 
+    @Loggable
     public ArrayList<Effect> getActiveEffects() { return activeEffects; }
 
+    @Loggable
     public void move(Tecton targetTecton) {
         // movingSpeed ????? TICK / TURN BASED
         if(movingCD==0){
@@ -85,6 +122,7 @@ public class Insect extends Entity{
         }
     }
 
+    @Loggable
     public void eatSpore() {
         SporeInterface sporeToEat=this.baseLocation.getNextSporeToEat();
         if(this.currStomachFullness+sporeToEat.getNutritionValue() <this.stomachLimit){
@@ -93,10 +131,12 @@ public class Insect extends Entity{
         }
     }
 
+    @Loggable
     public void cutHyphal(Hyphal h) {
         h.destroyHyphal();
     }
 
+    @Loggable
     @Override
     public void update() {
         movingCD--;     // 0 alá ne menjen
@@ -108,10 +148,12 @@ public class Insect extends Entity{
         }
     }
 
+    @Loggable
     public void applyEffect(Effect effect) {
         activeEffects.add(effect);
     }
 
+    @Loggable
     public void hungerEffectActivate(int stomachRateDecrease){
         if (this.currStomachFullness-stomachRateDecrease<0){
             this.currStomachFullness=0;
@@ -120,10 +162,12 @@ public class Insect extends Entity{
         }
     }
 
+    @Loggable
     public void HyhalEffectActivate(int coolDown){
         this.cutCooldown=coolDown;
     }
 
+    @Loggable
     public void SpeedEffectActivate(int speed, boolean stunned){
         if(stunned){
             this.movingCD=10;
@@ -133,6 +177,7 @@ public class Insect extends Entity{
         }
     }
 
+    @Loggable
     public void DestroyInsect() {
         // 1. Eltávolítás az Entomologist controlledInsects listájából
         // Gamelogic entomolgist listabol
@@ -150,6 +195,7 @@ public class Insect extends Entity{
         GameLogic.deleteEntity(this);
     }
 
+    @Loggable
     public void createInsect(){
         GameLogic.addEntity(this);
         baseLocation.addInsect(this);

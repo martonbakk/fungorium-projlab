@@ -3,38 +3,37 @@ package hu.bme.iit.projlab.bmekings.Map;
 import java.util.ArrayList;
 import java.util.Random;
 
-import hu.bme.iit.projlab.bmekings.Entities.Spore.DuplicateSpore;
-import hu.bme.iit.projlab.bmekings.Entities.Spore.HungerSpore;
-import hu.bme.iit.projlab.bmekings.Entities.Spore.HyphalProtectorSpore;
-import hu.bme.iit.projlab.bmekings.Entities.Spore.NormalSpore;
-import hu.bme.iit.projlab.bmekings.Entities.Spore.SpeedSpore;
-import hu.bme.iit.projlab.bmekings.Entities.Spore.Spore;
-import hu.bme.iit.projlab.bmekings.Entities.Spore.StunSpore;
+import hu.bme.iit.projlab.bmekings.Map.Tecton.*;
+import hu.bme.iit.projlab.bmekings.Entities.Spore.*;
+import hu.bme.iit.projlab.bmekings.Entities.Insect.*;
 import hu.bme.iit.projlab.bmekings.Logic.GameLogic.GameLogic;
-import hu.bme.iit.projlab.bmekings.Map.Tecton.HyphalPreserverTecton;
-import hu.bme.iit.projlab.bmekings.Map.Tecton.NoFungusTecton;
-import hu.bme.iit.projlab.bmekings.Map.Tecton.Tecton;
-import hu.bme.iit.projlab.bmekings.Map.Tecton.ToxicTecton;
-import hu.bme.iit.projlab.bmekings.Map.Tecton.WeakTecton;
 import hu.bme.iit.projlab.bmekings.Player.Entomologist.Entomologist;
 import hu.bme.iit.projlab.bmekings.Player.Mycologist.Mycologist;
+import hu.bme.iit.projlab.bmekings.Entities.Fungal.Hyphal;
+import hu.bme.iit.projlab.bmekings.Logger.Loggable;
 
 /**
  * A Map osztály felelős a játékterep generálásáért, a tektonok kezelésére, azok kettéhasadásának
  * lebonyolításáért, valamint a térkép frissítéséért. A játékban lévő tektonokat egy listában tárolja,
  * és biztosítja a játék térbeli struktúrájának fenntartását.
  */
+
+@Loggable("Map")
 public class Map {
     private ArrayList<Tecton> tectons = new ArrayList<>();
+
+    
 
     public Map(){
 
     }
 
+    @Loggable
     public void addTecton(Tecton t) {
         tectons.add(t);
     }
 
+    @Loggable
     public void generateMap() {
         
         ArrayList<Mycologist> mycologists = GameLogic.getMycologists();
@@ -78,7 +77,7 @@ public class Map {
             for(int j = 0; j < 2; j++){
                 int idx = random.nextInt(tectons.size());
                 Tecton baseTecton = tectons.get(idx);
-                if(!baseTecton.createFungalBody(mycologists.get(i), "generateMap")){
+                if(!baseTecton.createFungalBody(mycologists.get(i))){
                     j--;
                 }
             }
@@ -91,9 +90,9 @@ public class Map {
             Tecton baseTecton = availableTectons.get(idx);
             availableTectons.remove(idx);
             
-            //baseTecton.addInsect(entomologists.get(i));
+            baseTecton.addInsect(new Insect(1,1,1,1,1,baseTecton,entomologists.get(i)));
             
-            for(int j = 0; i < 3; i++){
+            for(int j = 0; j < 3; j++){
                 idx = random.nextInt(tectons.size());
                 baseTecton = tectons.get(idx);
                 int type = random.nextInt(7);
@@ -126,6 +125,7 @@ public class Map {
         }
     }
 
+    @Loggable
     public void splitTecton(Tecton tecton) {
         if(tecton.isOccupiedByInsect())
             return;
@@ -133,13 +133,37 @@ public class Map {
         updateTectons(tecton);
     }
 
+    @Loggable
     public void updateTectons(Tecton tecton) {
         ArrayList<Tecton> connectedTectons = (ArrayList<Tecton>)tecton.getConnectedNeighbors().keySet();
-        for(Tecton t : connectedTectons){
-            ///t.disconnectTecton(tecton, t.getConnectedNeighbors().get(tecton));
+        for(Tecton connected : connectedTectons){
+            for(Hyphal hyphal : tecton.getConnectedNeighbors().get(connected)){
+                connected.disconnectTecton(tecton, hyphal);
+            }
         }
+        for(Tecton neighbor : tecton.getNeighbors()){
+            neighbor.removeNeighbor(tecton);
+        }
+        tectons.remove(tecton);
+        Random random = new Random();
+        ArrayList<Tecton> newNeighbors1 = new ArrayList<>();
+        ArrayList<Tecton> newNeighbors2 = new ArrayList<>();
+
+        for (Tecton neighbor : tecton.getNeighbors()) {
+            if (random.nextBoolean()) {
+                newNeighbors1.add(neighbor);
+            } else {
+                newNeighbors2.add(neighbor);
+            }
+        }
+        tectons.add(new Tecton());
+        tectons.getLast().setNeighbors(newNeighbors1);
+        tectons.add(new Tecton());
+        tectons.getLast().setNeighbors(newNeighbors2);
+        
     }
 
+    @Loggable
     public ArrayList<Tecton> getTectons(ArrayList<String> tectonIds) {
         ArrayList<Tecton> result = new ArrayList<>();
         for (Tecton tecton : tectons) {
@@ -153,6 +177,7 @@ public class Map {
     }
 
 
+    @Loggable
     public ArrayList<Tecton> getAllTectons(){
         
         return tectons;

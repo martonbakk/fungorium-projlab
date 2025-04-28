@@ -23,7 +23,7 @@ public class HungerSpore extends Spore {
     }
 
     public void activateEffect(Insect targetInsect) {
-        
+        targetInsect.increaseHunger(10);
     }
 
     @Override

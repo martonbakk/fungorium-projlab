@@ -24,7 +24,7 @@ public class SlowSpore extends Spore {
 
 
     public void activateEffect(Insect targetInsect) {
-
+        targetInsect.decreaseMovingSpeed(10);
     }
 
     @Override

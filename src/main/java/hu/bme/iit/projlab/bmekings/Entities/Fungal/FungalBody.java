@@ -16,6 +16,7 @@ import hu.bme.iit.projlab.bmekings.Entities.Spore.SlowSpore;
 import hu.bme.iit.projlab.bmekings.Entities.Spore.SpeedSpore;
 import hu.bme.iit.projlab.bmekings.Entities.Spore.StunSpore;
 import hu.bme.iit.projlab.bmekings.Interface.SporeInterface.SporeInterface;
+import hu.bme.iit.projlab.bmekings.Logger.Loggable;
 import hu.bme.iit.projlab.bmekings.Logic.GameLogic.GameLogic;
 import hu.bme.iit.projlab.bmekings.Logic.IDGenerator.IDGenerator;
 import hu.bme.iit.projlab.bmekings.Map.Tecton.Tecton;
@@ -27,6 +28,8 @@ import hu.bme.iit.projlab.bmekings.Player.Mycologist.Mycologist;
  * műveleteket kezeli. A gombatestek a játék kulcselemei, amelyek spórákat termelnek, és terjesztik a gombafonalakat.
  * Az Entity absztrakt osztályból származik, így örökli annak attribútumait és metódusait.
  */
+
+@Loggable("FungalBody")
 public class FungalBody extends Entity {
 
     /** A gombatest által kilőtt spórák listája. */
@@ -80,12 +83,22 @@ public class FungalBody extends Entity {
         this.callNum = 0;
     }
 
+    @Loggable
     public int getCurrLvl() { return currLevel; }
 
+    @Loggable
     public int getShotSporesNum() { return shotSporesNum; }
 
+    @Loggable
     public TypeCharacteristics getCharacteristics() { return characteristics; }
 
+    @Loggable
+    public void setLevel(int lvl) { currLevel = lvl; }
+
+    @Loggable
+    public void setShotSporesNum(int s) { shotSporesNum = s; }
+
+    @Loggable
     public Boolean checkShootingRange(Tecton tecton) {
         if (baseLocation.equals(tecton)) {
             return true;
@@ -121,6 +134,7 @@ public class FungalBody extends Entity {
     }
 
     // FLAG VALTOZAS AZ UML BEN PLUSZ PARAMÉTER
+    @Loggable
     public void shootSpore(Tecton tecton) {
         if(checkShootingRange(tecton)){
             return;
@@ -149,6 +163,7 @@ public class FungalBody extends Entity {
     //    return this.hyphalList;
     //}
 
+    @Loggable
     public void levelUp() {
         if (currLevel == 3) {
             System.out.println("Elérted a maximális szintet (3)!");
@@ -175,6 +190,7 @@ public class FungalBody extends Entity {
      * Koncepció a következő:
      * A fonál base és szomszéd tektonját elmentjük, végig megynük utána a szomszéd szomszédjával. 
      */
+    @Loggable
     public void keepHyphalAlive() {
         HashMap<Tecton, Set<Tecton>> neighbours = new HashMap<>();
         Set<Hyphal> hyphalSet = new HashSet<>();
@@ -214,6 +230,7 @@ public class FungalBody extends Entity {
         }
     }
 
+    @Loggable
     @Override
     public void update() {
         keepHyphalAlive();
@@ -223,6 +240,7 @@ public class FungalBody extends Entity {
         // egy adott idokozonkent majd amugy is termel sporat itt akkor random lehetne hozzaadogatni az AddSproe-val a sporakat
     }
 
+    @Loggable
     public void AddSpore() {
         Random random = new Random();
         int sporeType = random.nextInt(11); 
@@ -257,36 +275,13 @@ public class FungalBody extends Entity {
      * Ezt itt csekkoljátok le, nem fix, hogy jó....
      * Mindenféleképp a csekk logikától az összekötésig, hogy a BFS jól működjön
      */
+    @Loggable
     public void growHyphal(Tecton connected) {
-        //Tecton connectedTecton, 
-        //boolean developed, 
-        //int developTime, 
-        //int lifeTime, 
-        //int cutTime, 
-        //Tecton baseLocation
-        
-        // Ezt nem a tectonon belül kell?
         if (this.baseLocation.connectedNeighbours.get(connected)!=null){
             System.out.println("Ez a fonál már létezik!");
             return;
         }
-
-        // Ez a beégetett konstruktor paraméter szerintem nem jó konstrukció, valahogy ezt egységesen kellene beállítani szerintem pl static-al mas ötlet?
-        Hyphal newHyphal = new Hyphal(connected, false, 3000, 3000, 300, this.baseLocation, this.owner);
-        
-        // Mindkettőhöz hozzáadjuk a másikat?? Szerintem igen
-       
-        // Ezt nem a tectonon belül kellene megoldani?????
-        //this.baseLocation.connectedNeighbours.get(this.baseLocation).add(newHyphal);
-        //connected.connectedNeighbours.get(this.baseLocation).add(newHyphal);
-
-        baseLocation.connectTecton(connected, newHyphal);
-
-        //Mycologist player = this.getOwner();
-        
-        owner.addHyphal(newHyphal);
-
-        GameLogic.addEntity(newHyphal);
+        baseLocation.connectTecton(connected, owner);
     }
 /*
     public Mycologist getOwner(){
@@ -302,6 +297,7 @@ public class FungalBody extends Entity {
     }
 */
 
+    @Loggable
     public void destroyFungus(){
         // gombasz
         //Mycologist owner = this.getOwner();

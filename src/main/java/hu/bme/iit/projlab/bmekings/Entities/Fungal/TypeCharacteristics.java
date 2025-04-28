@@ -1,5 +1,8 @@
 package hu.bme.iit.projlab.bmekings.Entities.Fungal;
 
+import hu.bme.iit.projlab.bmekings.Logger.Loggable;
+
+@Loggable("TypeCharacteristics")
 public class TypeCharacteristics{
     int shootingRange;
     int sporeProductionIntensity;
@@ -22,11 +25,15 @@ public class TypeCharacteristics{
         this.sporeCapacity = sporeCapacity;
     }
 
-   public int getShootingRange() { return shootingRange; }
+    @Loggable
+    public int getShootingRange() { return shootingRange; }
+    
+    @Loggable
+    public int getSporeProductionIntensity() { return sporeProductionIntensity; }
    
-   public int getSporeProductionIntensity() { return sporeProductionIntensity; }
+    @Loggable
+    public int getStartingHyphalNum() { return startingHyphalNum; }
    
-   public int getStartingHyphalNum() { return startingHyphalNum; }
-   
-   public int getSporeCapacity() { return sporeCapacity; }
+    @Loggable
+    public int getSporeCapacity() { return sporeCapacity; }
 }
