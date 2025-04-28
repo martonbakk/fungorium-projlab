@@ -24,6 +24,7 @@ public interface SporeInterface {
      */
     public void spawnSpore();
 
+    public void destroySpore();
 
     public int getNutritionValue();
 

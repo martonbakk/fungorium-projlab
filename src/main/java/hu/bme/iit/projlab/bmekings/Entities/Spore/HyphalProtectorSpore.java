@@ -27,11 +27,6 @@ public class HyphalProtectorSpore extends Spore {
 
     }
 
-    public void spawnSpore() {
-
-    }
-
-
     @Override
     public void update() {
         

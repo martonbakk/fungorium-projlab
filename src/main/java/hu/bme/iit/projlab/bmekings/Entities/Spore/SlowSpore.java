@@ -27,10 +27,6 @@ public class SlowSpore extends Spore {
 
     }
 
-    public void spawnSpore() {
-
-    }
-
     @Override
     public void update() {
         

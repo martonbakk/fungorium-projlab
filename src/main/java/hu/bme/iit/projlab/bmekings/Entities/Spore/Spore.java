@@ -2,6 +2,7 @@ package hu.bme.iit.projlab.bmekings.Entities.Spore;
 
 import hu.bme.iit.projlab.bmekings.Entities.Entity;
 import hu.bme.iit.projlab.bmekings.Interface.SporeInterface.SporeInterface;
+import hu.bme.iit.projlab.bmekings.Logic.GameLogic.GameLogic;
 import hu.bme.iit.projlab.bmekings.Logic.IDGenerator.IDGenerator;
 import hu.bme.iit.projlab.bmekings.Map.Tecton.Tecton;
 
@@ -40,5 +41,15 @@ public abstract class Spore extends Entity implements SporeInterface {
 
     public void setBaseLocation(Tecton baseLocation) {
         this.baseLocation = baseLocation;
+    }
+
+    public void destroySpore(){
+        GameLogic.deleteEntity(this);
+        baseLocation.removeSpore(this);
+    }
+
+    public void spawnSpore() {
+        GameLogic.addEntity(this);
+        baseLocation.addSpore(this);        
     }
 }

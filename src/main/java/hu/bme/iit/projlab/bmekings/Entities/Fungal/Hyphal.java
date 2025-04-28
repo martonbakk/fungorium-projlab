@@ -3,9 +3,9 @@ package hu.bme.iit.projlab.bmekings.Entities.Fungal;
 import hu.bme.iit.projlab.bmekings.Entities.Entity;
 import hu.bme.iit.projlab.bmekings.Entities.Insect.Insect;
 import hu.bme.iit.projlab.bmekings.Logic.GameLogic.GameLogic;
+import hu.bme.iit.projlab.bmekings.Logic.IDGenerator.IDGenerator;
 import hu.bme.iit.projlab.bmekings.Map.Tecton.Tecton;
 import hu.bme.iit.projlab.bmekings.Player.Mycologist.Mycologist;
-import hu.bme.iit.projlab.bmekings.Logic.IDGenerator.IDGenerator;
 
 /**
  * A Hyphal osztály a játékban lévő gombafonalak adatait tárolja, és a gombafonalakkal kapcsolatos fontos műveleteket kezeli.
@@ -19,11 +19,12 @@ public class Hyphal extends Entity {
     private int lifeTime;
     private int cutTime;
     private static int hyphalIds = 0;
+    private Mycologist owner;
 
     private static void hyphalIdGenerator() {
         hyphalIds++;
     }
-
+//kosntrukktorba az owner felvetele
     public Hyphal() {
         super(IDGenerator.generateID("H"),null);
         this.connectedTecton = new Tecton(); 
@@ -33,24 +34,14 @@ public class Hyphal extends Entity {
         this.cutTime = 0;
     }
 
-    // Szerintem kéne egy ilyen konstruktor
-    public Hyphal(String id, Tecton baseLocation, Tecton connectedTecon, int developTime, int lifeTime, int cutTime) {
-        super(id, baseLocation);
-        //this.id=IDGenerator.generateID("H");
-        this.connectedTecton = connectedTecon;
-        this.developed = true;
-        this.developTime  = developTime;
-        this.lifeTime = lifeTime;
-        this.cutTime = cutTime;
-    }
-
-    public Hyphal(Tecton connectedTecton, boolean developed, int developTime, int lifeTime, int cutTime, Tecton baseLocation){
+    public Hyphal(Tecton connectedTecton, boolean developed, int developTime, int lifeTime, int cutTime, Tecton baseLocation, Mycologist owner){
         super(IDGenerator.generateID("H"), baseLocation);
         this.connectedTecton = connectedTecton;
         this.developed = developed;
         this.developTime = developTime;
         this.lifeTime = lifeTime;
         this.cutTime = cutTime;
+        this.owner=owner;
     }
 
     public Tecton getConnectedTecton() { return connectedTecton; }
@@ -66,6 +57,7 @@ public class Hyphal extends Entity {
     public void setLifeTime(int newLifeTime) { lifeTime=newLifeTime; }
 
     public void growFungus(Tecton tecton, String grownFrom) {
+        /*
         Mycologist player=null;
         for (Mycologist mycologist : GameLogic.getMycologists()){
             for (Hyphal hyphal : mycologist.getHyphalList()){
@@ -74,8 +66,8 @@ public class Hyphal extends Entity {
                 }
             }
         }
-        
-        tecton.createFungalBody(player, grownFrom);
+        */
+        tecton.createFungalBody(owner, grownFrom);
     }
 
 
@@ -119,9 +111,9 @@ public class Hyphal extends Entity {
          
         // mycologist
         
-        Mycologist owner=this.getOwner();
+        //Mycologist owner=this.getOwner();
         owner.removeHyphal(this);
-            }
+        }
 
     public Mycologist getOwner(){
         Mycologist player = null;

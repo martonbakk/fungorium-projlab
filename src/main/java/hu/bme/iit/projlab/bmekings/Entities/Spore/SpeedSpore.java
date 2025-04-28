@@ -26,12 +26,6 @@ public class SpeedSpore extends Spore {
     public void activateEffect(Insect targetInsect) {
     }
 
-
-    public void spawnSpore() {
-
-    }
-
-
     @Override
     public void update() {
 
