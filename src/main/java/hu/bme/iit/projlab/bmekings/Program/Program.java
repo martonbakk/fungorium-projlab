@@ -152,6 +152,7 @@ public class Program {
 
     // ● [string]: az Entomológus id-je
     private static void addEntomologist(String[] splitInput) {
+        if (splitInput.length < 2) return;
         Entomologist player = new Entomologist(splitInput[1]);
         //MethodLogger.logCurrentMethod(player, "Entomológus hozzáadva");
         entomologistPlayers.add(player);
@@ -161,6 +162,7 @@ public class Program {
 
     // ● [string]: az Mycologist id-je
     private static void addMycologist(String[] splitInput) {
+        if (splitInput.length < 2) return;
         Mycologist player = new Mycologist(splitInput[1]);
         player.setTypeCharacteristics(new TypeCharacteristics(1, 1, 1, 1));
         mycologistPlayers.add(player);
