@@ -46,7 +46,7 @@ public class Tecton {
 
     public HashMap<Tecton, ArrayList<Hyphal>> getConnectedNeighbors() { return connectedNeighbours; }
 
-    public SporeInterface getNextSporeToEat() { SporeInterface spore=spores.peek(); spores.peek().destroySpore(); return spore;}
+    public SporeInterface getNextSporeToEat() {  return spores.peek();}
 
     public void setOccupiedByFungus(boolean value) { occupiedByFungalBody = value; }
 

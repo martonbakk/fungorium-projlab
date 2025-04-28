@@ -496,12 +496,12 @@ public class Program {
                                             break;
                                         case "-lt":
                                             if (splitInput.length < 11) {
-                                                // 10 hosszú, csak a -dt [szám] és -lt [szám] és -ct [szám] flag van
-                                                // Tehát a flagek sorban -dt [szám] -lt [szám] -ct [szám]
+                                                // 10 hosszú, csak a -dt [szám] és -ct [szám] és -lt [szám] flag van
+                                                // Tehát a flagek sorban -dt [szám] -ct [szám] -lt [szám]
                                             }
                                             else {
                                                 // Ha több mint 10 hosszú, akkor az utolsó flag csak -d [bool] lehet
-                                                // Tehát a flagek sorban: -dt [szám] -lt [szám] -ct [szám] -d [bool]
+                                                // Tehát a flagek sorban: -dt [szám] -ct [szám] -lt [szám] -d [bool]
                                             }
                                             break;
                                         default:
@@ -525,26 +525,101 @@ public class Program {
                         switch (splitInput[6]) {
                             case "-dt":
                                 if (splitInput.length < 9) {
-                                    // 8 hosszú, csak a -lt [szám] és -dt [szám] flag van
+                                    // 8 hosszú, csak a -dt [szám] és -d [bool] flag van
+                                    // Tehát a flagek sorban -dt [szám] -d [bool]
                                 }
                                 else {
-
+                                    switch (splitInput[8]) {
+                                        case "-d":
+                                            if (splitInput.length < 11) {
+                                                // 10 hosszú, csak a -dt [szám] és -d [bool] és -lt [szám] flag van
+                                                // Tehát a flagek sorban -dt [szám] -d [bool] -lt [szám]
+                                            }
+                                            else {
+                                                // Ha több mint 10 hosszú, akkor az utolsó flag csak -ct [szám] lehet
+                                                // Tehát a flagek sorban -dt [szám] -d [bool] -lt [szám] -ct [szám]
+                                            }
+                                            break;
+                                        case "-ct":
+                                            if (splitInput.length < 11) {
+                                                // 10 hosszú, csak a -dt [szám] és -d [bool] és -ct [szám] flag van
+                                                // Tehát a flagek sorban -dt [szám] -d [bool] -ct [szám]
+                                            }
+                                            else {
+                                                // Ha több mint 10 hosszú, akkor az utolsó flag csak -lt [szám] lehet
+                                                // Tehát a flagek sorban: -dt [szám] -d [bool] -ct [szám] -lt [szám]
+                                            }
+                                            break;
+                                        default:
+                                            System.out.println("Nincs ilyen paraméter!");
+                                            break;
+                                    }
                                 }
                                 break;
                             case "-d":
                                 if (splitInput.length < 9) {
-                                    // 8 hosszú, csak a -lt [szám] és -d [bool] flag van
+                                    // 8 hosszú, csak a -dt [szám] és -d [bool] flag van
+                                    // Tehát a flagek sorban -dt [szám] -d [bool]
                                 }
                                 else {
-
+                                    switch (splitInput[8]) {
+                                        case "-dt":
+                                            if (splitInput.length < 11) {
+                                                // 10 hosszú, csak a -dt [szám] és -d [bool] és -lt [szám] flag van
+                                                // Tehát a flagek sorban -dt [szám] -d [bool] -lt [szám]
+                                            }
+                                            else {
+                                                // Ha több mint 10 hosszú, akkor az utolsó flag csak -ct [szám] lehet
+                                                // Tehát a flagek sorban -dt [szám] -d [bool] -lt [szám] -ct [szám]
+                                            }
+                                            break;
+                                        case "-ct":
+                                            if (splitInput.length < 11) {
+                                                // 10 hosszú, csak a -dt [szám] és -d [bool] és -ct [szám] flag van
+                                                // Tehát a flagek sorban -dt [szám] -d [bool] -ct [szám]
+                                            }
+                                            else {
+                                                // Ha több mint 10 hosszú, akkor az utolsó flag csak -lt [szám] lehet
+                                                // Tehát a flagek sorban: -dt [szám] -d [bool] -ct [szám] -lt [szám]
+                                            }
+                                            break;
+                                        default:
+                                            System.out.println("Nincs ilyen paraméter!");
+                                            break;
+                                    }
                                 }
                                 break;
                             case "-ct":
                                 if (splitInput.length < 9) {
-                                    // 8 hosszú, csak a -lt [szám] és -ct [szám] flag van
+                                    // 8 hosszú, csak a -dt [szám] és -d [bool] flag van
+                                    // Tehát a flagek sorban -dt [szám] -d [bool]
                                 }
                                 else {
-
+                                    switch (splitInput[8]) {
+                                        case "-d":
+                                            if (splitInput.length < 11) {
+                                                // 10 hosszú, csak a -dt [szám] és -d [bool] és -lt [szám] flag van
+                                                // Tehát a flagek sorban -dt [szám] -d [bool] -lt [szám]
+                                            }
+                                            else {
+                                                // Ha több mint 10 hosszú, akkor az utolsó flag csak -ct [szám] lehet
+                                                // Tehát a flagek sorban -dt [szám] -d [bool] -lt [szám] -ct [szám]
+                                            }
+                                            break;
+                                        case "-dt":
+                                            if (splitInput.length < 11) {
+                                                // 10 hosszú, csak a -dt [szám] és -d [bool] és -ct [szám] flag van
+                                                // Tehát a flagek sorban -dt [szám] -d [bool] -ct [szám]
+                                            }
+                                            else {
+                                                // Ha több mint 10 hosszú, akkor az utolsó flag csak -lt [szám] lehet
+                                                // Tehát a flagek sorban: -dt [szám] -d [bool] -ct [szám] -lt [szám]
+                                            }
+                                            break;
+                                        default:
+                                            System.out.println("Nincs ilyen paraméter!");
+                                            break;
+                                    }
                                 }
                                 break;
                             default:
@@ -552,7 +627,6 @@ public class Program {
                                 break;
                         }
                     }
-                    
                     break;
                 case "-ct":
                     if (splitInput.length < 7) {

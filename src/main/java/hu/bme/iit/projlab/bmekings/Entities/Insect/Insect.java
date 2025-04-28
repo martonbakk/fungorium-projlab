@@ -88,7 +88,7 @@ public class Insect extends Entity{
     public void eatSpore() {
         SporeInterface sporeToEat=this.baseLocation.getNextSporeToEat();
         if(this.currStomachFullness+sporeToEat.getNutritionValue() <this.stomachLimit){
-            this.baseLocation.decreaseSpore(1);
+            sporeToEat.destroySpore();
             sporeToEat.activateEffect(this);
         }
     }
