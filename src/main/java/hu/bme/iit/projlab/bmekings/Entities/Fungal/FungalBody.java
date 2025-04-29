@@ -91,6 +91,9 @@ public class FungalBody extends Entity {
 
     @Loggable
     public TypeCharacteristics getCharacteristics() { return characteristics; }
+    
+    @Loggable
+    public Mycologist getOwner() { return owner; }
 
     @Loggable
     public void setLevel(int lvl) { currLevel = lvl; }
@@ -158,10 +161,6 @@ public class FungalBody extends Entity {
             }
         }
     }
-    
-    //public ArrayList<Hyphal> getHyphalList() {
-    //    return this.hyphalList;
-    //}
 
     @Loggable
     public void levelUp() {
@@ -283,19 +282,6 @@ public class FungalBody extends Entity {
         }
         baseLocation.connectTecton(connected, owner);
     }
-/*
-    public Mycologist getOwner(){
-        Mycologist player = null;
-        for (Mycologist mycologist : GameLogic.getMycologists()){
-            for (FungalBody fungalbody : mycologist.getControlledFunguses()){
-                if (this == fungalbody){
-                    player = mycologist;
-                }
-            }
-        }
-        return player;
-    }
-*/
 
     @Loggable
     public void destroyFungus(){

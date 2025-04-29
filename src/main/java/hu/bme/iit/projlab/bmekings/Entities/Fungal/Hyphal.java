@@ -20,13 +20,9 @@ public class Hyphal extends Entity {
     private int developTime;
     private int lifeTime;
     private int cutTime;
-    private static int hyphalIds = 0;
     private Mycologist owner;
 
-    private static void hyphalIdGenerator() {
-        hyphalIds++;
-    }
-//kosntrukktorba az owner felvetele
+    //kosntrukktorba az owner felvetele
     public Hyphal() {
         super(IDGenerator.generateID("H"),null);
         this.connectedTecton = new Tecton(); 
@@ -62,7 +58,16 @@ public class Hyphal extends Entity {
     public int getCutTime() { return cutTime; }
 
     @Loggable
+    public void setDeveloped(boolean b) { developed = b; }
+
+    @Loggable
+    public void setDevelopTime(int newDevelopTime) { developTime = newDevelopTime; }
+
+    @Loggable
     public void setLifeTime(int newLifeTime) { lifeTime=newLifeTime; }
+
+    @Loggable
+    public void setCutTime(int newCutTime) { cutTime = newCutTime; }
 
     @Loggable
     public void growFungus(Tecton tecton) {

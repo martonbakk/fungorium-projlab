@@ -199,7 +199,15 @@ public class Tecton implements Listener{
 
     @Loggable
     public void connectTecton(Tecton tc, Mycologist owner) {
-        if (!neighbours.contains(tc)) {
+        // TODO: rosszul történik a csekkolás!!!
+        // itt csak annak a tektonnak a szomszédjait nézi, amelyiken rajta van a gombatest
+        // if (!neighbours.contains(tc)) {
+        //     System.out.println("Megkapott tekton nem szomszédos!");
+        //     return;
+        // }
+
+        // Szerintem így egy fokkal jobb, de még mindig nem jó az összekötés
+        if (!tc.getNeighbors().contains(this)) {
             System.out.println("Megkapott tekton nem szomszédos!");
             return;
         }
