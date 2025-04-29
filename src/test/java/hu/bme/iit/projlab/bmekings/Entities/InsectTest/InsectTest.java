@@ -1,6 +1,7 @@
 package hu.bme.iit.projlab.bmekings.Entities.InsectTest;
 
 import org.junit.jupiter.api.Test;
+import hu.bme.iit.projlab.bmekings.TestHelper;
 
 class InsectTest {
 

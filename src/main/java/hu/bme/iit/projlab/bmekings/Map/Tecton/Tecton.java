@@ -1,6 +1,5 @@
 package hu.bme.iit.projlab.bmekings.Map.Tecton;
 
-import java.util.Objects;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -40,16 +39,18 @@ public class Tecton implements Listener{
     protected Flags flags;
 
     public class Flags{
-        public int fungalApproved;
-        public int hyphalApproved;
-        public int oneHyphalApproved;
+        public boolean fungalApproved;
+        public boolean hyphalApproved;
+        public boolean oneHyphalApproved;
 
         public Flags(){
-            fungalApproved=0;
-            hyphalApproved=0;
-            oneHyphalApproved=0;
+            fungalApproved=false;
+            hyphalApproved=false;
+            oneHyphalApproved=false;
         }
     }
+
+    public Flags getFlag(){return flags;}
 
     @Loggable
     public String getId() { return id; }
@@ -100,7 +101,7 @@ public class Tecton implements Listener{
         this.occupiedByFungalBody=occupiedByFungalBody;
         this.flags=new Flags();
 
-        System.out.println("Új objektum [" + id + "] létrejött");
+        System.out.println("Uj objektum [" + id + "] letrejott!");
     }
 
     @Loggable

@@ -15,12 +15,12 @@ import hu.bme.iit.projlab.bmekings.Logger.Loggable;
 public class NoFungusTecton extends Tecton {
     public NoFungusTecton(double splitChance, boolean occupiedByInsect, boolean occupiedByFungalBody) {
         super(splitChance,  occupiedByInsect,  occupiedByFungalBody);
-        this.flags.fungalApproved=10;
+        this.flags.fungalApproved=false;
     }
 
     public NoFungusTecton(){
         super();
-        this.flags.fungalApproved=10;
+        this.flags.fungalApproved=false;
     }
 
     @Loggable

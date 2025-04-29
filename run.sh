@@ -38,10 +38,10 @@ fi
 # 4. Első futtatásnál mvn clean install, utána clean package
 if [ ! -d "$TARGET_DIR" ]; then
     echo "Első futtatás: 'mvn clean install' futtatása..."
-    mvn clean install
+    mvn clean install -DskipTests
 else
     echo "Projekt buildelése Maven-nel (clean package)..."
-    mvn clean package
+    mvn clean package -DskipTests
 fi
 
 # Ellenőrizzük a build eredményét

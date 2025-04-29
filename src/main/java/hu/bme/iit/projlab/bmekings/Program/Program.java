@@ -14,12 +14,9 @@ import hu.bme.iit.projlab.bmekings.Entities.Spore.HyphalProtectorSpore;
 import hu.bme.iit.projlab.bmekings.Entities.Spore.NormalSpore;
 import hu.bme.iit.projlab.bmekings.Entities.Spore.SlowSpore;
 import hu.bme.iit.projlab.bmekings.Entities.Spore.SpeedSpore;
-import hu.bme.iit.projlab.bmekings.Entities.Spore.Spore;
 import hu.bme.iit.projlab.bmekings.Entities.Spore.StunSpore;
 import hu.bme.iit.projlab.bmekings.Interface.SporeInterface.SporeInterface;
-import hu.bme.iit.projlab.bmekings.Logger.Loggable;
 import hu.bme.iit.projlab.bmekings.Logic.GameLogic.GameLogic;
-import hu.bme.iit.projlab.bmekings.Map.Map;
 import hu.bme.iit.projlab.bmekings.Map.Tecton.HyphalPreserverTecton;
 import hu.bme.iit.projlab.bmekings.Map.Tecton.NoFungusTecton;
 import hu.bme.iit.projlab.bmekings.Map.Tecton.Tecton;
@@ -28,141 +25,140 @@ import hu.bme.iit.projlab.bmekings.Map.Tecton.WeakTecton;
 import hu.bme.iit.projlab.bmekings.Player.Entomologist.Entomologist;
 import hu.bme.iit.projlab.bmekings.Player.Mycologist.Mycologist;
 
-
 public class Program {
     // jatek inicializalasa
     private static ArrayList<Entomologist> entomologistPlayers = new ArrayList<>();
     private static ArrayList<Mycologist> mycologistPlayers = new ArrayList<>();
-    private static GameLogic gameLogic;
+    public static GameLogic gameLogic= new GameLogic(1000, 2); //teszthez publik
     private static Params params = new Params();
     // tesztek inicializalasa
-    private static FungalBody fungus= new FungalBody();
-    private static SporeInterface spore= new SlowSpore();
+    private static FungalBody fungus = new FungalBody();
+    private static SporeInterface spore = new SlowSpore();
 
-     public static void main(String[] args) {
-        boolean running = true;
-        Scanner scanner = new Scanner(System.in);
-        String input;
-        
-        initBasePlayers();
-        gameLogic = new GameLogic(1000, 2);
-        gameLogic.startGame(); //ticker start 1 sec 2 player, see initialization
-        while (running) {
-            input = scanner.nextLine();
-            consoleActions(input);
+    public static void main(String[] args) {
+            // Eredeti main metódus tartalma
+            boolean running = true;
+            Scanner scanner = new Scanner(System.in);
+            String input;
 
-            if (input.equals("exit")) {
-                running = false;
-                gameLogic.stopGame();
+            initBasePlayers();
+            gameLogic.startGame(); // ticker start 1 sec 2 player, see initialization
+            while (running) {
+                input = scanner.nextLine();
+                consoleActions(input);
+
+                if (input.equals("exit")) {
+                    running = false;
+                    gameLogic.stopGame();
+                }
             }
-        }
-        scanner.close();
+            scanner.close();
     }
 
-    private static void initBasePlayers(){
+    public static void initBasePlayers() {
         addEntomologist();
         addMycologist();
     }
 
-    private static void consoleActions(String input) {
+    public static void consoleActions(String input) {
         String[] splitInput = input.split(" ");
 
         switch (splitInput[0]) {
-        case "/addMycologist":
-            addMycologist();
-            break;
-        case "/addEntomologist":
-            addEntomologist();
-            break;
-        case "/generateMap":
-            generateMap();
-            break;
-        case "/addFungalBody":
-            addFungalBody(splitInput);
-            break;
-        case "/addHyphal":
-            addHyphal(splitInput);
-            break;
-        case "/addInsect":
-            addInsect(splitInput);
-            break;
-        case "/addSpore":
-            addSpore(splitInput);
-            break;
-        case "/addTecton":
-            addTecton(splitInput);
-            break;
-        case "/setFungalBody":
-            setFungalBody(splitInput);
-            break;
-        case "/setHyphal":
-            setHyphal(splitInput);
-            break;
-        case "/setInsect":
-            setInsect(splitInput);
-            break;
-        case "/setSpore":
-            setSpore(splitInput);
-            break;
-        case "/setTecton":
-            setTecton(splitInput);
-            break;
-        case "/setNeighbor":
-            setNeighbor(splitInput);
-            break;
-        case "/help":
-            help();
-            break;
-        case "/save":
-            save(splitInput);
-            break;
-        case "/load":
-            load(splitInput);
-            break;
-        case "/list":
-            list(splitInput);
-            break;
-        case "/checkout":
-            checkout(splitInput);
-            break;
-        case "/shootsp":
-            shootSpore(splitInput);
-            break;
-        case "/levelup":
-            levelUp(splitInput);
-            break;
-        case "/growfb":
-            growFb(splitInput);
-            break;
-        case "/growh":
-            growH(splitInput);
-            break;
-        case "/move":
-            move(splitInput);
-            break;
-        case "/eatsp":
-            eatSp(splitInput);
-            break;
-        case "/eatinsect":
-            eatInsect(splitInput);
-            break;
-        case "/speedupdev":
-            speedUpDev(splitInput);
-            break;
-        case "/cuthyphal":
-            cutHyphal(splitInput);
-            break;
-        case "/splittecton":
-            splitTecton(splitInput);
-            break;
-        case "/tick":
-            tick();
-            break;
-        case "exit":
-            System.out.println("Program leállítása...");
-            break;
-        default:
-            System.out.println("Rossz input!");
+            case "/addMycologist":
+                addMycologist();
+                break;
+            case "/addEntomologist":
+                addEntomologist();
+                break;
+            case "/generateMap":
+                generateMap();
+                break;
+            case "/addFungalBody":
+                addFungalBody(splitInput);
+                break;
+            case "/addHyphal":
+                addHyphal(splitInput);
+                break;
+            case "/addInsect":
+                addInsect(splitInput);
+                break;
+            case "/addSpore":
+                addSpore(splitInput);
+                break;
+            case "/addTecton":
+                addTecton(splitInput);
+                break;
+            case "/setFungalBody":
+                setFungalBody(splitInput);
+                break;
+            case "/setHyphal":
+                setHyphal(splitInput);
+                break;
+            case "/setInsect":
+                setInsect(splitInput);
+                break;
+            case "/setSpore":
+                setSpore(splitInput);
+                break;
+            case "/setTecton":
+                setTecton(splitInput);
+                break;
+            case "/setNeighbor":
+                setNeighbor(splitInput);
+                break;
+            case "/help":
+                help();
+                break;
+            case "/save":
+                save(splitInput);
+                break;
+            case "/load":
+                load(splitInput);
+                break;
+            case "/list":
+                list(splitInput);
+                break;
+            case "/checkout":
+                checkout(splitInput);
+                break;
+            case "/shootsp":
+                shootSpore(splitInput);
+                break;
+            case "/levelup":
+                levelUp(splitInput);
+                break;
+            case "/growfb":
+                growFb(splitInput);
+                break;
+            case "/growh":
+                growH(splitInput);
+                break;
+            case "/move":
+                move(splitInput);
+                break;
+            case "/eatsp":
+                eatSp(splitInput);
+                break;
+            case "/eatinsect":
+                eatInsect(splitInput);
+                break;
+            case "/speedupdev":
+                speedUpDev(splitInput);
+                break;
+            case "/cuthyphal":
+                cutHyphal(splitInput);
+                break;
+            case "/splittecton":
+                splitTecton(splitInput);
+                break;
+            case "/tick":
+                tick();
+                break;
+            case "exit":
+                System.out.println("Program leallitasa...");
+                break;
+            default:
+                System.out.println("Rossz input!");
         }
     }
 
@@ -200,7 +196,7 @@ public class Program {
         }
 
         if (player == null) {
-            System.out.println("Nincs ilyen játékos!");
+            System.out.println("Nincs ilyen jatekos!");
             return;
         }
 
@@ -221,21 +217,21 @@ public class Program {
         if (splitInput.length == 3) return;
 
         if (splitInput.length == 5 && splitInput[3].equals("-l")) {
-            baseTecton.getFungalBody().setLevel(Integer.parseInt(splitInput[4]));
+            baseTecton.getFungalBody().setLevelNoWrite(Integer.parseInt(splitInput[4]));
         }
 
         if (splitInput.length == 5 && splitInput[3].equals("-s")) {
-            baseTecton.getFungalBody().setShotSporesNum(Integer.parseInt(splitInput[4]));
+            baseTecton.getFungalBody().setShotSporesNumNoWrite(Integer.parseInt(splitInput[4]));
         }
 
         if (splitInput.length == 7 && splitInput[3].equals("-l") && splitInput[5].equals("-s")) {
-            baseTecton.getFungalBody().setLevel(Integer.parseInt(splitInput[4]));
-            baseTecton.getFungalBody().setShotSporesNum(Integer.parseInt(splitInput[6]));
+            baseTecton.getFungalBody().setLevelNoWrite(Integer.parseInt(splitInput[4]));
+            baseTecton.getFungalBody().setShotSporesNumNoWrite(Integer.parseInt(splitInput[6]));
 
         }
         else if (splitInput.length == 7 && splitInput[3].equals("-s") && splitInput[5].equals("-l")) {
-            baseTecton.getFungalBody().setLevel(Integer.parseInt(splitInput[6]));
-            baseTecton.getFungalBody().setShotSporesNum(Integer.parseInt(splitInput[4]));
+            baseTecton.getFungalBody().setLevelNoWrite(Integer.parseInt(splitInput[6]));
+            baseTecton.getFungalBody().setShotSporesNumNoWrite(Integer.parseInt(splitInput[4]));
         }
     }
 
@@ -262,7 +258,7 @@ public class Program {
         }
 
         if (player == null) {
-            System.out.println("Nincs ilyen játékos!");
+            System.out.println("Nincs ilyen jatekos!");
             return;
         }
 
@@ -300,12 +296,12 @@ public class Program {
 
         if (splitInput.length < 11) return;
 
-        Hyphal hyphal = player.getHyphalList().getLast();
+        Hyphal hyphal = player.getHyphalList().get(player.getHyphalList().size());
 
         if (splitInput.length == 11) {
             if (splitInput[5].equals("-d") && splitInput[7].equals("-lt") && splitInput[9].equals("-ct")) {
                 if (splitInput[6].equals("false")) {
-                    System.out.println("Ilyen formátumban a -d flag csak true lehet!");
+                    System.out.println("Ilyen formatumban a -d flag csak true lehet!");
                     return;
                 }
                 hyphal.setDeveloped(true);
@@ -314,13 +310,13 @@ public class Program {
                 
             }
             else {
-                System.out.println("Nincs ilyen paraméter!");
+                System.out.println("Nincs ilyen parameter!");
             }
         }
         else if (splitInput.length == 13) {
             if (splitInput[5].equals("-d") && splitInput[7].equals("-dt") && splitInput[9].equals("-lt") && splitInput[11].equals("-ct")) {
                 if (splitInput[6].equals("true")) {
-                    System.out.println("Ilyen formátumban a -d flag csak false lehet!");
+                    System.out.println("Ilyen formatumban a -d flag csak false lehet!");
                     return;
                 }
                 hyphal.setDeveloped(false);
@@ -329,11 +325,11 @@ public class Program {
                 hyphal.setCutTime(Integer.parseInt(splitInput[12]));
             }
             else {
-                System.out.println("Nincs ilyen paraméter!");
+                System.out.println("Nincs ilyen parameter!");
             }
         }
         else {
-            System.out.println("Rossz paraméterezés!");
+            System.out.println("Rossz parameterezes!");
             return;
         }
     }
@@ -353,7 +349,7 @@ public class Program {
         }
 
         if (player == null) {
-            System.out.println("Nincs ilyen játékos!");
+            System.out.println("Nincs ilyen jatekos!");
             return;
         }
 
@@ -386,14 +382,12 @@ public class Program {
                 fungalBody.setLevel(Integer.parseInt(splitInput[6]));
             }
             else {
-                System.out.println("Rossz paraméterezés!");
+                System.out.println("Rossz parameterezes!");
             }
         }
         else {
-            System.out.println("Rossz paraméterezés!");
+            System.out.println("Rossz parameterezes!");
         }
-
-
     }
 
     // ● [string]: megadja a játékos ID-jét
@@ -413,7 +407,7 @@ public class Program {
         }
 
         if (player == null) {
-            System.out.println("Nincs ilyen játékos!");
+            System.out.println("Nincs ilyen jatekos!");
             return;
         }
 
@@ -424,7 +418,7 @@ public class Program {
         }
 
         if (hyphal == null) {
-            System.out.println("Nincs ilyen fonál!");
+            System.out.println("Nincs ilyen fonal!");
             return;
         }
 
@@ -444,16 +438,14 @@ public class Program {
                     hyphal.setCutTime(Integer.parseInt(splitInput[4]));
                     break;
                 default:
-                    System.out.println("Nincs ilyen paraméter!");
+                    System.out.println("Nincs ilyen parameter!");
                     break;
             }
         }
         else {
-            System.out.print("Rossz paraméterezés!");
+            System.out.print("Rossz parameterezes!");
         }
-
     }
-
 
     // ● [string]: a Tekton ID-je
     // ● [string]: a Spóra típusa, a string értéke lehet:
@@ -502,7 +494,7 @@ public class Program {
                 baseLocation.addSpore(new HyphalProtectorSpore(baseLocation));
                 break;
             default:
-                System.out.println("Nincs ilyen típus!");
+                System.out.println("Nincs ilyen tipus!");
                 break;
         }
     }
@@ -523,12 +515,11 @@ public class Program {
         }
 
         if (spore == null) {
-            System.out.println("Nincs ilyen spóra!");
+            System.out.println("Nincs ilyen spora!");
             return;
         }
 
         spore.setNutritionalValue(Integer.parseInt(splitInput[2]));
-
     }
 
     // -------------------- JÁTÉKBELI ESEMÉNYEK: ---------------------
@@ -539,7 +530,7 @@ public class Program {
     // ● [string]: a másik tekton id-je
     private static void shootSpore(String[] splitInput) {
         if (splitInput.length < 5) {
-            System.out.println("Túl kevés paraméter!");
+            System.out.println("Tul keves parameter!");
             return;
         } 
         Mycologist player = null;
@@ -550,7 +541,7 @@ public class Program {
         }
 
         if (player == null) {
-            System.out.println("Nincs ilyen játékos!");
+            System.out.println("Nincs ilyen jatekos!");
             return;
         }
 
@@ -597,7 +588,6 @@ public class Program {
     // ● [string]: a fonál id-je
     // Grow fungalBody
     private static void growFb(String[] splitInput) {
-
         Mycologist player = null;
 
         for (Mycologist m : mycologistPlayers) {
@@ -606,7 +596,7 @@ public class Program {
         }
 
         if (player == null) {
-            System.out.println("Nincs ilyen játékos!");
+            System.out.println("Nincs ilyen jatekos!");
             return;
         }
 
@@ -619,7 +609,6 @@ public class Program {
     // ● [string]: a gombatest id-je
     // ● [string]: a tekton id-je
     private static void growH(String[] splitInput) {
-
         Mycologist player = null;
 
         for (Mycologist m : mycologistPlayers) {
@@ -628,7 +617,7 @@ public class Program {
         }
 
         if (player == null) {
-            System.out.println("Nincs ilyen játékos!");
+            System.out.println("Nincs ilyen jatekos!");
             return;
         }
 
@@ -640,7 +629,6 @@ public class Program {
     // ● [string]: a játékos id-je
     // ● [string]: a fonál id-je
     private static void speedUpDev(String[] splitInput) {
-
         Mycologist player = null;
 
         for (Mycologist m : mycologistPlayers) {
@@ -649,7 +637,7 @@ public class Program {
         }
 
         if (player == null) {
-            System.out.println("Nincs ilyen játékos!");
+            System.out.println("Nincs ilyen jatekos!");
             return;
         }
         Hyphal hyphal = new Hyphal(); // flageknek megfelelően be kell majd álltani
@@ -660,7 +648,6 @@ public class Program {
     // ● [string]: a játékos id-je
     // ● [string]: a gombatest id-je
     private static void levelUp(String[] splitInput) {
-
         Mycologist player = null;
 
         for (Mycologist m : mycologistPlayers) {
@@ -669,44 +656,37 @@ public class Program {
         }
 
         if (player == null) {
-            System.out.println("Nincs ilyen játékos!");
+            System.out.println("Nincs ilyen jatekos!");
             return;
         }
-
-
     }
     
     // ● [string]: a játékos id-je
     // ● [string]: a rovar id-je
     // ● [string]: a tekton id-je
     private static void move(String[] splitInput) {
-            
     }
     
     // ● [string]: a játékos id-je
     // ● [string]: a rovar id-je
     // ● [string]: a spóra id-je
     private static void eatSp(String[] splitInput) {
-            
     }
     
     // ● [string]: a játékos id-je
     // ● [string]: a fonal id-je
     // ● [string]: a rovar id-je
     private static void eatInsect(String[] splitInput) {
-            
     }
     
     // ● [string]: a játékos id-je
     // ● [string]: a rovar id-je
     // ● [string]: a fonal id-je
     private static void cutHyphal(String[] splitInput) {
-            
     }
     
     // TODO
     private static void splitTecton(String[] splitInput) {
-            
     }
 
     private static void tick() {
@@ -715,7 +695,6 @@ public class Program {
 
     // --------------ROVARÁSZ----------------
 
-
     // ● [string]: az Entitás id-je
     // ● [string]: az Entitás tektonja
     // ● -ms [szám]: a Rovar mozgási sebessége
@@ -723,9 +702,7 @@ public class Program {
     // ● -sl [szám]: a Rovar telítettségének maximális értéke
     // ● -ccd [szám]: a fonalvágás cooldown-ja
     private static void addInsect(String[] splitInput) {
-        
     }
-
 
     // ● [string]: megadja mely Rovar attribútumát változtatja meg
     // ● -ms [szám]: megváltoztatja a Rovar mozgási sebességét
@@ -734,11 +711,9 @@ public class Program {
     // ● -ccd [szám]: megváltoztatja a fonalvágás cooldown-ját
     // TODO LEMARADT VALAMI
     private static void setInsect(String[] splitInput) {
-        
     }
 
     // --------------TECTON----------------
-
 
     // ● [string]: a Tecton id-ja
     // ● [string]: a tekton típusa
@@ -808,7 +783,7 @@ public class Program {
         }
 
         if (neighborTecton == null) {
-            System.out.println("Nincs ilyen Tekton, nem adtál hozzá szomszédot!");
+            System.out.println("Nincs ilyen Tekton, nem adtal hozza szomszedot!");
             return;
         }
 
@@ -822,7 +797,6 @@ public class Program {
     private static void setTecton(String[] splitInput) {
         Tecton tecton = null;
         double oldSc = -1;
-
 
         for (Tecton t : gameLogic.map.getAllTectons()) {
             if (t.getId().equals(splitInput[1])) {
@@ -840,7 +814,7 @@ public class Program {
             tecton.setSplitChance(Double.parseDouble(splitInput[3]));
         }
         else {
-            System.out.println("Nincs elég paraméter megadva!");
+            System.out.println("Nincs eleg parameter megadva!");
         }
     }
 
@@ -895,8 +869,6 @@ public class Program {
         
 
         // játékosok, rovarok, gombák, spórák, fonalak, 
-
-
     }
 
     // ● [string]: a bemenetet tároló fájl neve
@@ -993,12 +965,12 @@ public class Program {
                         }
                         break;
                     default:
-                        System.out.println("Nincs ilyen paraméter!");
+                        System.out.println("Nincs ilyen parameter!");
                         break;
                 }   
             }
             else {
-                System.out.println("Nincs ilyen paraméter!");
+                System.out.println("Nincs ilyen parameter!");
             }
         }
         else if (splitInput.length == 2){
@@ -1046,12 +1018,12 @@ public class Program {
                     }
                     break;
                 default:
-                    System.out.println("Nincs ilyen paraméter!");
+                    System.out.println("Nincs ilyen parameter!");
                     break;
             }
         }
         else {
-            System.out.println("Túl kevés paraméter!");
+            System.out.println("Tul keves parameter!");
         }
     }
 
@@ -1097,5 +1069,4 @@ public class Program {
                 break;
         }
     }
-
 }

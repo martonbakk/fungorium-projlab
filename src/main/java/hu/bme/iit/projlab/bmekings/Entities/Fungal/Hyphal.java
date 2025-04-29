@@ -132,7 +132,8 @@ public class Hyphal extends Entity {
         this.baseLocation.disconnectTecton(this.connectedTecton, this);
          
         // mycologist
-        
+        ut.println("Hyphal oHyphalm torlodott id:["+ id +"]");
+
         //Mycologist owner=this.getOwner();
         owner.removeHyphal(this);
         }

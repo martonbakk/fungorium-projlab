@@ -1,6 +1,6 @@
 package hu.bme.iit.projlab.bmekings.Entities.Insect;
 
-import java.util.ArrayList;
+import java.util.HashMap;
 
 import hu.bme.iit.projlab.bmekings.Effects.Effect.Effect;
 import hu.bme.iit.projlab.bmekings.Entities.Entity;
@@ -30,7 +30,7 @@ public class Insect extends Entity{
     private int cutCooldown;
     private int stunTime;
     private Entomologist owner;
-    private ArrayList<Effect> activeEffects;
+    private HashMap<Effect, Integer> activeEffects;
 
     @Loggable
     public void increaseMovingSpeed(int speed){
@@ -64,7 +64,7 @@ public class Insect extends Entity{
         this.stomachLimit = 0;
         this.currStomachFullness = 0;
         this.cutCooldown = 0;
-        this.activeEffects = new ArrayList<>();
+        this.activeEffects = new HashMap<>();
     }
 //rovarasz felvetel konstruktorba!!!
     public Insect(int movingSpeed, int movingCD, int stomachLimit, int currStomachFullness, int cutCooldown, Tecton baseLocation, Entomologist owner){
@@ -116,7 +116,7 @@ public class Insect extends Entity{
     public Entomologist getEntomologist(){ return  owner;}
 
     @Loggable
-    public ArrayList<Effect> getActiveEffects() { return activeEffects; }
+    public HashMap<Effect, Integer> getActiveEffects() { return activeEffects; }
 
     @Loggable
     public void move(Tecton targetTecton) {
@@ -164,16 +164,18 @@ public class Insect extends Entity{
                 currStomachFullness=0;
         }
         
-        
         // Kiszedes egy ido utan meg kell hogy valosuljon
-        for(Effect item: activeEffects){
-            //remove ha lejar az ideje
+        for(Effect item: activeEffects.keySet()){
+            item.apply(this);
+            if(activeEffects.get(item) <= 0){
+                activeEffects.remove(item);
+            }
         }
     }
 
     @Loggable
     public void applyEffect(Effect effect) {
-        activeEffects.add(effect);
+        activeEffects.put(effect, 10);
     }
 
     @Loggable
@@ -204,6 +206,7 @@ public class Insect extends Entity{
     public void DestroyInsect() {
         owner.deleteControlledInsect(this);
         GameLogic.deleteEntity(this);
+        System.out.println("Insect objektum torlodott id:["+ id +"]");
     }
 
     @Loggable

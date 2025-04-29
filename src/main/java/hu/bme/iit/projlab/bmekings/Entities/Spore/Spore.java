@@ -52,6 +52,7 @@ public abstract class Spore extends Entity implements SporeInterface {
     public void destroySpore(){
         GameLogic.deleteEntity(this);
         baseLocation.removeSpore(this);
+        System.out.println("Spore objektum torlodott id:["+ id +"]");
     }
 
     public void spawnSpore() {

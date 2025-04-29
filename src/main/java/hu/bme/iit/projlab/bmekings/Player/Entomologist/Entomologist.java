@@ -18,7 +18,7 @@ public class Entomologist extends Player{
 
     public Entomologist() {
         super(IDGenerator.generateID("E"));
-        System.out.println("Új objektum [" + getPlayerID() + "] hozzáadva!");
+        System.out.println("Uj objektum [" + getPlayerID() + "] hozzaadva!");
     }
     public List<Insect> getControlledInsects() { return controlledInsects; }
 

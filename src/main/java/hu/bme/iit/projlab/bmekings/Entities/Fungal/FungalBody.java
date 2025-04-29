@@ -76,6 +76,7 @@ public class FungalBody extends Entity {
     /// occupiedByFungalbody-hoz kell
     public FungalBody(TypeCharacteristics characteristics, Tecton baseLocation){
         super(IDGenerator.generateID("FB"),baseLocation); 
+        
         this.characteristics = characteristics;
         this.spores = new LinkedList<>();
         this.currLevel = 1;
@@ -95,10 +96,27 @@ public class FungalBody extends Entity {
     public Mycologist getOwner() { return owner; }
 
     @Loggable
-    public void setLevel(int lvl) { currLevel = lvl; }
+    public void setLvlNoWrite(int lvl) { currLevel = lvl; }
 
     @Loggable
-    public void setShotSporesNum(int s) { shotSporesNum = s; }
+    public void setShotSporesNumNoWrite(int s) { shotSporesNum = s; }
+
+
+    // objektum_neve [attributum] megvaltozott:
+    // [regi_ertek] -> [új_érték]
+    @Loggable
+    public void setLevel(int lvl) { 
+    System.out.println("[" + this.id + "] [currlevel] megvaltozott:");
+    System.out.println("[" + currLevel + "] -> [" + lvl + "]");
+    currLevel = lvl; 
+    }
+
+    @Loggable
+    public void setShotSporesNum(int s) { 
+    System.out.println("[" + this.id + "] [shotSporesNum] megvaltozott:");
+    System.out.println("[" + shotSporesNum + "] -> [" + s + "]");
+    shotSporesNum = s; 
+    }
 
     @Loggable
     public Boolean checkShootingRange(Tecton tecton) {
@@ -293,6 +311,9 @@ public class FungalBody extends Entity {
 
         // tecton 
         this.baseLocation.destroyFungalBody();
+
+        System.out.println("Fungus objektum torlodott id: [" + id + "]");
+
     }
     
 }

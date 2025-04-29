@@ -7,10 +7,10 @@ import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Before;
 import org.aspectj.lang.reflect.MethodSignature;
 
-import hu.bme.iit.projlab.bmekings.Player.Player;
 import hu.bme.iit.projlab.bmekings.Entities.Entity;
-import hu.bme.iit.projlab.bmekings.Map.Tecton.Tecton;
 import hu.bme.iit.projlab.bmekings.Map.Map;
+import hu.bme.iit.projlab.bmekings.Map.Tecton.Tecton;
+import hu.bme.iit.projlab.bmekings.Player.Player;
 
 @Aspect
 public class LoggingAspect {
@@ -34,7 +34,7 @@ public class LoggingAspect {
         }
 
         if (target instanceof Tecton tecton){
-            targetID = "Meg nem mukodik";//tecton.getId();
+            targetID = tecton.getId();
         }
         if (target instanceof Map){
             targetID = "MP1";

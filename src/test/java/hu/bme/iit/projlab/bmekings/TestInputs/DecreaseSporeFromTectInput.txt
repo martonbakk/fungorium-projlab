@@ -1,0 +1,3 @@
+/addtecton T_001 -t normal
+/addspore SP_001 -t normal -n 5
+/setspore -id SP_001 -n 0

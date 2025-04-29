@@ -27,7 +27,7 @@ public class Mycologist extends Player{
         this.controlledFunguses = new ArrayList<>();
         this.hyphalList = new ArrayList<>();
         this.typeCharacteristics = new TypeCharacteristics();
-        System.out.println("Új objektum [" + getPlayerID() + "] hozzáadva!");
+        System.out.println("Uj objektum [" + getPlayerID() + "] hozzaadva!");
     }
 
     public Mycologist(int shootingRange, int sporeProductionIntensity, int startingHyphalNum, int sporeCapacity) {
@@ -154,7 +154,9 @@ public class Mycologist extends Player{
 
     @Loggable
     public void growFungalBody(Tecton tecton){
-        tecton.createFungalBody(this);
+        if(tecton.getFlag().fungalApproved){
+            tecton.createFungalBody(this);
+        }
     }
 
     @Loggable
@@ -232,7 +234,8 @@ public class Mycologist extends Player{
 
     @Loggable
     public void growHyphalFromHyphalAciton(Tecton targetTecton){
-        selectedHyphal.growHyphalFromHyphal(targetTecton);
+        if(targetTecton.getFlag().hyphalApproved || (targetTecton.getFlag().oneHyphalApproved&&targetTecton.getConnectedNeighbors().size()==0)){
+            selectedHyphal.growHyphalFromHyphal(targetTecton);
+        }
     }
-
 }

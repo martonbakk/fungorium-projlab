@@ -3,14 +3,21 @@ package hu.bme.iit.projlab.bmekings.Map;
 import java.util.ArrayList;
 import java.util.Random;
 
-import hu.bme.iit.projlab.bmekings.Map.Tecton.*;
-import hu.bme.iit.projlab.bmekings.Entities.Spore.*;
-import hu.bme.iit.projlab.bmekings.Entities.Insect.*;
+import hu.bme.iit.projlab.bmekings.Entities.Fungal.Hyphal;
+import hu.bme.iit.projlab.bmekings.Entities.Insect.Insect;
+import hu.bme.iit.projlab.bmekings.Entities.Spore.DuplicateSpore;
+import hu.bme.iit.projlab.bmekings.Entities.Spore.HungerSpore;
+import hu.bme.iit.projlab.bmekings.Entities.Spore.Spore;
+import hu.bme.iit.projlab.bmekings.Entities.Spore.StunSpore;
+import hu.bme.iit.projlab.bmekings.Logger.Loggable;
 import hu.bme.iit.projlab.bmekings.Logic.GameLogic.GameLogic;
+import hu.bme.iit.projlab.bmekings.Map.Tecton.HyphalPreserverTecton;
+import hu.bme.iit.projlab.bmekings.Map.Tecton.NoFungusTecton;
+import hu.bme.iit.projlab.bmekings.Map.Tecton.Tecton;
+import hu.bme.iit.projlab.bmekings.Map.Tecton.ToxicTecton;
+import hu.bme.iit.projlab.bmekings.Map.Tecton.WeakTecton;
 import hu.bme.iit.projlab.bmekings.Player.Entomologist.Entomologist;
 import hu.bme.iit.projlab.bmekings.Player.Mycologist.Mycologist;
-import hu.bme.iit.projlab.bmekings.Entities.Fungal.Hyphal;
-import hu.bme.iit.projlab.bmekings.Logger.Loggable;
 
 /**
  * A Map osztály felelős a játékterep generálásáért, a tektonok kezelésére, azok kettéhasadásának
@@ -21,7 +28,7 @@ import hu.bme.iit.projlab.bmekings.Logger.Loggable;
 @Loggable("Map")
 public class Map {
     private ArrayList<Tecton> tectons = new ArrayList<>();
-
+    private boolean generatedMap=false;
     
 
     public Map(){
@@ -35,6 +42,10 @@ public class Map {
 
     @Loggable
     public void generateMap() {
+        if(generatedMap) {
+            return; // Map already generated
+        }
+        generatedMap=true;
         ArrayList<Mycologist> mycologists = GameLogic.getMycologists();
         ArrayList<Entomologist> entomologists = GameLogic.getEntomologists();
         Random random = new Random();
@@ -159,9 +170,9 @@ public class Map {
             }
         }
         tectons.add(new Tecton());
-        tectons.getLast().setNeighbors(newNeighbors1);
+        tectons.get(tectons.size()).setNeighbors(newNeighbors1);
         tectons.add(new Tecton());
-        tectons.getLast().setNeighbors(newNeighbors2);
+        tectons.get(tectons.size()).setNeighbors(newNeighbors2);
         
     }
 
