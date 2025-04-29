@@ -29,7 +29,7 @@ public class GameLogic {
 
     public GameLogic(int TickInterval, int playerNum) {
         ticker = new Ticker(TickInterval);
-        map.generateMap(); 
+        map = new Map();
     }
 
     public GameLogic(ArrayList<Entity> entities, ArrayList<Listener> listeners, Map map) {
@@ -40,6 +40,12 @@ public class GameLogic {
     
     public void startGame() {
         ticker.start();
+    }
+
+    // TODO
+    // kéne a teszteléshez egy olyan függvény, ami csak 1, vagy több tick-et hajt végre
+    public void tick() {
+        
     }
    
     public void addListener(Listener l) {

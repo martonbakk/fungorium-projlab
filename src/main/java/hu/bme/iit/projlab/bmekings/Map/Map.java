@@ -104,22 +104,22 @@ public class Map {
                 Spore sp;
                 switch (type) {
                     case 0:
-                        sp = new DuplicateSpore(10, baseTecton);
+                        sp = new DuplicateSpore(baseTecton);
                         break;
                     case 1:
-                        sp = new HungerSpore(10, baseTecton);
+                        sp = new HungerSpore(baseTecton);
                         break;
                     case 2:
-                        sp = new StunSpore(10, baseTecton);
+                        sp = new StunSpore(baseTecton);
                         break;
                     case 3:
-                        sp = new HyphalProtectorSpore(10, baseTecton);
+                        sp = new HungerSpore(baseTecton);
                         break;
                     case 4:
-                        sp = new SpeedSpore(10, baseTecton);
+                        sp = new HungerSpore(baseTecton);
                         break;
                     default:
-                        sp = new NormalSpore(10, baseTecton);
+                        sp = new HungerSpore(baseTecton);
                         break;
                 }
                 baseTecton.addSpore(sp);

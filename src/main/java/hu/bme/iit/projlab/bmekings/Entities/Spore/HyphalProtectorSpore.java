@@ -15,14 +15,11 @@ public class HyphalProtectorSpore extends Spore {
         super();
     }
 
-    public HyphalProtectorSpore(int n, String id, Tecton baseLocation) {
-        super(n, id, baseLocation);
+    public HyphalProtectorSpore(Tecton baseLocation) {
+        super(baseLocation);
     }
 
-    public HyphalProtectorSpore(int n, Tecton baseLocation) {
-        super(n, baseLocation);
-    }
-
+    @Override
     public void activateEffect(Insect targInsect) {
         //targInsect.increaseHyphalCoolDown(10);
     }
@@ -32,8 +29,5 @@ public class HyphalProtectorSpore extends Spore {
         
     }
 
-    @Override
-    public int getNutritionValue(){
-        return 0;
-    }
+
 }

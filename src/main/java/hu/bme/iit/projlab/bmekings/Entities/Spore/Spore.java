@@ -1,6 +1,9 @@
 package hu.bme.iit.projlab.bmekings.Entities.Spore;
 
+import java.util.Random;
+
 import hu.bme.iit.projlab.bmekings.Entities.Entity;
+import hu.bme.iit.projlab.bmekings.Entities.Insect.Insect;
 import hu.bme.iit.projlab.bmekings.Interface.SporeInterface.SporeInterface;
 import hu.bme.iit.projlab.bmekings.Logic.GameLogic.GameLogic;
 import hu.bme.iit.projlab.bmekings.Logic.IDGenerator.IDGenerator;
@@ -17,23 +20,26 @@ public abstract class Spore extends Entity implements SporeInterface {
 
     private int nutritionValue;
     protected Tecton baseLocation;
+     private  Random rand = new Random();
+
 
     public Spore(){
         super();
-        //this.id=IDGenerator.generateID("SP");
-        this.nutritionValue=0;
+        int randomNumber = rand.nextInt(50) + 1;
+        this.nutritionValue= randomNumber;
     }
 
-    public Spore(int n, String id, Tecton baseLocation) {
-        super(id, baseLocation);
-        //this.id=IDGenerator.generateID("SP");
-        nutritionValue = n;
-    }
-
-    public Spore(int n, Tecton baseLocation) {
+    public Spore(Tecton baseLocation) {
         super(IDGenerator.generateID("SP"), baseLocation);
-        nutritionValue = n;
+        int randomNumber = rand.nextInt(50) + 1;
+        nutritionValue = randomNumber;
     }
+
+    public String getId() { return id; }
+
+    public Tecton getBaseLocation() { return baseLocation; }
+
+    public void setNutritionalValue(int n) { nutritionValue = n; }
 
     public boolean isBaseLocation(Tecton baseLocation) {
         return this.baseLocation.getId().equals(baseLocation.getId());
@@ -52,4 +58,10 @@ public abstract class Spore extends Entity implements SporeInterface {
         GameLogic.addEntity(this);
         baseLocation.addSpore(this);        
     }
+
+    public int getNutritionValue(){
+        return this.nutritionValue;
+    }
+
+    public void activateEffect(Insect targetInsect) {}
 }

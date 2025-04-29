@@ -6,6 +6,7 @@ import hu.bme.iit.projlab.bmekings.Entities.Fungal.Hyphal;
 import hu.bme.iit.projlab.bmekings.Entities.Insect.Insect;
 import hu.bme.iit.projlab.bmekings.Interface.SporeInterface.SporeInterface;
 import hu.bme.iit.projlab.bmekings.Logger.Loggable;
+import hu.bme.iit.projlab.bmekings.Logic.IDGenerator.IDGenerator;
 import hu.bme.iit.projlab.bmekings.Map.Tecton.Tecton;
 import hu.bme.iit.projlab.bmekings.Player.Player;
 import hu.bme.iit.projlab.bmekings.Program.Params;
@@ -15,9 +16,9 @@ public class Entomologist extends Player{
     private List<Insect> controlledInsects;
     // Rovar tipusat is kezzeljuk le valahogy
 
-    public Entomologist(String playerId) {
-        super(playerId);
-        //this.playerId=IDGenerator.generateID("E");
+    public Entomologist() {
+        super(IDGenerator.generateID("E"));
+        System.out.println("Új objektum [" + getPlayerID() + "] hozzáadva!");
     }
     public List<Insect> getControlledInsects() { return controlledInsects; }
 

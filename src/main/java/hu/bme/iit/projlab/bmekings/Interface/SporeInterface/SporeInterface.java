@@ -28,6 +28,12 @@ public interface SporeInterface {
 
     public int getNutritionValue();
 
+    public void setNutritionalValue(int n);
+
+    public String getId();
+
+    public Tecton getBaseLocation();
+
     public boolean isBaseLocation(Tecton baseLocation);
 
     public void setBaseLocation(Tecton baseLocation);

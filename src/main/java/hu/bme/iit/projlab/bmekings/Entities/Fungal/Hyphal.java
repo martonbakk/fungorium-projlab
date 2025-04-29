@@ -106,6 +106,9 @@ public class Hyphal extends Entity {
 
     @Loggable
     public void eatInsect(Insect stunnedInsect){
+        if (stunnedInsect.getStunTime()==0) {
+            return;
+        }
         Tecton currLoc = stunnedInsect.getBase();
 
         stunnedInsect.DestroyInsect();
@@ -147,8 +150,14 @@ public class Hyphal extends Entity {
         return player;
     }
 
+    @Loggable
     public void hyphalHeal(){
         lifeTime++;
+    }
+
+    @Loggable
+    public void growHyphalFromHyphal(Tecton targetTecton){
+        baseLocation.connectTecton(targetTecton, owner);
     }
 
         

@@ -14,15 +14,11 @@ public class SlowSpore extends Spore {
         super();
     }
 
-    public SlowSpore(int n, String id, Tecton baseLocation) {
-        super(n, id, baseLocation);
+    public SlowSpore(Tecton baseLocation) {
+        super(baseLocation);
     }
 
-    public SlowSpore(int n, Tecton baseLocation) {
-        super(n, baseLocation);
-    }
-
-
+    @Override
     public void activateEffect(Insect targetInsect) {
         targetInsect.decreaseMovingSpeed(10);
     }

@@ -17,12 +17,8 @@ public class StunSpore extends Spore {
      * A StunSpore osztály konstruktora.
      * Meghívja az ősosztály konstruktorát, és kiírja a konzolra, hogy egy új StunSpore objektum jött létre.
      */
-    public StunSpore(int n, String id, Tecton baseLocation) {
-        super(n, id, baseLocation);
-    }
-
-    public StunSpore(int n, Tecton baseLocation) {
-        super(n, baseLocation);
+    public StunSpore(Tecton baseLocation) {
+        super(baseLocation);
     }
 
     /**
@@ -30,6 +26,7 @@ public class StunSpore extends Spore {
      * A metódus egy adott időtartamra megállítja a rovart, amely elfogyasztotta a spórát,
      * és kiírja a konzolra, hogy a hatás aktiválódott.
      */
+    @Override
     public void activateEffect(Insect targetInsect) {
         targetInsect.stunEffect(4);
     }
@@ -49,8 +46,5 @@ public class StunSpore extends Spore {
         
     }
     
-    @Override
-    public int getNutritionValue(){
-        return 0;
-    }
+
 }

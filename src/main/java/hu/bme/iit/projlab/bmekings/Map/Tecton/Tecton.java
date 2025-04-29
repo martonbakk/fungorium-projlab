@@ -115,7 +115,7 @@ public class Tecton implements Listener{
         if(this.isOccupiedByFungus())
             return false;
                                  
-        FungalBody newfungalBody = new FungalBody(1, 0, player.getTypeCharacteristics(), null, this, player);  //megkell oldani a charachteristicst
+        FungalBody newfungalBody = new FungalBody(1, 0, player.getTypeCharacteristics(), this, player);
 
         GameLogic.addEntity(fungalBody);
 
@@ -198,7 +198,7 @@ public class Tecton implements Listener{
     }
 
     @Loggable
-    public void connectTecton(Tecton tc, Mycologist owner) {
+    public void connectTecton(Tecton connected, Mycologist owner) {
         // TODO: rosszul történik a csekkolás!!!
         // itt csak annak a tektonnak a szomszédjait nézi, amelyiken rajta van a gombatest
         // if (!neighbours.contains(tc)) {
@@ -207,14 +207,14 @@ public class Tecton implements Listener{
         // }
 
         // Szerintem így egy fokkal jobb, de még mindig nem jó az összekötés
-        if (!tc.getNeighbors().contains(this)) {
+        if (!connected.getNeighbors().contains(this)) {
             System.out.println("Megkapott tekton nem szomszédos!");
             return;
         }
-        Hyphal newHyphal = new Hyphal(tc, false, 3000, 3000, 300, this, owner);
+        Hyphal newHyphal = new Hyphal(connected, false, 3000, 3000, 300, this, owner);
 
         // Ellenőrizzük, hogy a két tekton össze van e már kötve
-        ArrayList<Hyphal> hyphals = connectedNeighbours.get(tc);
+        ArrayList<Hyphal> hyphals = connectedNeighbours.get(connected);
         if (hyphals != null) {
             // Ha össze van frissítsük a hyphal listát
             hyphals.add(newHyphal);
@@ -223,7 +223,7 @@ public class Tecton implements Listener{
         else {
             hyphals = new ArrayList<>();
             hyphals.add(newHyphal);
-            connectedNeighbours.put(tc, hyphals);
+            connectedNeighbours.put(connected, hyphals);
         }
 
         owner.addHyphal(newHyphal);

@@ -7,6 +7,7 @@ import hu.bme.iit.projlab.bmekings.Entities.Fungal.FungalBody;
 import hu.bme.iit.projlab.bmekings.Entities.Fungal.Hyphal;
 import hu.bme.iit.projlab.bmekings.Entities.Fungal.TypeCharacteristics;
 import hu.bme.iit.projlab.bmekings.Logger.Loggable;
+import hu.bme.iit.projlab.bmekings.Logic.IDGenerator.IDGenerator;
 import hu.bme.iit.projlab.bmekings.Map.Tecton.Tecton;
 import hu.bme.iit.projlab.bmekings.Player.Player;
 import hu.bme.iit.projlab.bmekings.Program.Params;
@@ -21,21 +22,18 @@ public class Mycologist extends Player{
     
     // Fungus type lekezelese hianyzik
 
-    public Mycologist(String playerId) {
-        super(playerId);
-        //this.playerId=IDGenerator.generateID("M");
+    public Mycologist() {
+        super(IDGenerator.generateID("M"));
         this.controlledFunguses = new ArrayList<>();
         this.hyphalList = new ArrayList<>();
-        
         this.typeCharacteristics = new TypeCharacteristics();
+        System.out.println("Új objektum [" + getPlayerID() + "] hozzáadva!");
     }
 
-    public Mycologist(String playerId, int shootingRange, int sporeProductionIntensity, int startingHyphalNum, int sporeCapacity) {
-        super(playerId);
-        //this.playerId=IDGenerator.generateID("M");
+    public Mycologist(int shootingRange, int sporeProductionIntensity, int startingHyphalNum, int sporeCapacity) {
+        super(IDGenerator.generateID("M"));
         this.controlledFunguses = new ArrayList<>();
-        this.hyphalList = new ArrayList<>();
-        
+        this.hyphalList = new ArrayList<>();        
         this.typeCharacteristics = new TypeCharacteristics(shootingRange,sporeProductionIntensity,startingHyphalNum,sporeCapacity);
     }
 
@@ -78,6 +76,9 @@ public class Mycologist extends Player{
                 break;
             case 8:
                 speedUpDevelopment(params.selectedHyphal);
+                break;
+            case 9:
+                growHyphalFromHyphalAciton(params.selectedTecton);
                 break;
             default:
                 System.out.println("Invalid action type");
@@ -180,7 +181,7 @@ public class Mycologist extends Player{
     }
 
     @Loggable
-    private void selectFungus(FungalBody fungus){
+    public void selectFungus(FungalBody fungus){
         if(checkControlledFunguses()){
             return;
         }
@@ -227,6 +228,11 @@ public class Mycologist extends Player{
     @Loggable
     public void addFungus(FungalBody fungalToAdd){
         controlledFunguses.add(fungalToAdd);
+    }
+
+    @Loggable
+    public void growHyphalFromHyphalAciton(Tecton targetTecton){
+        selectedHyphal.growHyphalFromHyphal(targetTecton);
     }
 
 }

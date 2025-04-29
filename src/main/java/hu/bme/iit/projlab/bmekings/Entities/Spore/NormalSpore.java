@@ -14,14 +14,12 @@ public class NormalSpore extends Spore {
         super();
     }
 
-    public NormalSpore(int n, String id, Tecton baseLocation) {
-        super(n, id, baseLocation);
+
+    public NormalSpore(Tecton baseLocation) {
+        super(baseLocation);
     }
 
-    public NormalSpore(int n, Tecton baseLocation) {
-        super(n, baseLocation);
-    }
-
+    @Override
     public void activateEffect(Insect targetInsect) {
     }
     
@@ -29,8 +27,5 @@ public class NormalSpore extends Spore {
     public void update() {
     }
 
-    @Override
-    public int getNutritionValue(){
-        return 0;
-    }
+
 }

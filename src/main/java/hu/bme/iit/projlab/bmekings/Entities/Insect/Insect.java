@@ -28,6 +28,7 @@ public class Insect extends Entity{
     private int stomachLimit;
     private int currStomachFullness;
     private int cutCooldown;
+    private int stunTime;
     private Entomologist owner;
     private ArrayList<Effect> activeEffects;
 
@@ -45,24 +46,21 @@ public class Insect extends Entity{
 
     @Loggable
     public void inreaseHyphalCoolDown(int cd){
-        this.movingSpeed+=cd;
+        this.cutCooldown+=cd;
     }
 
-    @Loggable
-    public void increaseHunger(int cd){
-        this.currStomachFullness-=cd;
-    }
 
     public void stunEffect(int cd){
-        this.movingCD=cd;
+        this.stunTime=cd;
+        this.movingCD = cd;
     }
 
     public Insect() {
         super();
 
-        //this.id=IDGenerator.generateID("I");
         this.movingSpeed = 0;
         this.movingCD = 0;
+        this.stunTime=0;
         this.stomachLimit = 0;
         this.currStomachFullness = 0;
         this.cutCooldown = 0;
@@ -76,6 +74,7 @@ public class Insect extends Entity{
         this.movingSpeed = movingSpeed;
         this.movingCD = movingCD;
         this.stomachLimit = stomachLimit;
+        this.stunTime=0;
         this.currStomachFullness = currStomachFullness;
         this.cutCooldown = cutCooldown;
         this.owner=owner;
@@ -92,6 +91,11 @@ public class Insect extends Entity{
         this.cutCooldown = parentInsect.getCutCooldown();
         this.owner=parentInsect.owner;
     }
+
+
+    @Loggable
+    public int getStunTime() { return stunTime;}
+
 
     @Loggable
     public int getMovingSpeed() { return movingSpeed; }
@@ -125,10 +129,18 @@ public class Insect extends Entity{
     @Loggable
     public void eatSpore() {
         SporeInterface sporeToEat=this.baseLocation.getNextSporeToEat();
-        if(this.currStomachFullness+sporeToEat.getNutritionValue() <this.stomachLimit){
+        if(this.currStomachFullness+sporeToEat.getNutritionValue() < this.stomachLimit){
             sporeToEat.destroySpore();
+            this.feedInsect(sporeToEat.getNutritionValue());
             sporeToEat.activateEffect(this);
         }
+    }
+
+    @Loggable
+    public void feedInsect(int nutritionvalue) {
+        currStomachFullness += nutritionvalue;
+        if (currStomachFullness<0) 
+            currStomachFullness=0;
     }
 
     @Loggable
@@ -139,8 +151,19 @@ public class Insect extends Entity{
     @Loggable
     @Override
     public void update() {
-        movingCD--;     // 0 alá ne menjen
-        cutCooldown--;  // 0 alá ne menjen
+        if(movingCD>0)
+            movingCD--;
+        if(stunTime>0)
+            stunTime--;
+        if (cutCooldown>0)     // 0 alá ne menjen
+            cutCooldown--;  // 0 alá ne menjen
+        
+        if (currStomachFullness > 0) {
+            currStomachFullness-=5;
+            if(currStomachFullness < 0)
+                currStomachFullness=0;
+        }
+        
         
         // Kiszedes egy ido utan meg kell hogy valosuljon
         for(Effect item: activeEffects){
@@ -179,19 +202,7 @@ public class Insect extends Entity{
 
     @Loggable
     public void DestroyInsect() {
-        // 1. Eltávolítás az Entomologist controlledInsects listájából
-        // Gamelogic entomolgist listabol
-        /*
-        for (Entomologist entomologist : GameLogic.getEntomologists()){
-            for (Insect insect : entomologist.getControlledInsects()){
-                if (this == insect){
-                    entomologist.deleteControlledInsect(this);
-                }
-            }
-        }
-        */
         owner.deleteControlledInsect(this);
-        // 2. Eltávolítás a GameLogic entityList-jéből
         GameLogic.deleteEntity(this);
     }
 

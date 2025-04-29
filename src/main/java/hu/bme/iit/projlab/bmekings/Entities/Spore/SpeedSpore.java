@@ -14,15 +14,11 @@ public class SpeedSpore extends Spore {
         super();
     }
 
-    public SpeedSpore(int n, String id, Tecton baseLocation) {
-        super(n, id, baseLocation);
+    public SpeedSpore( Tecton baseLocation) {
+        super(baseLocation);
     }
 
-    public SpeedSpore(int n, Tecton baseLocation) {
-        super(n, baseLocation);
-    }
-
-
+    @Override
     public void activateEffect(Insect targetInsect) {
         targetInsect.increaseMovingSpeed(10);
     }
@@ -32,8 +28,4 @@ public class SpeedSpore extends Spore {
 
     }
 
-    @Override
-    public int getNutritionValue(){
-        return 0;
-    }
 }

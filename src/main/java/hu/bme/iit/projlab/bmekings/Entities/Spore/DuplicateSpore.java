@@ -12,15 +12,12 @@ public class DuplicateSpore extends Spore {
     public DuplicateSpore() {
         super();
     }
-
-    public DuplicateSpore(int n, String id, Tecton baseLocation) {
-        super(n, id, baseLocation);
+    
+    public DuplicateSpore(Tecton baseLocation) {
+        super(baseLocation);
     }
 
-    public DuplicateSpore(int n, Tecton baseLocation) {
-        super(n, baseLocation);
-    }
-
+    @Override
     public void activateEffect(Insect targetInsect) {
         Insect newInsect=new Insect(targetInsect);
         newInsect.createInsect();
@@ -31,8 +28,5 @@ public class DuplicateSpore extends Spore {
 
     }
 
-    @Override
-    public int getNutritionValue(){
-        return 0;
-    }
+
 }

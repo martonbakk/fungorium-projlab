@@ -14,17 +14,12 @@ public class HungerSpore extends Spore {
         super();
     }
 
-    public HungerSpore(int n, String id, Tecton baseLocation) {
-        super(n,id,baseLocation);
+    public HungerSpore(Tecton baseLocation) {
+        super(baseLocation);
     }
 
-    public HungerSpore(int n, Tecton baseLocation) {
-        super(n,baseLocation);
-    }
-
-    public void activateEffect(Insect targetInsect) {
-        targetInsect.increaseHunger(10);
-    }
+    @Override
+    public void activateEffect(Insect targetInsect) {}
 
     @Override
     public void update() {
@@ -33,6 +28,6 @@ public class HungerSpore extends Spore {
 
     @Override
     public int getNutritionValue(){
-        return 0;
+    return this.getNutritionValue() * -1;
     }
 }

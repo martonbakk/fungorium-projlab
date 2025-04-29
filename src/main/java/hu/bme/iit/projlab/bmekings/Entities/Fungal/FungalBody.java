@@ -32,15 +32,15 @@ import hu.bme.iit.projlab.bmekings.Player.Mycologist.Mycologist;
 @Loggable("FungalBody")
 public class FungalBody extends Entity {
 
-    /** A gombatest által kilőtt spórák listája. */
-    private Queue<SporeInterface> spores;
+    /** A gombatest által kilőtt spórák listája. */ 
+    private Queue<SporeInterface> spores = new LinkedList<>();
     private int currLevel;              // jelenlegi szint 
     private int shotSporesNum;          // a kiloheto sporak szama
     private TypeCharacteristics characteristics;
     private int callNum;                // hívasok száma, ugye a leveUpnal mindig 3 hívás egyenlő egy szintel (currLevel)
     private Mycologist owner;
 
-//kosntrukktorba az owner felvetele!!!
+    //kosntrukktorba az owner felvetele!!!
     public FungalBody() {
         super();  
 
@@ -52,10 +52,9 @@ public class FungalBody extends Entity {
         this.callNum = 0;
     }
 
-    public FungalBody(int currLevel, int shotSporesNum, TypeCharacteristics characteristics, Queue<SporeInterface> spores, Tecton baseLocation, Mycologist owner){
+    public FungalBody(int currLevel, int shotSporesNum, TypeCharacteristics characteristics, Tecton baseLocation, Mycologist owner){
         super(IDGenerator.generateID("FB"), baseLocation);
         this.characteristics = characteristics;
-        this.spores=spores;
         this.currLevel = currLevel;
         this.shotSporesNum = shotSporesNum;
         this.callNum = 0;
@@ -139,11 +138,11 @@ public class FungalBody extends Entity {
     // FLAG VALTOZAS AZ UML BEN PLUSZ PARAMÉTER
     @Loggable
     public void shootSpore(Tecton tecton) {
-        if(checkShootingRange(tecton)){
+        if(checkShootingRange(tecton)) {
             return;
         }
 
-        if(this.spores.isEmpty()){
+        if(this.spores.isEmpty()) {
             System.out.println("Nincs spóra a gombatestben!");
         }
         for (int i=0; i<this.shotSporesNum; i++){
