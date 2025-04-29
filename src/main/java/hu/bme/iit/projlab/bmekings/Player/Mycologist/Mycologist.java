@@ -89,9 +89,24 @@ public class Mycologist extends Player{
             case 10:
                 hyphalEatInsect(params.selectedInsect);
                 break;
+            case 11:
+                levelUpFungalBody(params.selectedFungus);
+                break;
             default:
                 System.out.println("Invalid action type");
         }
+    }
+
+    @Loggable
+    private void levelUpFungalBody(FungalBody selectedFungus) {
+        if (checkControlledFungus()) {
+            return;
+        }
+
+        if(selectedFungus==null){
+            return;
+        }
+        selectedFungus.levelUp();
     }
 
     @Loggable

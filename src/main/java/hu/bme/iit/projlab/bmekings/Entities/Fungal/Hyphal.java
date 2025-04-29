@@ -113,8 +113,9 @@ public class Hyphal extends Entity {
 
     @Loggable
     public void dying() {
+        int szam = lifeTime-1 ;
         System.out.println("[" + this.getId() + "] [life] megvaltozott:");
-        System.out.println("[" + lifeTime + "] -> [" + lifeTime-1 + "]");
+        System.out.println("[" + lifeTime + "] -> [" + szam + "]");
         lifeTime--;
     }
 

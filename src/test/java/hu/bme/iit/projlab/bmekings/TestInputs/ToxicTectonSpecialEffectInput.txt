@@ -1,3 +1,4 @@
 /addTecton toxic  
 /addTecton toxic
+/setNeighbor T-01 T-02
 /addHyphal M-01 T-01 T-02

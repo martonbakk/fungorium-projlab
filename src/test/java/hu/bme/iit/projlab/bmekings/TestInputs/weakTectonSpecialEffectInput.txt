@@ -1,4 +1,5 @@
 /addTecton weak
 /addTecton weak
+/setNeighbor T-01 T-02
 /addhyphal M-01 T-01 T-02
 /addhyphal M-02 T-01 T-02

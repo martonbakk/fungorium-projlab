@@ -1,0 +1,3 @@
+Uj objektum [T-01] letrejott!
+Uj objektum [T-02] letrejott!
+Nincs ilyen rovar!

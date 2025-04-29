@@ -660,8 +660,20 @@ public class Program {
             System.out.println("Nincs ilyen gombatest!");
             return;
         }
+
+        Tecton connectTecton = null;
+        for (Tecton t : gameLogic.map.getAllTectons()) {
+            if (t.getId().equals(splitInput[3]))
+                connectTecton = t;
+        }
+
+        if (connectTecton == null) {
+            System.out.println("Nincs ilyen Tekton");
+            return;
+        }
         
-        params.selectedFungus = fung;
+        params.selectedTecton = connectTecton;
+        player.selectFungus(fung);
         player.SelectAction(5, params);
     }
     
@@ -698,7 +710,24 @@ public class Program {
             System.out.println("Nincs ilyen jatekos!");
             return;
         }
+
+        FungalBody fungalBody = null;
+        for (FungalBody fb : player.getControlledFunguses()) {
+            if (fb.getId().equals(splitInput[2]))
+                fungalBody = fb;
+        }
+
+        if (fungalBody == null) {
+            System.out.println("Nincs ilyen gombatest!");
+            return;
+        }
+
+        player.selectFungus(fungalBody);
+        player.SelectAction(11, params);
     }
+    
+
+    
     
     // ● [string]: a játékos id-je
     // ● [string]: a rovar id-je

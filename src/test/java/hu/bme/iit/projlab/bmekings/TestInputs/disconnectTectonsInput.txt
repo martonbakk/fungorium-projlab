@@ -1,5 +1,6 @@
 /addTecton normal  
 /addTecton normal  
+/setNeighbor T-01 T-02
 /addHyphal M-01 T-01 T-02
 /addInsect E-01 T-01
 /cuthyphal E-01 I-01 H-01

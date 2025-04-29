@@ -1,5 +1,6 @@
 /addTecton normal 
-/addTecton normal 
+/addTecton normal
+/setNeighbor T-01 T-02
 /addFungalBody M-01 T-01 -l 1 -s 0 
 /growh M-01 FB-01 T-02
 /tick

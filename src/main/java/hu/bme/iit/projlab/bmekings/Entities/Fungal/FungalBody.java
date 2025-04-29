@@ -197,6 +197,7 @@ public class FungalBody extends Entity {
             this.characteristics.sporeProductionIntensity += 1;
             this.characteristics.sporeCapacity += 5; 
             System.out.println("Szintlépés történt! Új szint: " + currLevel);
+            this.setLevel(currLevel);
         } else {
             System.out.println("Még " + (3 - callNum) + " hívás kell a szintlépéshez. " + "Jelenlegi szint: " + currLevel);
         }

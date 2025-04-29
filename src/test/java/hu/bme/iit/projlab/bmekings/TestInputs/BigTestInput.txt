@@ -2,6 +2,9 @@
 /addTecton normal
 /addTecton normal
 /addTecton normal
+/setNeighbor T-01 T-02
+/setNeighbor T-02 T-03
+/setNeighbor T-03 T-04
 /addFungalBody M-01 T-03 -l 1 -s 0
 /addFungalBody M-01 T-04 -l 1 -s 0
 /addHyphal M-01 T-02 T-03
