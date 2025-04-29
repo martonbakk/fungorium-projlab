@@ -34,11 +34,13 @@ public class Insect extends Entity{
 
     @Loggable
     public void increaseMovingSpeed(int speed){
+        System.out.println("[" + this.getId() + "] sped up");
         this.movingSpeed+=speed;    
     }
 
     @Loggable
     public void decreaseMovingSpeed(int speed){
+        System.out.println("[" + this.getId() + "] slowed");
         this.movingSpeed-=speed;
         if (movingSpeed<0)
             movingSpeed=0;
@@ -46,11 +48,14 @@ public class Insect extends Entity{
 
     @Loggable
     public void inreaseHyphalCoolDown(int cd){
+        System.out.println("[" + this.getId() + "] can't cut hyphal for: "+ cd +"");
         this.cutCooldown+=cd;
     }
 
 
     public void stunEffect(int cd){
+    System.out.println("[" + this.getId() + "] stunned for:"cd"");
+        
         this.stunTime=cd;
         this.movingCD = cd;
     }

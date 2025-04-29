@@ -217,7 +217,7 @@ public class Program {
         if (splitInput.length == 3) return;
 
         if (splitInput.length == 5 && splitInput[3].equals("-l")) {
-            baseTecton.getFungalBody().setLevelNoWrite(Integer.parseInt(splitInput[4]));
+            baseTecton.getFungalBody().setLvlNoWrite(Integer.parseInt(splitInput[4]));
         }
 
         if (splitInput.length == 5 && splitInput[3].equals("-s")) {
@@ -225,12 +225,12 @@ public class Program {
         }
 
         if (splitInput.length == 7 && splitInput[3].equals("-l") && splitInput[5].equals("-s")) {
-            baseTecton.getFungalBody().setLevelNoWrite(Integer.parseInt(splitInput[4]));
+            baseTecton.getFungalBody().setLvlNoWrite(Integer.parseInt(splitInput[4]));
             baseTecton.getFungalBody().setShotSporesNumNoWrite(Integer.parseInt(splitInput[6]));
 
         }
         else if (splitInput.length == 7 && splitInput[3].equals("-s") && splitInput[5].equals("-l")) {
-            baseTecton.getFungalBody().setLevelNoWrite(Integer.parseInt(splitInput[6]));
+            baseTecton.getFungalBody().setLvlNoWrite(Integer.parseInt(splitInput[6]));
             baseTecton.getFungalBody().setShotSporesNumNoWrite(Integer.parseInt(splitInput[4]));
         }
     }

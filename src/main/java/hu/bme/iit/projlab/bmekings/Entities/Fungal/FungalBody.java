@@ -106,14 +106,14 @@ public class FungalBody extends Entity {
     // [regi_ertek] -> [új_érték]
     @Loggable
     public void setLevel(int lvl) { 
-    System.out.println("[" + this.id + "] [currlevel] megvaltozott:");
+    System.out.println("[" + this.getId() + "] [currlevel] megvaltozott:");
     System.out.println("[" + currLevel + "] -> [" + lvl + "]");
     currLevel = lvl; 
     }
 
     @Loggable
     public void setShotSporesNum(int s) { 
-    System.out.println("[" + this.id + "] [shotSporesNum] megvaltozott:");
+    System.out.println("[" + this.getId() + "] [shotSporesNum] megvaltozott:");
     System.out.println("[" + shotSporesNum + "] -> [" + s + "]");
     shotSporesNum = s; 
     }
@@ -312,7 +312,7 @@ public class FungalBody extends Entity {
         // tecton 
         this.baseLocation.destroyFungalBody();
 
-        System.out.println("Fungus objektum torlodott id: [" + id + "]");
+        System.out.println("Fungus objektum torlodott id: [" + this.getId() + "]");
 
     }
     

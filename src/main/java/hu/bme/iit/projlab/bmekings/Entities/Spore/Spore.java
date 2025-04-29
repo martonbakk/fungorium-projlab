@@ -39,14 +39,22 @@ public abstract class Spore extends Entity implements SporeInterface {
 
     public Tecton getBaseLocation() { return baseLocation; }
 
-    public void setNutritionalValue(int n) { nutritionValue = n; }
+    public void setNutritionalValue(int n) { 
+        System.out.println("[" + this.getId() + "] [nutritionValue] megvaltozott:");
+        System.out.println("[" + nutritionValue + "] -> [" + n + "]"); 
+        nutritionValue = n;
+
+    }
 
     public boolean isBaseLocation(Tecton baseLocation) {
         return this.baseLocation.getId().equals(baseLocation.getId());
     }    
 
     public void setBaseLocation(Tecton baseLocation) {
+        System.out.println("[" + this.getId() + "] [baseLocation] megvaltozott:");
+        System.out.println("[" + this.baseLocation + "] -> [" + baseLocation + "]");
         this.baseLocation = baseLocation;
+
     }
 
     public void destroySpore(){

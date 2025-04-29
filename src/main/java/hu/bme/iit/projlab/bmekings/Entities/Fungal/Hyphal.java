@@ -58,16 +58,29 @@ public class Hyphal extends Entity {
     public int getCutTime() { return cutTime; }
 
     @Loggable
-    public void setDeveloped(boolean b) { developed = b; }
+    public void setDeveloped(boolean b) { 
+    System.out.println("[" + this.getId() + "] [developed] megvaltozott:");
+    System.out.println("[" + developed + "] -> [" + b + "]");
+    developed = b; 
+    }
 
     @Loggable
-    public void setDevelopTime(int newDevelopTime) { developTime = newDevelopTime; }
+    public void setDevelopTime(int newDevelopTime) { 
+    System.out.println("[" + this.getId() + "] [developTime] megvaltozott:");
+    System.out.println("[" + developTime + "] -> [" + newDevelopTime + "]");    
+    developTime = newDevelopTime; }
 
     @Loggable
-    public void setLifeTime(int newLifeTime) { lifeTime=newLifeTime; }
+    public void setLifeTime(int newLifeTime) { 
+    System.out.println("[" + this.getId() + "] [lifeTime] megvaltozott:");
+    System.out.println("[" + lifeTime + "] -> [" + newLifeTime + "]");  
+    lifeTime=newLifeTime; }
 
     @Loggable
-    public void setCutTime(int newCutTime) { cutTime = newCutTime; }
+    public void setCutTime(int newCutTime) { 
+    System.out.println("[" + this.getId() + "] [cutTime] megvaltozott:");
+    System.out.println("[" + cutTime + "] -> [" + newCutTime + "]");
+    cutTime = newCutTime; }
 
     @Loggable
     public void growFungus(Tecton tecton) {
@@ -131,10 +144,8 @@ public class Hyphal extends Entity {
         // connectedtecton
         this.baseLocation.disconnectTecton(this.connectedTecton, this);
          
-        // mycologist
-        ut.println("Hyphal oHyphalm torlodott id:["+ id +"]");
+        System.out.println("Hyphal torlodott id:["+ id +"]");
 
-        //Mycologist owner=this.getOwner();
         owner.removeHyphal(this);
         }
 

@@ -158,6 +158,7 @@ public class Map {
             neighbor.removeNeighbor(tecton);
         }
         tectons.remove(tecton);
+        System.out.println("Tecton torlodott id:["+ tecton.getId() +"]");
         Random random = new Random();
         ArrayList<Tecton> newNeighbors1 = new ArrayList<>();
         ArrayList<Tecton> newNeighbors2 = new ArrayList<>();

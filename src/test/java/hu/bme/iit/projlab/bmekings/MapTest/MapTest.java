@@ -34,3 +34,4 @@ class MapTest {
           "src/test/java/hu/bme/iit/projlab/bmekings/UpdateTectonsOutput.txt"
       );
     }
+}
