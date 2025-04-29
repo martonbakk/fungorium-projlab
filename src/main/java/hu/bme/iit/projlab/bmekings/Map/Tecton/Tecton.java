@@ -263,16 +263,4 @@ public class Tecton implements Listener{
         runSpecialEffect();
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Tecton tecton = (Tecton) o;
-        return id.equals(tecton.getId());
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(id);
-    }
 }
