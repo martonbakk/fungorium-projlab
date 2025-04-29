@@ -218,7 +218,7 @@ public class Program {
 
         if (splitInput.length == 5 && splitInput[3].equals("-l")) {
             baseTecton.getFungalBody().setLvlNoWrite(Integer.parseInt(splitInput[4]));
-        }
+        } 
 
         if (splitInput.length == 5 && splitInput[3].equals("-s")) {
             baseTecton.getFungalBody().setShotSporesNumNoWrite(Integer.parseInt(splitInput[4]));

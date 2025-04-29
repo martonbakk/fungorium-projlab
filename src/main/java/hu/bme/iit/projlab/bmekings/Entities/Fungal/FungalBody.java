@@ -101,7 +101,6 @@ public class FungalBody extends Entity {
     @Loggable
     public void setShotSporesNumNoWrite(int s) { shotSporesNum = s; }
 
-
     // objektum_neve [attributum] megvaltozott:
     // [regi_ertek] -> [új_érték]
     @Loggable

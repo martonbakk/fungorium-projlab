@@ -1,0 +1,2 @@
+/addtecton T_010 -t hyphalpres  
+/addhyphal H_005 -t T_010 -d true -lt 1 

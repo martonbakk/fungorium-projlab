@@ -1,0 +1,3 @@
+/addtecton T_008 -t weak  
+/addhyphal H_003 -t T_008 -d true  
+/addhyphal H_004 -t T_008 -d true

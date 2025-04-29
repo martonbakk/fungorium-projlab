@@ -1,0 +1,4 @@
+/addfungus FB_001 -t T_001 -l 1 -s 3  
+/levelup FB_001  
+/levelup FB_001  
+/levelup FB_001

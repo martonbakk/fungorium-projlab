@@ -1,0 +1,2 @@
+/addtecton T_009 -t nofungus  
+/addfungus FB_003 -t T_009 -l 1

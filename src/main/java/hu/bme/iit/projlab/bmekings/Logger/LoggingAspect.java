@@ -34,7 +34,7 @@ public class LoggingAspect {
         }
 
         if (target instanceof Tecton tecton){
-            targetID = tecton.getId();
+            targetID = "Meg nem mukodik";//tecton.getId();
         }
         if (target instanceof Map){
             targetID = "MP1";

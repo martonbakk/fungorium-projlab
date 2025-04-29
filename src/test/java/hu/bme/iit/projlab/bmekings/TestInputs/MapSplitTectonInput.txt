@@ -1,0 +1,2 @@
+/addtecton T_001 -t normal -sc 0.5
+/splitTecton T_001

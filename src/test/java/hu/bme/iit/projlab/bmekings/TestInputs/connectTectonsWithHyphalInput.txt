@@ -1,0 +1,5 @@
+/addtecton T_001 -t normal  
+/addtecton T_002 -t normal  
+/addfungus FB_001 -t T_001 -l 1 -s 3  
+/addhyphal H_001 -t T_001 -d true -dt 10 -lt 20  
+/growh FB_001 T_002

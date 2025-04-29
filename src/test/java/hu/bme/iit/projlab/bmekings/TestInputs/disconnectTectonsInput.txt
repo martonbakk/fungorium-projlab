@@ -1,0 +1,5 @@
+/addtecton T_001 -t normal  
+/addtecton T_002 -t normal  
+/addhyphal H_001 -t T_001 -d true
+/growh FB_001 T_002
+/cuthyphal I_001 H_001

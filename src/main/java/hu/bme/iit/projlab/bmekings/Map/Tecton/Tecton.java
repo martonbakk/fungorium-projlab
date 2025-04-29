@@ -86,10 +86,10 @@ public class Tecton implements Listener{
 
     @Loggable
     public void setSplitChance(double d) { 
-    System.out.println("[" + this.getId() + "] [splitChance] megvaltozott:");
-    System.out.println("[" + splitChance + "] -> [" + d + "]");
+        System.out.println("[" + id + "] [splitChance] megvaltozott:");
+        System.out.println("[" + splitChance + "] -> [" + d + "]");
         splitChance = d;
- }
+    }
 
 
     public Tecton() {

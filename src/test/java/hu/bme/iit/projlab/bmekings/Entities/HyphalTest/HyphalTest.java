@@ -1,12 +1,19 @@
 package hu.bme.iit.projlab.bmekings.Entities.HyphalTest;
 
+import java.io.IOException;
+
 import org.junit.jupiter.api.Test;
 import hu.bme.iit.projlab.bmekings.TestHelper;
 
 class HyphalTest {
 
     @Test
-    void growFungus() {
+    void connectTectonsWithHyphal()  throws IOException{
+        TestHelper.runTest(
+           "src/test/java/hu/bme/iit/projlab/bmekings/TestInputs/connectTectonsWithHyphalInput.txt",
+           "src/test/java/hu/bme/iit/projlab/bmekings/TestExceptedOutputs/connectTectonsWithHyphalExpectedOutput.txt",
+           "src/test/java/hu/bme/iit/projlab/bmekings/Entities/HyphalTest/connectTectonsWithHyphalOutput.txt"
+        );
     }
 
     @Test
@@ -22,7 +29,12 @@ class HyphalTest {
     }
 
     @Test
-    void eatInsect() {
+    void eatInsect() throws IOException{
+        TestHelper.runTest(
+           "src/test/java/hu/bme/iit/projlab/bmekings/TestInputs/src/test/java/hu/bme/iit/projlab/bmekings/TestInputs/HyphalEatInsectInput.txt",
+           "src/test/java/hu/bme/iit/projlab/bmekings/TestExceptedOutputs/HyphalEatInsectExpectedOutput.txt",
+           "src/test/java/hu/bme/iit/projlab/bmekings/Entities/HyphalTest/HyphalEatInsectOutput.txt"
+        );
     }
 
     @Test

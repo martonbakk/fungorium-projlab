@@ -54,7 +54,7 @@ public class Insect extends Entity{
 
 
     public void stunEffect(int cd){
-    System.out.println("[" + this.getId() + "] stunned for:"cd"");
+    System.out.println("[" + this.getId() + "] stunned for:" + cd);
         
         this.stunTime=cd;
         this.movingCD = cd;
