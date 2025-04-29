@@ -18,6 +18,10 @@ public class SlowSpore extends Spore {
         super(baseLocation);
     }
 
+    public SlowSpore(String id, Tecton baseLocation) {
+        super(id, baseLocation);
+    }
+
     @Override
     public void activateEffect(Insect targetInsect) {
         targetInsect.decreaseMovingSpeed(10);

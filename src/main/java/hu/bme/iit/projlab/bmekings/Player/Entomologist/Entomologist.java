@@ -16,6 +16,11 @@ public class Entomologist extends Player{
     private List<Insect> controlledInsects;
     // Rovar tipusat is kezzeljuk le valahogy
 
+    public Entomologist(String id) {
+        super(id);
+        System.out.println("Uj objektum [" + getPlayerID() + "] hozzaadva!");
+    }
+
     public Entomologist() {
         super(IDGenerator.generateID("E"));
         System.out.println("Uj objektum [" + getPlayerID() + "] hozzaadva!");
@@ -53,7 +58,9 @@ public class Entomologist extends Player{
     public void EatSporeInsect(List<SporeInterface> spore, int sporeNum){}
 
     @Loggable
-    public void CutHyphalInsect(Hyphal hyphalToCut){}
+    public void CutHyphalInsect(Hyphal hyphalToCut){
+        System.out.println("Cutting hyphal: " + hyphalToCut.getId() + " with insect: " + this.getPlayerID());
+    }
 
     @Loggable
     public void deleteControlledInsect(Insect controlledInsect){

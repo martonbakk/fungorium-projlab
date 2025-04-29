@@ -103,7 +103,8 @@ public class Map {
             if (availableTectons.isEmpty()) break; // No available tectons
             int idx = random.nextInt(availableTectons.size());
             Tecton baseTecton = availableTectons.remove(idx);
-            baseTecton.addInsect(new Insect(1, 1, 1, 1, 1, baseTecton, entomologist));
+            Insect insect = new Insect(1, 1, 1, 1, 1, baseTecton, entomologist);
+            baseTecton.addInsect(insect);
         }
     
         // Add spores for each entomologist (3 per entomologist)

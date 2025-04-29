@@ -1,4 +1,4 @@
 /addtecton normal  
-/addspore T_001 dupe  
-/addinsect E_001 T_001 1 2 100 2 
-/eatsp E_001 I_001 S_001
+/addspore T-01 dupe  
+/addinsect E-01 T-01 1 2 100 2 
+/eatsp E-01 I-01 S-01

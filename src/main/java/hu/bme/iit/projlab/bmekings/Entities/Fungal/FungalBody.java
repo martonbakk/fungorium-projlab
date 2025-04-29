@@ -83,6 +83,10 @@ public class FungalBody extends Entity {
         this.callNum = 0;
     }
 
+    public Queue<SporeInterface> getSpores(){
+        return spores;
+    }
+
     @Loggable
     public int getCurrLvl() { return currLevel; }
 

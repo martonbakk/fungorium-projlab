@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.time.temporal.TemporalField;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Scanner;
@@ -24,6 +25,7 @@ import hu.bme.iit.projlab.bmekings.Entities.Spore.Spore;
 import hu.bme.iit.projlab.bmekings.Entities.Spore.StunSpore;
 import hu.bme.iit.projlab.bmekings.Interface.SporeInterface.SporeInterface;
 import hu.bme.iit.projlab.bmekings.Logic.GameLogic.GameLogic;
+import hu.bme.iit.projlab.bmekings.Map.Map;
 import hu.bme.iit.projlab.bmekings.Map.Tecton.HyphalPreserverTecton;
 import hu.bme.iit.projlab.bmekings.Map.Tecton.NoFungusTecton;
 import hu.bme.iit.projlab.bmekings.Map.Tecton.Tecton;
@@ -173,17 +175,16 @@ public class Program {
     }
 
     
+
+    
     // ● [string]: torlendo Spore id-je
     private static void deleteSpore(String[] splitInput){
         if (splitInput.length < 2) return;
-
-        Spore spore = null;
-
-        gameLogic.map.getSpores()
-        gameLogic.map.
-        for (Tecton tc : mycologistPlayers) {
-            if (m.getPlayerID().equals(splitInput[1])) {
-                player = m;
+  
+        for (Tecton tc : gameLogic.map.getAllTectons()) {
+            for (SporeInterface s : tc.getSpores())
+            if (s.getId().equals(splitInput[1])) {
+                s.destroySpore();
             }
         }
     }
@@ -647,9 +648,13 @@ public class Program {
             return;
         }
 
-        // TODO
+        FungalBody fung;
 
-        player.SelectAction(4, params);
+        for(FungalBody fungbod: player.getControlledFunguses())
+            if(splitInput[2].equals(fungbod.getId()))
+                fung=fungbod;
+
+        player.SelectAction(5, params);
     }
     
     // ● [string]: a játékos id-je
@@ -691,6 +696,11 @@ public class Program {
     // ● [string]: a rovar id-je
     // ● [string]: a tekton id-je
     private static void move(String[] splitInput) {
+        if (splitInput.length < 4) {
+            System.out.println("Tul keves parameter!");
+            return;
+        }
+
         Entomologist player = null;
 
         for (Entomologist m : entomologistPlayers) {
@@ -716,16 +726,14 @@ public class Program {
         baseTecton = insect.getBase();
 
         for (Tecton t : gameLogic.map.getAllTectons()) {
-            if (t.getId().equals(splitInput[1])) 
+            if (t.getId().equals(splitInput[3])) 
                 targetTecton = t;
         }
 
-        if(baseTecton.getConnectedNeighbours().contains(targetTecton)
-
-        
-                
+        insect.move(targetTecton);                 
         
     }
+
     
     // ● [string]: a játékos id-je
     // ● [string]: a rovar id-je
@@ -764,10 +772,7 @@ public class Program {
             return;
             }
         
-        eaterInsect.eatSpore(spore);
-        
-        
-        
+        eaterInsect.eatSpore();
     }
     
     // ● [string]: a játékos id-je
@@ -809,9 +814,11 @@ public class Program {
         Hyphal hyphal = null;
 
         // Find the Hyphal by ID
-        foreach (var item in insect.getBase().getNeighbours()) {
-            if(item.getValue().equals(splitInput[2])){
-                hyphal = item.getValue();
+        for (int i=0; i< gameLogic.map.getAllTectons().size(); i++){
+            for (Hyphal h : gameLogic.map.getAllTectons().get(i).getConnectedNeighbors().get(insect.getBase())) {
+                if (h.getId().equals(splitInput[2])) {
+                    hyphal = h;
+                }
             }
         }
     
@@ -866,9 +873,11 @@ public class Program {
 
         Hyphal hyphal = null;
 
-        for (Hyphal h : player.getHyphalList()) {
-            if (h.getId().equals(splitInput[3])) {
-                hyphal = h;
+       for (int i=0; i< gameLogic.map.getAllTectons().size(); i++){
+            for (Hyphal h : gameLogic.map.getAllTectons().get(i).getConnectedNeighbors().get(insect.getBase())) {
+                if (h.getId().equals(splitInput[2])) {
+                    hyphal = h;
+                }
             }
         }
 
@@ -876,8 +885,8 @@ public class Program {
             System.out.println("Nincs ilyen fonal!");
             return;
         }
-
-        player.cutHyphal(hyphal, insect);
+        params.selectedHyphal = hyphal;
+        player.SelectAction(5, params);
     }
 
     
@@ -901,7 +910,7 @@ public class Program {
             return;
         }
 
-        tecton.splitTecton();
+        gameLogic.map.splitTecton(tecton);
     }
 
     private static void tick() {
@@ -909,7 +918,7 @@ public class Program {
     }
 
 
-    private static void tick() {
+    private static void Tick() {
         gameLogic.tick();
     }
 
@@ -963,13 +972,12 @@ public class Program {
     
     // /setInsect E-01 I-01 -flag [érték]
     private static void setInsect(String[] splitInput) {
-        if (spliitInput.length < 5) {
+        if (splitInput.length < 5) {
             System.out.println("Túl kevés paraméter!");
             return;
         }
-      
+
         
-    
     }
 
     // --------------TECTON----------------
@@ -1117,168 +1125,284 @@ public class Program {
     }
 
     // ● [string]: a kimenetet tároló fájl neve
-    private static void save(String[] splitInput) {
+    private static void load(String[] splitInput) {
         if (splitInput.length < 2) {
-            System.out.println("Túl kevés paraméter! Használat: /save [fájlnév]");
-            return;
+        System.out.println("Túl kevés paraméter! Használat: /load [fájlnév]");
+        return;
+    }
+
+    String fileName = splitInput[1];
+    try {
+        // Jelenlegi állapot törlése
+        entomologistPlayers.clear();
+        mycologistPlayers.clear();
+        if (gameLogic != null) {
+            gameLogic = null; // Kihagyjuk az inicializálást a StackOverflowError elkerülése érdekében
         }
 
-        String fileName = splitInput[1];
+        // Ideiglenes tárolók
+        HashMap<String, Tecton> tectonMap = new HashMap<>();
+        HashMap<String, FungalBody> fungalBodyMap = new HashMap<>();
+        HashMap<String, Entomologist> entomologistMap = new HashMap<>();
+        HashMap<String, Mycologist> mycologistMap = new HashMap<>();
+
+        // Fájl beolvasása
+        String content = Files.readString(Paths.get(fileName));
+        String[] lines = content.split("\n");
+
+        // Objektumok létrehozása
+        for (String line : lines) {
+            if (line.trim().isEmpty()) continue;
+            String[] parts = line.split(":");
+            if (parts.length < 2) continue;
+
+            switch (parts[0]) {
+                case "Entomologist":
+                    Entomologist e = new Entomologist(parts[1]);
+                    entomologistPlayers.add(e);
+                    entomologistMap.put(parts[1], e);
+                    break;
+
+                case "Insect":
+                    Entomologist entomologist = entomologistMap.get(parts[2]);
+                    if (entomologist != null) {
+                        Insect insect = new Insect(Integer.parseInt(parts[3]), Integer.parseInt(parts[4]),Integer.parseInt(parts[5]), Integer.parseInt(parts[6]),0 ,tectonMap.get(parts[2]), entomologist);
+                        entomologist.addInsect(insect);
+                    }
+                    break;
+
+                case "Mycologist":
+                    Mycologist m = new Mycologist(parts[1]);
+                    mycologistPlayers.add(m);
+                    mycologistMap.put(parts[1], m);
+                    break;
+
+                case "FungalBody":
+                    Mycologist mycologist = mycologistMap.get(parts[2]);
+                    if (mycologist != null) {
+                        TypeCharacteristics characteristics = new TypeCharacteristics(
+                            Integer.parseInt(parts[6]), // shootingRange
+                            Integer.parseInt(parts[7]), // sporeProductionIntensity
+                            Integer.parseInt(parts[8]), // startingHyphalNum
+                            Integer.parseInt(parts[9])  // sporeCapacity
+                        );
+                        FungalBody fb = new FungalBody(
+                            Integer.parseInt(parts[4]), // currLevel
+                            Integer.parseInt(parts[5]), // shotSporesNum
+                            characteristics,
+                            tectonMap.getOrDefault(parts[3], null),
+                            mycologist
+                        );
+                        mycologist.addFungus(fb);
+                        fungalBodyMap.put(parts[1], fb);
+                    }
+                    break;
+
+                case "Hyphal":
+                    Mycologist hyphalOwner = mycologistMap.get(parts[2]);
+                    if (hyphalOwner != null) {
+                        Hyphal h = new Hyphal(
+                            tectonMap.getOrDefault(parts[4], null), // connectedTecton
+                            Boolean.parseBoolean(parts[5]), // developed
+                            Integer.parseInt(parts[6]), // developTime
+                            Integer.parseInt(parts[7]), // lifeTime
+                            Integer.parseInt(parts[8]), // cutTime
+                            tectonMap.getOrDefault(parts[3], null), // baseLocation
+                            hyphalOwner
+                        );
+                        hyphalOwner.addHyphal(h);
+                        GameLogic.addEntity(h);
+                    }
+                    break;
+
+                case "Spore":
+                    Mycologist sporeMycologist = mycologistMap.get(parts[2]);
+                    if (sporeMycologist != null) {
+                        SporeInterface s = createSpore(parts[5], parts[1], tectonMap.getOrDefault(parts[3], null));
+                        ((Spore)s).setNutritionalValue(Integer.parseInt(parts[4]));
+                        if (s.getBaseLocation() != null) {
+                            s.getBaseLocation().addSpore(s);
+                        }
+                    }
+                    break;
+
+                case "Tecton":
+                    Tecton t = new Tecton();
+                    t.setSplitChance(Double.parseDouble(parts[2]));
+                    t.setOccupiedByFungus(Boolean.parseBoolean(parts[4]));
+                    t.getFlag().fungalApproved = Boolean.parseBoolean(parts[5]);
+                    t.getFlag().hyphalApproved = Boolean.parseBoolean(parts[6]);
+                    t.getFlag().oneHyphalApproved = Boolean.parseBoolean(parts[7]);
+                    tectonMap.put(parts[1], t);
+                    if (gameLogic != null && gameLogic.map != null) {
+                        gameLogic.map.addTecton(t);
+                    }
+                    break;
+
+                case "TestFungalBody":
+                    TypeCharacteristics testCharacteristics = new TypeCharacteristics(
+                        Integer.parseInt(parts[5]), // shootingRange
+                        Integer.parseInt(parts[6]), // sporeProductionIntensity
+                        Integer.parseInt(parts[7]), // startingHyphalNum
+                        Integer.parseInt(parts[8])  // sporeCapacity
+                    );
+                    fungus = new FungalBody(
+                        Integer.parseInt(parts[3]), // currLevel
+                        Integer.parseInt(parts[4]), // shotSporesNum
+                        testCharacteristics,
+                        tectonMap.getOrDefault(parts[2], null),
+                        null // Nincs owner a teszt objektumnak
+                    );
+                    break;
+
+                case "TestSpore":
+                    spore = createSpore(parts[4], parts[1], tectonMap.getOrDefault(parts[2], null));
+                    ((Spore)spore).setNutritionalValue(Integer.parseInt(parts[3]));
+                    break;
+            }
+        }
+
+        System.out.println("Játékállapot betöltve: " + fileName);
+    } catch (IOException e) {
+        System.out.println("Hiba a betöltés során: " + e.getMessage());
+    } catch (Exception e) {
+        System.out.println("Érvénytelen fájlformátum: " + e.getMessage());
+    }
+    }
+    private static SporeInterface createSpore(String type, String id, Tecton baseLocation) {
+        SporeInterface spore;
+        switch (type) {
+            case "SlowSpore":
+                spore = new SlowSpore(id, baseLocation);
+                break;
+            case "NormalSpore":
+                spore = new NormalSpore(id, baseLocation);
+                break;
+            case "DuplicateSpore":
+                spore = new DuplicateSpore(id, baseLocation);
+                break;
+            case "HungerSpore":
+                spore = new HungerSpore(id, baseLocation);
+                break;
+            case "SpeedSpore":
+                spore = new SpeedSpore(id, baseLocation);
+                break;
+            case "StunSpore":
+                spore = new StunSpore(id, baseLocation);
+                break;
+            default:
+                spore = new NormalSpore(id, baseLocation); // Alapértelmezett típus
+                break;
+        }
+        return spore;
+    }
+
+    private static Entomologist findEntomologist(String id) {
+    for (Entomologist e : entomologistPlayers) {
+            if (e.getPlayerID().equals(id)) {
+                return e;
+            }
+        }
+        return null;
+    }
+
+    private static Mycologist findMycologist(String id) {
+        for (Mycologist m : mycologistPlayers) {
+            if (m.getPlayerID().equals(id)) {
+                return m;
+            }
+        }
+        return null;
+    }
+
+    // ● [string]: a bemenetet tároló fájl neve
+    private static void save(String[] splitInput) {
+        if (splitInput.length < 2) {
+        System.out.println("Túl kevés paraméter! Használat: /save [fájlnév]");
+        return;
+    }
+
+    String fileName = splitInput[1];
         try (PrintWriter writer = new PrintWriter(new FileWriter(fileName))) {
             // Entomológusok és rovarok mentése
             for (Entomologist e : entomologistPlayers) {
                 writer.println("Entomologist:" + e.getPlayerID());
                 for (Insect i : e.getControlledInsects()) {
-                    writer.println("Insect:" + i.getId() + ":" + (i.getBase() != null ? i.getBase().getId() : "null") +
-                            ":" + i.getMovingSpeed() + ":" + i.getMovingCD() + ":" + i.getStomachLimit() + ":" + i.getCutCooldown());
+                    writer.println("Insect:" + i.getId() + ":" + 
+                            (i.getBase() != null ? i.getBase().getId() : "null") + ":" + 
+                            i.getMovingSpeed() + ":" + i.getMovingCD() + ":" + 
+                            i.getStomachLimit() + ":" + i.getCutCooldown());
                 }
             }
 
             // Mikológusok, gombák, fonalak, spórák mentése
             for (Mycologist m : mycologistPlayers) {
                 writer.println("Mycologist:" + m.getPlayerID());
-                for (FungalBody fb : m.getControlledFungalBodies()) {
+                for (FungalBody fb : m.getControlledFunguses()) {
                     writer.println("FungalBody:" + fb.getId() + ":" + m.getPlayerID() + ":" +
-                            (fb.getBase() != null ? fb.getBase().getId() : "null"));
-                    for (Hyphal h : fb.getHyphals()) {
-                        writer.println("Hyphal:" + h.getId() + ":" + fb.getId() + ":" +
+                            (fb.getBase() != null ? fb.getBase().getId() : "null") + ":" +
+                            fb.getCurrLvl() + ":" + fb.getShotSporesNum() + ":" +
+                            fb.getCharacteristics().shootingRange + ":" +
+                            fb.getCharacteristics().sporeProductionIntensity + ":" +
+                            fb.getCharacteristics().startingHyphalNum + ":" +
+                            fb.getCharacteristics().sporeCapacity);
+                    for (Hyphal h : m.getHyphalList()) { // Mycologist.getHyphalList() használata
+                        writer.println("Hyphal:" + h.getId() + ":" + 
+                                (fb.getBase() != null ? fb.getId() : "null") + ":" +
                                 (h.getBase() != null ? h.getBase().getId() : "null") + ":" +
-                                (h.getTarget() != null ? h.getTarget().getId() : "null"));
+                                (h.getConnectedTecton() != null ? h.getConnectedTecton().getId() : "null") + ":" +
+                                h.getDeveloped() + ":" + h.getDevelopTime() + ":" +
+                                h.getLifeTime() + ":" + h.getCutTime());
                     }
                 }
-                for (SporeInterface s : m.getControlledSpores()) {
+                for(int index=0;index<m.getControlledFunguses().size();index++){
+                    for (SporeInterface s : m.getControlledFunguses().get(index).getSpores()) {
+                    String sporeType = getSporeType(s);
                     writer.println("Spore:" + s.getId() + ":" + m.getPlayerID() + ":" +
-                            (s.getBase() != null ? s.getBase().getId() : "null"));
+                            (s.getBaseLocation() != null ? s.getBaseLocation().getId() : "null") + ":" +
+                            ((Spore)s).getNutritionValue() + ":" + sporeType);
+                    }
                 }
+
             }
 
             // Tektonok mentése
             if (gameLogic != null && gameLogic.map != null) {
                 for (Tecton t : gameLogic.map.getAllTectons()) {
-                    writer.println("Tecton:" + t.getId() + ":" + t.getType());
+                    writer.println("Tecton:" + t.getId() + ":" + t.getSplitChance() + ":" +
+                            t.isOccupiedByInsect() + ":" + t.isOccupiedByFungus() + ":" +
+                            t.getFlag().fungalApproved + ":" + t.getFlag().hyphalApproved + ":" +
+                            t.getFlag().oneHyphalApproved);
                 }
             }
 
             // Teszt objektumok mentése
             writer.println("TestFungalBody:" + fungus.getId() + ":" +
-                    (fungus.getBase() != null ? fungus.getBase().getId() : "null"));
+                    (fungus.getBase() != null ? fungus.getBase().getId() : "null") + ":" +
+                    fungus.getCurrLvl() + ":" + fungus.getShotSporesNum() + ":" +
+                    fungus.getCharacteristics().shootingRange + ":" +
+                    fungus.getCharacteristics().sporeProductionIntensity + ":" +
+                    fungus.getCharacteristics().startingHyphalNum + ":" +
+                    fungus.getCharacteristics().sporeCapacity);
             writer.println("TestSpore:" + spore.getId() + ":" +
-                    (spore.getBase() != null ? spore.getBase().getId() : "null"));
+                    (spore.getBaseLocation() != null ? spore.getBaseLocation().getId() : "null") + ":" +
+                    ((Spore)spore).getNutritionValue() + ":" + getSporeType(spore));
 
-            System.out.println("Játékállapot mentve: " + fileName);
+            System.out.println("Jatekallapot mentve: " + fileName);
         } catch (IOException e) {
-            System.out.println("Hiba a mentés során: " + e.getMessage());
-        }
-        catch (Exception e) {
-            System.out.println("Érvénytelen fájlformátum: " + e.getMessage());
+            System.out.println("Hiba a mentes soran: " + e.getMessage());
         }
     }
 
-
-    // ● [string]: a bemenetet tároló fájl neve
-    private static void load(String[] splitInput) {
-        if (splitInput.length < 2) {
-            System.out.println("Túl kevés paraméter! Használat: /load [fájlnév]");
-            return;
-        }
-
-        String fileName = splitInput[1];
-        try {
-            // Jelenlegi állapot törlése
-            entomologistPlayers.clear();
-            mycologistPlayers.clear();
-            if (gameLogic != null) {
-                gameLogic = new GameLogic(1000, 2); // Új GameLogic inicializálása
-            }
-
-            // Ideiglenes tárolók a tektonok és más objektumok számára
-            Map<String, Tecton> tectonMap = new HashMap<>();
-            Map<String, FungalBody> fungalBodyMap = new HashMap<>();
-
-            // Fájl beolvasása
-            String content = Files.readString(Paths.get(fileName));
-            String[] lines = content.split("\n");
-
-            // Objektumok létrehozása
-            for (String line : lines) {
-                if (line.trim().isEmpty()) continue;
-                String[] parts = line.split(":");
-                if (parts.length < 2) continue;
-
-                switch (parts[0]) {
-                    case "Entomologist":
-                        Entomologist e = new Entomologist(parts[1]);
-                        entomologistPlayers.add(e);
-                        break;
-
-                    case "Insect":
-                        Entomologist entomologist = findEntomologist(parts[2]);
-                        if (entomologist != null) {
-                            Insect insect = new Insect(parts[1], tectonMap.getOrDefault(parts[2], null));
-                            insect.setMovingSpeed(Integer.parseInt(parts[3]));
-                            insect.setMovingCD(Integer.parseInt(parts[4]));
-                            insect.setStomachLimit(Integer.parseInt(parts[5]));
-                            insect.setCutCooldown(Integer.parseInt(parts[6]));
-                            entomologist.addInsect(insect);
-                        }
-                        break;
-
-                    case "Mycologist":
-                        Mycologist m = new Mycologist(parts[1]);
-                        mycologistPlayers.add(m);
-                        break;
-
-                    case "FungalBody":
-                        Mycologist mycologist = findMycologist(parts[2]);
-                        if (mycologist != null) {
-                            FungalBody fb = new FungalBody(parts[1], tectonMap.getOrDefault(parts[3], null));
-                            mycologist.addFungalBody(fb);
-                            fungalBodyMap.put(parts[1], fb);
-                        }
-                        break;
-
-                    case "Hyphal":
-                        FungalBody fb = fungalBodyMap.get(parts[2]);
-                        if (fb != null) {
-                            Hyphal h = new Hyphal(parts[1], tectonMap.getOrDefault(parts[3], null),
-                                    tectonMap.getOrDefault(parts[4], null));
-                            fb.addHyphal(h);
-                        }
-                        break;
-
-                    case "Spore":
-                        Mycologist sporeMycologist = findMycologist(parts[2]);
-                        if (sporeMycologist != null) {
-                            SporeInterface s = new SlowSpore(parts[1], tectonMap.getOrDefault(parts[3], null));
-                            sporeMycologist.addSpore(s);
-                        }
-                        break;
-
-                    case "Tecton":
-                        Tecton t = new Tecton(parts[1], parts[2]);
-                        tectonMap.put(parts[1], t);
-                        if (gameLogic != null && gameLogic.map != null) {
-                            gameLogic.map.addTecton(t);
-                        }
-                        break;
-
-                    case "TestFungalBody":
-                        fungus = new FungalBody(parts[1], tectonMap.getOrDefault(parts[2], null));
-                        break;
-
-                    case "TestSpore":
-                        spore = new SlowSpore(parts[1], tectonMap.getOrDefault(parts[2], null));
-                        break;
-                }
-            }
-
-            System.out.println("Játékállapot betöltve: " + fileName);
-        } catch (IOException e) {
-            System.out.println("Hiba a betöltés során: " + e.getMessage());
-        } catch (Exception e) {
-            System.out.println("Érvénytelen fájlformátum: " + e.getMessage());
-        }
-    }
+    private static String getSporeType(SporeInterface spore) {
+        if (spore instanceof SlowSpore) return "SlowSpore";
+        if (spore instanceof NormalSpore) return "NormalSpore";
+        if (spore instanceof DuplicateSpore) return "DuplicateSpore";
+        if (spore instanceof HungerSpore) return "HungerSpore";
+        if (spore instanceof SpeedSpore) return "SpeedSpore";
+        if (spore instanceof StunSpore) return "StunSpore";
+    return "UnknownSpore";
+}
 
     // ● [string]: a példányok típusa, értéke lehet:
     // ○ e: entitások
@@ -1323,7 +1447,7 @@ public class Program {
                         for (Tecton t : gameLogic.map.getAllTectons()) {
                             for (SporeInterface sp : t.getSpores()) {
                                 System.out.println("ID: " + sp.getId());
-                                System.out.println("BaseLocation: " + sp.getBase());
+                                System.out.println("BaseLocation: " + sp.getBaseLocation());
                                 System.out.println("NutritionalValue: " + sp.getNutritionValue());
                                 System.out.println("Class: " + sp.getClass());
                             }
@@ -1395,7 +1519,7 @@ public class Program {
                     for (Tecton t : gameLogic.map.getAllTectons()) {
                         for (SporeInterface sp : t.getSpores()) {
                             System.out.println("ID: " + sp.getId());
-                            System.out.println("BaseLocation: " + sp.getBase().getId());
+                            System.out.println("BaseLocation: " + sp.getBaseLocation().getId());
                         }
                     }
                     break;

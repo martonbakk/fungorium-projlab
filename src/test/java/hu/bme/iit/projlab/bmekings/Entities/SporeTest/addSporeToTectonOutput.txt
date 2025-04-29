@@ -1,0 +1,4 @@
+Uj objektum [E-10] hozzaadva!
+Uj objektum [M-10] hozzaadva!
+Rossz input!
+Rossz input!

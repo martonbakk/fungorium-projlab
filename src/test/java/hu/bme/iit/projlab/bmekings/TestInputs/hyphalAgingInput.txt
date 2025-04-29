@@ -1,1 +1,4 @@
-/addhyphal H_007 -t T_001 -d true -lt 1
+/addtecton normal  
+/addtecton normal  
+/addhyphal M-01 T-01 T-02
+/tick

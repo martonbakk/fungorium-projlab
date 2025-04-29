@@ -1,3 +1,5 @@
-/addfungus FB_001 -t T_001 -l 1  
-/addhyphal H_006 -t T_001 -d true -lt 5  
-/sethyphal H_006 -lt 10
+/addtecton normal 
+/addtecton normal 
+/addFungalBody M-01 T-01 1 0 
+/growh M-01 FB-01 T-02
+/tick

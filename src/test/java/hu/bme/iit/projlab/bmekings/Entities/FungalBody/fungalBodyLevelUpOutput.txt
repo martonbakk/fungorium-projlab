@@ -1,0 +1,4 @@
+Uj objektum [E-02] hozzaadva!
+Uj objektum [M-02] hozzaadva!
+Rossz input!
+Nincs ilyen Tekton!

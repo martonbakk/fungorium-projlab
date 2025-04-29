@@ -1,4 +1,4 @@
-/addtecton T_001 -t normal  
-/addspore SP_008 -t hunger  
-/addinsect I_008 -t T_001 -sl 100  
-/eatsp I_008 SP_008
+/addtecton normal  
+/addspore T-01 hunger  
+/addinsect E-01 T-01 1 2 100 2 
+/eatsp E-01 I-01 S-01

@@ -22,6 +22,13 @@ public class StunSpore extends Spore {
     }
 
     /**
+     * A StunSpore osztály konstruktora.
+     * Meghívja az ősosztály konstruktorát, és kiírja a konzolra, hogy egy új StunSpore objektum jött létre.
+     */
+    public StunSpore(String id, Tecton baseLocation) {
+        super(id, baseLocation);
+    }
+    /**
      * Aktiválja a spóra bénító hatását.
      * A metódus egy adott időtartamra megállítja a rovart, amely elfogyasztotta a spórát,
      * és kiírja a konzolra, hogy a hatás aktiválódott.

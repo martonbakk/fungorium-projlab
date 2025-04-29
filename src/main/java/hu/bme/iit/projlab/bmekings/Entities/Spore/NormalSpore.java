@@ -19,6 +19,9 @@ public class NormalSpore extends Spore {
         super(baseLocation);
     }
 
+    public NormalSpore(String id, Tecton baseLocation) {
+        super(id, baseLocation);
+    }
     @Override
     public void activateEffect(Insect targetInsect) {
     }

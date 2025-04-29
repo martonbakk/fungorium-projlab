@@ -19,6 +19,9 @@ public class HyphalProtectorSpore extends Spore {
         super(baseLocation);
     }
 
+    public HyphalProtectorSpore(String id, Tecton baseLocation) {
+        super(id, baseLocation);
+    }
     @Override
     public void activateEffect(Insect targInsect) {
         //targInsect.increaseHyphalCoolDown(10);

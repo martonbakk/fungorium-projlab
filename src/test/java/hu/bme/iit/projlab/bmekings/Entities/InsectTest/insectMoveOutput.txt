@@ -1,0 +1,6 @@
+Uj objektum [E-06] hozzaadva!
+Uj objektum [M-06] hozzaadva!
+Rossz input!
+Rossz input!
+Rossz input!
+Tul keves parameter!

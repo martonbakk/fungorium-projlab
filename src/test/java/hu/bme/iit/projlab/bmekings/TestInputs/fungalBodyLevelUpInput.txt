@@ -1,4 +1,5 @@
-/addfungus FB_001 -t T_001 -l 1 -s 3  
-/levelup FB_001  
-/levelup FB_001  
-/levelup FB_001
+/addtecton normal 
+/addFungalBody M-01 T-01 1 0 
+/levelup M-01 FB-01  
+/levelup M-01 FB-01  
+/levelup M-01 FB-01

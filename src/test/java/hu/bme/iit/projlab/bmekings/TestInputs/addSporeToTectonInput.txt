@@ -1,2 +1,2 @@
 /addtecton normal  
-/addspore T_001 dupe
+/addspore T-01 dupe

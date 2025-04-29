@@ -18,6 +18,10 @@ public class HungerSpore extends Spore {
         super(baseLocation);
     }
 
+    public HungerSpore(String id, Tecton baseLocation) {
+        super(id, baseLocation);
+    }
+
     @Override
     public void activateEffect(Insect targetInsect) {}
 

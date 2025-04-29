@@ -1,5 +1,7 @@
-/addtecton T_001 -t normal
-/addtecton T_002 -t normal
-/addinsect I_001 -t T_001 -ms 2 -mcd 5  
-/addhyphal H_001 -t T_002 -d true
-/eatinsect H_001 I_001
+/addtecton normal
+/addtecton normal
+/addinsect E-01 T-01 1 2 100 2 
+/addhyphal M-01 T-01 T-02
+/addspore T-01 stun
+/eatsp E-01 I-01 S-01
+/eatinsect M-01 H-01 I-01

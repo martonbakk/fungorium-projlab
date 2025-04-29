@@ -1,4 +1,4 @@
 /addtecton normal  
 /addtecton normal  
-/addFungalBody M_001 T_001 1 0  
-/growh M_001 T_002
+/addFungalBody M-01 T-01 1 0  
+/growh M-01 FB-01 T-02

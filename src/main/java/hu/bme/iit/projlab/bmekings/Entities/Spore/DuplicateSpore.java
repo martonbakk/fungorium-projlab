@@ -17,6 +17,10 @@ public class DuplicateSpore extends Spore {
         super(baseLocation);
     }
 
+    public DuplicateSpore(String id, Tecton baseLocation) {
+        super(id, baseLocation);
+    }
+    
     @Override
     public void activateEffect(Insect targetInsect) {
         Insect newInsect=new Insect(targetInsect);

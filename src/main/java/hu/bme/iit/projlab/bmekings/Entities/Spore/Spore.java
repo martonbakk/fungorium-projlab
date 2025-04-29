@@ -35,6 +35,12 @@ public abstract class Spore extends Entity implements SporeInterface {
         nutritionValue = randomNumber;
     }
 
+    public Spore(String id, Tecton baseLocation) {
+        super(id, baseLocation);
+        int randomNumber = rand.nextInt(50) + 1;
+        nutritionValue = randomNumber;
+    }
+
     public String getId() { return id; }
 
     public Tecton getBaseLocation() { return baseLocation; }

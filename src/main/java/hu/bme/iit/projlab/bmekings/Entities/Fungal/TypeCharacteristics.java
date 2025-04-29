@@ -4,10 +4,6 @@ import hu.bme.iit.projlab.bmekings.Logger.Loggable;
 
 @Loggable("TypeCharacteristics")
 public class TypeCharacteristics{
-    int shootingRange;
-    int sporeProductionIntensity;
-    int startingHyphalNum;
-    int sporeCapacity;
 
 
     public TypeCharacteristics(){
@@ -25,6 +21,11 @@ public class TypeCharacteristics{
         this.sporeCapacity = sporeCapacity;
     }
 
+    public int shootingRange;
+    public int sporeProductionIntensity;
+    public int startingHyphalNum;
+    public int sporeCapacity;
+    
     @Loggable
     public int getShootingRange() { return shootingRange; }
     
@@ -36,4 +37,6 @@ public class TypeCharacteristics{
    
     @Loggable
     public int getSporeCapacity() { return sporeCapacity; }
+
+    
 }

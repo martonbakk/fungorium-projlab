@@ -22,6 +22,11 @@ public class Mycologist extends Player{
     
     // Fungus type lekezelese hianyzik
 
+    public Mycologist(String id) {
+        super(id);
+        System.out.println("Uj objektum [" + getPlayerID() + "] hozzaadva!");
+    }
+
     public Mycologist() {
         super(IDGenerator.generateID("M"));
         this.controlledFunguses = new ArrayList<>();

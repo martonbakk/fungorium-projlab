@@ -1,3 +1,4 @@
-/addfungus FB_003 -t T_001 -l 2  
-/addtecton T_011 -t normal  
-/shootsp FB_003 T_011
+/addtecton normal 
+/addtecton normal 
+/addFungalBody M-01 T-01 1 0 
+/shootsp M-01 FB-01 T-01 T-02
