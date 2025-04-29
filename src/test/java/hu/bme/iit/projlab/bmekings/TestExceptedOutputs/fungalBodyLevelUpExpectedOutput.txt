@@ -1,0 +1,4 @@
+Uj objektum [E-01] hozzaadva!
+Uj objektum [M-01] hozzaadva!
+Uj objektum [T-01] letrejott!
+Uj objektum [FB-01] letrejott!

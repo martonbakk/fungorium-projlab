@@ -2,10 +2,21 @@ package hu.bme.iit.projlab.bmekings.Entities.InsectTest;
 
 import java.io.IOException;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+
+import hu.bme.iit.projlab.bmekings.Logic.IDGenerator.IDGenerator;
+import hu.bme.iit.projlab.bmekings.Program.Program;
 import hu.bme.iit.projlab.bmekings.TestHelper;
 
 class InsectTest {
+    @BeforeEach
+    void setUp() throws Exception {
+        Program.initBasePlayers();
+        Program.gameLogic.startGame();
+        IDGenerator.reset();
+    }
+
 
     @Test
     void insectMove()  throws IOException{

@@ -1,5 +1,2 @@
-Uj objektum [E-03] hozzaadva!
-Uj objektum [M-03] hozzaadva!
-Rossz input!
-Rossz input!
-Rossz input!
+Uj objektum [T-01] letrejott!
+Uj objektum [T-02] letrejott!

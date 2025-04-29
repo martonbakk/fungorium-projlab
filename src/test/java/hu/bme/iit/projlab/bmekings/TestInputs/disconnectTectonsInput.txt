@@ -1,4 +1,5 @@
-/addtecton normal  
-/addtecton normal  
-/addhyphal M-01 T-001 T-02
-/cuthyphal H-01
+/addTecton normal  
+/addTecton normal  
+/addHyphal M-01 T-01 T-02
+/addInsect E-01 T-01
+/cuthyphal E-01 I-01 H-01

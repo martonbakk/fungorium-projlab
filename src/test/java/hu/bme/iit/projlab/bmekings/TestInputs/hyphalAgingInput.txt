@@ -1,4 +1,4 @@
-/addtecton normal  
-/addtecton normal  
-/addhyphal M-01 T-01 T-02
+/addTecton normal  
+/addTecton normal  
+/addHyphal M-01 T-01 T-02
 /tick

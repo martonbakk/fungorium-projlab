@@ -1,4 +1,0 @@
-/addtecton normal  
-/addspore T-01 hyphalp  
-/addinsect E-01 T-01 1 2 100 2 
-/eatsp E-01 I-01 S-01

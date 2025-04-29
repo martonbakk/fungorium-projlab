@@ -1,5 +1,3 @@
-Uj objektum [E-09] hozzaadva!
-Uj objektum [M-09] hozzaadva!
-Rossz input!
-Rossz input!
-Rossz input!
+Uj objektum [T-01] letrejott!
+Uj objektum [SP-01] letrejott!
+Nincs ilyen rovar!

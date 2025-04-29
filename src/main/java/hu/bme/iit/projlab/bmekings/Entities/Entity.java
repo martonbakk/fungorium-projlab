@@ -10,7 +10,7 @@ import hu.bme.iit.projlab.bmekings.Map.Tecton.Tecton;
 public abstract class Entity implements Listener {
 
     protected String id;
-    protected Tecton baseLocation;
+    protected Tecton baseLocation=null;
 
     public Entity() {
         this.id="";

@@ -2,16 +2,27 @@ package hu.bme.iit.projlab.bmekings.Entities.SporeTest;
 
 import java.io.IOException;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+
+import hu.bme.iit.projlab.bmekings.Logic.IDGenerator.IDGenerator;
+import hu.bme.iit.projlab.bmekings.Program.Program;
 import hu.bme.iit.projlab.bmekings.TestHelper;
 
 class SporeTest {
- 
+    @BeforeEach
+    void setUp() throws Exception {
+        Program.initBasePlayers();
+        Program.gameLogic.startGame();
+        IDGenerator.reset();
+    }
+
+
     @Test
     void decreaseSporeFromTect()  throws IOException{
         TestHelper.runTest(
            "src/test/java/hu/bme/iit/projlab/bmekings/TestInputs/DecreaseSporeFromTectInput.txt",
-           "src/test/java/hu/bme/iit/projlab/bmekings/TestExceptedOutputs/DecreaseSporeFromTectOutput.txt",
+           "src/test/java/hu/bme/iit/projlab/bmekings/TestExceptedOutputs/DecreaseSporeFromTectExpectedOutput.txt",
            "src/test/java/hu/bme/iit/projlab/bmekings/Entities/SporeTest/decreaseSporeFromTectOutput.txt"
         );
     }
@@ -49,7 +60,7 @@ class SporeTest {
         TestHelper.runTest(
             "src/test/java/hu/bme/iit/projlab/bmekings/TestInputs/SpeedSporeSpecialEffectInput.txt",
             "src/test/java/hu/bme/iit/projlab/bmekings/TestExceptedOutputs/SpeedSporeSpecialEffectExpectedOutput.txt",
-            "src/test/java/hu/bme/iit/projlab/bmekings/TestExceptedOutputs/SpeedSporeSpecialEffectOutput.txt.txt"
+            "src/test/java/hu/bme/iit/projlab/bmekings/Entities/SpeedSporeSpecialEffectOutput.txt.txt"
         );
     }
 

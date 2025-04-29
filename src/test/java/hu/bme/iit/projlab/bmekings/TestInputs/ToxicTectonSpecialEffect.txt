@@ -1,2 +1,0 @@
-/addtecton T_007 -t toxic  
-/addhyphal H_002 -t T_007 -d true -lt 5

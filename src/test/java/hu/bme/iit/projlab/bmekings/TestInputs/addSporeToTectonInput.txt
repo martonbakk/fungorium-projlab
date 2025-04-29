@@ -1,2 +1,2 @@
-/addtecton normal  
-/addspore T-01 dupe
+/addTecton normal  
+/addSpore T-01 dupe

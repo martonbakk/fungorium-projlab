@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import hu.bme.iit.projlab.bmekings.Entities.Fungal.FungalBody;
 import hu.bme.iit.projlab.bmekings.Entities.Fungal.Hyphal;
+import hu.bme.iit.projlab.bmekings.Entities.Insect.Insect;
 import hu.bme.iit.projlab.bmekings.Interface.SporeInterface.SporeInterface;
 import hu.bme.iit.projlab.bmekings.Map.Tecton.Tecton;
 
@@ -16,4 +17,5 @@ public class Params {
     public Tecton selectedTecton;
     public ArrayList<SporeInterface> selectedSpores;
     public int sporeNum;
+    public Insect selectedInsect;
 }

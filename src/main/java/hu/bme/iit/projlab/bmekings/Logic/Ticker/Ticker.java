@@ -6,13 +6,12 @@ import java.util.List;
 import hu.bme.iit.projlab.bmekings.Interface.Listener.Listener;
 
 public class Ticker {
-    private final List<Listener> gameObList;
+    private final List<Listener> gameObList=new ArrayList<>();
     private final long intervalMillis;
-    private Thread tickerThread;
+    private Thread tickerThread = new Thread();
     private volatile boolean running;
 
     public Ticker(long intervalMillis) {
-        this.gameObList = new ArrayList<>();
         this.intervalMillis = intervalMillis;
         this.running = false;
     }

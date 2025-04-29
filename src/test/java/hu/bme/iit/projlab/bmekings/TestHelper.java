@@ -2,10 +2,10 @@ package hu.bme.iit.projlab.bmekings;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
-import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.PrintStream;
+import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 
@@ -55,9 +55,7 @@ public class TestHelper {
             // Input szimulálása
             System.setIn(new ByteArrayInputStream(input.getBytes()));
 
-            // Program inicializálása
-            Program.initBasePlayers();
-            Program.gameLogic.startGame();
+
 
             // Parancsok feldolgozása soronként
             String[] commands = input.split("\n");
@@ -75,9 +73,7 @@ public class TestHelper {
             Files.writeString(Paths.get(outputFilePath), actualOutput);
 
             // Kimenet ellenőrzése
-            assertEquals(expectedOutput.trim(), actualOutput.trim(), "A kimenet nem egyezik az elvárt kimenettel!");
-            Program.gameLogic=null;
-
+            assertEquals(expectedOutput.trim(), actualOutput.trim(), "A kimenet nem egyezik az elvart kimenettel!");
         } finally {
             // Eredeti System.out és System.in visszaállítása
             System.setOut(originalOut);

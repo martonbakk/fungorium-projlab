@@ -1,6 +1,4 @@
-/addtecton T_001 -t normal  
-/addspore SP_006 -t hyphalp  
-/addinsect I_006 -t T_001  
-/addhyphal H_008 -t T_001 -d true  
-/eatsp I_006 SP_006
-/cuthyphal I_006 H_008
+/addTecton normal  
+/addSpore T-01 hyphalp  
+/addInsect E-01 T-01
+/eatsp E-01 I-01 S-01

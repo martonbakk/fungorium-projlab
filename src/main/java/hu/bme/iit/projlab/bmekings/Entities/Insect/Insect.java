@@ -29,8 +29,8 @@ public class Insect extends Entity{
     private int currStomachFullness;
     private int cutCooldown;
     private int stunTime;
-    private Entomologist owner;
-    private HashMap<Effect, Integer> activeEffects;
+    private Entomologist owner=null;
+    private HashMap<Effect, Integer> activeEffects=new HashMap<>();
 
     @Loggable
     public void increaseMovingSpeed(int speed){
@@ -133,8 +133,6 @@ public class Insect extends Entity{
                 this.baseLocation=targetTecton;
             }
         }
-
-        
     }
 
     @Loggable

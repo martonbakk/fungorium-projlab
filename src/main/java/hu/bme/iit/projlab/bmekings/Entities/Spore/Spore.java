@@ -19,7 +19,7 @@ import hu.bme.iit.projlab.bmekings.Map.Tecton.Tecton;
 public abstract class Spore extends Entity implements SporeInterface {
 
     private int nutritionValue;
-    protected Tecton baseLocation;
+    protected Tecton baseLocation=null;
      private  Random rand = new Random();
 
 

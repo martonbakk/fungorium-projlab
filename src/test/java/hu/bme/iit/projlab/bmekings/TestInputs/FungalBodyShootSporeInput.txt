@@ -1,4 +1,4 @@
-/addtecton normal 
-/addtecton normal 
-/addFungalBody M-01 T-01 1 0 
+/addTecton normal 
+/addTecton normal 
+/addFungalBody M-01 T-01 -l 1 -s 0 
 /shootsp M-01 FB-01 T-01 T-02

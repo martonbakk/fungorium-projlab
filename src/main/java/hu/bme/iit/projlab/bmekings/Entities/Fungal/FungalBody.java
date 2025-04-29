@@ -36,7 +36,7 @@ public class FungalBody extends Entity {
     private Queue<SporeInterface> spores = new LinkedList<>();
     private int currLevel;              // jelenlegi szint 
     private int shotSporesNum;          // a kiloheto sporak szama
-    private TypeCharacteristics characteristics;
+    private TypeCharacteristics characteristics=new TypeCharacteristics(0, 0, 0, 0);
     private int callNum;                // hívasok száma, ugye a leveUpnal mindig 3 hívás egyenlő egy szintel (currLevel)
     private Mycologist owner;
 
@@ -45,8 +45,6 @@ public class FungalBody extends Entity {
         super();  
 
         //this.id=IDGenerator.generateID("FB");
-        this.characteristics = new TypeCharacteristics(0, 0, 0, 0);
-        this.spores = new LinkedList<>();
         this.currLevel = 1;
         this.shotSporesNum = 0;
         this.callNum = 0;
@@ -246,6 +244,8 @@ public class FungalBody extends Entity {
 
         for (Hyphal hyphal : hyphalSet) {
             hyphal.setLifeTime(3);
+            System.out.println("[" + hyphal.getId() + "] [life] megvaltozott:");
+            System.out.println("[" + hyphal.getLifeTime() + "] -> [" + 3 + "]");
         }
     }
 

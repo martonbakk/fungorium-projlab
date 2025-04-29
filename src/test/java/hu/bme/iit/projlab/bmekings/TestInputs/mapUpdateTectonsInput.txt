@@ -1,3 +1,0 @@
-/addtecton T_001 -t normal -sc 0.5  
-/settecton T_001 -sc 0.5  
-/updatetectons

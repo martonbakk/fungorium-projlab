@@ -1,6 +1,4 @@
-Uj objektum [E-04] hozzaadva!
-Uj objektum [M-04] hozzaadva!
-Rossz input!
-Rossz input!
-Nincs ilyen Tekton!
+Uj objektum [T-01] letrejott!
+Uj objektum [T-02] letrejott!
+Uj objektum [FB-01] letrejott!
 Nem választottál ki gombatestet...

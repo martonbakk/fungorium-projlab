@@ -65,6 +65,7 @@ public class Program {
     }
 
     public static void initBasePlayers() {
+        GameLogic.resetPlayers();
         addEntomologist();
         addMycologist();
     }
@@ -648,12 +649,19 @@ public class Program {
             return;
         }
 
-        FungalBody fung;
+        FungalBody fung = null;
 
-        for(FungalBody fungbod: player.getControlledFunguses())
+        for(FungalBody fungbod: player.getControlledFunguses()) {
             if(splitInput[2].equals(fungbod.getId()))
                 fung=fungbod;
+        }
 
+        if (fung == null) {
+            System.out.println("Nincs ilyen gombatest!");
+            return;
+        }
+        
+        params.selectedFungus = fung;
         player.SelectAction(5, params);
     }
     
@@ -713,15 +721,20 @@ public class Program {
             return;
         }
 
-        Insect insect = new Insect();
+        Insect insect = null;
 
         for (Insect i : player.getControlledInsects()) {
             if (i.getId().equals(splitInput[2]))
                 insect = i;
         }
-        
-        Tecton baseTecton = new Tecton();
-        Tecton targetTecton = new Tecton();
+
+        if (insect == null){
+            System.out.println("Nincs ilyen rovar!");
+            return;
+        }
+
+        Tecton baseTecton = null;
+        Tecton targetTecton = null;
 
         baseTecton = insect.getBase();
 
@@ -730,8 +743,13 @@ public class Program {
                 targetTecton = t;
         }
 
+        if (targetTecton == null){
+            System.out.println("Nincs ilyen tekton!");
+            return;
+        }
+
         insect.move(targetTecton);                 
-        
+        player.SelectAction(2, params);
     }
 
     
@@ -750,7 +768,7 @@ public class Program {
             return;
         }
 
-        Insect eaterInsect=null;
+        Insect eaterInsect = null;
 
         for (Insect insect : player.getControlledInsects()) {
             if(insect.getId().equals(splitInput[2])){
@@ -758,7 +776,7 @@ public class Program {
             }
         }
 
-        if (player == null) {
+        if (eaterInsect == null) {
             System.out.println("Nincs ilyen rovar!");
             return;
         }
@@ -772,7 +790,10 @@ public class Program {
             return;
             }
         
-        eaterInsect.eatSpore();
+        //eaterInsect.eatSpore();
+
+        player.SelectAction(3, params);
+
     }
     
     // ● [string]: a játékos id-je
@@ -834,6 +855,10 @@ public class Program {
         } else {
             System.out.println("A fonal es a rovar nem ugyanazon a Tektonon vannak!");
         }
+
+        player.SelectAction(10, params);
+
+
     }
 
     // ● [string]: a játékos id-je
@@ -886,7 +911,7 @@ public class Program {
             return;
         }
         params.selectedHyphal = hyphal;
-        player.SelectAction(5, params);
+        player.SelectAction(4, params);
     }
 
     

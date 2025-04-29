@@ -1,4 +1,4 @@
-/addtecton T_001 -t normal  
-/addtecton T_012 -t normal  
-/addinsect I_002 -t T_001 -ms 3  
-/move I_002 T_012
+/addTecton normal
+/addTecton normal  
+/addInsect E-01 T-01
+/move E-01 I-01 T-02

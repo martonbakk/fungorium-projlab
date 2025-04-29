@@ -17,7 +17,7 @@ import hu.bme.iit.projlab.bmekings.Player.Mycologist.Mycologist;
  */
 public class GameLogic {
     /** A játékidő telését vezérlő ticker objektum. */
-    private Ticker ticker;
+    private Ticker ticker=new Ticker(1000);
     /** A játékban szereplő Listener interfészt implementáló objektumok listája, amelyek frissítéseket kapnak. */
     private ArrayList<Listener> listeners = new ArrayList<>();
     private static ArrayList<Mycologist> mycologists = new ArrayList<>();
@@ -83,6 +83,11 @@ public class GameLogic {
 
     public static void addMycologist(Mycologist player){
         mycologists.add(player);
+    }
+
+    public static void resetPlayers(){
+        mycologists = new ArrayList<>();
+        entomologists = new ArrayList<>();
     }
 
 }

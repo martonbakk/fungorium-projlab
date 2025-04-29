@@ -15,17 +15,16 @@ import hu.bme.iit.projlab.bmekings.Player.Mycologist.Mycologist;
  */
 @Loggable("Hyphal")
 public class Hyphal extends Entity {
-    private Tecton connectedTecton;
+    private Tecton connectedTecton=null;
     private boolean developed;
     private int developTime;
     private int lifeTime;
     private int cutTime;
-    private Mycologist owner;
+    private Mycologist owner=null;
 
     //kosntrukktorba az owner felvetele
     public Hyphal() {
         super(IDGenerator.generateID("H"),null);
-        this.connectedTecton = new Tecton(); 
         this.developed = false;
         this.developTime  = 0;
         this.lifeTime = 0;
@@ -114,11 +113,16 @@ public class Hyphal extends Entity {
 
     @Loggable
     public void dying() {
+        System.out.println("[" + this.getId() + "] [life] megvaltozott:");
+        System.out.println("[" + lifeTime + "] -> [" + lifeTime-1 + "]");
         lifeTime--;
     }
 
     @Loggable
     public void eatInsect(Insect stunnedInsect){
+        if(!((stunnedInsect.getBase()==this.baseLocation) || (stunnedInsect.getBase()==this.connectedTecton)))
+            return;
+
         if (stunnedInsect.getStunTime()==0) {
             return;
         }

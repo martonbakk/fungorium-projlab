@@ -6,6 +6,7 @@ import java.util.List;
 import hu.bme.iit.projlab.bmekings.Entities.Fungal.FungalBody;
 import hu.bme.iit.projlab.bmekings.Entities.Fungal.Hyphal;
 import hu.bme.iit.projlab.bmekings.Entities.Fungal.TypeCharacteristics;
+import hu.bme.iit.projlab.bmekings.Entities.Insect.Insect;
 import hu.bme.iit.projlab.bmekings.Logger.Loggable;
 import hu.bme.iit.projlab.bmekings.Logic.IDGenerator.IDGenerator;
 import hu.bme.iit.projlab.bmekings.Map.Tecton.Tecton;
@@ -14,11 +15,11 @@ import hu.bme.iit.projlab.bmekings.Program.Params;
 
 @Loggable("Mycologist")
 public class Mycologist extends Player{
-    private ArrayList<FungalBody> controlledFunguses;
-    private ArrayList<Hyphal> hyphalList;
-    private FungalBody selectedFungus;
-    private Hyphal selectedHyphal;
-    private TypeCharacteristics typeCharacteristics;
+    private ArrayList<FungalBody> controlledFunguses= new ArrayList<>();
+    private ArrayList<Hyphal> hyphalList= new ArrayList<>();
+    private FungalBody selectedFungus=null;
+    private Hyphal selectedHyphal=null;
+    private TypeCharacteristics typeCharacteristics= new TypeCharacteristics();
     
     // Fungus type lekezelese hianyzik
 
@@ -84,6 +85,9 @@ public class Mycologist extends Player{
                 break;
             case 9:
                 growHyphalFromHyphalAciton(params.selectedTecton);
+                break;
+            case 10:
+                hyphalEatInsect(params.selectedInsect);
                 break;
             default:
                 System.out.println("Invalid action type");
@@ -241,6 +245,13 @@ public class Mycologist extends Player{
     public void growHyphalFromHyphalAciton(Tecton targetTecton){
         if(targetTecton.getFlag().hyphalApproved || (targetTecton.getFlag().oneHyphalApproved&&targetTecton.getConnectedNeighbors().size()==0)){
             selectedHyphal.growHyphalFromHyphal(targetTecton);
+            selectedHyphal=null;
         }
+    }
+
+    public void hyphalEatInsect(Insect targetInsect){
+        selectedHyphal.eatInsect(targetInsect);
+        selectedHyphal=null;
+
     }
 }

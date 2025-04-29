@@ -1,7 +1,7 @@
-/addtecton normal
-/addtecton normal
-/addinsect E-01 T-01 1 2 100 2 
-/addhyphal M-01 T-01 T-02
-/addspore T-01 stun
+/addTecton normal
+/addTecton normal
+/addInsect E-01 T-01
+/addHyphal M-01 T-01 T-02
+/addSpore T-01 stun
 /eatsp E-01 I-01 S-01
 /eatinsect M-01 H-01 I-01
