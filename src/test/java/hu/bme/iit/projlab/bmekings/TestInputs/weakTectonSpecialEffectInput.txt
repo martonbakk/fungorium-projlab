@@ -1,3 +1,6 @@
-/addtecton T_008 -t weak  
-/addhyphal H_003 -t T_008 -d true  
-/addhyphal H_004 -t T_008 -d true
+/addMycologist
+/addtecton weak
+/addtecton normal
+/addFungalBody M-01 T-02
+/addhyphal M-01 FB-01 T-02 T-01
+/addhyphal M-01 FB-01 

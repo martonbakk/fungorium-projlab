@@ -16,4 +16,23 @@ class HyphalTest {
         );
     }
 
+    @Test
+    void fungalBodyKeepHyphalAlive()  throws IOException{
+        TestHelper.runTest(
+           "src/test/java/hu/bme/iit/projlab/bmekings/TestInputs/fungalBodyKeepHyphalAliveInput.txt",
+           "src/test/java/hu/bme/iit/projlab/bmekings/TestExceptedOutputs/fungalBodyKeepHyphalAliveExpectedOutput.txt",
+           "src/test/java/hu/bme/iit/projlab/bmekings/Entities/FungalBody/fungalBodyKeepHyphalAliveOutput.txt"
+        );
+    }
+
+    @Test
+    void fungalBodyShootSpore()  throws IOException{
+        TestHelper.runTest(
+           "src/test/java/hu/bme/iit/projlab/bmekings/TestInputs/src/test/java/hu/bme/iit/projlab/bmekings/TestInputs/FungalBodyShootSporeInput.txt",
+           "src/test/java/hu/bme/iit/projlab/bmekings/TestExceptedOutputs/src/test/java/hu/bme/iit/projlab/bmekings/TestInputs/FungalBodyShootSporeExpectedOutput.txt",
+           "src/test/java/hu/bme/iit/projlab/bmekings/Entities/FungalBody/FungalBodyShootSporeOutput.txt"
+        );
+    }
+
+
 }

@@ -1,0 +1,4 @@
+/addtecton T_001 -t normal  
+/addspore SP_007 -t speed  
+/addinsect I_007 -t T_001 -mcd 5  
+/eatsp I_007 SP_007

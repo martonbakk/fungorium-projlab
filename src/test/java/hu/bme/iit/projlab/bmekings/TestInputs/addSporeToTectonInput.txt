@@ -1,2 +1,2 @@
-/addtecton T_001 -t normal  
-/addspore SP_002 -t dupe
+/addtecton normal  
+/addspore T_001 dupe

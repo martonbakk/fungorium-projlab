@@ -99,8 +99,7 @@ public class Insect extends Entity{
 
 
     @Loggable
-    public int getStunTime() { return stunTime;}
-
+    public int getStunTime() { return stunTime; }
 
     @Loggable
     public int getMovingSpeed() { return movingSpeed; }
@@ -125,10 +124,17 @@ public class Insect extends Entity{
 
     @Loggable
     public void move(Tecton targetTecton) {
+
         // movingSpeed ????? TICK / TURN BASED
-        if(movingCD==0){
-            this.baseLocation=targetTecton;
+        if(!baseLocation.getConnectedNeighbors().get(targetTecton).isEmpty()){
+            if(movingCD==0){
+                System.out.println("[" + this.getId() + "] [baseLocation] megvaltozott:");
+                System.out.println("[" + baseLocation.getId() + "] -> [" + targetTecton.getId() + "]");
+                this.baseLocation=targetTecton;
+            }
         }
+
+        
     }
 
     @Loggable
@@ -215,7 +221,7 @@ public class Insect extends Entity{
     }
 
     @Loggable
-    public void createInsect(){
+    public void createInsect() {
         GameLogic.addEntity(this);
         baseLocation.addInsect(this);
         owner.addInsect(this);

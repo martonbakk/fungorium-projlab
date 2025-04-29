@@ -40,7 +40,7 @@ class MapTest {
     public void weakTectonSpecialEffect()  throws IOException{
         TestHelper.runTest(
           "src/test/java/hu/bme/iit/projlab/bmekings/TestInputs/weakTectonSpecialEffectInput.txt",
-          "src/test/java/hu/bme/iit/projlab/bmekings/TestExceptedOutputs/weakTectonSpecialEffectOutput.txt",
+          "src/test/java/hu/bme/iit/projlab/bmekings/TestExceptedOutputs/weakTectonSpecialEffectExpectedOutput.txt",
           "src/test/java/hu/bme/iit/projlab/bmekings/MapTest/weakTectonSpecialEffectOutput.txt"
       );
     }
@@ -71,5 +71,13 @@ class MapTest {
           "src/test/java/hu/bme/iit/projlab/bmekings/MapTest/hyphalPreserverTectonSpecialEffectOutput.txt"
       );
     }
-    
+  
+    public void mapUpdateTectons()  throws IOException{
+      TestHelper.runTest(
+        "src/test/java/hu/bme/iit/projlab/bmekings/TestInputs/mapUpdateTectonsInput.txt",
+        "src/test/java/hu/bme/iit/projlab/bmekings/TestExceptedOutputs/mapUpdateTectonsExpectedOutput.txt",
+        "src/test/java/hu/bme/iit/projlab/bmekings/MapTest/mapUpdateTectonsOutput.txt"
+    );
+  }
+
 }

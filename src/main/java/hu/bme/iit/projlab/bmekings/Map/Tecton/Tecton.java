@@ -80,9 +80,7 @@ public class Tecton implements Listener{
     public FungalBody getFungalBody() { return fungalBody; }
 
     @Loggable
-    public void setOccupiedByFungus(boolean value) { 
-    
-    occupiedByFungalBody = value; }
+    public void setOccupiedByFungus(boolean value) { occupiedByFungalBody = value; }
 
     @Loggable
     public void setSplitChance(double d) { 
@@ -90,7 +88,6 @@ public class Tecton implements Listener{
         System.out.println("[" + splitChance + "] -> [" + d + "]");
         splitChance = d;
     }
-
 
     public Tecton() {
         this.id=IDGenerator.generateID("T"); 

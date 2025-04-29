@@ -4,7 +4,6 @@ import java.io.IOException;
 
 import org.junit.jupiter.api.Test;
 import hu.bme.iit.projlab.bmekings.TestHelper;
-import hu.bme.iit.projlab.bmekings.TestHelper;
 
 class SporeTest {
  
@@ -31,11 +30,45 @@ class SporeTest {
     public void stunsporeSpecialEffect() throws IOException {
         TestHelper.runTest(
             "src/test/java/hu/bme/iit/projlab/bmekings/TestInputs/stunsporeSpecialEffectInput.txt",
-            "src/test/java/hu/bme/iit/projlab/bmekings/TestExceptedOutputs/stunsporeSpecialEffectOutput.txt",
+            "src/test/java/hu/bme/iit/projlab/bmekings/TestExceptedOutputs/stunsporeSpecialEffectExpectedOutput.txt",
             "src/test/java/hu/bme/iit/projlab/bmekings/Entities/SporeTest/stunsporeSpecialEffectOutput.txt"
         );
     }
 
+    @Test
+    public void hyphalProtectorSporeSpecialEffect() throws IOException {
+        TestHelper.runTest(
+            "src/test/java/hu/bme/iit/projlab/bmekings/TestInputs/hyphalProtectorSporeSpecialEffectInput.txt",
+            "src/test/java/hu/bme/iit/projlab/bmekings/TestExceptedOutputs/hyphalProtectorSporeSpecialEffectExpectedOutput.txt",
+            "src/test/java/hu/bme/iit/projlab/bmekings/Entities/SporeTest/hyphalProtectorSporeSpecialEffectOutput.txt"
+        );
+    }
 
+    @Test
+    public void SpeedSporeSpecialEffect() throws IOException {
+        TestHelper.runTest(
+            "src/test/java/hu/bme/iit/projlab/bmekings/TestInputs/SpeedSporeSpecialEffectInput.txt",
+            "src/test/java/hu/bme/iit/projlab/bmekings/TestExceptedOutputs/SpeedSporeSpecialEffectExpectedOutput.txt",
+            "src/test/java/hu/bme/iit/projlab/bmekings/TestExceptedOutputs/SpeedSporeSpecialEffectOutput.txt.txt"
+        );
+    }
+
+    @Test
+    public void hungerSporeSpecialEffect() throws IOException {
+        TestHelper.runTest(
+            "src/test/java/hu/bme/iit/projlab/bmekings/TestInputs/hungerSporeSpecialEffectInput.txt",
+            "src/test/java/hu/bme/iit/projlab/bmekings/TestExceptedOutputs/hungerSporeSpecialEffectExpectedOutput.txt",
+            "src/test/java/hu/bme/iit/projlab/bmekings/Entities/SporeTest/hungerSporeSpecialEffectOutput.txt"
+        );
+    }
+
+    @Test
+    public void slowSporeSpecialEffect() throws IOException {
+        TestHelper.runTest(
+            "src/test/java/hu/bme/iit/projlab/bmekings/TestInputs/slowSporeSpecialEffectInput.txt",
+            "src/test/java/hu/bme/iit/projlab/bmekings/TestExceptedOutputs/slowSporeSpecialEffectExpectedOutput.txt",
+            "src/test/java/hu/bme/iit/projlab/bmekings/Entities/SporeTest/slowSporeSpecialEffectOutput.txt"
+        );
+    }
 
 }

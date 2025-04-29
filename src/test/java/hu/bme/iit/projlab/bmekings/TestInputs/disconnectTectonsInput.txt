@@ -1,5 +1,12 @@
-/addtecton T_001 -t normal  
-/addtecton T_002 -t normal  
-/addhyphal H_001 -t T_001 -d true
+/addtecton normal  
+/addtecton normal  
+
+/addFungalBody M-01 T-01
+/addhyphal M-01 FB-01 T-01 T_02
+/addHyphal M-01 FB-01 T-01 T-02 -d true -lt [szám] -ct [szám]
+/addHyphal M-01 FB-01 T-01 T-02 -d false -dt [szám] -lt [szám] -ct [szám]
+/addSpore T-01 normal
+/addInsect E-01 T-01
+
 /growh FB_001 T_002
 /cuthyphal I_001 H_001

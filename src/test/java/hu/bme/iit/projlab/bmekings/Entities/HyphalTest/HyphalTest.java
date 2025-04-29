@@ -17,6 +17,15 @@ class HyphalTest {
     }
 
     @Test
+    void hyphalAging()  throws IOException{
+        TestHelper.runTest(
+           "src/test/java/hu/bme/iit/projlab/bmekings/TestInputs/hyphalAgingInput.txt",
+           "src/test/java/hu/bme/iit/projlab/bmekings/TestExceptedOutputs/hyphalAgingExpectedOutput.txt",
+           "src/test/java/hu/bme/iit/projlab/bmekings/Entities/HyphalTest/hyphalAgingOutput.txt"
+        );
+    }
+
+    @Test
     void growFungusFromInsect() {
     }
 
