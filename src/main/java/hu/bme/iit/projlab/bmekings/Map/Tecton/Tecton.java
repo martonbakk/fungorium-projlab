@@ -50,7 +50,7 @@ public class Tecton implements Listener{
         }
     }
 
-    public Flags getFlag(){return flags;}
+    public Flags getFlag() { return flags; }
 
     @Loggable
     public String getId() { return id; }
@@ -95,6 +95,7 @@ public class Tecton implements Listener{
         this.occupiedByInsect=false;
         this.occupiedByFungalBody=false;
         this.flags=new Flags();
+        System.out.println("Uj objektum [" + id + "] letrejott!");
     }
 
     public Tecton(double splitChance, boolean occupiedByInsect, boolean occupiedByFungalBody) {

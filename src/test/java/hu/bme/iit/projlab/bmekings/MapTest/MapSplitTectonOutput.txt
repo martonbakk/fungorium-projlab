@@ -1,2 +1,4 @@
 Uj objektum [T-01] letrejott!
-Rossz input!
+Tecton torlodott id: [T-01]
+Uj objektum [T-02] letrejott!
+Uj objektum [T-03] letrejott!

@@ -268,12 +268,13 @@ public class Program {
     //  ○ -lt [szám]: az élettartama
     //  ○ -ct [szám]: az az idő, ami után meghal, ha elvágták
 
+    // /addHyphal M-01 FB-01 T-01 T-02
     // fix sorrend a flageknek:
     // /addHyphal M-01 FB-01 T-01 T-02 -d true -lt [szám] -ct [szám]
     // fix sorrend a flageknek: 
     // /addHyphal M-01 FB-01 T-01 T-02 -d false -dt [szám] -lt [szám] -ct [szám]
     private static void addHyphal(String[] splitInput) {
-        if (splitInput.length < 5) return;
+        if (splitInput.length < 4) return;
 
         Mycologist player = null;
         for (Mycologist m : mycologistPlayers) {
@@ -287,37 +288,59 @@ public class Program {
             return;
         }
 
-        Tecton baseTecton = null;
-        Tecton connectTecton = null;
+        if (splitInput.length == 4) {
+            Tecton baseTecton = null;
+            Tecton connectTecton = null;
 
-        for (Tecton t : gameLogic.map.getAllTectons()) {
-            if (t.getId().equals(splitInput[3])) {
-                baseTecton = t;
+            for (Tecton t : gameLogic.map.getAllTectons()) {
+                if (t.getId().equals(splitInput[2])) {
+                    baseTecton = t;
+                }
+                if (t.getId().equals(splitInput[3])) {
+                    connectTecton = t;
+                }
             }
-            if (t.getId().equals(splitInput[4])) {
-                connectTecton = t;
+
+            if (baseTecton == null || connectTecton == null) {
+                System.out.println("Nincs ilyen Tekton!");
+                return;
             }
+
+            baseTecton.connectTecton(connectTecton, player);
         }
+        else if (splitInput.length == 5) {
+            Tecton baseTecton = null;
+            Tecton connectTecton = null;
 
-        if (baseTecton == null || connectTecton == null) {
-            System.out.println("Nincs ilyen Tekton!");
-            return;
-        }
-
-        FungalBody fungalBody = null;
-
-        for (FungalBody fb : player.getControlledFunguses()) {
-            if (fb.getId().equals(splitInput[2])) {
-                fungalBody = fb;
+            for (Tecton t : gameLogic.map.getAllTectons()) {
+                if (t.getId().equals(splitInput[3])) {
+                    baseTecton = t;
+                }
+                if (t.getId().equals(splitInput[4])) {
+                    connectTecton = t;
+                }
             }
-        }
 
-        if (fungalBody == null) {
-            System.out.println("Nincs ilyen gombatest!");
-            return;
+            if (baseTecton == null || connectTecton == null) {
+                System.out.println("Nincs ilyen Tekton!");
+                return;
+            }
+
+            FungalBody fungalBody = null;
+
+            for (FungalBody fb : player.getControlledFunguses()) {
+                if (fb.getId().equals(splitInput[2])) {
+                    fungalBody = fb;
+                }
+            }
+    
+            if (fungalBody == null) {
+                System.out.println("Nincs ilyen gombatest!");
+                return;
+            }
+            
+            fungalBody.growHyphal(connectTecton);
         }
-        
-        fungalBody.growHyphal(connectTecton);
 
         if (splitInput.length < 11) return;
 
@@ -625,8 +648,18 @@ public class Program {
             return;
         }
 
-        // TODO
+        Hyphal hyphal = null;
+        for (Hyphal h : player.getHyphalList()) {
+            if (h.getId().equals(splitInput[2]))
+                hyphal = h;
+        }
 
+        if (hyphal == null) {
+            System.out.println("Nincs ilyen fonal!");
+            return;
+        }
+
+        params.selectedTecton = hyphal.getConnectedTecton();
         player.SelectAction(3, params);
     }
 
@@ -911,11 +944,13 @@ public class Program {
         }
 
         Hyphal hyphal = null;
-
-       for (int i=0; i< gameLogic.map.getAllTectons().size(); i++){
-            for (Hyphal h : gameLogic.map.getAllTectons().get(i).getConnectedNeighbors().get(insect.getBase())) {
-                if (h.getId().equals(splitInput[2])) {
-                    hyphal = h;
+        for (Tecton t : gameLogic.map.getAllTectons()) {
+            ArrayList<Hyphal> hyphals = t.getConnectedNeighbors().get(insect.getBase());
+            if (hyphals != null) {
+                for (Hyphal h : hyphals) {
+                    if (h.getId().equals(splitInput[2])) {
+                        hyphal = h;
+                    }
                 }
             }
         }
@@ -1042,7 +1077,7 @@ public class Program {
         }
 
         double sc = 0;
-        double hdt = 6;
+        double hdt = 2;
 
         if (splitInput.length > 3) {
             sc = Integer.parseInt(splitInput[3]);
@@ -1052,22 +1087,27 @@ public class Program {
             case "normal":
                 Tecton nTecton = new Tecton(sc, false, false);
                 gameLogic.map.addTecton(nTecton);
+                gameLogic.addListener(nTecton);
                 break;
             case "toxic":
                 ToxicTecton tTecton = new ToxicTecton(hdt, sc, false, false);
                 gameLogic.map.addTecton(tTecton);
+                gameLogic.addListener(tTecton);
                 break;
             case "weak":
                 WeakTecton wTecton = new WeakTecton(false, sc, false, false);
                 gameLogic.map.addTecton(wTecton);
+                gameLogic.addListener(wTecton);
                 break;
             case "nofungus":
                 NoFungusTecton nfTecton = new NoFungusTecton(sc, false, false);
                 gameLogic.map.addTecton(nfTecton);
+                gameLogic.addListener(nfTecton);
                 break;
             case "hyphalpres":
                 HyphalPreserverTecton hpTecton = new HyphalPreserverTecton(sc, false, false);
                 gameLogic.map.addTecton(hpTecton);
+                gameLogic.addListener(hpTecton);
                 break;
         }
     }

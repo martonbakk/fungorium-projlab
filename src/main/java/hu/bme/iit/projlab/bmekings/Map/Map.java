@@ -149,9 +149,8 @@ public class Map {
 
     @Loggable
     public void updateTectons(Tecton tecton) {
-        ArrayList<Tecton> connectedTectons = (ArrayList<Tecton>)tecton.getConnectedNeighbors().keySet();
-        for(Tecton connected : connectedTectons){
-            for(Hyphal hyphal : tecton.getConnectedNeighbors().get(connected)){
+        for (Tecton connected : tecton.getConnectedNeighbors().keySet()) {
+            for (Hyphal hyphal : tecton.getConnectedNeighbors().get(connected)){
                 connected.disconnectTecton(tecton, hyphal);
             }
         }
@@ -159,7 +158,7 @@ public class Map {
             neighbor.removeNeighbor(tecton);
         }
         tectons.remove(tecton);
-        System.out.println("Tecton torlodott id:["+ tecton.getId() +"]");
+        System.out.println("Tecton torlodott id: ["+ tecton.getId() +"]");
         Random random = new Random();
         ArrayList<Tecton> newNeighbors1 = new ArrayList<>();
         ArrayList<Tecton> newNeighbors2 = new ArrayList<>();
@@ -172,9 +171,9 @@ public class Map {
             }
         }
         tectons.add(new Tecton());
-        tectons.get(tectons.size()).setNeighbors(newNeighbors1);
+        tectons.get(tectons.size() - 1).setNeighbors(newNeighbors1);
         tectons.add(new Tecton());
-        tectons.get(tectons.size()).setNeighbors(newNeighbors2);
+        tectons.get(tectons.size() - 1).setNeighbors(newNeighbors2);
         
     }
 

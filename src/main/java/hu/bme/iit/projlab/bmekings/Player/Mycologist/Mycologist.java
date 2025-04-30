@@ -181,8 +181,11 @@ public class Mycologist extends Player{
 
     @Loggable
     public void growFungalBody(Tecton tecton){
-        if(tecton.getFlag().fungalApproved){
+        if (tecton.getFlag().fungalApproved) {
             tecton.createFungalBody(this);
+        }
+        else {
+            System.out.println("Erre a tektonra nem lehet gombatestet noveszteni!");
         }
     }
 

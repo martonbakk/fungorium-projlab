@@ -42,7 +42,6 @@ public class GameLogic {
         ticker.start();
     }
 
-    // TODO
     // kéne a teszteléshez egy olyan függvény, ami csak 1, vagy több tick-et hajt végre
     public void tick() {
         

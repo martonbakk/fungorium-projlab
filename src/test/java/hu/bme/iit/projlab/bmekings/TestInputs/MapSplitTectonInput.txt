@@ -1,2 +1,2 @@
 /addTecton normal
-/splitTecton T-01
+/splittecton T-01

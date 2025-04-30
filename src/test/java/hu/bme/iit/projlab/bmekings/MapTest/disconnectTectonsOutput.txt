@@ -1,3 +1,6 @@
 Uj objektum [T-01] letrejott!
 Uj objektum [T-02] letrejott!
-Nincs ilyen rovar!
+Uj objektum [FB-01] letrejott!
+Uj objektum [H-01] letrejott!
+Uj objektum [I-01] letrejott!
+Nincs ilyen fonal!

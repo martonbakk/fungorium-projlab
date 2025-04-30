@@ -6,7 +6,7 @@ import hu.bme.iit.projlab.bmekings.Logger.Loggable;
  * A NoFungusTecton osztály a Tecton egy speciális leszármazottja, 
  * amely egy olyan terepelemet reprezentál, ahol gombás testek nem tudnak megtelepedni.
  * Ez az osztály felülírhatja a {@code Tecton} viselkedését a runSpecialEffect
- * metódus segítségével, bár jelenleg az implementáció üres.
+ * metódus segítségéve
  * Kétféle konstruktor érhető el: egy paraméteres, amellyel az objektum azonnal 
  * inicializálható, valamint egy paraméter nélküli alapértelmezett konstruktor.
  */
@@ -25,6 +25,7 @@ public class NoFungusTecton extends Tecton {
 
     @Loggable
     public Flags runSpecialEffect() {
+        System.out.println("Jart itt");
         return this.flags;
     }
 }
