@@ -5,13 +5,16 @@
 /setNeighbor T-01 T-02
 /setNeighbor T-02 T-03
 /setNeighbor T-03 T-04
-/addFungalBody M-01 T-03 -l 1 -s 0
-/addFungalBody M-01 T-04 -l 1 -s 0
+/addFungalBody M-01 T-03 -l 1 -s 10
+/addFungalBody M-01 T-04 -l 1 -s 10
 /addHyphal M-01 T-02 T-03
 /addInsect E-01 T-02 
 /move E-01 I-01 T-03
 /growh M-01 FB-01 T-04
+/addSporeToFB M-01 FB-02 dupe
+/addSporeToFB M-01 FB-02 dupe
 /shootsp M-01 FB-02 T-04 T-04
 /move E-01 I-01 T-04
 /eatsp E-01 I-01 S-01
-/splitTecton T-03
+/move E-01 I-02 T-03
+/splittecton T-03

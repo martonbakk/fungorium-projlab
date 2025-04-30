@@ -167,6 +167,9 @@ public class Program {
             case "/tick":
                 tick();
                 break;
+            case "/addSporeToFB":
+                addSporeToFungalBody(splitInput);
+                break;
             case "exit":
                 System.out.println("Program leallitasa...");
                 break;
@@ -576,6 +579,7 @@ public class Program {
     // ● [string]: a gombatest id-je
     // ● [string]: az egyik tekton id-je
     // ● [string]: a másik tekton id-je
+    // ● (opcionális, csak a dupe jó) [string]: type
     private static void shootSpore(String[] splitInput) {
         if (splitInput.length < 5) {
             System.out.println("Tul keves parameter!");
@@ -613,7 +617,7 @@ public class Program {
             if (t.getId().equals(splitInput[3])) {
                 tecton1 = t;
             }
-            else if (t.getId().equals(splitInput[4])) {
+            if (t.getId().equals(splitInput[4])) {
                 tecton2 = t;
             }
         }
@@ -630,6 +634,38 @@ public class Program {
         player.selectFungus(fungalBody);
         params.selectedTectons = tectons;
         player.SelectAction(7, params);
+    }
+
+    // /addSporeToFB M-01 FB-01 dupe
+    private static void addSporeToFungalBody(String[] splitInput) {
+        if (splitInput.length < 4) return;
+
+        Mycologist player = null;
+
+        for (Mycologist m : mycologistPlayers) {
+            if (m.getPlayerID().equals(splitInput[1]))
+                player = m;
+        }
+
+        if (player == null) {
+            System.out.println("Nincs ilyen jatekos!");
+            return;
+        }
+
+        FungalBody fungalBody = null;
+
+        for (FungalBody fb : player.getControlledFunguses()) {
+            if (fb.getId().equals(splitInput[2])) {
+                fungalBody = fb;
+            }
+        }
+
+        if (fungalBody == null) {
+            System.out.println("Nincs ilyen gombaetest!");
+            return;
+        }
+
+        fungalBody.AddSpore(splitInput[3]);
     }
 
     // ● [string]: a játékos id-je
@@ -1177,7 +1213,8 @@ public class Program {
         String[] commands = {
         "/addMycologist",
         "/addEntomologist",
-        "/addfungus",
+        "/addFungalBody",
+        "/addHyphal",
         "/addinsect",
         "/addspore",
         "/addTecton",

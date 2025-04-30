@@ -57,7 +57,7 @@ public abstract class Spore extends Entity implements SporeInterface {
 
     public void setBaseLocation(Tecton baseLocation) {
         System.out.println("[" + this.getId() + "] [baseLocation] megvaltozott:");
-        System.out.println("[" + this.baseLocation + "] -> [" + baseLocation + "]");
+        System.out.println("[" + this.baseLocation.getId() + "] -> [" + baseLocation.getId() + "]");
         this.baseLocation = baseLocation;
 
     }

@@ -157,15 +157,16 @@ public class FungalBody extends Entity {
     // FLAG VALTOZAS AZ UML BEN PLUSZ PARAMÉTER
     @Loggable
     public void shootSpore(Tecton tecton) {
-        if(checkShootingRange(tecton)) {
-            return;
-        }
+        // if(checkShootingRange(tecton)) {
+        //     System.out.println("nincs rangeben");
+        //     return;
+        // }
 
         if(this.spores.isEmpty()) {
             System.out.println("Nincs spóra a gombatestben!");
             return;
         }
-        for (int i=0; i<this.shotSporesNum; i++){
+        for (int i=0; i<this.shotSporesNum; i++) {
             SporeInterface spore = this.spores.poll();
             spore.setBaseLocation(tecton);
             tecton.addSpore(spore);
@@ -254,36 +255,43 @@ public class FungalBody extends Entity {
     @Override
     public void update() {
         keepHyphalAlive();
-        AddSpore();
+        AddSpore("");
 
         this.shotSporesNum=10; // A kilőhető spórák számát vissza kell állítani a kezdeti értékre DE NEM BIZTOS HOGY EZT ÍGY KÉNE
         // egy adott idokozonkent majd amugy is termel sporat itt akkor random lehetne hozzaadogatni az AddSproe-val a sporakat
     }
 
     @Loggable
-    public void AddSpore() {
+    public void AddSpore(String type) {
+        SporeInterface spore;
+        if (type.equals("dupe")) {
+            spore = new DuplicateSpore(baseLocation);
+            spores.add(spore);
+            return;
+        }
+
         Random random = new Random();
         int sporeType = random.nextInt(11); 
         // default a NormalSpore mert arra legyen a legtöbb esély
-        SporeInterface spore;
+        
         switch (sporeType) {
             case 0:
-                spore = new SlowSpore();
+                spore = new SlowSpore(baseLocation);
                 break;
             case 1:
-                spore = new DuplicateSpore(); 
+                spore = new DuplicateSpore(baseLocation); 
                 break;
             case 2:
-                spore = new HungerSpore();
+                spore = new HungerSpore(baseLocation);
                 break;
             case 3:
-                spore = new SpeedSpore(); 
+                spore = new SpeedSpore(baseLocation); 
                 break;
             case 4:
-                spore = new StunSpore(); 
+                spore = new StunSpore(baseLocation); 
                 break;
             default:
-                spore = new NormalSpore(); 
+                spore = new NormalSpore(baseLocation); 
                 break;
             }
 
