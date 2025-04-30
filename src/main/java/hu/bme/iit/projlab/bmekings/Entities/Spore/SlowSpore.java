@@ -34,6 +34,6 @@ public class SlowSpore extends Spore {
 
     @Override
     public int getNutritionValue(){
-        return 0;
+        return nutritionValue;
     }
 }

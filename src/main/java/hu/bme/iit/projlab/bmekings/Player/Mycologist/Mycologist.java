@@ -90,7 +90,7 @@ public class Mycologist extends Player{
                 hyphalEatInsect(params.selectedInsect);
                 break;
             case 11:
-                levelUpFungalBody(params.selectedFungus);
+                levelUpFungalBody(selectedFungus);
                 break;
             default:
                 System.out.println("Invalid action type");
@@ -104,9 +104,11 @@ public class Mycologist extends Player{
         }
 
         if(selectedFungus==null){
+            System.out.println("selectedfungus null");
             return;
         }
         selectedFungus.levelUp();
+        selectedFungus = null;
     }
 
     @Loggable
@@ -124,6 +126,7 @@ public class Mycologist extends Player{
         if (checkControlledFungus) {
             System.out.println("Nem választottál ki gombatestet...");
         }
+
         return checkControlledFungus;
     }
 
@@ -189,15 +192,7 @@ public class Mycologist extends Player{
     }
 
     @Loggable
-    private void selectHyphal(Hyphal hyphal){
-        if (checkControlledFungus()){
-            return;
-        }
-
-        if(checkControlledFungusHyphal()){
-            return;
-        }
-
+    public void selectHyphal(Hyphal hyphal){
         for (Hyphal controlledHyphal : hyphalList) {
             if (controlledHyphal.getId().equals(hyphal.getId())) {
                 this.selectedHyphal = controlledHyphal;
@@ -265,7 +260,7 @@ public class Mycologist extends Player{
     }
 
     public void hyphalEatInsect(Insect targetInsect){
-        selectedHyphal.eatInsect(targetInsect);
+        this.selectedHyphal.eatInsect(targetInsect);
         selectedHyphal=null;
 
     }

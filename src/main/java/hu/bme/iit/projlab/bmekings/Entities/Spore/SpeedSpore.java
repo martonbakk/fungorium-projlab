@@ -32,4 +32,9 @@ public class SpeedSpore extends Spore {
 
     }
 
+    @Override
+    public int getNutritionValue(){
+        return nutritionValue;
+    }
+
 }

@@ -42,7 +42,7 @@ public class Entomologist extends Player{
                 MoveInsect(param.selectedTecton);
                 break;
             case 3:
-                EatSporeInsect(param.selectedSpores, param.sporeNum);
+                EatSpore();
                 break;
             case 4:
                 CutHyphalInsect(param.selectedHyphal);
@@ -59,7 +59,7 @@ public class Entomologist extends Player{
     }
 
     @Loggable
-    public void EatSporeInsect(List<SporeInterface> spore, int sporeNum){
+    public void EatSpore() {
         selectedInsect.eatSpore();
         selectedInsect=null;
 

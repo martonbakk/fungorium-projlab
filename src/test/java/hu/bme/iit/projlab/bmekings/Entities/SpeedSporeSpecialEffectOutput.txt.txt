@@ -1,3 +1,6 @@
 Uj objektum [T-01] letrejott!
 Uj objektum [SP-01] letrejott!
-Nincs ilyen rovar!
+Uj objektum [I-01] letrejott!
+Insect nutrition changed
+[I-01] sped up
+Spore objektum torlodott id:[SP-01]

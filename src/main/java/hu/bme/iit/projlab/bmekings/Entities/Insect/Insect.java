@@ -85,7 +85,7 @@ public class Insect extends Entity{
         this.owner=owner;
     }
 
-    public Insect(Insect parentInsect){
+    public Insect(Insect parentInsect) {
         super(IDGenerator.generateID("I"), parentInsect.getBase());
 
         //this.id=IDGenerator.generateID("I");
@@ -124,29 +124,31 @@ public class Insect extends Entity{
 
     @Loggable
     public void move(Tecton targetTecton) {
+        
+        /// moving speed/tick/trun based?
 
-        // movingSpeed ????? TICK / TURN BASED
-        if(!baseLocation.getConnectedNeighbors().get(targetTecton).isEmpty()){
-            if(movingCD==0){
+        if(baseLocation.getConnectedNeighbors().containsKey(targetTecton)){
+            if(movingCD == 0){
                 System.out.println("[" + this.getId() + "] [baseLocation] megvaltozott:");
                 System.out.println("[" + baseLocation.getId() + "] -> [" + targetTecton.getId() + "]");
                 this.baseLocation=targetTecton;
-            }
-        }
+            } else System.out.println("A mozgás cooldown-on van.");
+        } else System.out.println("A tektonok nincsenek fonallal osszekotve.");
     }
 
     @Loggable
     public void eatSpore() {
-        SporeInterface sporeToEat=this.baseLocation.getNextSporeToEat();
-        if(this.currStomachFullness+sporeToEat.getNutritionValue() < this.stomachLimit){
-            sporeToEat.destroySpore();
+        SporeInterface sporeToEat = this.baseLocation.getNextSporeToEat();
+        if(this.currStomachFullness+sporeToEat.getNutritionValue() < this.stomachLimit) {
             this.feedInsect(sporeToEat.getNutritionValue());
             sporeToEat.activateEffect(this);
+            sporeToEat.destroySpore();
         }
     }
 
     @Loggable
     public void feedInsect(int nutritionvalue) {
+        System.out.println("Insect nutrition changed");
         currStomachFullness += nutritionvalue;
         if (currStomachFullness<0) 
             currStomachFullness=0;

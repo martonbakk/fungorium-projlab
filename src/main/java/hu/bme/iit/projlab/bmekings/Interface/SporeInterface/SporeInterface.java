@@ -15,7 +15,8 @@ public interface SporeInterface {
      * A metódust minden implementáló osztálynak meg kell valósítania, hogy meghatározza,
      * milyen hatást gyakorol a spóra a rovarra, amely elfogyasztja.
      */
-    public void activateEffect(Insect targetInsect);
+    
+   public void activateEffect(Insect targetInsect);
 
     /**
      * Létrehozza (spawnolja) a spórát a játékban.

@@ -52,6 +52,10 @@ public class StunSpore extends Spore {
     public void update() {
         
     }
-    
+
+    @Override
+    public int getNutritionValue(){
+        return nutritionValue;
+    }    
 
 }

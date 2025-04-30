@@ -1,4 +1,4 @@
 Uj objektum [T-01] letrejott!
 Uj objektum [T-02] letrejott!
 Uj objektum [FB-01] letrejott!
-A gombatest nem tudja elérni a megadott tekton-t!
+Nincs spóra a gombatestben!

@@ -108,8 +108,8 @@ public class FungalBody extends Entity {
     @Loggable
     public void setLevel(int lvl) { 
     System.out.println("[" + this.getId() + "] [currlevel] megvaltozott:");
-    System.out.println("[" + currLevel + "] -> [" + lvl + "]");
-    currLevel = lvl; 
+    System.out.println("[" + this.currLevel + "] -> [" + lvl + "]"); 
+    this.currLevel = lvl;
     }
 
     @Loggable
@@ -163,6 +163,7 @@ public class FungalBody extends Entity {
 
         if(this.spores.isEmpty()) {
             System.out.println("Nincs spóra a gombatestben!");
+            return;
         }
         for (int i=0; i<this.shotSporesNum; i++){
             SporeInterface spore = this.spores.poll();
@@ -187,19 +188,18 @@ public class FungalBody extends Entity {
             this.shotSporesNum++;
             return;
         }
-
-        this.callNum= callNum + 1;
+        
+        this.callNum= this.callNum + 1;
         
         if (callNum == 3) {
-            callNum = 0;
-            this.currLevel++;
+            this.callNum = 0;
             this.characteristics.shootingRange += 1;
             this.characteristics.sporeProductionIntensity += 1;
             this.characteristics.sporeCapacity += 5; 
-            System.out.println("Szintlépés történt! Új szint: " + currLevel);
-            this.setLevel(currLevel);
+            int nextlvl = currLevel + 1;
+            this.setLevel(nextlvl);
         } else {
-            System.out.println("Még " + (3 - callNum) + " hívás kell a szintlépéshez. " + "Jelenlegi szint: " + currLevel);
+            ///System.out.println("Még " + (3 - callNum) + " hívás kell a szintlépéshez. " + "Jelenlegi szint: " + currLevel);
         }
     }
 
@@ -268,7 +268,7 @@ public class FungalBody extends Entity {
         SporeInterface spore;
         switch (sporeType) {
             case 0:
-                spore = new SlowSpore(); 
+                spore = new SlowSpore();
                 break;
             case 1:
                 spore = new DuplicateSpore(); 

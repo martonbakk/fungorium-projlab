@@ -8,7 +8,6 @@ import hu.bme.iit.projlab.bmekings.Map.Tecton.Tecton;
  * A Spore absztrakt osztályból származik, és implementálja a Listener interfészt az Entity ősosztályon keresztül.
  * */
 public class DuplicateSpore extends Spore {
-
     public DuplicateSpore() {
         super();
     }
@@ -16,14 +15,10 @@ public class DuplicateSpore extends Spore {
     public DuplicateSpore(Tecton baseLocation) {
         super(baseLocation);
     }
-
-    public DuplicateSpore(String id, Tecton baseLocation) {
-        super(id, baseLocation);
-    }
     
     @Override
     public void activateEffect(Insect targetInsect) {
-        Insect newInsect=new Insect(targetInsect);
+        Insect newInsect = new Insect(targetInsect);
         newInsect.createInsect();
     }
 
@@ -32,5 +27,8 @@ public class DuplicateSpore extends Spore {
 
     }
 
-
+    @Override
+    public int getNutritionValue(){
+        return nutritionValue;
+    }
 }

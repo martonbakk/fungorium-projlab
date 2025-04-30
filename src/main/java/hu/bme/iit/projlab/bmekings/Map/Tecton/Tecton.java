@@ -190,7 +190,6 @@ public class Tecton implements Listener{
         if (hyphals != null) {
         // Töröljük a megadott hyphal-t a listából
             hyphals.remove(hyphal);
-            hyphals.removeIf(h -> h.equals(hyphal));
         // Ha a lista üres lett, töröljük a Tecton kulcsot a HashMap-ből
             if (hyphals.isEmpty()) {
             connectedNeighbours.remove(tc);
@@ -203,12 +202,6 @@ public class Tecton implements Listener{
 
     @Loggable
     public void connectTecton(Tecton connected, Mycologist owner) {
-        // TODO: rosszul történik a csekkolás!!!
-        // itt csak annak a tektonnak a szomszédjait nézi, amelyiken rajta van a gombatest
-        // if (!neighbours.contains(tc)) {
-        //     System.out.println("Megkapott tekton nem szomszédos!");
-        //     return;
-        // }
 
         // Szerintem így egy fokkal jobb, de még mindig nem jó az összekötés
         if (!connected.getNeighbors().contains(this)) {
@@ -222,6 +215,7 @@ public class Tecton implements Listener{
         if (hyphals != null) {
             // Ha össze van frissítsük a hyphal listát
             hyphals.add(newHyphal);
+            //connectedNeighbours.put(connected, hyphals);
         }
         // Ha még nincs, vegyük fel a HashMapbe
         else {

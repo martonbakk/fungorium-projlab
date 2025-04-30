@@ -174,9 +174,6 @@ public class Program {
                 System.out.println("Rossz input!");
         }
     }
-
-    
-
     
     // ● [string]: torlendo Spore id-je
     private static void deleteSpore(String[] splitInput){
@@ -777,14 +774,14 @@ public class Program {
             return;
         }
 
-        insect.move(targetTecton);                 
+        player.selectInsect(insect);
+        params.selectedTecton = targetTecton;           
         player.SelectAction(2, params);
     }
 
     
     // ● [string]: a játékos id-je
     // ● [string]: a rovar id-je
-    // ● [string]: a spóra id-je
     private static void eatSp(String[] splitInput) {
         Entomologist player = null;
 
@@ -810,17 +807,7 @@ public class Program {
             return;
         }
 
-        SporeInterface spore;
-
-        if(splitInput[3].equals(eaterInsect.getBase().getNextSporeToEat())){
-            spore = eaterInsect.getBase().getNextSporeToEat();
-        } else {
-             System.out.println("Nincs ilyen rovar!");
-            return;
-            }
-        
-        //eaterInsect.eatSpore();
-
+        player.selectInsect(eaterInsect);
         player.SelectAction(3, params);
 
     }
@@ -834,10 +821,10 @@ public class Program {
             return;
         }
 
-        Entomologist player = null;
+        Mycologist player = null;
     
         // Find the Mycologist player by ID
-        for (Entomologist m : entomologistPlayers) {
+        for (Mycologist m : mycologistPlayers) {
             if (m.getPlayerID().equals(splitInput[1])) {
                 player = m;
             }
@@ -850,9 +837,11 @@ public class Program {
         Insect insect = null;
     
         // Find the Insect by ID
-        for (Insect i : player.getControlledInsects()) {
-            if (i instanceof Insect && i.getId().equals(splitInput[3])) {
-                insect = (Insect) i;
+        for (Entomologist e : entomologistPlayers) {
+            for (Insect i : e.getControlledInsects()) {
+                if (i.getId().equals(splitInput[3])) {
+                    insect = i;
+                }
             }
         }
     
@@ -862,13 +851,9 @@ public class Program {
         }
     
         Hyphal hyphal = null;
-
-        // Find the Hyphal by ID
-        for (int i=0; i< gameLogic.map.getAllTectons().size(); i++){
-            for (Hyphal h : gameLogic.map.getAllTectons().get(i).getConnectedNeighbors().get(insect.getBase())) {
-                if (h.getId().equals(splitInput[2])) {
-                    hyphal = h;
-                }
+        for (Hyphal h : player.getHyphalList()) {
+            if (h.getId().equals(splitInput[2])) {
+                hyphal = h;
             }
         }
     
@@ -877,17 +862,17 @@ public class Program {
             return;
         }
 
-        // Perform the "eat" action
-        if (hyphal.getBase().equals(insect.getBase())) {
-            hyphal.eatInsect(insect);
-            System.out.println("A fonal megette a rovart!");
-        } else {
-            System.out.println("A fonal es a rovar nem ugyanazon a Tektonon vannak!");
-        }
-
+        // // Perform the "eat" action
+        // if (hyphal.getBase().equals(insect.getBase())) {
+        //     hyphal.eatInsect(insect);
+        //     System.out.println("A fonal megette a rovart!");
+        // } else {
+        //     System.out.println("A fonal es a rovar nem ugyanazon a Tektonon vannak!");
+        // }
+        
+        player.selectHyphal(hyphal);
+        params.selectedInsect = insect;
         player.SelectAction(10, params);
-
-
     }
 
     // ● [string]: a játékos id-je
@@ -985,9 +970,9 @@ public class Program {
     // ● -sl [szám]: a Rovar telítettségének maximális értéke
     // ● -ccd [szám]: a fonalvágás cooldown-ja
 
-    // /addInsect E-01 T-01
+    // /addInsect E-01 T-01 -mcd 0
     private static void addInsect(String[] splitInput) {
-        if (splitInput.length < 4) return;
+        if (splitInput.length < 3) return;
 
         Entomologist player = null;
         for (Entomologist e : entomologistPlayers) {
@@ -1011,8 +996,16 @@ public class Program {
             System.out.println("Nincs ilyen Tekton!");
             return;
         }
+        
+        Insect insect = null;
 
-        Insect insect = new Insect(1, 1, 1, 1, 1, baseLocation, player);
+        if (splitInput.length == 5 && splitInput[3].equals("-mcd")) {
+            insect = new Insect(1, Integer.parseInt(splitInput[4]), 100, 1, 1, baseLocation, player);
+        }
+        else {
+            insect = new Insect(1, 0, 100, 1, 1, baseLocation, player);
+        }
+
         insect.createInsect();
 
     }
@@ -1030,8 +1023,6 @@ public class Program {
             System.out.println("Túl kevés paraméter!");
             return;
         }
-
-        
     }
 
     // --------------TECTON----------------
@@ -1327,25 +1318,25 @@ public class Program {
         SporeInterface spore;
         switch (type) {
             case "SlowSpore":
-                spore = new SlowSpore(id, baseLocation);
+                spore = new SlowSpore(baseLocation);
                 break;
             case "NormalSpore":
-                spore = new NormalSpore(id, baseLocation);
+                spore = new NormalSpore(baseLocation);
                 break;
             case "DuplicateSpore":
-                spore = new DuplicateSpore(id, baseLocation);
+                spore = new DuplicateSpore(baseLocation);
                 break;
             case "HungerSpore":
-                spore = new HungerSpore(id, baseLocation);
+                spore = new HungerSpore(baseLocation);
                 break;
             case "SpeedSpore":
-                spore = new SpeedSpore(id, baseLocation);
+                spore = new SpeedSpore(baseLocation);
                 break;
             case "StunSpore":
-                spore = new StunSpore(id, baseLocation);
+                spore = new StunSpore(baseLocation);
                 break;
             default:
-                spore = new NormalSpore(id, baseLocation); // Alapértelmezett típus
+                spore = new NormalSpore(baseLocation); // Alapértelmezett típus
                 break;
         }
         return spore;
