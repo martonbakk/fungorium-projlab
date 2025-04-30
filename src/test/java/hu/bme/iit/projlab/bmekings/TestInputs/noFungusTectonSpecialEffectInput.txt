@@ -1,0 +1,6 @@
+/addTecton normal
+/addTecton nofungus
+/setNeighbor T-01 T-02
+/addFungalBody M-01 T-01 -l 1 -s 0
+/addHyphal M-01 FB-01 T-01 T-02
+/growfb M-01 H-01

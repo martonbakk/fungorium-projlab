@@ -1,0 +1,2 @@
+/addTecton normal  
+/addSpore T-01 dupe

@@ -1,0 +1,4 @@
+/addTecton normal  
+/addSpore T-01 slow  
+/addInsect E-01 T-01
+/eatsp E-01 I-01 S-01

@@ -1,0 +1,2 @@
+/addTecton normal
+/splittecton T-01

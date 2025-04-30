@@ -1,0 +1,5 @@
+Uj objektum [T-01] letrejott!
+Uj objektum [T-02] letrejott!
+Uj objektum [FB-01] letrejott!
+Nincs spóra a gombatestben!
+Nincs spóra a gombatestben!

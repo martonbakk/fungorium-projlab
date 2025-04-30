@@ -1,0 +1,9 @@
+/addTecton normal
+/addTecton normal
+/setNeighbor T-01 T-02
+/addInsect E-01 T-01
+/addFungalBody M-01 T-01
+/addHyphal M-01 FB-01 T-01 T-02
+/addSpore T-01 stun
+/eatsp E-01 I-01 SP-01
+/eatinsect M-01 H-01 I-01

@@ -1,0 +1,4 @@
+Uj objektum [T-01] letrejott!
+Uj objektum [FB-01] letrejott!
+[FB-01] [currlevel] megvaltozott:
+[1] -> [2]

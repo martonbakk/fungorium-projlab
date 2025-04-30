@@ -1,0 +1,3 @@
+/addTecton normal
+/addSpore T-01 normal
+/deleteSpore S-01

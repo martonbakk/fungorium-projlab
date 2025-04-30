@@ -1,7 +1,6 @@
-package main.java.hu.bme.iit.projlab.bmekings.Entities;
-
-import main.java.hu.bme.iit.projlab.bmekings.Interface.Listener.Listener;
-import main.java.hu.bme.iit.projlab.bmekings.Map.Tecton.Tecton;
+package hu.bme.iit.projlab.bmekings.Entities;
+import hu.bme.iit.projlab.bmekings.Interface.Listener.Listener;
+import hu.bme.iit.projlab.bmekings.Map.Tecton.Tecton;
 
 /**
  * Absztrakt osztály, amely az entitások és figurák közös alapadatait tárolja.
@@ -10,8 +9,8 @@ import main.java.hu.bme.iit.projlab.bmekings.Map.Tecton.Tecton;
  */
 public abstract class Entity implements Listener {
 
-    private String id;
-    private Tecton baseLocation;
+    protected String id;
+    protected Tecton baseLocation=null;
 
     public Entity() {
         this.id="";
@@ -21,5 +20,15 @@ public abstract class Entity implements Listener {
     public Entity(String id, Tecton baseLocation) {
         this.id = id;
         this.baseLocation = baseLocation;
+        System.out.println("Uj objektum [" + id + "] letrejott!");
     }
+
+    public Tecton getBase(){
+        return baseLocation;
+    }
+
+    public String getId() {
+        return id;
+    }
+
 }

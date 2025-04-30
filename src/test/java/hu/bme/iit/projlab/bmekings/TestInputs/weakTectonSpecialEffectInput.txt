@@ -1,0 +1,7 @@
+/addTecton weak
+/addTecton weak
+/setNeighbor T-01 T-02
+/addFungalBody M-01 T-01
+/addFungalBody M-01 T-02
+/growh M-01 FB-01 T-02
+/growh M-01 FB-02 T-01
