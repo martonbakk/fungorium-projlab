@@ -1,11 +1,10 @@
 package hu.bme.iit.projlab.bmekings.Player.Entomologist;
 
-import java.util.List;
 import java.util.ArrayList;
+import java.util.List;
 
 import hu.bme.iit.projlab.bmekings.Entities.Fungal.Hyphal;
 import hu.bme.iit.projlab.bmekings.Entities.Insect.Insect;
-import hu.bme.iit.projlab.bmekings.Interface.SporeInterface.SporeInterface;
 import hu.bme.iit.projlab.bmekings.Logger.Loggable;
 import hu.bme.iit.projlab.bmekings.Logic.IDGenerator.IDGenerator;
 import hu.bme.iit.projlab.bmekings.Map.Tecton.Tecton;
@@ -17,13 +16,19 @@ public class Entomologist extends Player{
     private ArrayList<Insect> controlledInsects = new ArrayList<>();
     private Insect selectedInsect=null;
 
-    public Entomologist(String id) {
-        super(id);
+    //public Entomologist(String id) {
+    //    super(id);
+    //    System.out.println("Uj objektum [" + getPlayerID() + "] hozzaadva!");
+    //}
+    public Entomologist() {
+        super("E");
         System.out.println("Uj objektum [" + getPlayerID() + "] hozzaadva!");
     }
 
-    public Entomologist() {
+
+    public Entomologist(String userName) {
         super(IDGenerator.generateID("E"));
+        this.userName = userName;
         System.out.println("Uj objektum [" + getPlayerID() + "] hozzaadva!");
     }
     public List<Insect> getControlledInsects() { return controlledInsects; }

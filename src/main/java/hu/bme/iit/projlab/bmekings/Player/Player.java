@@ -7,6 +7,7 @@ import hu.bme.iit.projlab.bmekings.Program.Params;
 public abstract class Player{
     private String playerId;
     private int score;
+    protected  String userName;
 
     // Objectum lesz a csomagolo, kasztolni kell az egyes menupontokba és akkor nem rakjuk tele felesleges parameterekkel a cuccot
     public abstract void SelectAction(int actionType, Params params);
@@ -22,6 +23,6 @@ public abstract class Player{
     public int getScore() { return score; }
 
     public String toString() {
-        return playerId + " " + score;
+        return "Username: "+userName + " PlayerID: " + playerId;
     }
 };

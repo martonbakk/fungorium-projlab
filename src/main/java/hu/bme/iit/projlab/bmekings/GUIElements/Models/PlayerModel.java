@@ -10,7 +10,7 @@ public class PlayerModel {
     private ArrayList<Player> players = new ArrayList<>();
 
     public void addPlayer(String name, String type) {
-        if (name.equals("Entomologist")) {
+        if (type.equals("Entomologist")) {
             players.add(new Entomologist(name));
         }else {
            players.add(new Mycologist(name));
