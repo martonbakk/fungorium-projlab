@@ -57,7 +57,18 @@ public class Map {
     
         System.err.println("Mycologists: " + mycologists.size() + ", Entomologists: " + entomologists.size());
         // Generate Tectons
-        for (int i = 0; i < (mycologists.size() + entomologists.size()) * 8; i++) {
+        int tectonCount = 0;
+
+        if(((mycologists.size() + entomologists.size()) >= 2) && ((mycologists.size() + entomologists.size()) <= 6)){
+            tectonCount = 44;
+        }else if (((mycologists.size() + entomologists.size()) >= 6) && ((mycologists.size() + entomologists.size()) <= 12)){
+            tectonCount = 88;
+        }else{
+            System.err.println("Invalid number of players. Map generation failed.");
+        }
+
+
+        for (int i = 0; i < tectonCount; i++) {
             int type = random.nextInt(5);
             Tecton tc;
             switch (type) {

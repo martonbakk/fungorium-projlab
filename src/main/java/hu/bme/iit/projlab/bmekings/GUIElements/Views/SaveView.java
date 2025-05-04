@@ -61,13 +61,6 @@ public class SaveView extends AbstractGameView {
         gbc.gridy = 2;
         add(nameField, gbc);
 
-        // Üzenet
-        JLabel message = new JLabel("Mentési funkcionalitás implementáció alatt", SwingConstants.CENTER);
-        message.setFont(new Font("Arial", Font.PLAIN, 16));
-        gbc.gridx = 0;
-        gbc.gridy = 3;
-        gbc.gridwidth = 2;
-        add(message, gbc);
 
         // Vissza gomb
         JButton backButton = new JButton("Vissza");

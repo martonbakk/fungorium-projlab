@@ -41,6 +41,8 @@ public class Hyphal extends Entity {
         this.owner=owner;
     }
 
+    
+
     @Loggable
     public Tecton getConnectedTecton() { return connectedTecton; }
 

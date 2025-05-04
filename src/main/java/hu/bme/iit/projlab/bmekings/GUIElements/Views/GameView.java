@@ -1,5 +1,6 @@
 package hu.bme.iit.projlab.bmekings.GUIElements.Views;
 
+import java.awt.BasicStroke;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
@@ -10,8 +11,13 @@ import java.awt.Graphics2D;
 import java.awt.GridLayout;
 import java.awt.Polygon;
 import java.awt.RenderingHints;
+import java.awt.image.BufferedImage;
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
+import javax.imageio.ImageIO;
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
@@ -20,6 +26,8 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.SwingConstants;
 
+import hu.bme.iit.projlab.bmekings.Entities.Fungal.FungalBody;
+import hu.bme.iit.projlab.bmekings.Entities.Fungal.Hyphal;
 import hu.bme.iit.projlab.bmekings.GUIElements.Controller.Controller;
 import hu.bme.iit.projlab.bmekings.Interface.Listener.Listener;
 import hu.bme.iit.projlab.bmekings.Map.Tecton.Tecton;
@@ -37,15 +45,12 @@ public class GameView extends AbstractGameView implements Listener {
     public GameView(Controller controller) {
         super(controller);
         setLayout(new BorderLayout(10, 10));
-        setBorder(BorderFactory.createLineBorder(Color.BLACK, 2));
 
         // Felső panel
         JPanel topPanel = new JPanel(new BorderLayout());
 
         JPanel menuPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT, 5, 5));
         menuPanel.setOpaque(false);
-
-        
 
         scoreLabel = new JLabel("", SwingConstants.CENTER);
         scoreLabel.setFont(new Font("Arial", Font.PLAIN, 12));
@@ -161,6 +166,9 @@ public class GameView extends AbstractGameView implements Listener {
         private int tectonCount;
         private final ArrayList<Polygon> tectonPolygons = new ArrayList<>();
         private final ArrayList<Tecton> tectons = new ArrayList<>();
+        private BufferedImage insectImage;
+        private BufferedImage fungalImage;
+        private Tecton selectedTecton;
 
         public void setTectonCount(int count) {
             this.tectonCount = count;
@@ -168,24 +176,48 @@ public class GameView extends AbstractGameView implements Listener {
 
         public PentagonPanel() {
             setPreferredSize(new Dimension(0, 400));
-            setBackground(new Color(173, 216, 230));
+            setBackground(new Color(128, 195, 255));
+
+            // Load insect image
+            try {
+                insectImage = ImageIO.read(getClass().getResource("/Data/insect1.png"));
+            } catch (IOException e) {
+                System.err.println("Nem sikerült betölteni az insect1.png képet: " + e.getMessage());
+                insectImage = null;
+            }
+
+            // Load fungal body image
+            try {
+                fungalImage = ImageIO.read(getClass().getResource("/Data/ms2.png"));
+            } catch (IOException e) {
+                System.err.println("Nem sikerült betölteni az ms2.png képet: " + e.getMessage());
+                fungalImage = null;
+            }
 
             addMouseListener(new java.awt.event.MouseAdapter() {
                 @Override
                 public void mouseClicked(java.awt.event.MouseEvent e) {
                     int x = e.getX();
                     int y = e.getY();
+                    Tecton clickedTecton = null;
                     for (int i = 0; i < tectonPolygons.size(); i++) {
                         if (tectonPolygons.get(i).contains(x, y)) {
-                            Tecton clickedTecton = tectons.get(i);
-                            StringBuilder message = new StringBuilder("Tecton ID: " + clickedTecton.getId() + "\nSzomszédok:\n");
-                            for (Tecton neighbor : clickedTecton.getNeighbors()) {
-                                message.append("- ").append(neighbor.getId()).append("\n");
-                            }
-                            JOptionPane.showMessageDialog(PentagonPanel.this, message.toString());
+                            clickedTecton = tectons.get(i);
                             break;
                         }
                     }
+                    // Update selected tecton (deselect if clicking outside or same tecton)
+                    if (clickedTecton != null) {
+                        selectedTecton = (selectedTecton == clickedTecton) ? null : clickedTecton;
+                        StringBuilder message = new StringBuilder("Tecton ID: " + clickedTecton.getId() + "\nSzomszédok:\n");
+                        for (Tecton neighbor : clickedTecton.getNeighbors()) {
+                            message.append("- ").append(neighbor.getId()).append("\n");
+                        }
+                        JOptionPane.showMessageDialog(PentagonPanel.this, message.toString());
+                    } else {
+                        selectedTecton = null; // Deselect if clicked outside
+                    }
+                    repaint(); // Trigger redraw to update outline
                 }
             });
         }
@@ -195,35 +227,125 @@ public class GameView extends AbstractGameView implements Listener {
             super.paintComponent(g);
             tectonPolygons.clear();
             tectons.clear();
-        
+
             Graphics2D g2d = (Graphics2D) g;
             g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-            g2d.setColor(new Color(139, 69, 19));
-        
+
             ArrayList<Tecton> currentTectons = controller.getGameLogic().map.getTectons();
             if (currentTectons == null || currentTectons.isEmpty()) return;
             tectons.addAll(currentTectons);
-        
+
             int radius = 20;
             int padding = 20;
             int diameter = radius * 2;
             int spacing = 10;
             int totalWidth = getWidth();
-        
-            // Megállapítjuk, hány oszlop fér ki
+
+            // Calculate number of columns
             int cols = Math.max(1, (totalWidth - padding * 2 + spacing) / (diameter + spacing));
-        
+
+            // Map tectons to their center coordinates
+            Map<Tecton, int[]> tectonCenters = new HashMap<>();
             for (int i = 0; i < tectons.size(); i++) {
                 int row = i / cols;
                 int col = i % cols;
-        
+
                 int x = padding + col * (diameter + spacing);
                 int y = padding + row * (diameter + spacing);
-        
+                int centerX = x + radius;
+                int centerY = y + radius;
+                tectonCenters.put(tectons.get(i), new int[]{centerX, centerY});
+            }
+
+            // Draw Hyphal connections
+            g2d.setColor(Color.BLACK); // Black lines for Hyphal
+            ArrayList<Mycologist> mycologists = controller.getGameLogic().getMycologists();
+            for (Mycologist mycologist : mycologists) {
+                for (Hyphal hyphal : mycologist.getHyphalList()) {
+                    Tecton base = hyphal.getBase();
+                    Tecton connected = hyphal.getConnectedTecton();
+                    if (base != null && connected != null) {
+                        int[] baseCenter = tectonCenters.get(base);
+                        int[] connectedCenter = tectonCenters.get(connected);
+                        if (baseCenter != null && connectedCenter != null) {
+                            g2d.drawLine(baseCenter[0], baseCenter[1], connectedCenter[0], connectedCenter[1]);
+                        }
+                    }
+                }
+            }
+
+            // Draw tectons, fungal bodies, insects, and selection outline
+            for (int i = 0; i < tectons.size(); i++) {
+                int row = i / cols;
+                int col = i % cols;
+
+                int x = padding + col * (diameter + spacing);
+                int y = padding + row * (diameter + spacing);
+
+                // Draw tecton (green circle)
+                g2d.setColor(new Color(128, 254, 57));
                 g2d.fillOval(x, y, diameter, diameter);
+
+                // Draw yellow outline if this is the selected tecton
+                if (tectons.get(i) == selectedTecton) {
+                    g2d.setColor(Color.YELLOW);
+                    g2d.setStroke(new BasicStroke(2)); // Thicker outline
+                    g2d.drawOval(x, y, diameter, diameter); // Outline around tecton
+                    g2d.setStroke(new BasicStroke(1)); // Reset stroke
+                }
+
+                // Create polygon for mouse click detection
+                Polygon polygon = new Polygon();
+                int sides = 20; // Approximate circle with many sides
+                for (int j = 0; j < sides; j++) {
+                    double angle = 2 * Math.PI * j / sides;
+                    int px = (int) (x + radius + radius * Math.cos(angle));
+                    int py = (int) (y + radius + radius * Math.sin(angle));
+                    polygon.addPoint(px, py);
+                }
+                tectonPolygons.add(polygon);
+
+                // Draw FungalBody if present
+                FungalBody fungalBody = tectons.get(i).getFungalBody(); // Assumes getFungalBody() exists
+                if (fungalBody != null) {
+                    if (fungalImage != null) {
+                        int fungalRadius = radius / 2; // Same size as previous fungal circle
+                        int fungalDiameter = fungalRadius * 2;
+                        int fungalX = x + (radius - fungalRadius); // Center within tecton
+                        int fungalY = y + (radius - fungalRadius);
+                        g2d.drawImage(fungalImage, fungalX, fungalY, fungalDiameter, fungalDiameter, null);
+                    } else {
+                        // Fallback to red circle if image loading failed
+                        g2d.setColor(Color.RED);
+                        int fungalRadius = radius / 2;
+                        int fungalDiameter = fungalRadius * 2;
+                        int fungalX = x + (radius - fungalRadius);
+                        int fungalY = y + (radius - fungalRadius);
+                        g2d.fillOval(fungalX, fungalY, fungalDiameter, fungalDiameter);
+                    }
+                }
+
+                // Draw Insect image if present
+                if (tectons.get(i).isOccupiedByInsect()) {
+                    if (insectImage != null) {
+                        int insectRadius = radius / 3; // Same size as previous insect circle
+                        int insectDiameter = insectRadius * 2;
+                        // Offset to avoid overlap with FungalBody (top-left quadrant)
+                        int insectX = x + (radius - insectRadius) - insectRadius; // Shift left
+                        int insectY = y + (radius - insectRadius) - insectRadius; // Shift up
+                        g2d.drawImage(insectImage, insectX, insectY, insectDiameter, insectDiameter, null);
+                    } else {
+                        // Fallback to yellow circle if image loading failed
+                        g2d.setColor(Color.YELLOW);
+                        int insectRadius = radius / 3;
+                        int insectDiameter = insectRadius * 2;
+                        int insectX = x + (radius - insectRadius) - insectRadius;
+                        int insectY = y + (radius - insectRadius) - insectRadius;
+                        g2d.fillOval(insectX, insectY, insectDiameter, insectDiameter);
+                    }
+                }
             }
         }
-
 
         @Override
         public Dimension getPreferredSize() {
