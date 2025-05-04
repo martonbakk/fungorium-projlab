@@ -1,5 +1,8 @@
 package hu.bme.iit.projlab.bmekings.Player;
 
+import java.util.Arrays;
+import java.util.List;
+
 import hu.bme.iit.projlab.bmekings.Program.Params;
 
 
@@ -26,5 +29,9 @@ public abstract class Player{
 
     public String toString() {
         return "Username: "+userName + " PlayerID: " + playerId;
+    }
+
+    public List<String> getAvailableActions() {
+        return Arrays.asList("Mozgás", "Gyűjtés", "Vizsgálat"); // Teszt adatok
     }
 };

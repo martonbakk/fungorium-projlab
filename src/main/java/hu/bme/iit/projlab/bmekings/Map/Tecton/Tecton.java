@@ -38,6 +38,22 @@ public class Tecton implements Listener{
 
     protected Flags flags;
 
+    private int posX = -1;
+    private int posY = -1;
+    
+    public void setPosition(int x, int y) {
+        this.posX = x;
+        this.posY = y;
+    }
+    
+    public int getPosX() {
+        return posX;
+    }
+    
+    public int getPosY() {
+        return posY;
+    }
+
     public class Flags{
         public boolean fungalApproved;
         public boolean hyphalApproved;

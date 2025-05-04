@@ -35,6 +35,10 @@ public class Map {
 
     }
 
+    public boolean isGeneratedMap() {
+        return generatedMap;
+    }
+
     @Loggable
     public void addTecton(Tecton t) {
         tectons.add(t);
@@ -42,16 +46,18 @@ public class Map {
 
     @Loggable
     public void generateMap() {
+        System.out.println("Generating map...");
         if(generatedMap) {
-            return; // Map already generated
+            tectons.clear(); // Map already generated
         }
         generatedMap=true;
         ArrayList<Mycologist> mycologists = GameLogic.getMycologists();
         ArrayList<Entomologist> entomologists = GameLogic.getEntomologists();
         Random random = new Random();
     
+        System.err.println("Mycologists: " + mycologists.size() + ", Entomologists: " + entomologists.size());
         // Generate Tectons
-        for (int i = 0; i < (mycologists.size() + entomologists.size()) * 4; i++) {
+        for (int i = 0; i < (mycologists.size() + entomologists.size()) * 8; i++) {
             int type = random.nextInt(5);
             Tecton tc;
             switch (type) {
@@ -137,7 +143,48 @@ public class Map {
                 baseTecton.addSpore(sp);
             }
         }
+        assignTectonPositions();
     }
+    private void assignTectonPositions() {
+        int centerX = 500;
+        int centerY = 400;
+        int radius = 200;
+
+        boolean[] visited = new boolean[tectons.size()];
+        java.util.Map<Tecton, Integer> indexMap = new java.util.HashMap<>();
+        for (int i = 0; i < tectons.size(); i++) {
+            indexMap.put(tectons.get(i), i);
+        }
+
+        ArrayList<Tecton> queue = new ArrayList<>();
+        if (tectons.isEmpty()) return;
+
+        queue.add(tectons.get(0));
+        visited[0] = true;
+        tectons.get(0).setPosition(centerX, centerY);
+
+        while (!queue.isEmpty()) {
+            Tecton current = queue.remove(0);
+            int cx = current.getPosX();
+            int cy = current.getPosY();
+
+            ArrayList<Tecton> neighbors = current.getNeighbors();
+            int n = neighbors.size();
+            for (int i = 0; i < n; i++) {
+                Tecton neighbor = neighbors.get(i);
+                int idx = indexMap.get(neighbor);
+                if (!visited[idx]) {
+                    double angle = 2 * Math.PI * i / n;
+                    int nx = cx + (int) (120 * Math.cos(angle));
+                    int ny = cy + (int) (120 * Math.sin(angle));
+                    neighbor.setPosition(nx, ny);
+                    visited[idx] = true;
+                    queue.add(neighbor);
+                }
+            }
+        }
+    }
+
 
     @Loggable
     public void splitTecton(Tecton tecton) {

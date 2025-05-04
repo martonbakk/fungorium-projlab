@@ -10,7 +10,7 @@ import hu.bme.iit.projlab.bmekings.Map.Tecton.Tecton;
  */
 public class HungerSpore extends Spore {
 
-    public HungerSpore() {
+    public HungerSpore(String id1, Tecton baseLocation1) {
         super();
     }
 

@@ -1,6 +1,7 @@
 package hu.bme.iit.projlab.bmekings.Player.Mycologist;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import hu.bme.iit.projlab.bmekings.Entities.Fungal.FungalBody;
@@ -101,6 +102,11 @@ public class Mycologist extends Player{
             default:
                 System.out.println("Invalid action type");
         }
+    }
+
+    @Override
+    public List<String> getAvailableActions() {
+        return Arrays.asList("Grow Fungal Body", "Speed Up Development", "Shoot Spore"); // Teszt adatok
     }
 
     @Loggable

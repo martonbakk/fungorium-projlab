@@ -23,9 +23,7 @@ public class GameLogic {
     private static ArrayList<Mycologist> mycologists = new ArrayList<>();
     private static ArrayList<Entomologist> entomologists = new ArrayList<>();
     private static ArrayList<Entity> entityList = new ArrayList<>();
-     
-
-    public Map map = new Map();
+    public Map map;
 
     public GameLogic(int TickInterval, int playerNum) {
         ticker = new Ticker(TickInterval);
@@ -36,6 +34,9 @@ public class GameLogic {
         this.entityList = entities;
         this.listeners=listeners;
         this.map = map;
+        for (Listener l : listeners) {
+            ticker.addListener(l);
+        }
     }
     
     public void startGame() {

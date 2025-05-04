@@ -91,7 +91,11 @@ public class PlayerAddView extends AbstractGameView {
 
         startGameButton = new JButton("Start Game");
         startGameButton.setEnabled(false);
-        startGameButton.addActionListener(e -> controller.switchView("GameView"));
+        startGameButton.addActionListener(e -> {
+            controller.switchView("GameView"); 
+            controller.getGameLogic().map.generateMap();
+            });
+            
         buttonPanel.add(startGameButton);
 
         add(buttonPanel, BorderLayout.SOUTH);

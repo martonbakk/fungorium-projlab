@@ -12,6 +12,7 @@ public class ProgramGUI extends JFrame {
             JFrame frame = new JFrame("Fungorium Game");
             frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
             frame.setSize(600, 400);
+            frame.setResizable(false);
             GameLogic gameLogic = new GameLogic(1000, 0); // TickInterval=1000ms, playerNum=0
             Controller controller = new Controller(gameLogic, frame);
             controller.switchView("StartView");

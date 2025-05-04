@@ -1,6 +1,7 @@
 package hu.bme.iit.projlab.bmekings.Player.Entomologist;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import hu.bme.iit.projlab.bmekings.Entities.Fungal.Hyphal;
@@ -25,6 +26,10 @@ public class Entomologist extends Player{
         System.out.println("Uj objektum [" + getPlayerID() + "] hozzaadva!");
     }
 
+    @Override
+    public List<String> getAvailableActions() {
+        return Arrays.asList("Eat Spore", "Move", "Cut Hyphal"); // Teszt adatok
+    }
 
     public Entomologist(String userName) {
         super(IDGenerator.generateID("E"));

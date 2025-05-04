@@ -18,7 +18,7 @@ import hu.bme.iit.projlab.bmekings.Player.Mycologist.Mycologist;
 import hu.bme.iit.projlab.bmekings.Player.Player;
 
 public class Controller {
-    private final GameLogic gameLogic;
+    private GameLogic gameLogic;
     private JFrame frame;
     private Map<String, AbstractGameView> views;
 
