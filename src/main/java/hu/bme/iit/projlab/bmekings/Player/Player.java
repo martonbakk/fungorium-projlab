@@ -1,7 +1,6 @@
 package hu.bme.iit.projlab.bmekings.Player;
 
 import hu.bme.iit.projlab.bmekings.Program.Params;
-import hu.bme.iit.projlab.bmekings.Entities.Entity;
 
 
 
@@ -21,4 +20,8 @@ public abstract class Player{
     public String getPlayerID() { return playerId; }
 
     public int getScore() { return score; }
+
+    public String toString() {
+        return playerId + " " + score;
+    }
 };

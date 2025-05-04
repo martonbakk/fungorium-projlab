@@ -57,9 +57,15 @@ if [ ! -f "$JAR_FILE" ]; then
     exit 1
 fi
 
-# 6. Fut a program
+# 6. Fut a program a megfelelő main osztállyal
 echo "Projekt futtatása..."
-java -jar "$JAR_FILE"
+if [ "$1" = "gui" ]; then
+    echo "GUI mód indítása (ProgramGUI)..."
+    java -cp "$JAR_FILE" hu.bme.iit.projlab.bmekings.GUIElements.ProgramGUI.ProgramGUI
+else
+    echo "Konzolos mód indítása (PlayerMenu)..."
+    java -cp "$JAR_FILE" hu.bme.iit.projlab.bmekings.Program.Program
+fi
 
 if [ $? -ne 0 ]; then
     echo "Hiba: A program futtatása sikertelen!"
