@@ -177,6 +177,10 @@ public class Map {
         
     }
 
+    public ArrayList<Tecton> getTectons() {
+        return tectons;
+    }
+
     @Loggable
     public ArrayList<Tecton> getTectons(ArrayList<String> tectonIds) {
         ArrayList<Tecton> result = new ArrayList<>();

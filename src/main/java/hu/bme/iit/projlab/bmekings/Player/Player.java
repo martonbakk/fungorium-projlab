@@ -20,6 +20,8 @@ public abstract class Player{
 
     public String getPlayerID() { return playerId; }
 
+    public String getUserName(){return userName;}
+
     public int getScore() { return score; }
 
     public String toString() {
