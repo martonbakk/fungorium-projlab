@@ -94,7 +94,8 @@ public class PlayerAddView extends AbstractGameView {
         startGameButton.addActionListener(e -> {
             controller.switchView("GameView"); 
             controller.getGameLogic().map.generateMap();
-            });
+            }
+        );
             
         buttonPanel.add(startGameButton);
 
