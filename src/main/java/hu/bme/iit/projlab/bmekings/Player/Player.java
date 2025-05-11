@@ -1,5 +1,6 @@
 package hu.bme.iit.projlab.bmekings.Player;
 
+import java.io.Serializable;
 import java.util.Arrays;
 import java.util.List;
 
@@ -7,7 +8,10 @@ import hu.bme.iit.projlab.bmekings.Program.Params;
 
 
 
-public abstract class Player{
+public abstract class Player implements Serializable{
+    private static final long serialVersionUID = 1L;
+
+    
     private String playerId;
     private int score;
     protected  String userName;

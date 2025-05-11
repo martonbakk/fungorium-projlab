@@ -1,5 +1,11 @@
 package hu.bme.iit.projlab.bmekings.Logic.GameLogic;
 
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.io.Serializable;
 import java.util.ArrayList;
 
 import hu.bme.iit.projlab.bmekings.Entities.Entity;
@@ -15,7 +21,9 @@ import hu.bme.iit.projlab.bmekings.Player.Mycologist.Mycologist;
  * Ez az osztály indítja el a játékot, kezeli a játékidő telését, és koordinálja a játék elemeit.
  * Kompozíciós kapcsolatban áll a Map osztállyal (egy az egyhez) és az Entity osztállyal (egy a többhöz).
  */
-public class GameLogic {
+public class GameLogic implements Serializable{
+    private static final long serialVersionUID = 1L;
+
     /** A játékidő telését vezérlő ticker objektum. */
     private Ticker ticker=new Ticker(1000);
     /** A játékban szereplő Listener interfészt implementáló objektumok listája, amelyek frissítéseket kapnak. */
@@ -24,6 +32,23 @@ public class GameLogic {
     private static ArrayList<Entomologist> entomologists = new ArrayList<>();
     private static ArrayList<Entity> entityList = new ArrayList<>();
     public Map map;
+
+
+
+    public void saveGame(String filePath) throws IOException {
+        try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(filePath))) {
+            oos.writeObject(this); // A teljes GameLogic objektum mentése
+        }
+    }
+
+    public static GameLogic loadGame(String filePath) throws IOException, ClassNotFoundException {
+        try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream(filePath))) {
+            GameLogic loadedGame = (GameLogic) ois.readObject();
+            return loadedGame;
+        }
+    }
+
+
 
     public GameLogic(int TickInterval, int playerNum) {
         ticker = new Ticker(TickInterval);

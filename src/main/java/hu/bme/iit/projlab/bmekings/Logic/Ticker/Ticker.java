@@ -1,14 +1,18 @@
 package hu.bme.iit.projlab.bmekings.Logic.Ticker;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
 import hu.bme.iit.projlab.bmekings.Interface.Listener.Listener;
 
-public class Ticker {
+public class Ticker implements Serializable {
+    private static final long serialVersionUID = 1L;
+
+
     private final List<Listener> gameObList=new ArrayList<>();
     private final long intervalMillis;
-    private Thread tickerThread = new Thread();
+    private transient Thread tickerThread = new Thread();
     private volatile boolean running;
 
     public Ticker(long intervalMillis) {

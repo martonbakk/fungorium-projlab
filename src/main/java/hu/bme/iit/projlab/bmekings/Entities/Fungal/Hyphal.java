@@ -1,5 +1,7 @@
 package hu.bme.iit.projlab.bmekings.Entities.Fungal;
 
+import java.io.Serializable;
+
 import hu.bme.iit.projlab.bmekings.Entities.Entity;
 import hu.bme.iit.projlab.bmekings.Entities.Insect.Insect;
 import hu.bme.iit.projlab.bmekings.Logger.Loggable;
@@ -15,6 +17,7 @@ import hu.bme.iit.projlab.bmekings.Player.Mycologist.Mycologist;
  */
 @Loggable("Hyphal")
 public class Hyphal extends Entity {
+
     private Tecton connectedTecton=null;
     private boolean developed;
     private int developTime;

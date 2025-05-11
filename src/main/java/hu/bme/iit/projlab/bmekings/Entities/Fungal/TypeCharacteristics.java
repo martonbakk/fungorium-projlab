@@ -1,11 +1,14 @@
 package hu.bme.iit.projlab.bmekings.Entities.Fungal;
 
+import java.io.Serializable;
+
 import hu.bme.iit.projlab.bmekings.Logger.Loggable;
 
 @Loggable("TypeCharacteristics")
-public class TypeCharacteristics{
+public class TypeCharacteristics implements Serializable{
+    private static final long serialVersionUID = 1L;
 
-
+    
     public TypeCharacteristics(){
         this.shootingRange = 1;
         this.sporeProductionIntensity = 1;

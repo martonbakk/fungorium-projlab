@@ -1,5 +1,6 @@
 package hu.bme.iit.projlab.bmekings.Entities.Insect;
 
+import java.io.Serializable;
 import java.util.HashMap;
 
 import hu.bme.iit.projlab.bmekings.Effects.Effect.Effect;

@@ -15,7 +15,7 @@ import hu.bme.iit.projlab.bmekings.Player.Player;
 import hu.bme.iit.projlab.bmekings.Program.Params;
 
 @Loggable("Mycologist")
-public class Mycologist extends Player{
+public class Mycologist extends Player {
     private ArrayList<FungalBody> controlledFunguses= new ArrayList<>();
     private ArrayList<Hyphal> hyphalList= new ArrayList<>();
     private FungalBody selectedFungus=null;
