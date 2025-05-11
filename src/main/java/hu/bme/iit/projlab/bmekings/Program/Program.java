@@ -180,11 +180,13 @@ public class Program {
                 }
                 try {
                      // Ellenőrzés mentés előtt
-                     System.out.println("Mentés előtti állapot:");
-                      System.out.println("Map: " + (gameLogic.map != null ? "Inicializált" : "Null"));
-                      System.out.println("Entomologists: " + gameLogic.getEntomologists().size());
-                      System.out.println("Mycologists: " + gameLogic.getMycologists().size());
-                      System.out.println("Entities: " + gameLogic.getEntityList().size());
+                    System.out.println("Mentés előtti állapot:");
+                    System.out.println("Map: " + (gameLogic.map != null ? "Inicializált" : "Null"));
+                    System.out.println("Entomologists: " + gameLogic.getEntomologists().size());
+                    System.out.println("Mycologists: " + gameLogic.getMycologists().size());
+                    System.out.println("Entities: " + gameLogic.getEntityList().size());
+                    //System.out.println("entitiy1: " + gameLogic.getEntityList().get(1).getId());
+
 
                        String filePath = System.getProperty("user.home") + "\\Documents\\MyGame\\test.ser";
                        gameLogic.saveGame(filePath);
