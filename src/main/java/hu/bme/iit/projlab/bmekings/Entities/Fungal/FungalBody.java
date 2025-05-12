@@ -185,7 +185,6 @@ public class FungalBody extends Entity {
             }
         }
 
-        }
     }
 
     public Spore getRandomSpore(Tecton tecton){
