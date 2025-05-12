@@ -14,6 +14,7 @@ import java.awt.RenderingHints;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -32,6 +33,7 @@ import hu.bme.iit.projlab.bmekings.Entities.Fungal.Hyphal;
 import hu.bme.iit.projlab.bmekings.Entities.Insect.Insect;
 import hu.bme.iit.projlab.bmekings.GUIElements.Controller.Controller;
 import hu.bme.iit.projlab.bmekings.Interface.Listener.Listener;
+import hu.bme.iit.projlab.bmekings.Logic.GameLogic.GameLogic;
 import hu.bme.iit.projlab.bmekings.Map.Tecton.Tecton;
 import hu.bme.iit.projlab.bmekings.Player.Entomologist.Entomologist;
 import hu.bme.iit.projlab.bmekings.Player.Mycologist.Mycologist;
@@ -102,6 +104,8 @@ public class GameView extends AbstractGameView implements Listener {
             if (selectedPlayer != null && selectedAction != null) {
                 JOptionPane.showMessageDialog(this, selectedPlayer.getUserName() + " végrehajtja: " + selectedAction);
                 // TODO: Konkrét akció logika implementálása
+                doAction(selectedPlayer, selectedAction);
+                System.out.println("asd3");
             }
         });
         bottomPanel.add(actionButton, BorderLayout.EAST);
@@ -117,6 +121,79 @@ public class GameView extends AbstractGameView implements Listener {
 
         controller.getGameLogic().addListener(this);
         update();
+    }
+
+    private void doAction(Player selectedPlayer, String selectedAction) {
+        if (selectedPlayer instanceof Mycologist) {
+            selectedPlayer = (Mycologist) selectedPlayer;
+            // ("Grow Fungal Body", "Speed Up Development", "Shoot Spore", "Eat Insect", "Grow Hyphal", "Level Up")
+            // ("Eat Spore", "Move", "Cut Hyphal")
+            switch (selectedAction) {
+                case "Select Fungus":
+                    selectedPlayer.SelectAction(1, GameLogic.getParams());
+                    break;
+                case "Select Hyphal":
+                    selectedPlayer.SelectAction(2, GameLogic.getParams());
+                    break;
+                case "Grow Fungal Body":
+                    selectedPlayer.SelectAction(3, GameLogic.getParams());
+                    break;
+                case "Grow Fungal Body From Spore":
+                    selectedPlayer.SelectAction(4, GameLogic.getParams());
+                    break;
+                case "Grow Hyphal":
+                    selectedPlayer.SelectAction(5, GameLogic.getParams());
+                    break;
+                case "Destroy Fungus":
+                    selectedPlayer.SelectAction(6, GameLogic.getParams());
+                    break;
+                case "Shoot Spore":
+                    selectedPlayer.SelectAction(7, GameLogic.getParams());
+                    break;
+                case "Speed Up Development":
+                    selectedPlayer.SelectAction(8, GameLogic.getParams());
+                    break;
+                case "Grow Hyphal From Hyphal":
+                    selectedPlayer.SelectAction(9, GameLogic.getParams());
+                    break;
+                case "Hyphal Eat Insect":
+                    selectedPlayer.SelectAction(10, GameLogic.getParams());
+                    break;
+                case "Level Up FungalBody":
+                    selectedPlayer.SelectAction(11, GameLogic.getParams());
+                    break;
+                default:
+                    System.out.println("Invalid action type");
+            }
+        }
+        else if (selectedPlayer instanceof Entomologist) {
+            selectedPlayer = (Entomologist) selectedPlayer;
+            
+            //  ("Eat Spore", "Move", "Cut Hyphal"); // Teszt adatok
+            switch (selectedAction) {
+                case "Select Insect":
+                    selectedPlayer.SelectAction(1, GameLogic.getParams());
+                    break;
+                case "Select Tecton":
+                    selectedPlayer.SelectAction(2, GameLogic.getParams());
+                    break;
+                case "Move":
+                    System.out.println("asd5");
+                    selectedPlayer.SelectAction(3, GameLogic.getParams());
+                    break;
+                case "Eat Spore":
+                    selectedPlayer.SelectAction(4, GameLogic.getParams());
+                    break;
+                case "Cut Hyphal":
+                    selectedPlayer.SelectAction(5, GameLogic.getParams());
+                    break;
+                default:
+                    System.out.println("Invalid action type");
+            }
+        }
+
+        controller.getGameLogic();
+       
     }
 
     private void updateStatusLabels() {
@@ -240,6 +317,24 @@ public class GameView extends AbstractGameView implements Listener {
                     } else {
                         selectedTecton = null;
                     }
+                    GameLogic.getParams().selectedTecton = selectedTecton;
+                    System.out.println(GameLogic.getParams().selectedTecton.getId());
+                    Player selectedPlayer = (Player) playerComboBox.getSelectedItem();
+                    
+                    if (selectedPlayer instanceof Mycologist && selectedTecton.isOccupiedByFungus()) {
+                            Mycologist selectedMyc = (Mycologist) selectedPlayer;
+                            selectedMyc.selectFungus(selectedTecton.getFungalBody());
+                            GameLogic.getParams().selectedFungus = selectedTecton.getFungalBody();
+                            System.out.println(GameLogic.getParams().selectedFungus.getId());
+                        }
+                    else if (selectedPlayer instanceof Entomologist && selectedTecton.isOccupiedByInsect()) {
+                            selectedTecton.getInsects().forEach(i -> {
+                                    Entomologist selectedEnt = (Entomologist) selectedPlayer;
+                                    selectedEnt.selectInsect(i);
+                                    // Ez teszteléshez kell
+                                    //System.out.println(selectedEnt.selectedInsect.getId());
+                            });
+                        }
                     repaint();
                 }
             });

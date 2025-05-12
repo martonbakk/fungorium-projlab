@@ -1,6 +1,7 @@
 package hu.bme.iit.projlab.bmekings.Map;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Random;
 
 import hu.bme.iit.projlab.bmekings.Entities.Fungal.Hyphal;
@@ -90,11 +91,11 @@ public class Map {
             }
             tectons.add(tc);
         }
-    
+        /*
         // Set up neighbors
         for (int i = 0; i < tectons.size(); i++) {
             for (int j = i + 1; j < tectons.size(); j++) {
-                if (random.nextInt(10) < 4) {
+                if (random.nextInt(10) < 2) {
                     Tecton tectonA = tectons.get(i);
                     Tecton tectonB = tectons.get(j);
                     tectonA.neighbours.add(tectonB);
@@ -102,7 +103,25 @@ public class Map {
                 }
             }
         }
-    
+        */
+
+        //temporary neighbor logic
+        Integer[] array1 = {0, 11, 22, 33};
+        Integer[] array2 = {10, 21, 32, 43}; 
+        ArrayList<Integer> leftBorder = new ArrayList<Integer>(Arrays.asList(array1));
+        ArrayList<Integer> rightBorder = new ArrayList<Integer>(Arrays.asList(array2));
+        for (Integer i = 0; i < tectons.size(); i++) {
+            if(!(leftBorder.contains(i)))
+                tectons.get(i).neighbours.add(tectons.get(i-1));
+            if(!(rightBorder.contains(i)))
+                tectons.get(i).neighbours.add(tectons.get(i+1));
+            if(i >= 11)
+                tectons.get(i).neighbours.add(tectons.get(i-11));
+            if(i <= 32)
+                tectons.get(i).neighbours.add(tectons.get(i+11));
+        }
+
+
         for (Mycologist mycologist : mycologists) {
             for (int j = 0; j < 2; j++) {
                 boolean success = false;
@@ -120,7 +139,7 @@ public class Map {
             if (availableTectons.isEmpty()) break; // No available tectons
             int idx = random.nextInt(availableTectons.size());
             Tecton baseTecton = availableTectons.remove(idx);
-            Insect insect = new Insect(1, 1, 1, 1, 1, baseTecton, entomologist);
+            Insect insect = new Insect(1, 0, 1, 1, 1, baseTecton, entomologist);
             baseTecton.addInsect(insect);
         }
     

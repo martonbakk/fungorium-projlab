@@ -76,7 +76,8 @@ public class Insect extends Entity{
         this.cutCooldown = 0;
         this.activeEffects = new HashMap<>();
     }
-//rovarasz felvetel konstruktorba!!!
+
+    //rovarasz felvetel konstruktorba!!!
     public Insect(int movingSpeed, int movingCD, int stomachLimit, int currStomachFullness, int cutCooldown, Tecton baseLocation, Entomologist owner){
         super(IDGenerator.generateID("I"), baseLocation);
 
@@ -88,6 +89,7 @@ public class Insect extends Entity{
         this.currStomachFullness = currStomachFullness;
         this.cutCooldown = cutCooldown;
         this.owner=owner;
+        this.owner.addInsect(this);
     }
 
     public Insect(Insect parentInsect) {

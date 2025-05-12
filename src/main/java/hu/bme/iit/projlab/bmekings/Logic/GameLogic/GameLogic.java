@@ -8,6 +8,7 @@ import hu.bme.iit.projlab.bmekings.Logic.Ticker.Ticker;
 import hu.bme.iit.projlab.bmekings.Map.Map;
 import hu.bme.iit.projlab.bmekings.Player.Entomologist.Entomologist;
 import hu.bme.iit.projlab.bmekings.Player.Mycologist.Mycologist;
+import hu.bme.iit.projlab.bmekings.Program.Params;
 
 
 /**
@@ -23,6 +24,7 @@ public class GameLogic {
     private static ArrayList<Mycologist> mycologists = new ArrayList<>();
     private static ArrayList<Entomologist> entomologists = new ArrayList<>();
     private static ArrayList<Entity> entityList = new ArrayList<>();
+    private static Params params = new Params();
     public Map map;
 
     public GameLogic(int TickInterval, int playerNum) {
@@ -55,6 +57,10 @@ public class GameLogic {
 
     public void stopGame() {
         ticker.stop();
+    }
+
+    public static Params getParams() {
+        return params;
     }
 
     public static ArrayList<Entomologist> getEntomologists(){

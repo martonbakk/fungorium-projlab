@@ -52,17 +52,17 @@ public class Entomologist extends Player{
         switch (actionType) {
             case 1:
                 selectInsect(param.selectedInsect);
-                break;/*
+                break;
             case 2:
                 // selectTecton
-                break;*/
-            case 2:
-                MoveInsect(param.selectedTecton);
                 break;
             case 3:
-                EatSpore();
+                MoveInsect(param.selectedTecton);
                 break;
             case 4:
+                EatSpore();
+                break;
+            case 5:
                 CutHyphalInsect(param.selectedHyphal);
                 break;
             default:
@@ -103,8 +103,11 @@ public class Entomologist extends Player{
 
     @Loggable
     public void selectInsect(Insect insect){
+        System.out.println(this.controlledInsects.size() + "");
         for (Insect controlledInsect : this.controlledInsects) {
+                System.out.println("forbanvan");
             if (controlledInsect.getId().equals(insect.getId())) {
+                System.out.println("ifbenvan");
                 this.selectedInsect = controlledInsect;
                 break;  // egyszerre egyhez tudjuk hozzaadni ne menjen tovabb a loop
             }
