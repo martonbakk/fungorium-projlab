@@ -11,9 +11,11 @@ import java.util.Set;
 import hu.bme.iit.projlab.bmekings.Entities.Entity;
 import hu.bme.iit.projlab.bmekings.Entities.Spore.DuplicateSpore;
 import hu.bme.iit.projlab.bmekings.Entities.Spore.HungerSpore;
+import hu.bme.iit.projlab.bmekings.Entities.Spore.HyphalProtectorSpore;
 import hu.bme.iit.projlab.bmekings.Entities.Spore.NormalSpore;
 import hu.bme.iit.projlab.bmekings.Entities.Spore.SlowSpore;
 import hu.bme.iit.projlab.bmekings.Entities.Spore.SpeedSpore;
+import hu.bme.iit.projlab.bmekings.Entities.Spore.Spore;
 import hu.bme.iit.projlab.bmekings.Entities.Spore.StunSpore;
 import hu.bme.iit.projlab.bmekings.Interface.SporeInterface.SporeInterface;
 import hu.bme.iit.projlab.bmekings.Logger.Loggable;
@@ -33,7 +35,7 @@ import hu.bme.iit.projlab.bmekings.Player.Mycologist.Mycologist;
 public class FungalBody extends Entity {
 
     /** A gombatest által kilőtt spórák listája. */ 
-    private Queue<SporeInterface> spores = new LinkedList<>();
+    private Queue<SporeInterface> spores = new LinkedList<>(); //tényleg van ilyenre szükség???
     private int currLevel;              // jelenlegi szint 
     private int shotSporesNum;          // a kiloheto sporak szama
     private TypeCharacteristics characteristics=new TypeCharacteristics(0, 0, 0, 0);
@@ -162,10 +164,12 @@ public class FungalBody extends Entity {
         //     return;
         // }
 
+        /*
         if(this.spores.isEmpty()) {
             System.out.println("Nincs spóra a gombatestben!");
             return;
         }
+        
         for (int i=0; i<this.shotSporesNum; i++) {
             SporeInterface spore = this.spores.poll();
             spore.setBaseLocation(tecton);
@@ -180,7 +184,68 @@ public class FungalBody extends Entity {
                 break;
             }
         }
+            */
+
+            for (int i=0; i<this.shotSporesNum; i++) {
+            Spore newSpore=getRandomSpore(tecton);
+            spores.add(newSpore);
+            newSpore.spawnSpore();
+
+            this.shotSporesNum--;
+
+            if(this.spores.isEmpty()){
+                System.out.println("Nincs több spóra a gombatestben!");
+                break;
+            }
+
+            if (this.shotSporesNum == 0) {
+                System.out.println("Nem tudsz kilőni több spórát!");
+                break;
+            }
+
+        }
     }
+
+    public Spore getRandomSpore(Tecton tecton){
+        Random rand = new Random();
+        int value = rand.nextInt(7);
+        Spore resultSpore;
+        switch (value) {
+            case 0:
+                resultSpore=new NormalSpore(tecton);
+                break;
+            
+            case 1:
+                resultSpore=new HungerSpore(tecton);
+                break;
+
+            case 2:
+                resultSpore=new HyphalProtectorSpore(tecton);
+                break;
+
+            case 3:
+                resultSpore=new HyphalProtectorSpore(tecton);
+                break;
+
+            case 4:
+                resultSpore=new DuplicateSpore(tecton);
+                break;
+
+            case 5:
+                resultSpore=new SlowSpore(tecton);
+                break;
+
+            case 6:
+                resultSpore=new SpeedSpore(tecton);
+                break;
+
+            default:
+                resultSpore=new NormalSpore(tecton);
+                break;
+        }
+        return resultSpore;
+    }
+
 
     @Loggable
     public void levelUp() {
