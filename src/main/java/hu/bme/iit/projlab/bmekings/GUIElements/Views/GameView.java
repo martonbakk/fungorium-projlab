@@ -46,7 +46,7 @@ public class GameView extends AbstractGameView implements Listener {
     private final List<String> insectSubTypes;
     private final List<String> fungalSubTypes;
 
-    public GameView(Controller controller, List<List<String>> textures, List<String> fungalSubTypes, List<String> insectSubTypes) {
+    public GameView(Controller controller, List<List<String>> textures, List<String> insectSubTypes, List<String> fungalSubTypes) {
         super(controller);
         this.insectSubTypes = insectSubTypes;
         this.fungalSubTypes = fungalSubTypes;

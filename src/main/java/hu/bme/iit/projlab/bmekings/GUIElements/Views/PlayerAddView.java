@@ -80,9 +80,9 @@ public class PlayerAddView extends AbstractGameView {
             nameField.setText("");
             // Altípus eltávolítása a megfelelő listáról
             if ("Mycologist".equals(type)) {
-                mycologistTypes.remove(subType);
-            } else {
                 entomologistTypes.remove(subType);
+            } else {
+                mycologistTypes.remove(subType);
             }
             // Altípus legördülő menü frissítése
             updateSubTypeComboBox();
@@ -140,7 +140,7 @@ public class PlayerAddView extends AbstractGameView {
     private void updateSubTypeComboBox() {
         subTypeComboBox.removeAllItems();
         String selectedType = (String) typeComboBox.getSelectedItem();
-        List<String> availableSubTypes = "Mycologist".equals(selectedType) ? mycologistTypes : entomologistTypes;
+        List<String> availableSubTypes = "Mycologist".equals(selectedType) ? entomologistTypes : mycologistTypes;
         if (availableSubTypes.isEmpty()) {
             subTypeComboBox.addItem("Nincs elérhető altípus");
             subTypeComboBox.setEnabled(false);
