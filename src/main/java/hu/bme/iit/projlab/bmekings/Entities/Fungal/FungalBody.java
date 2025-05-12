@@ -35,7 +35,7 @@ import hu.bme.iit.projlab.bmekings.Player.Mycologist.Mycologist;
 public class FungalBody extends Entity {
 
     /** A gombatest által kilőtt spórák listája. */ 
-    private Queue<SporeInterface> spores = new LinkedList<>(); //tényleg van ilyenre szükség???
+    private Queue<SporeInterface> spores = new LinkedList<>();
     private int currLevel;              // jelenlegi szint 
     private int shotSporesNum;          // a kiloheto sporak szama
     private TypeCharacteristics characteristics=new TypeCharacteristics(0, 0, 0, 0);
@@ -164,13 +164,13 @@ public class FungalBody extends Entity {
         //     return;
         // }
 
-        /*
         if(this.spores.isEmpty()) {
             System.out.println("Nincs spóra a gombatestben!");
             return;
         }
         
         for (int i=0; i<this.shotSporesNum; i++) {
+            // Ez kiveszi a Spore láncolt listából a legújabb spórát, amit az AddSpore random generált
             SporeInterface spore = this.spores.poll();
             spore.setBaseLocation(tecton);
             tecton.addSpore(spore);
@@ -184,24 +184,6 @@ public class FungalBody extends Entity {
                 break;
             }
         }
-            */
-
-            for (int i=0; i<this.shotSporesNum; i++) {
-            Spore newSpore=getRandomSpore(tecton);
-            spores.add(newSpore);
-            newSpore.spawnSpore();
-
-            this.shotSporesNum--;
-
-            if(this.spores.isEmpty()){
-                System.out.println("Nincs több spóra a gombatestben!");
-                break;
-            }
-
-            if (this.shotSporesNum == 0) {
-                System.out.println("Nem tudsz kilőni több spórát!");
-                break;
-            }
 
         }
     }
