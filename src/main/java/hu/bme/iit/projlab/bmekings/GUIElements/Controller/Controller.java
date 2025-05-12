@@ -2,6 +2,7 @@ package hu.bme.iit.projlab.bmekings.GUIElements.Controller;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import javax.swing.JFrame;
@@ -21,18 +22,24 @@ public class Controller {
     private GameLogic gameLogic;
     private JFrame frame;
     private Map<String, AbstractGameView> views;
+    private List<List<String>> textures;
+    private List<String> insectTypes= new ArrayList<>();
+    private List<String> fungalTypes=new ArrayList<>();
 
-    public Controller(GameLogic gameLogic, JFrame frame) {
+    public Controller(GameLogic gameLogic, JFrame frame, List<List<String>> textures, List<String> insectSubTypes, List<String> fungalSubTypes) {
+        this.insectTypes = insectSubTypes;
+        this.fungalTypes = fungalSubTypes;
         this.gameLogic = gameLogic;
         this.frame = frame;
         this.views = new HashMap<>();
+        this.textures = textures;
         initializeViews();
     }
 
     private void initializeViews() {
         views.put("StartView", new StartView(this)); //StartView
-        views.put("PlayerAddView", new PlayerAddView(this));
-        views.put("GameView", new GameView(this));
+        views.put("PlayerAddView", new PlayerAddView(this, this.insectTypes, this.fungalTypes)); //PlayerAddView
+        views.put("GameView", new GameView(this, this.textures, this.insectTypes, this.fungalTypes));
         views.put("LoadView", new LoadView(this));
         views.put("SaveView", new SaveView(this));
     }
@@ -53,11 +60,11 @@ public class Controller {
         frame.repaint();
     }
 
-    public void addPlayer(String name, String type) {
+    public void addPlayer(String name, String type, String subType) {
         if (type.equals("Mycologist")) {
-            GameLogic.addMycologist(new Mycologist(name));
+            GameLogic.addMycologist(new Mycologist(name, subType));
         } else if (type.equals("Entomologist")) {
-            GameLogic.addEntomologist(new Entomologist(name));
+            GameLogic.addEntomologist(new Entomologist(name, subType));
         }
     }
 

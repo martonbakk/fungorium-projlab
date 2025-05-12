@@ -3,6 +3,7 @@ package hu.bme.iit.projlab.bmekings.GUIElements.Views;
 import java.awt.BorderLayout;
 import java.awt.GridLayout;
 import java.util.ArrayList;
+import java.util.List;
 
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
@@ -22,16 +23,23 @@ import hu.bme.iit.projlab.bmekings.Player.Player;
 public class PlayerAddView extends AbstractGameView {
     private JTextField nameField;
     private JComboBox<String> typeComboBox;
+    private JComboBox<String> subTypeComboBox;
     private JTextArea mycologistListArea;
     private JTextArea entomologistListArea;
     private JButton startGameButton;
+    private JButton addButton;
+    private List<String> mycologistTypes = new ArrayList<>();
+    private List<String> entomologistTypes = new ArrayList<>();
 
-    public PlayerAddView(Controller controller) {
+    public PlayerAddView(Controller controller, List<String> insectTypes, List<String> fungalTypes) {
         super(controller);
+
+        this.mycologistTypes = insectTypes;
+        this.entomologistTypes = fungalTypes;
         setLayout(new BorderLayout(10, 10));
 
         // Input panel
-        JPanel inputPanel = new JPanel(new GridLayout(3, 2, 5, 5));
+        JPanel inputPanel = new JPanel(new GridLayout(4, 2, 5, 5));
         inputPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
 
         inputPanel.add(new JLabel("Név:"));
@@ -41,19 +49,44 @@ public class PlayerAddView extends AbstractGameView {
         inputPanel.add(new JLabel("Típus:"));
         String[] types = {"Mycologist", "Entomologist"};
         typeComboBox = new JComboBox<>(types);
+        typeComboBox.setSelectedIndex(0);
         inputPanel.add(typeComboBox);
 
-        JButton addButton = new JButton("Játékos hozzáadása");
+        inputPanel.add(new JLabel("Altípus:"));
+        subTypeComboBox = new JComboBox<>();
+        inputPanel.add(subTypeComboBox);
+
+        addButton = new JButton("Játékos hozzáadása");
+
+        // Altípusok inicializálása a kezdeti típus alapján
+        updateSubTypeComboBox();
+
+        // Típusváltás kezelése
+        typeComboBox.addActionListener(e -> updateSubTypeComboBox());
+
         addButton.addActionListener(e -> {
             String name = nameField.getText().trim();
             String type = (String) typeComboBox.getSelectedItem();
+            String subType = (String) subTypeComboBox.getSelectedItem();
             if (name.isEmpty()) {
                 JOptionPane.showMessageDialog(this, "Kérlek, add meg a játékos nevét!", "Hiba", JOptionPane.ERROR_MESSAGE);
-            } else {
-                controller.addPlayer(name, type);
-                nameField.setText("");
-                update();
+                return;
             }
+            if (subType == null || "Nincs elérhető altípus".equals(subType)) {
+                JOptionPane.showMessageDialog(this, "Nincs elérhető altípus, válassz másik típust!", "Hiba", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+            controller.addPlayer(name, type, subType);
+            nameField.setText("");
+            // Altípus eltávolítása a megfelelő listáról
+            if ("Mycologist".equals(type)) {
+                mycologistTypes.remove(subType);
+            } else {
+                entomologistTypes.remove(subType);
+            }
+            // Altípus legördülő menü frissítése
+            updateSubTypeComboBox();
+            update();
         });
         inputPanel.add(addButton);
 
@@ -86,22 +119,39 @@ public class PlayerAddView extends AbstractGameView {
         // Gombok panel
         JPanel buttonPanel = new JPanel();
         JButton backButton = new JButton("Vissza");
-        backButton.addActionListener(e -> controller.switchView("StartView"));
+        backButton.addActionListener(e -> {
+            controller.switchView("StartView");
+        });
         buttonPanel.add(backButton);
 
         startGameButton = new JButton("Start Game");
         startGameButton.setEnabled(false);
         startGameButton.addActionListener(e -> {
-            controller.switchView("GameView"); 
+            controller.switchView("GameView");
             controller.getGameLogic().map.generateMap();
-            }
-        );
-            
+        });
         buttonPanel.add(startGameButton);
 
         add(buttonPanel, BorderLayout.SOUTH);
 
         update();
+    }
+
+    private void updateSubTypeComboBox() {
+        subTypeComboBox.removeAllItems();
+        String selectedType = (String) typeComboBox.getSelectedItem();
+        List<String> availableSubTypes = "Mycologist".equals(selectedType) ? mycologistTypes : entomologistTypes;
+        if (availableSubTypes.isEmpty()) {
+            subTypeComboBox.addItem("Nincs elérhető altípus");
+            subTypeComboBox.setEnabled(false);
+            addButton.setEnabled(false);
+        } else {
+            for (String subType : availableSubTypes) {
+                subTypeComboBox.addItem(subType);
+            }
+            subTypeComboBox.setEnabled(true);
+            addButton.setEnabled(true);
+        }
     }
 
     @Override

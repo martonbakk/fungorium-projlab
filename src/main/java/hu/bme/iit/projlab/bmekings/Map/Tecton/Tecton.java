@@ -41,6 +41,8 @@ public class Tecton implements Listener{
     private int posX = -1;
     private int posY = -1;
     
+    public ArrayList<Insect> getInsects(){return insects; }
+
     public void setPosition(int x, int y) {
         this.posX = x;
         this.posY = y;

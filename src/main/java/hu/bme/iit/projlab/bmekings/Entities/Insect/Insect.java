@@ -33,6 +33,11 @@ public class Insect extends Entity{
     private HashMap<Effect, Integer> activeEffects=new HashMap<>();
 
     @Loggable
+    public Entomologist getOwner() {
+        return owner;
+    }
+
+    @Loggable
     public void increaseMovingSpeed(int speed){
         System.out.println("[" + this.getId() + "] sped up");
         this.movingSpeed+=speed;    

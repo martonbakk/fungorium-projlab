@@ -29,14 +29,25 @@ public class Mycologist extends Player{
         System.out.println("Uj objektum [" + getPlayerID() + "] hozzaadva!");
     }*/
 
-    public Mycologist() {
+    public Mycologist(){
         super("M");
+        System.out.println("Uj objektum [" + getPlayerID() + "] hozzaadva!");
+    }
+
+    public Mycologist(String userName, String type) {
+        super(IDGenerator.generateID("M"));
+        this.userName = userName;
+        this.type = type;
+        this.controlledFunguses = new ArrayList<>();
+        this.hyphalList = new ArrayList<>();
+        this.typeCharacteristics = new TypeCharacteristics();
         System.out.println("Uj objektum [" + getPlayerID() + "] hozzaadva!");
     }
 
     public Mycologist(String userName) {
         super(IDGenerator.generateID("M"));
         this.userName = userName;
+        this.type = null;
         this.controlledFunguses = new ArrayList<>();
         this.hyphalList = new ArrayList<>();
         this.typeCharacteristics = new TypeCharacteristics();

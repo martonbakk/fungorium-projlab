@@ -31,9 +31,17 @@ public class Entomologist extends Player{
         return Arrays.asList("Eat Spore", "Move", "Cut Hyphal"); // Teszt adatok
     }
 
+    public Entomologist(String userName, String type) {
+        super(IDGenerator.generateID("E"));
+        this.userName = userName;
+        this.type = type;
+        System.out.println("Uj objektum [" + getPlayerID() + "] hozzaadva!");
+    }
+
     public Entomologist(String userName) {
         super(IDGenerator.generateID("E"));
         this.userName = userName;
+        this.type = null;
         System.out.println("Uj objektum [" + getPlayerID() + "] hozzaadva!");
     }
     public List<Insect> getControlledInsects() { return controlledInsects; }

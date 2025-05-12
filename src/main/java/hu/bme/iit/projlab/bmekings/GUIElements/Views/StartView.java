@@ -15,7 +15,7 @@ import javax.swing.SwingConstants;
 
 import hu.bme.iit.projlab.bmekings.GUIElements.Controller.Controller;
 
-public class StartView extends AbstractGameView {
+public class StartView extends AbstractGameView{
     public StartView(Controller controller) {
         super(controller);
         setLayout(new BorderLayout());

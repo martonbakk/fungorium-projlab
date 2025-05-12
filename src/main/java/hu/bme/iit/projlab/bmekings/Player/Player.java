@@ -11,6 +11,7 @@ public abstract class Player{
     private String playerId;
     private int score;
     protected  String userName;
+    protected String type;
 
     // Objectum lesz a csomagolo, kasztolni kell az egyes menupontokba és akkor nem rakjuk tele felesleges parameterekkel a cuccot
     public abstract void SelectAction(int actionType, Params params);
@@ -28,10 +29,14 @@ public abstract class Player{
     public int getScore() { return score; }
 
     public String toString() {
-        return "Username: "+userName + " PlayerID: " + playerId;
+        return "Username: "+userName + " PlayerID: " + playerId+" Type: " + type;
     }
 
     public List<String> getAvailableActions() {
         return Arrays.asList("Mozgás", "Gyűjtés", "Vizsgálat"); // Teszt adatok
+    }
+
+    public String getType() {
+        return this.type;
     }
 };

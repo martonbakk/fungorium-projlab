@@ -15,6 +15,7 @@ import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import javax.imageio.ImageIO;
@@ -28,6 +29,7 @@ import javax.swing.SwingConstants;
 
 import hu.bme.iit.projlab.bmekings.Entities.Fungal.FungalBody;
 import hu.bme.iit.projlab.bmekings.Entities.Fungal.Hyphal;
+import hu.bme.iit.projlab.bmekings.Entities.Insect.Insect;
 import hu.bme.iit.projlab.bmekings.GUIElements.Controller.Controller;
 import hu.bme.iit.projlab.bmekings.Interface.Listener.Listener;
 import hu.bme.iit.projlab.bmekings.Map.Tecton.Tecton;
@@ -41,11 +43,14 @@ public class GameView extends AbstractGameView implements Listener {
     private final JLabel scoreLabel;
     private final JLabel selectedPlayerLabel;
     private final PentagonPanel pentagonPanel;
+    private final List<String> insectSubTypes;
+    private final List<String> fungalSubTypes;
 
-    public GameView(Controller controller) {
+    public GameView(Controller controller, List<List<String>> textures, List<String> fungalSubTypes, List<String> insectSubTypes) {
         super(controller);
+        this.insectSubTypes = insectSubTypes;
+        this.fungalSubTypes = fungalSubTypes;
         setLayout(new BorderLayout(10, 10));
-
         // Felső panel
         JPanel topPanel = new JPanel(new BorderLayout());
 
@@ -62,7 +67,9 @@ public class GameView extends AbstractGameView implements Listener {
         add(topPanel, BorderLayout.NORTH);
 
         // Pentagon panel
-        pentagonPanel = new PentagonPanel();
+        List<String> insectImagePaths = textures.get(0); // Insect images
+        List<String> fungalImagePaths = textures.get(1); // Fungal images
+        pentagonPanel = new PentagonPanel(insectImagePaths, fungalImagePaths, fungalSubTypes, insectSubTypes);
         add(pentagonPanel, BorderLayout.CENTER);
 
         // Alsó panel
@@ -166,32 +173,49 @@ public class GameView extends AbstractGameView implements Listener {
         private int tectonCount;
         private final ArrayList<Polygon> tectonPolygons = new ArrayList<>();
         private final ArrayList<Tecton> tectons = new ArrayList<>();
-        private BufferedImage insectImage;
-        private BufferedImage fungalImage;
+        private final Map<String, BufferedImage> mycologistSubTypeImages = new HashMap<>();
+        private final Map<String, BufferedImage> entomologistSubTypeImages = new HashMap<>();
+        private List<String> mycologistSubTypes = new ArrayList<>();
+        private List<String> entomologistSubTypes = new ArrayList<>();
         private Tecton selectedTecton;
 
         public void setTectonCount(int count) {
             this.tectonCount = count;
         }
 
-        public PentagonPanel() {
+
+        public PentagonPanel(List<String> insectImagePaths, List<String> fungalImagePaths, List<String> mycologistSubTypes, List<String> entomologistSubTypes) {
             setPreferredSize(new Dimension(0, 400));
             setBackground(new Color(128, 195, 255));
+            this.mycologistSubTypes = mycologistSubTypes;
+            this.entomologistSubTypes = entomologistSubTypes;
 
-            // Load insect image
+            // Képek betöltése és társítása altípusokhoz
+            String img = null;
             try {
-                insectImage = ImageIO.read(getClass().getResource("/Data/insect1.png"));
+                // Mycologist képek társítása
+                for (int i = 0; i < Math.min(fungalImagePaths.size(), mycologistSubTypes.size()); i++) {
+                    img = fungalImagePaths.get(i);
+                    System.out.println("Mycologist kép betöltése: " + img + ", Erőforrás: " + getClass().getResource(img));
+                    if (getClass().getResource(img) == null) {
+                        throw new IOException("Nem található erőforrás: " + img);
+                    }
+                    BufferedImage image = ImageIO.read(getClass().getResource(img));
+                    mycologistSubTypeImages.put(mycologistSubTypes.get(i), image);
+                }
+                // Entomologist képek társítása
+                for (int i = 0; i < Math.min(insectImagePaths.size(), entomologistSubTypes.size()); i++) {
+                    img = insectImagePaths.get(i);
+                    System.out.println("Entomologist kép betöltése: " + img + ", Erőforrás: " + getClass().getResource(img));
+                    if (getClass().getResource(img) == null) {
+                        throw new IOException("Nem található erőforrás: " + img);
+                    }
+                    BufferedImage image = ImageIO.read(getClass().getResource(img));
+                    entomologistSubTypeImages.put(entomologistSubTypes.get(i), image);
+                }
             } catch (IOException e) {
-                System.err.println("Nem sikerült betölteni az insect1.png képet: " + e.getMessage());
-                insectImage = null;
-            }
-
-            // Load fungal body image
-            try {
-                fungalImage = ImageIO.read(getClass().getResource("/Data/ms2.png"));
-            } catch (IOException e) {
-                System.err.println("Nem sikerült betölteni az ms2.png képet: " + e.getMessage());
-                fungalImage = null;
+                System.err.println("Nem sikerült betölteni az " + img + " képet: " + e.getMessage());
+                JOptionPane.showMessageDialog(null, "Hiba a kép betöltésekor: " + img + "\nFallback körök lesznek használva.", "Hiba", JOptionPane.ERROR_MESSAGE);
             }
 
             addMouseListener(new java.awt.event.MouseAdapter() {
@@ -206,7 +230,6 @@ public class GameView extends AbstractGameView implements Listener {
                             break;
                         }
                     }
-                    // Update selected tecton (deselect if clicking outside or same tecton)
                     if (clickedTecton != null) {
                         selectedTecton = (selectedTecton == clickedTecton) ? null : clickedTecton;
                         StringBuilder message = new StringBuilder("Tecton ID: " + clickedTecton.getId() + "\nSzomszédok:\n");
@@ -215,9 +238,9 @@ public class GameView extends AbstractGameView implements Listener {
                         }
                         JOptionPane.showMessageDialog(PentagonPanel.this, message.toString());
                     } else {
-                        selectedTecton = null; // Deselect if clicked outside
+                        selectedTecton = null;
                     }
-                    repaint(); // Trigger redraw to update outline
+                    repaint();
                 }
             });
         }
@@ -258,7 +281,7 @@ public class GameView extends AbstractGameView implements Listener {
             }
 
             // Draw Hyphal connections
-            g2d.setColor(Color.BLACK); // Black lines for Hyphal
+            g2d.setColor(Color.BLACK);
             ArrayList<Mycologist> mycologists = controller.getGameLogic().getMycologists();
             for (Mycologist mycologist : mycologists) {
                 for (Hyphal hyphal : mycologist.getHyphalList()) {
@@ -289,14 +312,14 @@ public class GameView extends AbstractGameView implements Listener {
                 // Draw yellow outline if this is the selected tecton
                 if (tectons.get(i) == selectedTecton) {
                     g2d.setColor(Color.YELLOW);
-                    g2d.setStroke(new BasicStroke(2)); // Thicker outline
-                    g2d.drawOval(x, y, diameter, diameter); // Outline around tecton
-                    g2d.setStroke(new BasicStroke(1)); // Reset stroke
+                    g2d.setStroke(new BasicStroke(2));
+                    g2d.drawOval(x, y, diameter, diameter);
+                    g2d.setStroke(new BasicStroke(1));
                 }
 
                 // Create polygon for mouse click detection
                 Polygon polygon = new Polygon();
-                int sides = 20; // Approximate circle with many sides
+                int sides = 20;
                 for (int j = 0; j < sides; j++) {
                     double angle = 2 * Math.PI * j / sides;
                     int px = (int) (x + radius + radius * Math.cos(angle));
@@ -306,16 +329,22 @@ public class GameView extends AbstractGameView implements Listener {
                 tectonPolygons.add(polygon);
 
                 // Draw FungalBody if present
-                FungalBody fungalBody = tectons.get(i).getFungalBody(); // Assumes getFungalBody() exists
+                FungalBody fungalBody = tectons.get(i).getFungalBody();
                 if (fungalBody != null) {
+                    Mycologist owner = fungalBody.getOwner();
+                    System.out.println("FungalBody owner: " + owner);
+                    String subType = owner != null ? owner.getType() : null;
+                    System.out.println("FungalBody subtype: " + subType);
+                    BufferedImage fungalImage = subType != null ? mycologistSubTypeImages.get(subType) : null;
+                    System.out.println("FungalBody image: " + fungalImage);
                     if (fungalImage != null) {
-                        int fungalRadius = radius / 2; // Same size as previous fungal circle
+                        int fungalRadius = radius / 2;
                         int fungalDiameter = fungalRadius * 2;
-                        int fungalX = x + (radius - fungalRadius); // Center within tecton
+                        int fungalX = x + (radius - fungalRadius);
                         int fungalY = y + (radius - fungalRadius);
                         g2d.drawImage(fungalImage, fungalX, fungalY, fungalDiameter, fungalDiameter, null);
                     } else {
-                        // Fallback to red circle if image loading failed
+                        // Fallback to red circle
                         g2d.setColor(Color.RED);
                         int fungalRadius = radius / 2;
                         int fungalDiameter = fungalRadius * 2;
@@ -327,21 +356,35 @@ public class GameView extends AbstractGameView implements Listener {
 
                 // Draw Insect image if present
                 if (tectons.get(i).isOccupiedByInsect()) {
-                    if (insectImage != null) {
-                        int insectRadius = radius / 3; // Same size as previous insect circle
-                        int insectDiameter = insectRadius * 2;
-                        // Offset to avoid overlap with FungalBody (top-left quadrant)
-                        int insectX = x + (radius - insectRadius) - insectRadius; // Shift left
-                        int insectY = y + (radius - insectRadius) - insectRadius; // Shift up
-                        g2d.drawImage(insectImage, insectX, insectY, insectDiameter, insectDiameter, null);
-                    } else {
-                        // Fallback to yellow circle if image loading failed
-                        g2d.setColor(Color.YELLOW);
-                        int insectRadius = radius / 3;
-                        int insectDiameter = insectRadius * 2;
-                        int insectX = x + (radius - insectRadius) - insectRadius;
-                        int insectY = y + (radius - insectRadius) - insectRadius;
-                        g2d.fillOval(insectX, insectY, insectDiameter, insectDiameter);
+                    List<Entomologist> insectOwners = new ArrayList<>();
+                    ArrayList<Insect> insects = tectons.get(i).getInsects();
+                    for (Insect insect : insects) {
+                        if (insect.getOwner() != null) {
+                            insectOwners.add(insect.getOwner());
+                        }
+                    }
+
+                    for (Entomologist owner : insectOwners) {
+                        String subType = owner != null ? owner.getType() : null;
+                        System.out.println("Insect owner: " + owner);
+                        BufferedImage insectImage = subType != null ? entomologistSubTypeImages.get(subType) : null;
+                        System.out.println("Insect subtype: " + subType);
+                        System.out.println("Insect image: " + insectImage);
+                        if (insectImage != null) {
+                            int insectRadius = radius / 3;
+                            int insectDiameter = insectRadius * 2;
+                            int insectX = x + (radius - insectRadius) - insectRadius;
+                            int insectY = y + (radius - insectRadius) - insectRadius;
+                            g2d.drawImage(insectImage, insectX, insectY, insectDiameter, insectDiameter, null);
+                        } else {
+                            // Fallback to yellow circle
+                            g2d.setColor(Color.YELLOW);
+                            int insectRadius = radius / 3;
+                            int insectDiameter = insectRadius * 2;
+                            int insectX = x + (radius - insectRadius) - insectRadius;
+                            int insectY = y + (radius - insectRadius) - insectRadius;
+                            g2d.fillOval(insectX, insectY, insectDiameter, insectDiameter);
+                        }
                     }
                 }
             }
