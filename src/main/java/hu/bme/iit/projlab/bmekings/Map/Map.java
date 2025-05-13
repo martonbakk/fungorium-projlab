@@ -171,6 +171,7 @@ public class Map {
                         break;
                 }
                 baseTecton.addSpore(sp);
+                GameLogic.addEntity(sp);
             }
         }
         assignTectonPositions();

@@ -47,12 +47,14 @@ public class Ticker {
             }
         });
         tickerThread.start();
+        System.out.println("Started Ticker!");
     }
 
     public void stop() {
         running = false;
         if (tickerThread != null) {
             tickerThread.interrupt();
+            System.out.println("Stopped Ticker!");
         }
     }
 }

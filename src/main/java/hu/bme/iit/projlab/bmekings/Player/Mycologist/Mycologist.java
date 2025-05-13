@@ -118,7 +118,7 @@ public class Mycologist extends Player{
     @Override
     public List<String> getAvailableActions() {
         return Arrays.asList("Grow Fungal Body", "Speed Up Development", 
-            "Shoot Spore", "Eat Insect", "Grow Hyphal", "Level Up"); // Teszt adatok
+            "Shoot Spore", "Eat Insect", "Grow Hyphal", "Grow Hyphal From Hyphal" , "Level Up"); // Teszt adatok
     }
 
     @Loggable
@@ -279,16 +279,19 @@ public class Mycologist extends Player{
     }
 
     @Loggable
-    public void growHyphalFromHyphalAciton(Tecton targetTecton){
-        if(targetTecton.getFlag().hyphalApproved || (targetTecton.getFlag().oneHyphalApproved&&targetTecton.getConnectedNeighbors().size()==0)){
+    public void growHyphalFromHyphalAciton(Tecton targetTecton) {
+        System.out.println("Megvan");
+        //if(targetTecton.getFlag().hyphalApproved || (targetTecton.getFlag().oneHyphalApproved&&targetTecton.getConnectedNeighbors().size()==0)){
+            // System.out.println("Megvan2");
             selectedHyphal.growHyphalFromHyphal(targetTecton);
-            selectedHyphal=null;
-        }
+            selectedHyphal = null;
+            this.selectedFungus = null;
+        //}
     }
 
     public void hyphalEatInsect(Insect targetInsect){
         this.selectedHyphal.eatInsect(targetInsect);
-        selectedHyphal=null;
-
+        selectedHyphal = null;
+        this.selectedFungus = null;
     }
 }

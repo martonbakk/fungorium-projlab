@@ -78,4 +78,8 @@ public class Controller {
     public GameLogic getGameLogic() {
         return gameLogic;
     }
+
+    public JFrame getFrame(){
+        return frame;
+    }
 }

@@ -35,6 +35,7 @@ public class ProgramGUI extends JFrame {
             Controller controller = new Controller(gameLogic, frame, textures, insectTypes, fungalTypes);
             controller.switchView("StartView");
             frame.setVisible(true);
+            frame.setLocationRelativeTo(null);
         });
     }
 }

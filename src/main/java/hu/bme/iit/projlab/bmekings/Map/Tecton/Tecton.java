@@ -140,7 +140,7 @@ public class Tecton implements Listener{
                                  
         FungalBody newfungalBody = new FungalBody(1, 0, player.getTypeCharacteristics(), this, player);
 
-        GameLogic.addEntity(fungalBody);
+        GameLogic.addEntity(newfungalBody);
 
         occupiedByFungalBody=true;
 
@@ -267,6 +267,7 @@ public class Tecton implements Listener{
     public void addInsect(Insect insect){
         occupiedByInsect=true;
         insects.add(insect);
+        GameLogic.addEntity(insect);
     }
 
     @Loggable

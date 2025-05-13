@@ -21,11 +21,14 @@ import java.util.Map;
 
 import javax.imageio.ImageIO;
 import javax.swing.BorderFactory;
+import javax.swing.Box;
+import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JTextArea;
 import javax.swing.SwingConstants;
 
 import hu.bme.iit.projlab.bmekings.Entities.Fungal.FungalBody;
@@ -44,6 +47,8 @@ public class GameView extends AbstractGameView implements Listener {
     private final JComboBox<String> actionComboBox;
     private final JLabel scoreLabel;
     private final JLabel selectedPlayerLabel;
+    private final JTextArea selectedFungusLabel;
+    private final JTextArea selectedHyphalLabel;
     private final PentagonPanel pentagonPanel;
     private final List<String> insectSubTypes;
     private final List<String> fungalSubTypes;
@@ -55,10 +60,6 @@ public class GameView extends AbstractGameView implements Listener {
         setLayout(new BorderLayout(10, 10));
         // Felső panel
         JPanel topPanel = new JPanel(new BorderLayout());
-
-        JPanel menuPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT, 5, 5));
-        menuPanel.setOpaque(false);
-
         scoreLabel = new JLabel("", SwingConstants.CENTER);
         scoreLabel.setFont(new Font("Arial", Font.PLAIN, 12));
         topPanel.add(scoreLabel, BorderLayout.NORTH);
@@ -68,11 +69,50 @@ public class GameView extends AbstractGameView implements Listener {
         topPanel.add(selectedPlayerLabel, BorderLayout.CENTER);
         add(topPanel, BorderLayout.NORTH);
 
+        JPanel gamePanel = new JPanel(new BorderLayout());
+
+        JPanel westJPanel = new JPanel();
+        westJPanel.setLayout(new BoxLayout(westJPanel, BoxLayout.PAGE_AXIS));
+        
+        selectedFungusLabel = new JTextArea("Kiválasztott\nGombatest: Nincs");
+        selectedFungusLabel.setFont(new Font("Arial", Font.PLAIN, 12));
+
+        selectedFungusLabel.setSize(100, Short.MAX_VALUE);
+        selectedFungusLabel.setPreferredSize(selectedFungusLabel.getPreferredSize());
+
+        selectedFungusLabel.setEditable(false);
+        selectedFungusLabel.setLineWrap(true);
+        selectedFungusLabel.setFocusable(false);
+        selectedFungusLabel.setOpaque(true);
+        
+        westJPanel.add(selectedFungusLabel);
+        westJPanel.add(Box.createRigidArea(new Dimension(0,30)));
+
+        selectedHyphalLabel = new JTextArea("Kiválasztott\nFonál: Nincs");
+        selectedHyphalLabel.setFont(new Font("Arial", Font.PLAIN, 12));
+
+        selectedHyphalLabel.setSize(100, Short.MAX_VALUE);
+        selectedHyphalLabel.setPreferredSize(selectedFungusLabel.getPreferredSize());
+
+        selectedHyphalLabel.setEditable(false);
+        selectedHyphalLabel.setLineWrap(true);
+        
+        westJPanel.add(selectedHyphalLabel);
+        gamePanel.add(westJPanel, BorderLayout.WEST);
+
         // Pentagon panel
         List<String> insectImagePaths = textures.get(0); // Insect images
         List<String> fungalImagePaths = textures.get(1); // Fungal images
         pentagonPanel = new PentagonPanel(insectImagePaths, fungalImagePaths, fungalSubTypes, insectSubTypes);
-        add(pentagonPanel, BorderLayout.CENTER);
+        gamePanel.add(pentagonPanel, BorderLayout.CENTER);
+
+        JPanel eastJPanel = new JPanel();
+        JLabel valami = new JLabel("Kiválasztott Rovar: Nincs", SwingConstants.CENTER);
+        valami.setFont(new Font("Arial", Font.PLAIN, 12));
+        eastJPanel.add(valami);
+        gamePanel.add(eastJPanel, BorderLayout.EAST);
+
+        add(gamePanel, BorderLayout.CENTER);
 
         // Alsó panel
         JPanel bottomPanel = new JPanel(new BorderLayout(5, 5));
@@ -321,9 +361,13 @@ public class GameView extends AbstractGameView implements Listener {
                     
                     if (selectedPlayer instanceof Mycologist && selectedTecton.isOccupiedByFungus()) {
                             Mycologist selectedMyc = (Mycologist) selectedPlayer;
-                            selectedMyc.selectFungus(selectedTecton.getFungalBody());
-                            GameLogic.getParams().selectedFungus = selectedTecton.getFungalBody();
-                            System.out.println(GameLogic.getParams().selectedFungus.getId());
+                            int answer = JOptionPane.showConfirmDialog(null, "Do you want to Select [" + selectedTecton.getFungalBody().getId() + "]", "Fungal Body Chooser", JOptionPane.YES_NO_OPTION);
+                            if (answer == 0) {
+                                selectedMyc.selectFungus(selectedTecton.getFungalBody());
+                                GameLogic.getParams().selectedFungus = selectedTecton.getFungalBody();
+                                System.out.println(GameLogic.getParams().selectedFungus.getId());
+                                selectedFungusLabel.setText("Kiválasztott\nGombatest: " + GameLogic.getParams().selectedFungus.getId());
+                            }
                         }
                     else if (selectedPlayer instanceof Entomologist && selectedTecton.isOccupiedByInsect()) {
                             selectedTecton.getInsects().forEach(i -> {
@@ -334,6 +378,15 @@ public class GameView extends AbstractGameView implements Listener {
                                         System.out.println(selectedEnt.getSelectedInsect().getId());
                             });
                         }
+                        
+                    // TODO
+                    else if (selectedPlayer instanceof Mycologist){
+                        for(Tecton neighbor : selectedTecton.getNeighbors()){
+                            //for(Hyphal h : selectedP)
+                        }
+
+                    }    
+                         
                     repaint();
                 }
             });
