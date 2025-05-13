@@ -205,6 +205,9 @@ public class Mycologist extends Player{
 
     @Loggable
     public void growFungalBody(Tecton tecton){
+        if (checkControlledFungus()){
+            return;
+        }
         if (tecton.getFlag().fungalApproved) {
             tecton.createFungalBody(this);
         }
@@ -215,6 +218,9 @@ public class Mycologist extends Player{
 
     @Loggable
     public void growFungalBodyFromSpore(Tecton tecton){
+        if (checkControlledFungus()){
+            return;
+        }
         tecton.createFungalBodyFromSpore(this);
     }
 
@@ -280,6 +286,9 @@ public class Mycologist extends Player{
 
     @Loggable
     public void growHyphalFromHyphalAciton(Tecton targetTecton) {
+        if (checkControlledFungus()){
+            return;
+        }
         System.out.println("Megvan");
         //if(targetTecton.getFlag().hyphalApproved || (targetTecton.getFlag().oneHyphalApproved&&targetTecton.getConnectedNeighbors().size()==0)){
             // System.out.println("Megvan2");
@@ -290,6 +299,9 @@ public class Mycologist extends Player{
     }
 
     public void hyphalEatInsect(Insect targetInsect){
+        if (checkControlledFungus()){
+            return;
+        }
         this.selectedHyphal.eatInsect(targetInsect);
         selectedHyphal = null;
         this.selectedFungus = null;

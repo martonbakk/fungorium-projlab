@@ -49,6 +49,8 @@ public class GameView extends AbstractGameView implements Listener {
     private final JLabel selectedPlayerLabel;
     private final JTextArea selectedFungusLabel;
     private final JTextArea selectedHyphalLabel;
+    private final JTextArea sporesOnTectonLabel;
+    private final JTextArea selectedInsectLabel;
     private final PentagonPanel pentagonPanel;
     private final List<String> insectSubTypes;
     private final List<String> fungalSubTypes;
@@ -83,21 +85,24 @@ public class GameView extends AbstractGameView implements Listener {
         selectedFungusLabel.setEditable(false);
         selectedFungusLabel.setLineWrap(true);
         selectedFungusLabel.setFocusable(false);
-        selectedFungusLabel.setOpaque(true);
+        selectedFungusLabel.setOpaque(false);
         
         westJPanel.add(selectedFungusLabel);
-        westJPanel.add(Box.createRigidArea(new Dimension(0,30)));
+        westJPanel.add(Box.createRigidArea(new Dimension(0,10)));
 
         selectedHyphalLabel = new JTextArea("Kiválasztott\nFonál: Nincs");
         selectedHyphalLabel.setFont(new Font("Arial", Font.PLAIN, 12));
 
         selectedHyphalLabel.setSize(100, Short.MAX_VALUE);
-        selectedHyphalLabel.setPreferredSize(selectedFungusLabel.getPreferredSize());
+        selectedHyphalLabel.setPreferredSize(selectedHyphalLabel.getPreferredSize());
 
         selectedHyphalLabel.setEditable(false);
         selectedHyphalLabel.setLineWrap(true);
+        selectedHyphalLabel.setFocusable(false);
+        selectedHyphalLabel.setOpaque(false);
         
         westJPanel.add(selectedHyphalLabel);
+
         gamePanel.add(westJPanel, BorderLayout.WEST);
 
         // Pentagon panel
@@ -107,9 +112,34 @@ public class GameView extends AbstractGameView implements Listener {
         gamePanel.add(pentagonPanel, BorderLayout.CENTER);
 
         JPanel eastJPanel = new JPanel();
-        JLabel valami = new JLabel("Kiválasztott Rovar: Nincs", SwingConstants.CENTER);
-        valami.setFont(new Font("Arial", Font.PLAIN, 12));
-        eastJPanel.add(valami);
+        eastJPanel.setLayout(new BoxLayout(eastJPanel, BoxLayout.PAGE_AXIS));
+
+        sporesOnTectonLabel = new JTextArea("A Tektonon lévő\nSpórák száma: -");
+        sporesOnTectonLabel.setFont(new Font("Arial", Font.PLAIN, 12));
+
+        sporesOnTectonLabel.setSize(100, Short.MAX_VALUE);
+        sporesOnTectonLabel.setPreferredSize(sporesOnTectonLabel.getPreferredSize());
+
+        sporesOnTectonLabel.setEditable(false);
+        sporesOnTectonLabel.setLineWrap(true);
+        sporesOnTectonLabel.setFocusable(false);
+        sporesOnTectonLabel.setOpaque(false);
+        
+        eastJPanel.add(sporesOnTectonLabel);
+        eastJPanel.add(Box.createRigidArea(new Dimension(0,10)));
+
+        selectedInsectLabel = new JTextArea("Kiválasztott\nRovar: Nincs");
+        selectedInsectLabel.setFont(new Font("Arial", Font.PLAIN, 12));
+
+        selectedInsectLabel.setSize(100, Short.MAX_VALUE);
+        selectedInsectLabel.setPreferredSize(selectedInsectLabel.getPreferredSize());
+
+        selectedInsectLabel.setEditable(false);
+        selectedInsectLabel.setLineWrap(true);
+        selectedInsectLabel.setFocusable(false);
+        selectedInsectLabel.setOpaque(false);
+
+        eastJPanel.add(selectedInsectLabel);
         gamePanel.add(eastJPanel, BorderLayout.EAST);
 
         add(gamePanel, BorderLayout.CENTER);
@@ -145,6 +175,10 @@ public class GameView extends AbstractGameView implements Listener {
                 JOptionPane.showMessageDialog(this, selectedPlayer.getUserName() + " végrehajtja: " + selectedAction);
                 // TODO: Konkrét akció logika implementálása
                 doAction(selectedPlayer, selectedAction);
+                selectedFungusLabel.setText("Kiválasztott\nGombatest: Nincs");
+                selectedHyphalLabel.setText("Kiválasztott\nFonál: Nincs");
+                sporesOnTectonLabel.setText("A Tektonon lévő\nSpórák száma: -");
+                selectedInsectLabel.setText("Kiválaszott\nRovar: Nincs");
             }
         });
         bottomPanel.add(actionButton, BorderLayout.EAST);
@@ -195,10 +229,10 @@ public class GameView extends AbstractGameView implements Listener {
                 case "Grow Hyphal From Hyphal":
                     selectedPlayer.SelectAction(9, GameLogic.getParams());
                     break;
-                case "Hyphal Eat Insect":
+                case "Eat Insect":
                     selectedPlayer.SelectAction(10, GameLogic.getParams());
                     break;
-                case "Level Up FungalBody":
+                case "Level Up":
                     selectedPlayer.SelectAction(11, GameLogic.getParams());
                     break;
                 default:
@@ -352,6 +386,7 @@ public class GameView extends AbstractGameView implements Listener {
                             message.append("- ").append(neighbor.getId()).append("\n");
                         }
                         JOptionPane.showMessageDialog(PentagonPanel.this, message.toString());
+                        sporesOnTectonLabel.setText("A Tektonon lévő Spórák száma: " + selectedTecton.getSpores().size());
                     } else {
                         selectedTecton = null;
                     }
@@ -373,9 +408,8 @@ public class GameView extends AbstractGameView implements Listener {
                             selectedTecton.getInsects().forEach(i -> {
                                     Entomologist selectedEnt = (Entomologist) selectedPlayer;
                                     selectedEnt.selectInsect(i);
-                                    // Ez teszteléshez kell
                                     if (selectedEnt.getSelectedInsect() != null)
-                                        System.out.println(selectedEnt.getSelectedInsect().getId());
+                                        selectedInsectLabel.setText("Kiválaszott\nRovar: " + selectedEnt.getSelectedInsect().getId());
                             });
                         }
                         
