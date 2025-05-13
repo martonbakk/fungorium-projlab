@@ -154,7 +154,8 @@ public class Map implements Serializable{
                         sp = new HungerSpore(baseTecton);
                         break;
                 }
-                baseTecton.addSpore(sp);
+                //baseTecton.addSpore(sp);
+                sp.spawnSpore();
             }
         }
         assignTectonPositions();

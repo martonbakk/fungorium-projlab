@@ -133,6 +133,7 @@ public class Tecton implements Listener, Serializable{
     @Loggable
     public void addSpore(SporeInterface spore) {
         spores.add(spore);
+        ///GameLogic.addEntity(spore);
     }
 
     @Loggable
@@ -144,7 +145,7 @@ public class Tecton implements Listener, Serializable{
                                  
         FungalBody newfungalBody = new FungalBody(1, 0, player.getTypeCharacteristics(), this, player);
 
-        GameLogic.addEntity(fungalBody);
+        GameLogic.addEntity(newfungalBody);
 
         occupiedByFungalBody=true;
 
@@ -168,7 +169,7 @@ public class Tecton implements Listener, Serializable{
         return createFungalBody(player);
     }
 
-    /// hianyos
+    /// hianyos 
     @Loggable
     public void destroyFungalBody(){
         fungalBody=null;
@@ -232,7 +233,6 @@ public class Tecton implements Listener, Serializable{
             return;
         }
         Hyphal newHyphal = new Hyphal(connected, false, 3000, 3000, 300, this, owner);
-
         // Ellenőrizzük, hogy a két tekton össze van e már kötve
         ArrayList<Hyphal> hyphals = connectedNeighbours.get(connected);
         if (hyphals != null) {

@@ -25,34 +25,99 @@ public class GameLogic implements Serializable{
     private static final long serialVersionUID = 1L;
 
     /** A játékidő telését vezérlő ticker objektum. */
-    private Ticker ticker=new Ticker(1000);
+    private transient Ticker ticker=new Ticker(1000);
     /** A játékban szereplő Listener interfészt implementáló objektumok listája, amelyek frissítéseket kapnak. */
     private ArrayList<Listener> listeners = new ArrayList<>();
     private static ArrayList<Mycologist> mycologists = new ArrayList<>();
     private static ArrayList<Entomologist> entomologists = new ArrayList<>();
     private static ArrayList<Entity> entityList = new ArrayList<>();
     public Map map;
+    private long elapsedTicks;
+    private long maxTicks;
 
+    /// Ezek azért kellenek mert statikus mezőket nem lehet szerializálni, ezért ezeken keresztül lesznel majd kezelve a szerializálás
+    private ArrayList<Mycologist> serializedMycologists;
+    private ArrayList<Entomologist> serializedEntomologists;
+    private ArrayList<Entity> serializedEntityList;
+
+    
+    
+    
+    public Map getMap(){
+        return map;
+    } 
+    
+    
+    private void writeObject(ObjectOutputStream oos) throws IOException {
+        // Statikus listák másolása az ideiglenes mezőkbe
+        synchronized (mycologists) {
+            serializedMycologists = new ArrayList<>(mycologists);
+        }
+        synchronized (entomologists) {
+            serializedEntomologists = new ArrayList<>(entomologists);
+        }
+        synchronized (entityList) {
+            serializedEntityList = new ArrayList<>(entityList);
+        }
+        oos.defaultWriteObject(); // Szerializálja az összes nem statikus mezőt
+    }
+
+    private void readObject(ObjectInputStream ois) throws IOException, ClassNotFoundException {
+    ois.defaultReadObject(); // Deszerializálja a nem statikus mezőket
+    synchronized (mycologists) {
+        mycologists.clear();
+        mycologists.addAll(serializedMycologists);
+    }
+    synchronized (entomologists) {
+        entomologists.clear();
+        entomologists.addAll(serializedEntomologists);
+    }
+    synchronized (entityList) {
+        entityList.clear();
+        entityList.addAll(serializedEntityList);
+    }
+    }
 
 
     public void saveGame(String filePath) throws IOException {
-        try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(filePath))) {
-            oos.writeObject(this); // A teljes GameLogic objektum mentése
-        }
+    validateState();
+    try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(filePath))) {
+        oos.writeObject(this);
+    }
     }
 
     public static GameLogic loadGame(String filePath) throws IOException, ClassNotFoundException {
         try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream(filePath))) {
             GameLogic loadedGame = (GameLogic) ois.readObject();
+            loadedGame.validateState();
+            // Ticker újrainicializálása
+            loadedGame.ticker = new Ticker(loadedGame.ticker.getIntervalMillis());
+            for (Listener l : loadedGame.listeners) {
+                loadedGame.ticker.addListener(l);
+            }
+            // Ellenőrizzük, hogy a játék lejárt-e
+            if (loadedGame.ticker.getElapsedTicks() >= loadedGame.maxTicks) {
+                loadedGame.stopGame(); // Játék leállítása, ha az idő lejárt
+            }
             return loadedGame;
         }
     }
+
+    private void validateState() {
+        if (map == null) throw new IllegalStateException("Map is null");
+        if (mycologists == null) throw new IllegalStateException("Mycologists list is null");
+        if (entomologists == null) throw new IllegalStateException("Entomologists list is null");
+        if (entityList == null) throw new IllegalStateException("Entity list is null");
+    }
+
+
 
 
 
     public GameLogic(int TickInterval, int playerNum) {
         ticker = new Ticker(TickInterval);
         map = new Map();
+        this.maxTicks = TickInterval;
     }
 
     public GameLogic(ArrayList<Entity> entities, ArrayList<Listener> listeners, Map map) {
@@ -70,7 +135,16 @@ public class GameLogic implements Serializable{
 
     // kéne a teszteléshez egy olyan függvény, ami csak 1, vagy több tick-et hajt végre
     public void tick() {
-        
+        synchronized (ticker.getGameObList()) {
+        for (Listener l : listeners) {
+            l.update();
+        }
+        ticker.incrementElapsedTicks();
+        }
+
+        if (ticker.getElapsedTicks() >= maxTicks) {
+            stopGame();
+        }
     }
    
     public void addListener(Listener l) {
@@ -114,5 +188,7 @@ public class GameLogic implements Serializable{
         mycologists = new ArrayList<>();
         entomologists = new ArrayList<>();
     }
+
+    
 
 }
