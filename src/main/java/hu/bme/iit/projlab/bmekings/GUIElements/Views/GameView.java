@@ -105,7 +105,6 @@ public class GameView extends AbstractGameView implements Listener {
                 JOptionPane.showMessageDialog(this, selectedPlayer.getUserName() + " végrehajtja: " + selectedAction);
                 // TODO: Konkrét akció logika implementálása
                 doAction(selectedPlayer, selectedAction);
-                System.out.println("asd3");
             }
         });
         bottomPanel.add(actionButton, BorderLayout.EAST);
@@ -178,7 +177,6 @@ public class GameView extends AbstractGameView implements Listener {
                     selectedPlayer.SelectAction(2, GameLogic.getParams());
                     break;
                 case "Move":
-                    System.out.println("asd5");
                     selectedPlayer.SelectAction(3, GameLogic.getParams());
                     break;
                 case "Eat Spore":
@@ -332,7 +330,8 @@ public class GameView extends AbstractGameView implements Listener {
                                     Entomologist selectedEnt = (Entomologist) selectedPlayer;
                                     selectedEnt.selectInsect(i);
                                     // Ez teszteléshez kell
-                                    //System.out.println(selectedEnt.selectedInsect.getId());
+                                    if (selectedEnt.getSelectedInsect() != null)
+                                        System.out.println(selectedEnt.getSelectedInsect().getId());
                             });
                         }
                     repaint();
@@ -427,11 +426,11 @@ public class GameView extends AbstractGameView implements Listener {
                 FungalBody fungalBody = tectons.get(i).getFungalBody();
                 if (fungalBody != null) {
                     Mycologist owner = fungalBody.getOwner();
-                    System.out.println("FungalBody owner: " + owner);
+                    // System.out.println("FungalBody owner: " + owner);
                     String subType = owner != null ? owner.getType() : null;
-                    System.out.println("FungalBody subtype: " + subType);
+                    // System.out.println("FungalBody subtype: " + subType);
                     BufferedImage fungalImage = subType != null ? mycologistSubTypeImages.get(subType) : null;
-                    System.out.println("FungalBody image: " + fungalImage);
+                    // System.out.println("FungalBody image: " + fungalImage);
                     if (fungalImage != null) {
                         int fungalRadius = radius / 2;
                         int fungalDiameter = fungalRadius * 2;
@@ -461,10 +460,10 @@ public class GameView extends AbstractGameView implements Listener {
 
                     for (Entomologist owner : insectOwners) {
                         String subType = owner != null ? owner.getType() : null;
-                        System.out.println("Insect owner: " + owner);
+                        // System.out.println("Insect owner: " + owner);
                         BufferedImage insectImage = subType != null ? entomologistSubTypeImages.get(subType) : null;
-                        System.out.println("Insect subtype: " + subType);
-                        System.out.println("Insect image: " + insectImage);
+                        // System.out.println("Insect subtype: " + subType);
+                        // System.out.println("Insect image: " + insectImage);
                         if (insectImage != null) {
                             int insectRadius = radius / 3;
                             int insectDiameter = insectRadius * 2;

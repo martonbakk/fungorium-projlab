@@ -15,7 +15,7 @@ import hu.bme.iit.projlab.bmekings.Program.Params;
 @Loggable("Entomologist")
 public class Entomologist extends Player{
     private ArrayList<Insect> controlledInsects = new ArrayList<>();
-    private Insect selectedInsect=null;
+    private Insect selectedInsect = null;
 
     //public Entomologist(String id) {
     //    super(id);
@@ -45,6 +45,8 @@ public class Entomologist extends Player{
         System.out.println("Uj objektum [" + getPlayerID() + "] hozzaadva!");
     }
     public List<Insect> getControlledInsects() { return controlledInsects; }
+
+    public Insect getSelectedInsect() { return selectedInsect; }
 
     @Loggable
     @Override
