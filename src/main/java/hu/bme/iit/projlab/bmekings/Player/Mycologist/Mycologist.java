@@ -96,7 +96,7 @@ public class Mycologist extends Player{
                 destroyFungus(params.selectedFungus);
                 break;
             case 7:
-                shootSpore(params.selectedTectons);
+                shootSpore(params.selectedTecton);
                 break;
             case 8:
                 speedUpDevelopment(params.selectedHyphal);
@@ -182,13 +182,13 @@ public class Mycologist extends Player{
     }
 
     @Loggable
-    private void shootSpore(List<Tecton> selectedTectons){
+    private void shootSpore(Tecton selectedTecton){
         if(checkControlledFungus()){
             return;
         }
-        for (Tecton tecton : selectedTectons) {
-            this.selectedFungus.shootSpore(tecton);
-        }
+        
+        this.selectedFungus.shootSpore(selectedTecton);
+        
         this.selectedFungus=null;
     }
     
