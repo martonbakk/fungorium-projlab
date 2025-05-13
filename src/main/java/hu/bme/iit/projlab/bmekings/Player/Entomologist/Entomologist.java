@@ -103,11 +103,8 @@ public class Entomologist extends Player{
 
     @Loggable
     public void selectInsect(Insect insect){
-        System.out.println(this.controlledInsects.size() + "");
         for (Insect controlledInsect : this.controlledInsects) {
-                System.out.println("forbanvan");
             if (controlledInsect.getId().equals(insect.getId())) {
-                System.out.println("ifbenvan");
                 this.selectedInsect = controlledInsect;
                 break;  // egyszerre egyhez tudjuk hozzaadni ne menjen tovabb a loop
             }
