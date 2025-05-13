@@ -15,6 +15,7 @@ public class Params {
     public ArrayList<Tecton> selectedTectons;
     public Hyphal selectedHyphal;
     public Tecton selectedTecton;
+    public Tecton fromTecton;
     public ArrayList<SporeInterface> selectedSpores;
     public int sporeNum;
     public Insect selectedInsect;

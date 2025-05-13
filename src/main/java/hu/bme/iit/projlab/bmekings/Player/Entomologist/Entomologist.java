@@ -73,20 +73,39 @@ public class Entomologist extends Player{
     }
 
     @Loggable
-    public void MoveInsect(Tecton tectonToStepOn){
+    private boolean checkSelectedInsect() {
+        boolean checkSelectedInsect = this.selectedInsect == null;
+        if (checkSelectedInsect) {
+            System.out.println("Nem választottál ki rovart...");
+        }
+
+        return checkSelectedInsect;
+    }
+
+    @Loggable
+    public void MoveInsect(Tecton tectonToStepOn) {
+        if (checkSelectedInsect()) {
+            return;
+        }
         selectedInsect.move(tectonToStepOn);
         selectedInsect=null;
     }
 
     @Loggable
     public void EatSpore() {
+        if (checkSelectedInsect()) {
+            return;
+        }
         selectedInsect.eatSpore();
         selectedInsect=null;
 
     }
 
     @Loggable
-    public void CutHyphalInsect(Hyphal hyphalToCut){
+    public void CutHyphalInsect(Hyphal hyphalToCut) {
+        if (checkSelectedInsect()) {
+            return;
+        }
         System.out.println("Cutting hyphal: " + hyphalToCut.getId() + " with insect: " + this.getPlayerID());
         selectedInsect.cutHyphal(hyphalToCut);
         selectedInsect=null;
