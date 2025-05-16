@@ -207,10 +207,13 @@ public class Program {
                         gameLogic = GameLogic.loadGame(filePath);
                         System.out.println("Játék sikeresen betöltve: " + filePath);
                         // Ellenőrzés
-                        System.out.println("Map: " + (gameLogic.map != null ? "Inicializált" : "Null"));
-                        System.out.println("Entomologists: " + gameLogic.getEntomologists().size());
-                        System.out.println("Mycologists: " + gameLogic.getMycologists().size());
-                        System.out.println("Entities: " + gameLogic.getEntityList().size());
+                       System.out.println("Mentés előtti állapot:");
+                    System.out.println("Map: " + (gameLogic.map != null ? "Inicializált" : "Null"));
+                    System.out.println("TectonNum: " + gameLogic.getMap().getTectons().size()); 
+                    System.out.println("Entomologists: " + gameLogic.getEntomologists().size());
+                    System.out.println("Mycologists: " + gameLogic.getMycologists().size());
+                    System.out.println("Entities: " + gameLogic.getEntityList().size());
+                    
                     } catch (FileNotFoundException e) {
                         System.err.println("Hiba: A mentett fájl nem található: " + e.getMessage());
                     } catch (IOException e) {

@@ -25,7 +25,7 @@ public class GameLogic implements Serializable{
     private static final long serialVersionUID = 1L;
 
     /** A játékidő telését vezérlő ticker objektum. */
-    private transient Ticker ticker=new Ticker(1000);
+    private Ticker ticker=new Ticker(1000);
     /** A játékban szereplő Listener interfészt implementáló objektumok listája, amelyek frissítéseket kapnak. */
     private ArrayList<Listener> listeners = new ArrayList<>();
     private static ArrayList<Mycologist> mycologists = new ArrayList<>();
@@ -79,11 +79,12 @@ public class GameLogic implements Serializable{
     }
 
 
+
     public void saveGame(String filePath) throws IOException {
-    validateState();
-    try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(filePath))) {
-        oos.writeObject(this);
-    }
+        validateState();
+        try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(filePath))) {
+            oos.writeObject(this);
+        }
     }
 
     public static GameLogic loadGame(String filePath) throws IOException, ClassNotFoundException {
@@ -188,6 +189,7 @@ public class GameLogic implements Serializable{
         mycologists = new ArrayList<>();
         entomologists = new ArrayList<>();
     }
+
 
     
 
