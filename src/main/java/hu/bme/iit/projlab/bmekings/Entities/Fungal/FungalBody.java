@@ -1,5 +1,6 @@
 package hu.bme.iit.projlab.bmekings.Entities.Fungal;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;

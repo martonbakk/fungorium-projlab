@@ -1,5 +1,6 @@
 package hu.bme.iit.projlab.bmekings.Map.Tecton;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -24,7 +25,9 @@ import hu.bme.iit.projlab.bmekings.Player.Mycologist.Mycologist;
  */
 
 @Loggable("Tecton")
-public class Tecton implements Listener{
+public class Tecton implements Listener, Serializable{
+    private static final long serialVersionUID = 1L;
+
     private Queue<SporeInterface> spores = new LinkedList<>();
     public ArrayList<Tecton> neighbours = new ArrayList<>();
     public HashMap<Tecton, ArrayList<Hyphal>> connectedNeighbours = new HashMap<>();
@@ -56,7 +59,10 @@ public class Tecton implements Listener{
         return posY;
     }
 
-    public class Flags{
+    public class Flags implements Serializable {
+        private static final long serialVersionUID = 1L;
+
+        
         public boolean fungalApproved;
         public boolean hyphalApproved;
         public boolean oneHyphalApproved;
@@ -129,6 +135,7 @@ public class Tecton implements Listener{
     @Loggable
     public void addSpore(SporeInterface spore) {
         spores.add(spore);
+        ///GameLogic.addEntity(spore);
     }
 
     @Loggable
@@ -164,7 +171,7 @@ public class Tecton implements Listener{
         return createFungalBody(player);
     }
 
-    /// hianyos
+    /// hianyos 
     @Loggable
     public void destroyFungalBody(){
         fungalBody=null;
@@ -228,7 +235,6 @@ public class Tecton implements Listener{
             return;
         }
         Hyphal newHyphal = new Hyphal(connected, false, 3000, 3000, 300, this, owner);
-
         // Ellenőrizzük, hogy a két tekton össze van e már kötve
         ArrayList<Hyphal> hyphals = connectedNeighbours.get(connected);
         if (hyphals != null) {
