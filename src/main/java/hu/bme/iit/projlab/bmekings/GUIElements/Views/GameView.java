@@ -409,7 +409,7 @@ public class GameView extends AbstractGameView implements Listener {
                     System.out.println(GameLogic.getParams().selectedTecton.getId());
                     Player selectedPlayer = (Player) playerComboBox.getSelectedItem();
                     
-                    if (selectedPlayer instanceof Mycologist && selectedTecton.isOccupiedByFungus()) {
+                    if (selectedPlayer instanceof Mycologist && selectedTecton.isOccupiedByFungus() && selectedTecton.getFungalBody().getOwner() == selectedPlayer) {
                             Mycologist selectedMyc = (Mycologist) selectedPlayer;
                             int answer = JOptionPane.showConfirmDialog(null, "Do you want to Select [" + selectedTecton.getFungalBody().getId() + "]", "Fungal Body Chooser", JOptionPane.YES_NO_OPTION);
                             if (answer == 0) {
