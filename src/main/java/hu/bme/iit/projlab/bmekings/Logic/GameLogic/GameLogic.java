@@ -6,6 +6,10 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 
 import hu.bme.iit.projlab.bmekings.Entities.Entity;
@@ -28,11 +32,11 @@ public class GameLogic implements Serializable{
     /** A játékidő telését vezérlő ticker objektum. */
     private Ticker ticker=new Ticker(1000);
     /** A játékban szereplő Listener interfészt implementáló objektumok listája, amelyek frissítéseket kapnak. */
-    private ArrayList<Listener> listeners = new ArrayList<>();
+    private transient ArrayList<Listener> listeners = new ArrayList<>();
     private static ArrayList<Mycologist> mycologists = new ArrayList<>();
     private static ArrayList<Entomologist> entomologists = new ArrayList<>();
     private static ArrayList<Entity> entityList = new ArrayList<>();
-    private static Params params = new Params();
+    private static Params params = new Params(); 
     public Map map;
     private long elapsedTicks;
     private long maxTicks;
@@ -40,8 +44,7 @@ public class GameLogic implements Serializable{
     /// Ezek azért kellenek mert statikus mezőket nem lehet szerializálni, ezért ezeken keresztül lesznel majd kezelve a szerializálás
     private ArrayList<Mycologist> serializedMycologists;
     private ArrayList<Entomologist> serializedEntomologists;
-    private ArrayList<Entity> serializedEntityList;
-
+    private ArrayList<Entity> serializedEntityList; 
     
     
     
@@ -80,19 +83,68 @@ public class GameLogic implements Serializable{
     }
     }
 
+    /// C:/valamilyenmappa/metés.ser
+/*
+    public void saveGame(String name) throws IOException {
+        String path;
+        ///path=
 
-
-    public void saveGame(String filePath) throws IOException {
         validateState();
-        try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(filePath))) {
+        try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(path))) {
             oos.writeObject(this);
         }
+    }*/
+
+    public void saveGame(String name) throws IOException {
+    // Érvényes fájlnév ellenőrzése
+    if (name == null || name.trim().isEmpty() || name.matches(".*[\\\\/:*?\"<>|].*")) {
+        throw new IllegalArgumentException("Érvénytelen mentési név: " + name);
     }
 
-    public static GameLogic loadGame(String filePath) throws IOException, ClassNotFoundException {
-        try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream(filePath))) {
+    // A játék gyökérmappájának elérése
+    String rootDir = System.getProperty("user.dir");
+    // A saves mappa elérési útja
+    Path savesDir = Paths.get(rootDir, "Saves");
+
+    // Ellenőrizzük, hogy a saves mappa létezik-e, ha nem, létrehozzuk
+    Files.createDirectories(savesDir);
+
+    // A mentési fájl elérési útja: saves/name.ser
+    Path filePath = savesDir.resolve(name + ".ser");
+    String path = filePath.toString();
+
+    // Játékállapot érvényességének ellenőrzése
+    validateState();
+
+    // Játékállapot mentése
+    try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(path))) {
+        oos.writeObject(this); 
+        System.out.println("Játék sikeresen mentve: " + path);
+    }
+}
+
+    public static GameLogic loadGame(String name) throws IOException, ClassNotFoundException {
+        if (name == null || name.trim().isEmpty() || name.matches(".*[\\\\/:*?\"<>|].*")) {
+        throw new IllegalArgumentException("Érvénytelen mentési név: " + name);
+        }
+
+        // A játék gyökérmappájának elérése
+        String rootDir = System.getProperty("user.dir");
+        // A saves mappa elérési útja
+        Path savesDir = Paths.get(rootDir, "Saves");
+
+        // Ellenőrizzük, hogy a saves mappa létezik-e, ha nem, létrehozzuk
+        Files.createDirectories(savesDir);
+
+        // A mentési fájl elérési útja: saves/name.ser
+        Path filePath = savesDir.resolve(name + ".ser");
+        String path = filePath.toString();
+        
+        
+        
+        try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream(path))) {
             GameLogic loadedGame = (GameLogic) ois.readObject();
-            loadedGame.validateState();
+            /*loadedGame.validateState();
             // Ticker újrainicializálása
             loadedGame.ticker = new Ticker(loadedGame.ticker.getIntervalMillis());
             for (Listener l : loadedGame.listeners) {
@@ -101,7 +153,7 @@ public class GameLogic implements Serializable{
             // Ellenőrizzük, hogy a játék lejárt-e
             if (loadedGame.ticker.getElapsedTicks() >= loadedGame.maxTicks) {
                 loadedGame.stopGame(); // Játék leállítása, ha az idő lejárt
-            }
+            }*/
             return loadedGame;
         }
     }

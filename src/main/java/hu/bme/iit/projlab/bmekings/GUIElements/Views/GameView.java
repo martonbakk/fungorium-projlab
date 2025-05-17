@@ -3,6 +3,8 @@ package hu.bme.iit.projlab.bmekings.GUIElements.Views;
 import java.awt.BasicStroke;
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Component;
+import java.awt.Dialog.ModalityType;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Font;
@@ -13,6 +15,11 @@ import java.awt.GridLayout;
 import java.awt.Point;
 import java.awt.Polygon;
 import java.awt.RenderingHints;
+import java.awt.Window;
+import java.awt.event.HierarchyEvent;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
+import java.awt.event.WindowListener;
 import java.awt.geom.Line2D;
 import java.awt.geom.Point2D;
 import java.awt.image.BufferedImage;
@@ -31,12 +38,14 @@ import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
+import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextArea;
 import javax.swing.SwingConstants;
+import javax.swing.SwingUtilities;
 
 import hu.bme.iit.projlab.bmekings.Entities.Fungal.FungalBody;
 import hu.bme.iit.projlab.bmekings.Entities.Fungal.Hyphal;
@@ -67,6 +76,50 @@ public class GameView extends AbstractGameView implements Listener {
         this.insectSubTypes = insectSubTypes;
         this.fungalSubTypes = fungalSubTypes;
         setLayout(new BorderLayout(10, 10));
+/*
+        addHierarchyListener(e -> {
+            if ((e.getChangeFlags() & HierarchyEvent.PARENT_CHANGED) != 0) {
+                Window window = SwingUtilities.getWindowAncestor(GameView.this);
+                if (window instanceof JFrame) {
+                    JFrame frame = (JFrame) window;
+                    frame.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
+                    // Eltávolítjuk a korábbi listener-eket, hogy ne legyen duplikáció
+                    for (WindowListener wl : frame.getWindowListeners()) {
+                        frame.removeWindowListener(wl);
+                    }
+                    frame.addWindowListener(new WindowAdapter() {
+                        @Override
+                        public void windowClosing(WindowEvent e) {
+                            boolean shouldExit = showSaveDialog();
+                            if (shouldExit) {
+                                frame.dispose();
+                                System.exit(0);
+                            }
+                        }
+                    });
+                }
+            }
+        });*/
+
+        addHierarchyListener(e -> {
+            if ((e.getChangeFlags() & HierarchyEvent.PARENT_CHANGED) != 0) {
+                Window window = SwingUtilities.getWindowAncestor(GameView.this);
+                if (window instanceof JFrame) {
+                    JFrame frame = (JFrame) window;
+                    frame.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
+                    for (WindowListener wl : frame.getWindowListeners()) {
+                        frame.removeWindowListener(wl);
+                    }
+                    frame.addWindowListener(new WindowAdapter() {
+                        @Override
+                        public void windowClosing(WindowEvent e) {
+                            showSaveDialog();
+                        }
+                    });
+                }
+            }
+        });
+
         // Felső panel
         JPanel topPanel = new JPanel(new BorderLayout());
         scoreLabel = new JLabel("", SwingConstants.CENTER);
@@ -79,7 +132,7 @@ public class GameView extends AbstractGameView implements Listener {
         add(topPanel, BorderLayout.NORTH);
 
         JPanel gamePanel = new JPanel(new BorderLayout());
-
+        
         JPanel westJPanel = new JPanel();
         westJPanel.setLayout(new BoxLayout(westJPanel, BoxLayout.PAGE_AXIS));
         
@@ -203,6 +256,54 @@ public class GameView extends AbstractGameView implements Listener {
 
         controller.getGameLogic().addListener(this);
         update();
+    }
+/*
+    private boolean showSaveDialog() {
+        JDialog dialog = new JDialog(SwingUtilities.getWindowAncestor(this), "Játék mentése", ModalityType.APPLICATION_MODAL);
+        SaveView saveView = new SaveView(controller);
+        dialog.add(saveView);
+        dialog.pack();
+        dialog.setLocationRelativeTo(SwingUtilities.getWindowAncestor(this));
+
+        // Változó a kilépés nyomon követésére
+        final boolean[] shouldExit = {false};
+
+        // Módosítjuk a SaveView gombjainak működését
+        for (Component comp : saveView.getComponents()) {
+            if (comp instanceof JPanel) {
+                for (Component button : ((JPanel) comp).getComponents()) {
+                    if (button instanceof JButton) {
+                        JButton btn = (JButton) button;
+                        if (btn.getText().equals("Mentés")) {
+                            btn.addActionListener(e -> {
+                                String name = saveView.getName();
+                                // Mentési logika meghívása a Controller-ben
+                                controller.saveGameOnExit(name); // Feltételezve, hogy van ilyen metódus
+                                shouldExit[0] = true;
+                                dialog.dispose();
+                            });
+                        } else if (btn.getText().equals("Vissza")) {
+                            btn.addActionListener(e -> {
+                                shouldExit[0] = false;
+                                dialog.dispose();
+                            });
+                        }
+                    }
+                }
+            }
+        }
+
+        dialog.setVisible(true); // Blokkol, amíg a dialógus be nem zárul
+        return shouldExit[0];
+    }*/
+
+   private void showSaveDialog() {
+        JDialog dialog = new JDialog(SwingUtilities.getWindowAncestor(this), "Játék mentése", ModalityType.APPLICATION_MODAL);
+        SaveView saveView = new SaveView(controller);
+        dialog.add(saveView);
+        dialog.pack();
+        dialog.setLocationRelativeTo(SwingUtilities.getWindowAncestor(this));
+        dialog.setVisible(true);
     }
 
     private void doAction(Player selectedPlayer, String selectedAction) {
@@ -417,7 +518,7 @@ public class GameView extends AbstractGameView implements Listener {
         }
 
         class TectonPanel extends JPanel {
-            Map<Tecton, Point2D> positions = new HashMap<>();
+            transient Map<Tecton, Point2D> positions = new HashMap<>();
             private final Tecton centralTecton;
             private static final Color CENTRAL_COLOR = new Color(0, 100, 0);
             private static final Color NEIGHBOR_COLOR = new Color(128, 254, 57);

@@ -1,11 +1,13 @@
 package hu.bme.iit.projlab.bmekings.GUIElements.Controller;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 
 import hu.bme.iit.projlab.bmekings.GUIElements.Views.AbstractGameView;
 import hu.bme.iit.projlab.bmekings.GUIElements.Views.GameView;
@@ -82,4 +84,28 @@ public class Controller {
     public JFrame getFrame(){
         return frame;
     }
+
+    public void saveGameOnExit(String name){
+        try {
+            gameLogic.saveGame(name);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+
+    public void loadGame(String name) {
+
+        try {
+            gameLogic.loadGame(name);
+        } catch (ClassNotFoundException | IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+
 }
+
+
+
+
