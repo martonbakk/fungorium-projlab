@@ -453,7 +453,7 @@ public class GameView extends AbstractGameView implements Listener {
     public TectonPanel(Tecton centralTecton) {
         this.centralTecton = centralTecton;
         setPreferredSize(new Dimension(800, 800));
-        setBackground(new Color(240, 255, 240));
+        setBackground(new Color(128, 195, 255));
     }
 
     @Override
@@ -487,6 +487,7 @@ public class GameView extends AbstractGameView implements Listener {
         g2d.setStroke(new BasicStroke(4));
         Point2D centralPos = positions.get(centralTecton);
         
+        System.out.println(centralTecton.getConnectedNeighbors().keySet().size());
         for (Tecton connected : centralTecton.getConnectedNeighbors().keySet()) {
             if (positions.containsKey(connected)) {
                 Point2D targetPos = positions.get(connected);
@@ -527,36 +528,28 @@ public class GameView extends AbstractGameView implements Listener {
         int halfSize = size/2;
         g2d.fillOval((int)(position.getX()-halfSize), (int)(position.getY()-halfSize), size, size);
 
-        // Draw white border
-        g2d.setStroke(new BasicStroke(3));
-        g2d.setColor(Color.WHITE);
-        g2d.drawOval((int)(position.getX()-halfSize), (int)(position.getY()-halfSize), size, size);
-
         // Draw fungus
         if (tecton.isOccupiedByFungus()) {
             FungalBody fungalBody = tecton.getFungalBody();
             Mycologist owner = fungalBody.getOwner();
-                    // System.out.println("FungalBody owner: " + owner);
-                    String subType = owner != null ? owner.getType() : null;
-                    // System.out.println("FungalBody subtype: " + subType);
-                    BufferedImage fungalImage = subType != null ? mycologistSubTypeImages.get(subType) : null;
-                    // System.out.println("FungalBody image: " + fungalImage);
-                    if (fungalImage != null) {
-                        int fungalRadius = FUNGUS_SIZE / 2;
-                        int fungalDiameter = fungalRadius * 2;
-                        int fungalX = (int)position.getX() - fungalRadius;
-                        int fungalY = (int)position.getY() - fungalRadius;
-                        g2d.drawImage(fungalImage, fungalX, fungalY, fungalDiameter, fungalDiameter, null);
+            String subType = owner != null ? owner.getType() : null;
+            BufferedImage fungalImage = subType != null ? mycologistSubTypeImages.get(subType) : null;
 
-                    } else {
-                        // Fallback to red circle
-                        g2d.setColor(Color.RED);
-                        int fungalRadius = FUNGUS_SIZE / 2;
-                        int fungalDiameter = fungalRadius * 2;
-                        int fungalX = (int)position.getX() - fungalRadius;
-                        int fungalY = (int)position.getY() - fungalRadius;
-                        g2d.fillOval(fungalX, fungalY, fungalDiameter, fungalDiameter);
-                    }
+            if (fungalImage != null) {
+                int fungalRadius = FUNGUS_SIZE / 2;
+                int fungalDiameter = fungalRadius * 2;
+                int fungalX = (int)position.getX() - fungalRadius;
+                int fungalY = (int)position.getY() - fungalRadius;
+                g2d.drawImage(fungalImage, fungalX, fungalY, fungalDiameter, fungalDiameter, null);
+            } else {
+                // Fallback to red circle
+                g2d.setColor(Color.RED);
+                int fungalRadius = FUNGUS_SIZE / 2;
+                int fungalDiameter = fungalRadius * 2;
+                int fungalX = (int)position.getX() - fungalRadius;
+                int fungalY = (int)position.getY() - fungalRadius;
+                g2d.fillOval(fungalX, fungalY, fungalDiameter, fungalDiameter);
+            }
         }
 
         // Draw insects
@@ -575,28 +568,25 @@ public class GameView extends AbstractGameView implements Listener {
     }
 
     private void drawInsect(Graphics2D g2d, Insect insect, Point2D position) {
-                        String subType = insect.getOwner() != null ? insect.getOwner().getType() : null;
+        String subType = insect.getOwner() != null ? insect.getOwner().getType() : null;
         BufferedImage insectImage = subType != null ? entomologistSubTypeImages.get(subType) : null;
-                        // System.out.println("Insect subtype: " + subType);
-                        // System.out.println("Insect image: " + insectImage);
-                        if (insectImage != null) {
-                            int insectRadius = INSECT_SIZE;
-                            int insectDiameter = insectRadius * 2;
-                            int insectX = (int) position.getX() + (INSECT_SIZE - insectRadius) - insectRadius;
-                            int insectY = (int) position.getY() + (INSECT_SIZE - insectRadius) - insectRadius;
-                            g2d.drawImage(insectImage, insectX, insectY, insectDiameter, insectDiameter, null);
-                        } else {
-                            // Fallback to yellow circle
-                            g2d.setColor(Color.YELLOW);
-                            int insectRadius = INSECT_SIZE / 3;
-                            int insectDiameter = insectRadius * 2;
-                            int insectX = (int) position.getX() + (INSECT_SIZE - insectRadius) - insectRadius;
-                            int insectY = (int)position.getY() + (INSECT_SIZE - insectRadius) - insectRadius;
-                            g2d.fillOval(insectX, insectY, insectDiameter, insectDiameter);
-                        }
+        if (insectImage != null) {
+            int insectRadius = INSECT_SIZE;
+            int insectDiameter = insectRadius * 2;
+            int insectX = (int) position.getX() + (INSECT_SIZE - insectRadius) - insectRadius;
+            int insectY = (int) position.getY() + (INSECT_SIZE - insectRadius) - insectRadius;
+            g2d.drawImage(insectImage, insectX, insectY, insectDiameter, insectDiameter, null);
+        } else {
+            // Fallback to yellow circle
+            g2d.setColor(Color.YELLOW);
+            int insectRadius = INSECT_SIZE / 3;
+            int insectDiameter = insectRadius * 2;
+            int insectX = (int) position.getX() + (INSECT_SIZE - insectRadius) - insectRadius;
+            int insectY = (int)position.getY() + (INSECT_SIZE - insectRadius) - insectRadius;
+            g2d.fillOval(insectX, insectY, insectDiameter, insectDiameter);
+        }
     }
 }
-
 
         @Override
         protected void paintComponent(Graphics g) {
@@ -685,11 +675,8 @@ public class GameView extends AbstractGameView implements Listener {
                 FungalBody fungalBody = tectons.get(i).getFungalBody();
                 if (fungalBody != null) {
                     Mycologist owner = fungalBody.getOwner();
-                    // System.out.println("FungalBody owner: " + owner);
                     String subType = owner != null ? owner.getType() : null;
-                    // System.out.println("FungalBody subtype: " + subType);
                     BufferedImage fungalImage = subType != null ? mycologistSubTypeImages.get(subType) : null;
-                    // System.out.println("FungalBody image: " + fungalImage);
                     if (fungalImage != null) {
                         int fungalRadius = radius / 2;
                         int fungalDiameter = fungalRadius * 2;
@@ -719,10 +706,7 @@ public class GameView extends AbstractGameView implements Listener {
 
                     for (Entomologist owner : insectOwners) {
                         String subType = owner != null ? owner.getType() : null;
-                        // System.out.println("Insect owner: " + owner);
                         BufferedImage insectImage = subType != null ? entomologistSubTypeImages.get(subType) : null;
-                        // System.out.println("Insect subtype: " + subType);
-                        // System.out.println("Insect image: " + insectImage);
                         if (insectImage != null) {
                             int insectRadius = radius / 3;
                             int insectDiameter = insectRadius * 2;
