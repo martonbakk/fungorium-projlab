@@ -159,10 +159,10 @@ public class FungalBody extends Entity {
     // FLAG VALTOZAS AZ UML BEN PLUSZ PARAMÉTER
     @Loggable
     public void shootSpore(Tecton tecton) {
-        // if(checkShootingRange(tecton)) {
-        //     System.out.println("nincs rangeben");
-        //     return;
-        // }
+        if(checkShootingRange(tecton)) {
+            System.out.println("nincs rangeben");
+            return;
+        }
 
         if(this.spores.isEmpty()) {
             System.out.println("Nincs spóra a gombatestben!");

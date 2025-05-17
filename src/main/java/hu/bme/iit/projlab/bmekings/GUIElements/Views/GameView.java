@@ -10,16 +10,20 @@ import java.awt.Frame;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.GridLayout;
+import java.awt.Point;
 import java.awt.Polygon;
 import java.awt.RenderingHints;
+import java.awt.geom.Line2D;
 import java.awt.geom.Point2D;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import javax.imageio.ImageIO;
 import javax.swing.BorderFactory;
@@ -406,187 +410,240 @@ public class GameView extends AbstractGameView implements Listener {
                         selectedTecton = null;
                     }
                     GameLogic.getParams().selectedTecton = selectedTecton;
-                    System.out.println(GameLogic.getParams().selectedTecton.getId());
-                    Player selectedPlayer = (Player) playerComboBox.getSelectedItem();
-                    
-                    if (selectedPlayer instanceof Mycologist && selectedTecton.isOccupiedByFungus() && selectedTecton.getFungalBody().getOwner() == selectedPlayer) {
-                            Mycologist selectedMyc = (Mycologist) selectedPlayer;
-                            int answer = JOptionPane.showConfirmDialog(null, "Do you want to Select [" + selectedTecton.getFungalBody().getId() + "]", "Fungal Body Chooser", JOptionPane.YES_NO_OPTION);
-                            if (answer == 0) {
-                                selectedMyc.selectFungus(selectedTecton.getFungalBody());
-                                GameLogic.getParams().selectedFungus = selectedTecton.getFungalBody();
-                                System.out.println(GameLogic.getParams().selectedFungus.getId());
-                                selectedFungusLabel.setText("Kiválasztott\nGombatest: " + GameLogic.getParams().selectedFungus.getId());
-                            }
-                        }
-                    else if (selectedPlayer instanceof Entomologist && selectedTecton.isOccupiedByInsect()) {
-                            selectedTecton.getInsects().forEach(i -> {
-                                    Entomologist selectedEnt = (Entomologist) selectedPlayer;
-                                    selectedEnt.selectInsect(i);
-                                    if (selectedEnt.getSelectedInsect() != null)
-                                        selectedInsectLabel.setText("Kiválaszott\nRovar: " + selectedEnt.getSelectedInsect().getId());
-                            });
-                        }
-                        
-                    // TODO
-                    else if (selectedPlayer instanceof Mycologist){
-                        for(Tecton neighbor : selectedTecton.getNeighbors()){
-                            //for(Hyphal h : selectedP)
-                        }
-
-                    }    
-                         
+                    System.out.println(GameLogic.getParams().selectedTecton.getId());    
                     repaint();
                 }
             });
         }
 
         class TectonPanel extends JPanel {
-    private final Tecton centralTecton;
-    private static final Color CENTRAL_COLOR = new Color(0, 100, 0);
-    private static final Color NEIGHBOR_COLOR = new Color(144, 238, 144);
-    private static final int CENTRAL_SIZE = 75;
-    private static final int NEIGHBOR_SIZE = 60;
-    private static final int FUNGUS_SIZE = 25;
-    private static final int INSECT_SIZE = 15;
+            Map<Tecton, Point2D> positions = new HashMap<>();
+            private final Tecton centralTecton;
+            private static final Color CENTRAL_COLOR = new Color(0, 100, 0);
+            private static final Color NEIGHBOR_COLOR = new Color(128, 254, 57);
+            private static final int TECTON_SIZE = 75;
+            private static final int FUNGUS_SIZE = 25;
+            private static final int INSECT_SIZE = 15;
 
-    public TectonPanel(Tecton centralTecton) {
-        this.centralTecton = centralTecton;
-        setPreferredSize(new Dimension(800, 800));
-        setBackground(new Color(128, 195, 255));
-    }
+            public TectonPanel(Tecton centralTecton) {
+                this.centralTecton = centralTecton;
+                setPreferredSize(new Dimension(800, 800));
+                setBackground(new Color(128, 195, 255));
+                addMouseListener(new java.awt.event.MouseAdapter() {
+                    @Override
+                    public void mouseClicked(java.awt.event.MouseEvent e) {
+                        Point clickPoint = e.getPoint();
+                        Player selectedPlayer = (Player) playerComboBox.getSelectedItem();
+                        
+                        Tecton clickedTecton = null;
+                        for (Map.Entry<Tecton, Point2D> entry : positions.entrySet()) {
+                            if (isPointInCircle(entry.getValue(), clickPoint, TECTON_SIZE)) {
+                                clickedTecton = entry.getKey();
+                            }
+                        }
 
-    @Override
-    protected void paintComponent(Graphics g) {
-        super.paintComponent(g);
-        Graphics2D g2d = (Graphics2D) g;
-        g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+                        Set<Hyphal> result = new HashSet<>();
+                        for (Tecton t : positions.keySet()) {
+                            for (Map.Entry<Tecton, ArrayList<Hyphal>> entry : t.getConnectedNeighbors().entrySet()) {
+                                result.addAll(entry.getValue());
+                            }
+                        }
+                        List<Hyphal> hyphals = new ArrayList<>(result);
 
-        int width = getWidth();
-        int height = getHeight();
-        Point2D center = new Point2D.Double(width/2.0, height/2.0);
-        int radius = Math.min(width, height) / 3;
+                        // Hyphal detektálás
+                        for (Hyphal h : hyphals) {
+                            Point2D from = positions.get(h.getBase());
+                            Point2D to = positions.get(h.getConnectedTecton());
+                            if (from == null || to == null) continue;
 
-        Map<Tecton, Point2D> positions = new HashMap<>();
-        positions.put(centralTecton, center);
+                            Point2D p1 = edgePoint(from, to, TECTON_SIZE);
+                            Point2D p2 = edgePoint(to, from, TECTON_SIZE);
 
-        List<Tecton> neighbors = centralTecton.getNeighbors();
-        int maxNeighbors = Math.min(neighbors.size(), 12);
-        double angleStep = 2 * Math.PI / maxNeighbors;
-        
-        for (int i = 0; i < maxNeighbors; i++) {
-            Tecton neighbor = neighbors.get(i);
-            double angle = angleStep * i;
-            double x = center.getX() + radius * Math.cos(angle);
-            double y = center.getY() + radius * Math.sin(angle);
-            positions.put(neighbor, new Point2D.Double(x, y));
-        }
+                            if (isPointNearLine(p1, p2, clickPoint, 5)) {
+                                System.out.println("Kattintottál fonálra: " + h.getId());
+                                return;
+                            }
+                        }
 
-        // Draw connections
-        g2d.setColor(Color.RED);
-        g2d.setStroke(new BasicStroke(4));
-        Point2D centralPos = positions.get(centralTecton);
-        
-        System.out.println(centralTecton.getConnectedNeighbors().keySet().size());
-        for (Tecton connected : centralTecton.getConnectedNeighbors().keySet()) {
-            if (positions.containsKey(connected)) {
-                Point2D targetPos = positions.get(connected);
-                drawConnection(g2d, centralPos, targetPos, CENTRAL_SIZE, NEIGHBOR_SIZE);
+                        if (selectedPlayer instanceof Mycologist && clickedTecton.isOccupiedByFungus() && clickedTecton.getFungalBody().getOwner() == selectedPlayer && clickedTecton != null) {
+                            Mycologist selectedMyc = (Mycologist) selectedPlayer;
+                            int answer = JOptionPane.showConfirmDialog(null, "Do you want to Select [" + clickedTecton.getFungalBody().getId() + "]", "Fungal Body Chooser", JOptionPane.YES_NO_OPTION);
+                            if (answer == 0) {
+                                selectedMyc.selectFungus(clickedTecton.getFungalBody());
+                                GameLogic.getParams().selectedFungus = clickedTecton.getFungalBody();
+                                System.out.println(GameLogic.getParams().selectedFungus.getId());
+                                selectedFungusLabel.setText("Kiválasztott\nGombatest: " + GameLogic.getParams().selectedFungus.getId());
+                                return;
+                            }
+                        }
+                        
+                        if (selectedPlayer instanceof Entomologist && clickedTecton.isOccupiedByInsect() && clickedTecton != null) {
+                            clickedTecton.getInsects().forEach(i -> {
+                            Entomologist selectedEnt = (Entomologist) selectedPlayer;
+                            selectedEnt.selectInsect(i);
+                            if (selectedEnt.getSelectedInsect() != null)
+                                selectedInsectLabel.setText("Kiválaszott\nRovar: " + selectedEnt.getSelectedInsect().getId());
+                                return;
+                            });
+                        } 
+                    }
+                });
             }
-        }
 
-        // Draw tectons
-        drawTecton(g2d, centralTecton, center, CENTRAL_SIZE);
-        for (Tecton neighbor : neighbors) {
-            if (positions.containsKey(neighbor)) {
-                drawTecton(g2d, neighbor, positions.get(neighbor), NEIGHBOR_SIZE);
+            private boolean isPointInCircle(Point2D center, Point click, double radius) {
+                return center.distance(click) <= radius;
             }
-        }
-    }
 
-    private void drawConnection(Graphics2D g2d, Point2D start, Point2D end, int startSize, int endSize) {
-        double dx = end.getX() - start.getX();
-        double dy = end.getY() - start.getY();
-        double distance = Math.hypot(dx, dy);
+            public boolean isPointNearLine(Point2D p1, Point2D p2, Point2D click, double tolerance) {
+                double distance = Line2D.ptSegDist(p1.getX(), p1.getY(), p2.getX(), p2.getY(),
+                                                click.getX(), click.getY());
+                return distance <= tolerance;
+            }
 
-        if (distance > 0) {
-            double unitX = dx / distance;
-            double unitY = dy / distance;
-            
-            double startX = start.getX() + unitX * (startSize/2.0);
-            double startY = start.getY() + unitY * (startSize/2.0);
-            double endX = end.getX() - unitX * (endSize/2.0);
-            double endY = end.getY() - unitY * (endSize/2.0);
-            
-            g2d.drawLine((int)startX, (int)startY, (int)endX, (int)endY);
-        }
-    }
+            private Point2D edgePoint(Point2D center, Point2D toward, double diameter) {
+                double dx = toward.getX() - center.getX();
+                double dy = toward.getY() - center.getY();
+                double len = Math.hypot(dx, dy);
 
-    private void drawTecton(Graphics2D g2d, Tecton tecton, Point2D position, int size) {
-        // Draw main body
-        g2d.setColor(tecton == centralTecton ? CENTRAL_COLOR : NEIGHBOR_COLOR);
-        int halfSize = size/2;
-        g2d.fillOval((int)(position.getX()-halfSize), (int)(position.getY()-halfSize), size, size);
+                if (len == 0) return center;
 
-        // Draw fungus
-        if (tecton.isOccupiedByFungus()) {
-            FungalBody fungalBody = tecton.getFungalBody();
-            Mycologist owner = fungalBody.getOwner();
-            String subType = owner != null ? owner.getType() : null;
-            BufferedImage fungalImage = subType != null ? mycologistSubTypeImages.get(subType) : null;
+                double unitX = dx / len;
+                double unitY = dy / len;
 
-            if (fungalImage != null) {
-                int fungalRadius = FUNGUS_SIZE / 2;
-                int fungalDiameter = fungalRadius * 2;
-                int fungalX = (int)position.getX() - fungalRadius;
-                int fungalY = (int)position.getY() - fungalRadius;
-                g2d.drawImage(fungalImage, fungalX, fungalY, fungalDiameter, fungalDiameter, null);
-            } else {
-                // Fallback to red circle
+                return new Point2D.Double(center.getX() + unitX * (diameter / 2.0),
+                                        center.getY() + unitY * (diameter / 2.0));
+            }
+
+            @Override
+            protected void paintComponent(Graphics g) {
+                super.paintComponent(g);
+                Graphics2D g2d = (Graphics2D) g;
+                g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+
+                int width = getWidth();
+                int height = getHeight();
+                Point2D center = new Point2D.Double(width/2.0, height/2.0);
+                int radius = Math.min(width, height) / 3;
+
+                positions.put(centralTecton, center);
+
+                List<Tecton> neighbors = centralTecton.getNeighbors();
+                int maxNeighbors = Math.min(neighbors.size(), 12);
+                double angleStep = 2 * Math.PI / maxNeighbors;
+                
+                for (int i = 0; i < maxNeighbors; i++) {
+                    Tecton neighbor = neighbors.get(i);
+                    double angle = angleStep * i;
+                    double x = center.getX() + radius * Math.cos(angle);
+                    double y = center.getY() + radius * Math.sin(angle);
+                    positions.put(neighbor, new Point2D.Double(x, y));
+                }
+
+                // Draw connections
                 g2d.setColor(Color.RED);
-                int fungalRadius = FUNGUS_SIZE / 2;
-                int fungalDiameter = fungalRadius * 2;
-                int fungalX = (int)position.getX() - fungalRadius;
-                int fungalY = (int)position.getY() - fungalRadius;
-                g2d.fillOval(fungalX, fungalY, fungalDiameter, fungalDiameter);
+                g2d.setStroke(new BasicStroke(4));
+                Point2D centralPos = positions.get(centralTecton);
+                
+                System.out.println(centralTecton.getConnectedNeighbors().keySet().size());
+                for (Tecton connected : centralTecton.getConnectedNeighbors().keySet()) {
+                    if (positions.containsKey(connected)) {
+                        Point2D targetPos = positions.get(connected);
+                        drawConnection(g2d, centralPos, targetPos, TECTON_SIZE);
+                    }
+                }
+
+                // Draw tectons
+                drawTecton(g2d, centralTecton, center, TECTON_SIZE);
+                for (Tecton neighbor : neighbors) {
+                    if (positions.containsKey(neighbor)) {
+                        drawTecton(g2d, neighbor, positions.get(neighbor), TECTON_SIZE);
+                    }
+                }
+            }
+
+            private void drawConnection(Graphics2D g2d, Point2D start, Point2D end, int size) {
+                double dx = end.getX() - start.getX();
+                double dy = end.getY() - start.getY();
+                double distance = Math.hypot(dx, dy);
+
+                if (distance > 0) {
+                    double unitX = dx / distance;
+                    double unitY = dy / distance;
+                    
+                    double startX = start.getX() + unitX * (size/2.0);
+                    double startY = start.getY() + unitY * (size/2.0);
+                    double endX = end.getX() - unitX * (size/2.0);
+                    double endY = end.getY() - unitY * (size/2.0);
+                    
+                    g2d.drawLine((int)startX, (int)startY, (int)endX, (int)endY);
+                }
+            }
+
+            private void drawTecton(Graphics2D g2d, Tecton tecton, Point2D position, int size) {
+                // Draw main body
+                g2d.setColor(tecton == centralTecton ? CENTRAL_COLOR : NEIGHBOR_COLOR);
+                int halfSize = size/2;
+                g2d.fillOval((int)(position.getX()-halfSize), (int)(position.getY()-halfSize), size, size);
+
+                // Draw fungus
+                if (tecton.isOccupiedByFungus()) {
+                    FungalBody fungalBody = tecton.getFungalBody();
+                    Mycologist owner = fungalBody.getOwner();
+                    String subType = owner != null ? owner.getType() : null;
+                    BufferedImage fungalImage = subType != null ? mycologistSubTypeImages.get(subType) : null;
+
+                    if (fungalImage != null) {
+                        int fungalRadius = FUNGUS_SIZE / 2;
+                        int fungalDiameter = fungalRadius * 2;
+                        int fungalX = (int)position.getX() - fungalRadius;
+                        int fungalY = (int)position.getY() - fungalRadius;
+                        g2d.drawImage(fungalImage, fungalX, fungalY, fungalDiameter, fungalDiameter, null);
+                    } else {
+                        // Fallback to red circle
+                        g2d.setColor(Color.RED);
+                        int fungalRadius = FUNGUS_SIZE / 2;
+                        int fungalDiameter = fungalRadius * 2;
+                        int fungalX = (int)position.getX() - fungalRadius;
+                        int fungalY = (int)position.getY() - fungalRadius;
+                        g2d.fillOval(fungalX, fungalY, fungalDiameter, fungalDiameter);
+                    }
+                }
+
+                // Draw insects
+                if (tecton.isOccupiedByInsect()) {
+                    List<Insect> insects = tecton.getInsects();
+                    int count = Math.min(insects.size(), 4);
+                    double distance = size/2.0 + INSECT_SIZE/2.0;
+                    
+                    for (int i = 0; i < count; i++) {
+                        double angle = Math.toRadians(90 - (i * 360.0 / count));
+                        double x = position.getX() + distance * Math.cos(angle);
+                        double y = position.getY() - distance * Math.sin(angle);
+                        drawInsect(g2d, insects.get(i), new Point2D.Double(x, y));
+                    }
+                }
+            }
+
+            private void drawInsect(Graphics2D g2d, Insect insect, Point2D position) {
+                String subType = insect.getOwner() != null ? insect.getOwner().getType() : null;
+                BufferedImage insectImage = subType != null ? entomologistSubTypeImages.get(subType) : null;
+                if (insectImage != null) {
+                    int insectRadius = INSECT_SIZE;
+                    int insectDiameter = insectRadius * 2;
+                    int insectX = (int) position.getX() + (INSECT_SIZE - insectRadius) - insectRadius;
+                    int insectY = (int) position.getY() + (INSECT_SIZE - insectRadius) - insectRadius;
+                    g2d.drawImage(insectImage, insectX, insectY, insectDiameter, insectDiameter, null);
+                } else {
+                    // Fallback to yellow circle
+                    g2d.setColor(Color.YELLOW);
+                    int insectRadius = INSECT_SIZE / 3;
+                    int insectDiameter = insectRadius * 2;
+                    int insectX = (int) position.getX() + (INSECT_SIZE - insectRadius) - insectRadius;
+                    int insectY = (int)position.getY() + (INSECT_SIZE - insectRadius) - insectRadius;
+                    g2d.fillOval(insectX, insectY, insectDiameter, insectDiameter);
+                }
             }
         }
-
-        // Draw insects
-        if (tecton.isOccupiedByInsect()) {
-            List<Insect> insects = tecton.getInsects();
-            int count = Math.min(insects.size(), 4);
-            double distance = size/2.0 + INSECT_SIZE/2.0;
-            
-            for (int i = 0; i < count; i++) {
-                double angle = Math.toRadians(90 - (i * 360.0 / count));
-                double x = position.getX() + distance * Math.cos(angle);
-                double y = position.getY() - distance * Math.sin(angle);
-                drawInsect(g2d, insects.get(i), new Point2D.Double(x, y));
-            }
-        }
-    }
-
-    private void drawInsect(Graphics2D g2d, Insect insect, Point2D position) {
-        String subType = insect.getOwner() != null ? insect.getOwner().getType() : null;
-        BufferedImage insectImage = subType != null ? entomologistSubTypeImages.get(subType) : null;
-        if (insectImage != null) {
-            int insectRadius = INSECT_SIZE;
-            int insectDiameter = insectRadius * 2;
-            int insectX = (int) position.getX() + (INSECT_SIZE - insectRadius) - insectRadius;
-            int insectY = (int) position.getY() + (INSECT_SIZE - insectRadius) - insectRadius;
-            g2d.drawImage(insectImage, insectX, insectY, insectDiameter, insectDiameter, null);
-        } else {
-            // Fallback to yellow circle
-            g2d.setColor(Color.YELLOW);
-            int insectRadius = INSECT_SIZE / 3;
-            int insectDiameter = insectRadius * 2;
-            int insectX = (int) position.getX() + (INSECT_SIZE - insectRadius) - insectRadius;
-            int insectY = (int)position.getY() + (INSECT_SIZE - insectRadius) - insectRadius;
-            g2d.fillOval(insectX, insectY, insectDiameter, insectDiameter);
-        }
-    }
-}
 
         @Override
         protected void paintComponent(Graphics g) {

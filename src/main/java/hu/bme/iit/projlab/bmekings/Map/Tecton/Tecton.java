@@ -241,6 +241,7 @@ public class Tecton implements Listener{
             hyphals = new ArrayList<>();
             hyphals.add(newHyphal);
             connectedNeighbours.put(connected, hyphals);
+            connected.getConnectedNeighbors().put(this, hyphals);
         }
 
         owner.addHyphal(newHyphal);
