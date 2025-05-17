@@ -160,7 +160,6 @@ public class FungalBody extends Entity {
     @Loggable
     public void shootSpore(Tecton tecton) {
         if(checkShootingRange(tecton)) {
-            System.out.println("nincs rangeben");
             return;
         }
 

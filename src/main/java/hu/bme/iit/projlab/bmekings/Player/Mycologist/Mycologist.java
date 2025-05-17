@@ -294,7 +294,6 @@ public class Mycologist extends Player{
         }
         System.out.println("Megvan");
         //if(targetTecton.getFlag().hyphalApproved || (targetTecton.getFlag().oneHyphalApproved&&targetTecton.getConnectedNeighbors().size()==0)){
-            // System.out.println("Megvan2");
             selectedHyphal.growHyphalFromHyphal(targetTecton);
             selectedHyphal = null;
             this.selectedFungus = null;

@@ -175,8 +175,8 @@ public class Hyphal extends Entity {
     }
 
     @Loggable
-    public void growHyphalFromHyphal(Tecton targetTecton){
-        baseLocation.connectTecton(targetTecton, owner);
+    public void growHyphalFromHyphal(Tecton targetTecton) {
+        connectedTecton.connectTecton(targetTecton, owner);
     }
 
         
