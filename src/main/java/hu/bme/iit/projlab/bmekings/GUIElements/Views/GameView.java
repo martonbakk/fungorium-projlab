@@ -464,6 +464,7 @@ public class GameView extends AbstractGameView implements Listener {
                                     selectedHyphalLabel.setText("Kiválasztott\nFonál: " + h.getId());
                                     GameLogic.getParams().selectedHyphal = h;
                                     selectedPlayer.SelectAction(2, GameLogic.getParams());
+                                    System.out.println("asd");
                                     return;
                                 }
                             }
