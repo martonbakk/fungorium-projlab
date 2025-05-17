@@ -76,7 +76,7 @@ public class Entomologist extends Player{
     private boolean checkSelectedInsect() {
         boolean checkSelectedInsect = this.selectedInsect == null;
         if (checkSelectedInsect) {
-            System.out.println("Nem választottál ki rovart...");
+            throw new RuntimeException("Nem választottál ki rovart...");
         }
 
         return checkSelectedInsect;
