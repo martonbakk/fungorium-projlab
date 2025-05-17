@@ -111,22 +111,22 @@ public class Map {
         ArrayList<Integer> leftBorder = new ArrayList<Integer>(Arrays.asList(array1));
         ArrayList<Integer> rightBorder = new ArrayList<Integer>(Arrays.asList(array2));
         for (Integer i = 0; i < tectons.size(); i++) {
-            if(!(leftBorder.contains(i)))
-                tectons.get(i).neighbours.add(tectons.get(i-1));
+            // Add Right neighbor
             if(!(rightBorder.contains(i)))
                 tectons.get(i).neighbours.add(tectons.get(i+1));
-            if (i == 14 || i == 28 || i == 42 || i == 56 || i == 70 || i == 84 || i == 98) {
-                tectons.get(i).neighbours.add(tectons.get(i-14));
+            // Add Down neighbor
+            if (!(i == 112 || i == 113 || i == 114 || i == 115 || i == 116 || i == 117 || i == 118 || i == 119 || i == 120 || i == 121 || i == 122 || i == 123 || i == 124 || i == 125))
                 tectons.get(i).neighbours.add(tectons.get(i+14));
-            }
-            if (i == 27 || i == 41 || i == 55 || i == 69 || i == 83 || i == 97 || i == 111) {
-                tectons.get(i).neighbours.add(tectons.get(i-14));
-                tectons.get(i).neighbours.add(tectons.get(i+14));
-            }
-            if (i == 0 || i == 13)
-                tectons.get(i).neighbours.add(tectons.get(i+14));
-            if (i == 112 || i == 125) 
-                tectons.get(i).neighbours.add(tectons.get(i-14));
+            // Add Left Neighbor
+            if(!(leftBorder.contains(i)))
+                tectons.get(i).neighbours.add(tectons.get(i-1));
+            // Add Up neighbor
+            if (!(i == 0 || i == 1 || i == 2 || i == 3 || i == 4 || i == 5 || i == 6 || i == 7 || i == 8 || i == 9 || i == 10 || i == 11 || i == 12 || i == 13))
+                    tectons.get(i).neighbours.add(tectons.get(i-14));
+            
+            
+            
+            
         }
 
 
