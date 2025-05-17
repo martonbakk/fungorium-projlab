@@ -176,6 +176,7 @@ public class FungalBody extends Entity {
             spore.setBaseLocation(tecton);
             tecton.addSpore(spore);
             this.shotSporesNum--;
+            
             if(this.spores.isEmpty()){
                 throw new RuntimeException("Nincs több spóra a gombatestben!");
             }
@@ -183,7 +184,6 @@ public class FungalBody extends Entity {
                 throw new RuntimeException("Nem tudsz kilőni több spórát!");
             }
         }
-
     }
 
     public Spore getRandomSpore(Tecton tecton){
