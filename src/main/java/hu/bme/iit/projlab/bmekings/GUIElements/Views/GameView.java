@@ -4,9 +4,7 @@ import java.awt.BasicStroke;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
-import java.awt.FlowLayout;
 import java.awt.Font;
-import java.awt.Frame;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.GridLayout;
@@ -18,7 +16,6 @@ import java.awt.geom.Point2D;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -32,11 +29,9 @@ import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
-import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextArea;
-import javax.swing.SwingConstants;
 
 import hu.bme.iit.projlab.bmekings.Entities.Fungal.FungalBody;
 import hu.bme.iit.projlab.bmekings.Entities.Fungal.Hyphal;
@@ -52,8 +47,8 @@ import hu.bme.iit.projlab.bmekings.Player.Player;
 public class GameView extends AbstractGameView implements Listener {
     private final JComboBox<Player> playerComboBox;
     private final JComboBox<String> actionComboBox;
-    private final JLabel scoreLabel;
-    private final JLabel selectedPlayerLabel;
+    private final JTextArea scoreLabel;
+    private final JTextArea selectedPlayerLabel;
     private final JTextArea selectedFungusLabel;
     private final JTextArea selectedHyphalLabel;
     private final JTextArea sporesOnTectonLabel;
@@ -61,93 +56,98 @@ public class GameView extends AbstractGameView implements Listener {
     private final PentagonPanel pentagonPanel;
     private final List<String> insectSubTypes;
     private final List<String> fungalSubTypes;
+    private final List<Player> removedPlayers = new ArrayList<>();
 
-    public GameView(Controller controller, List<List<String>> textures, List<String> insectSubTypes, List<String> fungalSubTypes) {
+
+     public GameView(Controller controller, List<List<String>> textures, List<String> insectSubTypes, List<String> fungalSubTypes) {
         super(controller);
         this.insectSubTypes = insectSubTypes;
         this.fungalSubTypes = fungalSubTypes;
         setLayout(new BorderLayout(10, 10));
-        // Felső panel
-        JPanel topPanel = new JPanel(new BorderLayout());
-        scoreLabel = new JLabel("", SwingConstants.CENTER);
-        scoreLabel.setFont(new Font("Arial", Font.PLAIN, 12));
-        topPanel.add(scoreLabel, BorderLayout.NORTH);
 
-        selectedPlayerLabel = new JLabel("Kiválasztott játékos: Nincs", SwingConstants.CENTER);
-        selectedPlayerLabel.setFont(new Font("Arial", Font.PLAIN, 12));
-        topPanel.add(selectedPlayerLabel, BorderLayout.CENTER);
-        add(topPanel, BorderLayout.NORTH);
-
+        // Középső panel (térkép és címkék)
         JPanel gamePanel = new JPanel(new BorderLayout());
 
-        JPanel westJPanel = new JPanel();
-        westJPanel.setLayout(new BoxLayout(westJPanel, BoxLayout.PAGE_AXIS));
-        
-        selectedFungusLabel = new JTextArea("Kiválasztott\nGombatest: Nincs");
-        selectedFungusLabel.setFont(new Font("Arial", Font.PLAIN, 12));
-
-        selectedFungusLabel.setSize(100, Short.MAX_VALUE);
-        selectedFungusLabel.setPreferredSize(selectedFungusLabel.getPreferredSize());
-
-        selectedFungusLabel.setEditable(false);
-        selectedFungusLabel.setLineWrap(true);
-        selectedFungusLabel.setFocusable(false);
-        selectedFungusLabel.setOpaque(false);
-        
-        westJPanel.add(selectedFungusLabel);
-        westJPanel.add(Box.createRigidArea(new Dimension(0,10)));
-
-        selectedHyphalLabel = new JTextArea("Kiválasztott\nFonál: Nincs");
-        selectedHyphalLabel.setFont(new Font("Arial", Font.PLAIN, 12));
-
-        selectedHyphalLabel.setSize(100, Short.MAX_VALUE);
-        selectedHyphalLabel.setPreferredSize(selectedHyphalLabel.getPreferredSize());
-
-        selectedHyphalLabel.setEditable(false);
-        selectedHyphalLabel.setLineWrap(true);
-        selectedHyphalLabel.setFocusable(false);
-        selectedHyphalLabel.setOpaque(false);
-        
-        westJPanel.add(selectedHyphalLabel);
-
-        gamePanel.add(westJPanel, BorderLayout.WEST);
-
-        // Pentagon panel
+        // Pentagon panel (térkép)
         List<String> insectImagePaths = textures.get(0); // Insect images
         List<String> fungalImagePaths = textures.get(1); // Fungal images
         pentagonPanel = new PentagonPanel(insectImagePaths, fungalImagePaths, fungalSubTypes, insectSubTypes);
         gamePanel.add(pentagonPanel, BorderLayout.CENTER);
 
+        // Jobb oldali panel az összes információval
         JPanel eastJPanel = new JPanel();
         eastJPanel.setLayout(new BoxLayout(eastJPanel, BoxLayout.PAGE_AXIS));
+        eastJPanel.setPreferredSize(new Dimension(155, 400)); // Növelt magasság
+        eastJPanel.setBackground(Color.LIGHT_GRAY); // Háttérszín
+        eastJPanel.setBorder(BorderFactory.createTitledBorder(
+            BorderFactory.createLineBorder(Color.BLACK)
+        )); // Keret címmel
 
+        // Pontszámok
+        scoreLabel = new JTextArea("Pontszámok: -");
+        scoreLabel.setFont(new Font("Arial", Font.PLAIN, 12));
+        scoreLabel.setPreferredSize(new Dimension(120, 50));
+        scoreLabel.setEditable(false);
+        scoreLabel.setLineWrap(true);
+        scoreLabel.setFocusable(false);
+        scoreLabel.setOpaque(false);
+        eastJPanel.add(scoreLabel);
+        eastJPanel.add(Box.createRigidArea(new Dimension(0, 10)));
+
+        // Kiválasztott játékos
+        selectedPlayerLabel = new JTextArea("Kiválasztott\njátékos: Nincs");
+        selectedPlayerLabel.setFont(new Font("Arial", Font.PLAIN, 12));
+        selectedPlayerLabel.setPreferredSize(new Dimension(120, 50));
+        // selectedPlayerLabel.setEditable(false); // JLabel does not support setEditable
+        selectedPlayerLabel.setLineWrap(true);
+        selectedPlayerLabel.setFocusable(false);
+        selectedPlayerLabel.setOpaque(false);
+        eastJPanel.add(selectedPlayerLabel);
+        eastJPanel.add(Box.createRigidArea(new Dimension(0, 10)));
+
+        // Kiválasztott gombatest
+        selectedFungusLabel = new JTextArea("Kiválasztott\nGombatest: Nincs");
+        selectedFungusLabel.setFont(new Font("Arial", Font.PLAIN, 12));
+        selectedFungusLabel.setPreferredSize(new Dimension(120, 50));
+        selectedFungusLabel.setEditable(false);
+        selectedFungusLabel.setLineWrap(true);
+        selectedFungusLabel.setFocusable(false);
+        selectedFungusLabel.setOpaque(false);
+        eastJPanel.add(selectedFungusLabel);
+        eastJPanel.add(Box.createRigidArea(new Dimension(0, 10)));
+
+        // Kiválasztott fonál
+        selectedHyphalLabel = new JTextArea("Kiválasztott\nFonál: Nincs");
+        selectedHyphalLabel.setFont(new Font("Arial", Font.PLAIN, 12));
+        selectedHyphalLabel.setPreferredSize(new Dimension(120, 50));
+        selectedHyphalLabel.setEditable(false);
+        selectedHyphalLabel.setLineWrap(true);
+        selectedHyphalLabel.setFocusable(false);
+        selectedHyphalLabel.setOpaque(false);
+        eastJPanel.add(selectedHyphalLabel);
+        eastJPanel.add(Box.createRigidArea(new Dimension(0, 10)));
+
+        // Kiválasztott rovar
         selectedInsectLabel = new JTextArea("Kiválasztott\nRovar: Nincs");
         selectedInsectLabel.setFont(new Font("Arial", Font.PLAIN, 12));
-
-        selectedInsectLabel.setSize(100, Short.MAX_VALUE);
-        selectedInsectLabel.setPreferredSize(selectedInsectLabel.getPreferredSize());
-
+        selectedInsectLabel.setPreferredSize(new Dimension(120, 50));
         selectedInsectLabel.setEditable(false);
         selectedInsectLabel.setLineWrap(true);
         selectedInsectLabel.setFocusable(false);
         selectedInsectLabel.setOpaque(false);
-
         eastJPanel.add(selectedInsectLabel);
-        eastJPanel.add(Box.createRigidArea(new Dimension(0,10)));
+        eastJPanel.add(Box.createRigidArea(new Dimension(0, 10)));
 
+        // Spórák száma a tektonon
         sporesOnTectonLabel = new JTextArea("A Tektonon lévő\nSpórák száma: -");
         sporesOnTectonLabel.setFont(new Font("Arial", Font.PLAIN, 12));
-
-        sporesOnTectonLabel.setSize(100, Short.MAX_VALUE);
-        sporesOnTectonLabel.setPreferredSize(sporesOnTectonLabel.getPreferredSize());
-
+        sporesOnTectonLabel.setPreferredSize(new Dimension(120, 50));
         sporesOnTectonLabel.setEditable(false);
         sporesOnTectonLabel.setLineWrap(true);
         sporesOnTectonLabel.setFocusable(false);
         sporesOnTectonLabel.setOpaque(false);
-        
         eastJPanel.add(sporesOnTectonLabel);
-        eastJPanel.add(Box.createRigidArea(new Dimension(0,10)));
+        eastJPanel.add(Box.createRigidArea(new Dimension(0, 10)));
 
         gamePanel.add(eastJPanel, BorderLayout.EAST);
 
@@ -176,10 +176,26 @@ public class GameView extends AbstractGameView implements Listener {
         comboPanel.add(actionComboBox);
         bottomPanel.add(comboPanel, BorderLayout.CENTER);
 
-        JButton actionButton = new JButton("Akció végrehajtása");
+        JButton actionButton = new JButton("Execute Action");
         actionButton.addActionListener(e -> {
             Player selectedPlayer = (Player) playerComboBox.getSelectedItem();
+            int idxOfPlayerFromCombo = playerComboBox.getSelectedIndex();
             String selectedAction = (String) actionComboBox.getSelectedItem();
+           
+            if (selectedPlayer != null) {
+                removedPlayers.add(selectedPlayer);
+                playerComboBox.removeItemAt(idxOfPlayerFromCombo);
+            }
+            
+            if (playerComboBox.getItemCount() == 0 && !removedPlayers.isEmpty()) {
+                for (Player p : removedPlayers) {
+                    playerComboBox.addItem(p);
+                    // WE SIMULATE ONE GAME LIFECYCLE
+                    controller.getGameLogic().tick();
+                }
+                removedPlayers.clear();
+            }
+
             if (selectedPlayer != null && selectedAction != null) {
                 JOptionPane.showMessageDialog(this, selectedPlayer.getUserName() + " végrehajtja: " + selectedAction);
                 // TODO: Konkrét akció logika implementálása
@@ -187,17 +203,10 @@ public class GameView extends AbstractGameView implements Listener {
                 selectedFungusLabel.setText("Kiválasztott\nGombatest: Nincs");
                 selectedHyphalLabel.setText("Kiválasztott\nFonál: Nincs");
                 sporesOnTectonLabel.setText("A Tektonon lévő\nSpórák száma: -");
-                selectedInsectLabel.setText("Kiválaszott\nRovar: Nincs");
+                selectedInsectLabel.setText("Kiválasztott\nRovar: Nincs");
             }
         });
         bottomPanel.add(actionButton, BorderLayout.EAST);
-
-        JButton backButton = new JButton("Simulate Steps");
-        backButton.addActionListener(e -> {
-            controller.getGameLogic().tick();
-            update();
-        });
-        bottomPanel.add(backButton, BorderLayout.WEST);
 
         add(bottomPanel, BorderLayout.SOUTH);
 
