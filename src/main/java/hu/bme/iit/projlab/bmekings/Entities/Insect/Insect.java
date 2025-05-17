@@ -1,6 +1,5 @@
 package hu.bme.iit.projlab.bmekings.Entities.Insect;
 
-import java.io.Serializable;
 import java.util.HashMap;
 
 import hu.bme.iit.projlab.bmekings.Effects.Effect.Effect;
@@ -139,7 +138,12 @@ public class Insect extends Entity{
             if(movingCD == 0){
                 System.out.println("[" + this.getId() + "] [baseLocation] megvaltozott:");
                 System.out.println("[" + baseLocation.getId() + "] -> [" + targetTecton.getId() + "]");
+                this.baseLocation.setOccupiedByInsect(false);
+                this.baseLocation.getInsects().remove(this);
                 this.baseLocation=targetTecton;
+                this.baseLocation.addInsect(this);
+                this.baseLocation.setOccupiedByInsect(true);
+
             } else System.out.println("A mozgás cooldown-on van.");
         } else System.out.println("A tektonok nincsenek fonallal osszekotve.");
     }

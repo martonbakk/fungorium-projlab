@@ -1,6 +1,5 @@
 package hu.bme.iit.projlab.bmekings.Entities.Fungal;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -49,8 +48,10 @@ public class FungalBody extends Entity {
 
         //this.id=IDGenerator.generateID("FB");
         this.currLevel = 1;
-        this.shotSporesNum = 0;
+        this.shotSporesNum = 2; // ELEJEN 
         this.callNum = 0;
+        this.AddSpore("dupe");
+        this.AddSpore("dupe");
     }
 
     public FungalBody(int currLevel, int shotSporesNum, TypeCharacteristics characteristics, Tecton baseLocation, Mycologist owner){
@@ -60,7 +61,8 @@ public class FungalBody extends Entity {
         this.shotSporesNum = shotSporesNum;
         this.callNum = 0;
         this.owner=owner;
-        
+        this.AddSpore("dupe");
+        this.AddSpore("dupe");
     }
 /*
     public FungalBody(String id, Tecton baseLocation, int currLevel, int shotSporesNum, int shootingRange, int sporeProductionIntensity, int startingHyphalNum, int sporeCapacity) {
@@ -153,8 +155,7 @@ public class FungalBody extends Entity {
                 }
             }
         }
-        System.out.println("A gombatest nem tudja elérni a megadott tekton-t!");
-        return true; 
+        throw new RuntimeException("A gombatest nem tudja elérni a megadott tekton-t!");
     }
 
     // FLAG VALTOZAS AZ UML BEN PLUSZ PARAMÉTER
@@ -165,8 +166,8 @@ public class FungalBody extends Entity {
         }
 
         if(this.spores.isEmpty()) {
-            System.out.println("Nincs spóra a gombatestben!");
-            return;
+            throw new RuntimeException("Nincs spóra a gombatestben!");
+            
         }
         
         for (int i=0; i<this.shotSporesNum; i++) {
@@ -176,12 +177,10 @@ public class FungalBody extends Entity {
             tecton.addSpore(spore);
             this.shotSporesNum--;
             if(this.spores.isEmpty()){
-                System.out.println("Nincs több spóra a gombatestben!");
-                break;
+                throw new RuntimeException("Nincs több spóra a gombatestben!");
             }
             if (this.shotSporesNum == 0) {
-                System.out.println("Nem tudsz kilőni több spórát!");
-                break;
+                throw new RuntimeException("Nem tudsz kilőni több spórát!");
             }
         }
 
@@ -352,8 +351,7 @@ public class FungalBody extends Entity {
     @Loggable
     public void growHyphal(Tecton connected) {
         if (this.baseLocation.connectedNeighbours.get(connected)!=null){
-            System.out.println("Ez a fonál már létezik!");
-            return;
+            throw new RuntimeException("Ez a fonál már létezik!");
         }
         baseLocation.connectTecton(connected, owner);
     }

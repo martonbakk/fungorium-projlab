@@ -221,6 +221,9 @@ public class Mycologist extends Player {
         if (checkControlledFungus()){
             return;
         }
+        if (!tecton.getConnectedNeighbors().containsKey(this.selectedFungus.getBase())){
+            throw new RuntimeException("Erre a tektonra nem lehet gombatestet noveszteni, még nincs összekötve!");
+        }
         tecton.createFungalBodyFromSpore(this);
     }
 

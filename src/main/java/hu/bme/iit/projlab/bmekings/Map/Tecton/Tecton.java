@@ -74,6 +74,8 @@ public class Tecton implements Listener, Serializable{
         }
     }
 
+    public void setOccupiedByInsect(boolean value) { occupiedByInsect = value; }
+
     public Flags getFlag() { return flags; }
 
     @Loggable
@@ -145,7 +147,7 @@ public class Tecton implements Listener, Serializable{
         if(this.isOccupiedByFungus())
             return false;
                                  
-        FungalBody newfungalBody = new FungalBody(1, 0, player.getTypeCharacteristics(), this, player);
+        FungalBody newfungalBody = new FungalBody(1, 2, player.getTypeCharacteristics(), this, player);
 
         GameLogic.addEntity(newfungalBody);
 
@@ -164,7 +166,7 @@ public class Tecton implements Listener, Serializable{
             return false;
 
         if (spores.size()<2)
-            return false;
+            throw new RuntimeException("Nincs elegendő spóra a gombatest létrehozásához!");
         spores.peek().destroySpore();
         spores.peek().destroySpore();           
                                
