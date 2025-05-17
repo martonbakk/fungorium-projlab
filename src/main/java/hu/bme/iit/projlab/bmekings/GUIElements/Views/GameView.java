@@ -253,9 +253,6 @@ public class GameView extends AbstractGameView implements Listener {
                 case "Level Up":
                     selectedPlayer.SelectAction(11, GameLogic.getParams());
                     break;
-                case "Grow Hyphal Barni":
-                    selectedPlayer.SelectAction(12, GameLogic.getParams());
-                    break;
                 default:
                     System.out.println("Invalid action type");
             }
@@ -402,11 +399,7 @@ public class GameView extends AbstractGameView implements Listener {
                     }
                     if (clickedTecton != null) {
                         selectedTecton = (selectedTecton == clickedTecton) ? null : clickedTecton;
-                        StringBuilder message = new StringBuilder("Tecton ID: " + clickedTecton.getId() + "\nSzomszédok:\n");
-                        for (Tecton neighbor : clickedTecton.getNeighbors()) {
-                            message.append("- ").append(neighbor.getId()).append("\n");
-                        }
-                        JOptionPane.showMessageDialog(PentagonPanel.this, message.toString());
+                        
                         sporesOnTectonLabel.setText("A Tektonon lévő Spórák száma: " + selectedTecton.getSpores().size());
                         TectonPanel tectonPanel = new TectonPanel(selectedTecton);
                         JFrame newFrame = new JFrame("Új ablak");
@@ -426,8 +419,9 @@ public class GameView extends AbstractGameView implements Listener {
         }
 
         class TectonPanel extends JPanel {
-            Map<Tecton, Point2D> positions = new HashMap<>();
+            private Map<Tecton, Point2D> positions = new HashMap<>();
             private final Tecton centralTecton;
+            private String information;
             private static final Color CENTRAL_COLOR = new Color(0, 100, 0);
             private static final Color NEIGHBOR_COLOR = new Color(128, 254, 57);
             private static final int TECTON_SIZE = 75;
@@ -448,6 +442,11 @@ public class GameView extends AbstractGameView implements Listener {
                         for (Map.Entry<Tecton, Point2D> entry : positions.entrySet()) {
                             if (isPointInCircle(entry.getValue(), clickPoint, TECTON_SIZE)) {
                                 clickedTecton = entry.getKey();
+                                StringBuilder message = new StringBuilder("Tecton ID: " + clickedTecton.getId() + "\nSzomszédok:\n");
+                                for (Tecton neighbor : clickedTecton.getNeighbors()) {
+                                    message.append("- ").append(neighbor.getId()).append("\n");
+                                }
+                                information = message.toString();
                             }
                         }
 
@@ -461,6 +460,7 @@ public class GameView extends AbstractGameView implements Listener {
 
                         // Hyphal detektálás
                         if (selectedPlayer instanceof Mycologist) {
+                            Mycologist selectedMyc = (Mycologist) selectedPlayer;
                             for (Hyphal h : hyphals) {
                                 Point2D from = positions.get(h.getBase());
                                 Point2D to = positions.get(h.getConnectedTecton());
@@ -470,22 +470,23 @@ public class GameView extends AbstractGameView implements Listener {
                                 Point2D p2 = edgePoint(to, from, TECTON_SIZE);
 
                                 if (isPointNearLine(p1, p2, clickPoint, 5)) {
-                                    selectedHyphalLabel.setText("Kiválasztott\nFonál: " + h.getId());
-                                    GameLogic.getParams().selectedHyphal = h;
-                                    selectedPlayer.SelectAction(2, GameLogic.getParams());
-                                    System.out.println("asd");
-                                    return;
+                                    int answer = JOptionPane.showConfirmDialog(null, "Do you want to Select [" + h.getId() + "]", "Hyphal", JOptionPane.YES_NO_OPTION);
+                                    if (answer == 0) {
+                                        selectedHyphalLabel.setText("Kiválasztott\nFonál: " + h.getId());
+                                        GameLogic.getParams().selectedHyphal = h;
+                                        selectedPlayer.SelectAction(2, GameLogic.getParams());
+                                        return;
+                                    }
                                 }
                             }
                         }
-                        
 
                         if (selectedPlayer instanceof Mycologist && clickedTecton.isOccupiedByFungus() && clickedTecton.getFungalBody().getOwner() == selectedPlayer && clickedTecton != null) {
                             Mycologist selectedMyc = (Mycologist) selectedPlayer;
                             int answer = JOptionPane.showConfirmDialog(null, "Do you want to Select [" + clickedTecton.getFungalBody().getId() + "]", "Fungal Body Chooser", JOptionPane.YES_NO_OPTION);
                             if (answer == 0) {
-                                selectedMyc.selectFungus(clickedTecton.getFungalBody());
                                 GameLogic.getParams().selectedFungus = clickedTecton.getFungalBody();
+                                selectedMyc.SelectAction(1, GameLogic.getParams());
                                 System.out.println(GameLogic.getParams().selectedFungus.getId());
                                 selectedFungusLabel.setText("Kiválasztott\nGombatest: " + GameLogic.getParams().selectedFungus.getId());
                                 return;
@@ -500,7 +501,8 @@ public class GameView extends AbstractGameView implements Listener {
                                 selectedInsectLabel.setText("Kiválaszott\nRovar: " + selectedEnt.getSelectedInsect().getId());
                                 return;
                             });
-                        } 
+                        }
+                        repaint();
                     }
                 });
             }
@@ -572,6 +574,26 @@ public class GameView extends AbstractGameView implements Listener {
                     if (positions.containsKey(neighbor)) {
                         drawTecton(g2d, neighbor, positions.get(neighbor), TECTON_SIZE);
                     }
+                }
+
+                // Draw Text
+                g2d.setColor(Color.WHITE);
+                g2d.setFont(new Font("SansSerif", Font.PLAIN, 12));
+
+                // Átlátszó információs doboz a jobb felső sarokban
+                int boxWidth = 200;
+                int padding = 10;
+
+                int textX = width - boxWidth - padding + 10;
+                int textY = padding + 20;
+                if (information != null) {
+                    String[] lines = information.split("\n");
+                    for (int i = 0; i < lines.length; i++) {
+                        g2d.drawString(lines[i], textX, textY + 15);
+                    }
+                }
+                else {
+                    g2d.drawString("Clcik on a Tecton to get information!", textX, textY + 15);
                 }
             }
 
