@@ -53,6 +53,7 @@ public class GameView extends AbstractGameView implements Listener {
     private final JTextArea selectedHyphalLabel;
     private final JTextArea sporesOnTectonLabel;
     private final JTextArea selectedInsectLabel;
+    private final JTextArea selectedTectonLabel;
     private final PentagonPanel pentagonPanel;
     private final List<String> insectSubTypes;
     private final List<String> fungalSubTypes;
@@ -125,6 +126,17 @@ public class GameView extends AbstractGameView implements Listener {
         selectedHyphalLabel.setFocusable(false);
         selectedHyphalLabel.setOpaque(false);
         eastJPanel.add(selectedHyphalLabel);
+        eastJPanel.add(Box.createRigidArea(new Dimension(0, 10)));
+
+        // Kiválasztott tekton
+        selectedTectonLabel = new JTextArea("Kiávlasztott\nTekton: Nincs");
+        selectedTectonLabel.setFont(new Font("Arial", Font.PLAIN, 12));
+        selectedTectonLabel.setPreferredSize(new Dimension(120, 50));
+        selectedTectonLabel.setEditable(false);
+        selectedTectonLabel.setLineWrap(true);
+        selectedTectonLabel.setFocusable(false);
+        selectedTectonLabel.setOpaque(false);
+        eastJPanel.add(selectedTectonLabel);
         eastJPanel.add(Box.createRigidArea(new Dimension(0, 10)));
 
         // Kiválasztott rovar
@@ -206,6 +218,7 @@ public class GameView extends AbstractGameView implements Listener {
                 selectedHyphalLabel.setText("Kiválasztott\nFonál: Nincs");
                 sporesOnTectonLabel.setText("A Tektonon lévő\nSpórák száma: -");
                 selectedInsectLabel.setText("Kiválasztott\nRovar: Nincs");
+                selectedTectonLabel.setText("Kiválasztott\nTekton: Nincs");
             }
         });
         bottomPanel.add(actionButton, BorderLayout.EAST);
@@ -421,7 +434,7 @@ public class GameView extends AbstractGameView implements Listener {
                         selectedTecton = null;
                     }
                     GameLogic.getParams().selectedTecton = selectedTecton;
-                    System.out.println(GameLogic.getParams().selectedTecton.getId());    
+                    selectedTectonLabel.setText("Kiválasztott\nTekton: " + clickedTecton.getId());
                     repaint();
                 }
             });
@@ -460,6 +473,7 @@ public class GameView extends AbstractGameView implements Listener {
                                 }
                                 information = message.toString();
                                 GameLogic.getParams().selectedTecton = clickedTecton;
+                                selectedTectonLabel.setText("Kiválasztott\nTekton: " + clickedTecton.getId());
                             }
                         }
 

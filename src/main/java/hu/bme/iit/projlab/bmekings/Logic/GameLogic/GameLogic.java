@@ -42,8 +42,7 @@ public class GameLogic implements Serializable{
     private ArrayList<Entomologist> serializedEntomologists;
     private ArrayList<Entity> serializedEntityList;
 
-    
-    
+    public ArrayList<Listener> getListeners() { return listeners; }
     
     public Map getMap(){
         return map;
