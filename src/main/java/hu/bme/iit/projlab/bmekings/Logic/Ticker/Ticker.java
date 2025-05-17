@@ -13,7 +13,7 @@ public class Ticker implements Serializable {
     private static final long serialVersionUID = 1L;
 
 
-    private final List<Listener> gameObList=new ArrayList<>();
+    private transient final List<Listener> gameObList=new ArrayList<>();
     private final long intervalMillis;
     private transient Thread tickerThread = new Thread();
     private volatile boolean running;

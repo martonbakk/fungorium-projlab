@@ -41,16 +41,16 @@ public class StartView extends AbstractGameView{
         loadButton.setAlignmentX(Component.CENTER_ALIGNMENT);
         loadButton.addActionListener(e -> controller.switchView("LoadView"));
 
-        JButton saveButton = new JButton("Save");
-        saveButton.setAlignmentX(Component.CENTER_ALIGNMENT);
-        saveButton.addActionListener(e -> controller.switchView("SaveView"));
+        ///JButton saveButton = new JButton("Save");
+        ///saveButton.setAlignmentX(Component.CENTER_ALIGNMENT);
+        ///saveButton.addActionListener(e -> controller.switchView("SaveView"));
 
         // Gombok hozzáadása a panelhez, távolságokkal
         mainPanel.add(startButton);
         mainPanel.add(Box.createVerticalStrut(10));
         mainPanel.add(loadButton);
-        mainPanel.add(Box.createVerticalStrut(10));
-        mainPanel.add(saveButton);
+        ///mainPanel.add(Box.createVerticalStrut(10));
+        ///mainPanel.add(saveButton);
 
         // Fő panel középre helyezése
         JPanel centerPanel = new JPanel(new GridBagLayout());
