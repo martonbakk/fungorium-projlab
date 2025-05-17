@@ -63,6 +63,7 @@ JOptionPane.showMessageDialog(this, "Kérlek, adj meg egy mentési nevet!",
 return;
 }
 controller.loadGame(name);
+controller.switchView("GameView");
 });
 buttonPanel.add(loadButton);
 
