@@ -129,8 +129,7 @@ public class Mycologist extends Player {
         }
 
         if(selectedFungus==null){
-            System.out.println("selectedfungus null");
-            return;
+            throw new RuntimeException("selectedfungus null");
         }
         selectedFungus.levelUp();
         selectedFungus = null;
@@ -140,7 +139,7 @@ public class Mycologist extends Player {
     private boolean checkControlledFunguses(){
         boolean checkControlledFungus= this.controlledFunguses.isEmpty();
         if (checkControlledFungus) {
-            System.out.println("Nem növesztettél még gombatestet...");   
+            throw new RuntimeException("Nem növesztettél még gombatestet...");   
         }
         return checkControlledFungus;
     }
@@ -149,7 +148,7 @@ public class Mycologist extends Player {
     private boolean checkControlledFungus(){
         boolean checkControlledFungus= this.selectedFungus == null;
         if (checkControlledFungus) {
-            System.out.println("Nem választottál ki gombatestet...");
+            throw new RuntimeException("Nem választottál ki gombatestet...");
         }
 
         return checkControlledFungus;
@@ -159,7 +158,7 @@ public class Mycologist extends Player {
     private boolean checkControlledFungusHyphal(){
         boolean checkControlledFungus= hyphalList.isEmpty();
         if (checkControlledFungus) {
-            System.out.println("Nincs a gombatestnek fonala...");
+            throw new RuntimeException("Nincs a gombatestnek fonala...");
         }
         return checkControlledFungus;
     }
@@ -168,7 +167,7 @@ public class Mycologist extends Player {
     private boolean checkSelectedHyhpal(){
         boolean checkControlledFungus= this.selectedHyphal == null;
         if (checkControlledFungus) {
-            System.out.println("Nem választottál ki fonalat...");
+           throw new RuntimeException("Nem választottál ki fonalat...");
         }
         return checkControlledFungus;
     }
@@ -209,12 +208,12 @@ public class Mycologist extends Player {
         if (checkControlledFungus()){
             return;
         }
-        //if (tecton.getFlag().fungalApproved) {
+        if (tecton.getFlag().fungalApproved) {
             tecton.createFungalBody(this);
-        // }
-        // else {
-        //     System.out.println("Erre a tektonra nem lehet gombatestet noveszteni!");
-        // }
+        }
+        else {
+            throw new RuntimeException("Erre a tektonra nem lehet gombatestet noveszteni!");
+        }
     }
 
     @Loggable
