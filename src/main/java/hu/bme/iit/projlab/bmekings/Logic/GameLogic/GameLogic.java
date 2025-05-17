@@ -3,11 +3,7 @@ package hu.bme.iit.projlab.bmekings.Logic.GameLogic;
 import java.util.ArrayList;
 
 import hu.bme.iit.projlab.bmekings.Entities.Entity;
-import hu.bme.iit.projlab.bmekings.Entities.Fungal.FungalBody;
-import hu.bme.iit.projlab.bmekings.Entities.Fungal.Hyphal;
-import hu.bme.iit.projlab.bmekings.Entities.Insect.Insect;
 import hu.bme.iit.projlab.bmekings.Interface.Listener.Listener;
-import hu.bme.iit.projlab.bmekings.Interface.SporeInterface.SporeInterface;
 import hu.bme.iit.projlab.bmekings.Logic.Ticker.Ticker;
 import hu.bme.iit.projlab.bmekings.Map.Map;
 import hu.bme.iit.projlab.bmekings.Player.Entomologist.Entomologist;
@@ -54,6 +50,7 @@ public class GameLogic {
         for (Entity e : entityList) {
             e.update();
         }
+        System.out.println("Tick");
     }
    
     public void addListener(Listener l) {
