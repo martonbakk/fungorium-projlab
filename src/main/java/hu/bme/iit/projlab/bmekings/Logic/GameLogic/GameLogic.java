@@ -141,7 +141,7 @@ public class GameLogic implements Serializable{
         for (Entity e : entityList) {
             e.update();
         }
-        System.out.println("Tick");
+        
     }
    
     public void addListener(Listener l) {
