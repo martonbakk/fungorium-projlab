@@ -13,7 +13,7 @@ public class Ticker implements Serializable {
     private static final long serialVersionUID = 1L;
 
 
-    private transient final List<Listener> gameObList=new ArrayList<>();
+    private transient List<Listener> gameObList = new ArrayList<>();
     private final long intervalMillis;
     private transient Thread tickerThread = new Thread();
     private volatile boolean running;
@@ -23,6 +23,7 @@ public class Ticker implements Serializable {
         this.intervalMillis = intervalMillis;
         this.running = false;
         this.elapsedTicks = 0;
+        
     }
 
     public void addListener(Listener listener) {
@@ -38,6 +39,9 @@ public class Ticker implements Serializable {
     }
 
     public void start() {
+        if (gameObList == null) {
+            gameObList = new ArrayList<>();
+        }
         if (running) return;
         running = true;
         tickerThread = new Thread(() -> {
@@ -57,7 +61,6 @@ public class Ticker implements Serializable {
             }
         });
         tickerThread.start();
-        System.out.println("Started Ticker!");
     }
 
     public void stop() {

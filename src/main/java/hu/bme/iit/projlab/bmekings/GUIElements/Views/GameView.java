@@ -22,6 +22,7 @@ import java.awt.geom.Line2D;
 import java.awt.geom.Point2D;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -55,19 +56,21 @@ import hu.bme.iit.projlab.bmekings.Player.Mycologist.Mycologist;
 import hu.bme.iit.projlab.bmekings.Player.Player;
 
 public class GameView extends AbstractGameView implements Listener {
-    private final JComboBox<Player> playerComboBox;
-    private final JComboBox<String> actionComboBox;
-    private final JTextArea scoreLabel;
-    private final JTextArea selectedPlayerLabel;
-    private final JTextArea selectedFungusLabel;
-    private final JTextArea selectedHyphalLabel;
-    private final JTextArea sporesOnTectonLabel;
-    private final JTextArea selectedInsectLabel;
-    private final JTextArea selectedTectonLabel;
-    private final PentagonPanel pentagonPanel;
-    private final List<String> insectSubTypes;
-    private final List<String> fungalSubTypes;
-    private final List<Player> removedPlayers = new ArrayList<>();
+    private static final long serialVersionUID = 1L;
+
+    private transient JComboBox<Player> playerComboBox;
+    private transient JComboBox<String> actionComboBox;
+    private transient JTextArea scoreLabel;
+    private transient JTextArea selectedPlayerLabel;
+    private transient JTextArea selectedFungusLabel;
+    private transient JTextArea selectedHyphalLabel;
+    private transient JTextArea sporesOnTectonLabel;
+    private transient JTextArea selectedInsectLabel;
+    private transient JTextArea selectedTectonLabel;
+    private transient PentagonPanel pentagonPanel;
+    private transient List<String> insectSubTypes;
+    private transient List<String> fungalSubTypes;
+    private transient List<Player> removedPlayers = new ArrayList<>();
 
 
      public GameView(Controller controller, List<List<String>> textures, List<String> insectSubTypes, List<String> fungalSubTypes) {
@@ -93,6 +96,7 @@ public class GameView extends AbstractGameView implements Listener {
                 }
             }
         });
+
 
         // Középső panel (térkép és címkék)
         JPanel gamePanel = new JPanel(new BorderLayout());
@@ -338,7 +342,7 @@ public class GameView extends AbstractGameView implements Listener {
             JOptionPane.showMessageDialog(this, "Hiba az akció végrehajtásakor: " + e.getMessage(), "Hiba", JOptionPane.ERROR_MESSAGE);
             return false;
         }
-        controller.getGameLogic();
+        repaint();
         return true;
     }
 
@@ -392,12 +396,14 @@ public class GameView extends AbstractGameView implements Listener {
         updateStatusLabels();
     }
 
-    private class PentagonPanel extends JPanel {
+    private class PentagonPanel extends JPanel implements Serializable{
+        private static final long serialVersionUID = 1L;
+        
         private int tectonCount;
         private final ArrayList<Polygon> tectonPolygons = new ArrayList<>();
         private final ArrayList<Tecton> tectons = new ArrayList<>();
-        private final Map<String, BufferedImage> mycologistSubTypeImages = new HashMap<>();
-        private final Map<String, BufferedImage> entomologistSubTypeImages = new HashMap<>();
+        private transient final Map<String, BufferedImage> mycologistSubTypeImages = new HashMap<>();
+        private transient final Map<String, BufferedImage> entomologistSubTypeImages = new HashMap<>();
         private List<String> mycologistSubTypes = new ArrayList<>();
         private List<String> entomologistSubTypes = new ArrayList<>();
         private Tecton selectedTecton;
@@ -480,7 +486,7 @@ public class GameView extends AbstractGameView implements Listener {
         class TectonPanel extends JPanel {
             transient Map<Tecton, Point2D> positions = new HashMap<>();
             private final Tecton centralTecton;
-            private String information;
+            private static String information;
             private static final Color CENTRAL_COLOR = new Color(0, 100, 0);
             private static final Color NEIGHBOR_COLOR = new Color(128, 254, 57);
             private static final int TECTON_SIZE = 75;
