@@ -83,31 +83,32 @@ public class Mycologist extends Player {
             case 2:
                 selectHyphal(params.selectedHyphal);
                 break;
+            // Ez itt szerintem nem kell, a sima growFungalBody-t szerintem csak akkor használjuk, ha fonál megeszik egy rovart
+            // case 3:
+            //     growFungalBody(params.selectedTecton);
+            //     break;
             case 3:
-                growFungalBody(params.selectedTecton);
-                break;
-            case 4:
                 growFungalBodyFromSpore(params.selectedTecton);
                 break;
-            case 5:
+            case 4:
                 growHyphalAction(params.selectedTecton);
                 break;
-            case 6:
+            case 5:
                 destroyFungus(params.selectedFungus);
                 break;
-            case 7:
+            case 6:
                 shootSpore(params.selectedTecton);
                 break;
-            case 8:
+            case 7:
                 speedUpDevelopment(params.selectedHyphal);
                 break;
-            case 9:
+            case 8:
                 growHyphalFromHyphalAciton(params.selectedTecton);
                 break;
-            case 10:
+            case 9:
                 hyphalEatInsect(params.selectedInsect);
                 break;
-            case 11:
+            case 10:
                 levelUpFungalBody(selectedFungus);
                 break;
             default:
@@ -208,12 +209,12 @@ public class Mycologist extends Player {
         if (checkControlledFungus()){
             return;
         }
-        if (tecton.getFlag().fungalApproved) {
+        //if (tecton.getFlag().fungalApproved) {
             tecton.createFungalBody(this);
-        }
-        else {
-            System.out.println("Erre a tektonra nem lehet gombatestet noveszteni!");
-        }
+        // }
+        // else {
+        //     System.out.println("Erre a tektonra nem lehet gombatestet noveszteni!");
+        // }
     }
 
     @Loggable

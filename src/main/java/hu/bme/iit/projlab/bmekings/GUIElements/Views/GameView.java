@@ -229,29 +229,26 @@ public class GameView extends AbstractGameView implements Listener {
                 case "Grow Fungal Body":
                     selectedPlayer.SelectAction(3, GameLogic.getParams());
                     break;
-                case "Grow Fungal Body From Spore":
+                case "Grow Hyphal":
                     selectedPlayer.SelectAction(4, GameLogic.getParams());
                     break;
-                case "Grow Hyphal":
+                case "Destroy Fungus":
                     selectedPlayer.SelectAction(5, GameLogic.getParams());
                     break;
-                case "Destroy Fungus":
+                case "Shoot Spore":
                     selectedPlayer.SelectAction(6, GameLogic.getParams());
                     break;
-                case "Shoot Spore":
+                case "Speed Up Development":
                     selectedPlayer.SelectAction(7, GameLogic.getParams());
                     break;
-                case "Speed Up Development":
+                case "Grow Hyphal From Hyphal":
                     selectedPlayer.SelectAction(8, GameLogic.getParams());
                     break;
-                case "Grow Hyphal From Hyphal":
+                case "Eat Insect":
                     selectedPlayer.SelectAction(9, GameLogic.getParams());
                     break;
-                case "Eat Insect":
-                    selectedPlayer.SelectAction(10, GameLogic.getParams());
-                    break;
                 case "Level Up":
-                    selectedPlayer.SelectAction(11, GameLogic.getParams());
+                    selectedPlayer.SelectAction(10, GameLogic.getParams());
                     break;
                 default:
                     System.out.println("Invalid action type");
