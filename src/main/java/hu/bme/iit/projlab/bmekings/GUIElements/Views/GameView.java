@@ -451,7 +451,7 @@ public class GameView extends AbstractGameView implements Listener {
                         for (Map.Entry<Tecton, Point2D> entry : positions.entrySet()) {
                             if (isPointInCircle(entry.getValue(), clickPoint, TECTON_SIZE)) {
                                 clickedTecton = entry.getKey();
-                                if (clickedTecton == null){
+                                if (clickedTecton == null) {
                                     return;
                                 }
                                 StringBuilder message = new StringBuilder("Tecton ID: " + clickedTecton.getId() + "\nSzomszédok:\n");
@@ -459,6 +459,7 @@ public class GameView extends AbstractGameView implements Listener {
                                     message.append("- ").append(neighbor.getId()).append("\n");
                                 }
                                 information = message.toString();
+                                GameLogic.getParams().selectedTecton = clickedTecton;
                             }
                         }
 
