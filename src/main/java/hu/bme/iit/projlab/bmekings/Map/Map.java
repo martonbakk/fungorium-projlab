@@ -58,15 +58,15 @@ public class Map {
     
         System.err.println("Mycologists: " + mycologists.size() + ", Entomologists: " + entomologists.size());
         // Generate Tectons
-        int tectonCount = 0;
+        int tectonCount = 126;
 
-        if(((mycologists.size() + entomologists.size()) >= 2) && ((mycologists.size() + entomologists.size()) <= 6)){
-            tectonCount = 44;
-        }else if (((mycologists.size() + entomologists.size()) >= 6) && ((mycologists.size() + entomologists.size()) <= 12)){
-            tectonCount = 88;
-        }else{
-            System.err.println("Invalid number of players. Map generation failed.");
-        }
+        // if(((mycologists.size() + entomologists.size()) >= 2) && ((mycologists.size() + entomologists.size()) < 6)){
+        //     tectonCount = 44;
+        // }else if (((mycologists.size() + entomologists.size()) >= 6) && ((mycologists.size() + entomologists.size()) <= 12)){
+        //     tectonCount = 88;
+        // }else{
+        //     System.err.println("Invalid number of players. Map generation failed.");
+        // }
 
 
         for (int i = 0; i < tectonCount; i++) {
@@ -106,8 +106,8 @@ public class Map {
         */
 
         //temporary neighbor logic
-        Integer[] array1 = {0, 11, 22, 33};
-        Integer[] array2 = {10, 21, 32, 43}; 
+        Integer[] array1 = {0, 14, 28, 42, 56, 70, 84, 98, 112};
+        Integer[] array2 = {13, 27, 41, 55, 69, 83, 97, 111, 125}; 
         ArrayList<Integer> leftBorder = new ArrayList<Integer>(Arrays.asList(array1));
         ArrayList<Integer> rightBorder = new ArrayList<Integer>(Arrays.asList(array2));
         for (Integer i = 0; i < tectons.size(); i++) {
@@ -115,10 +115,18 @@ public class Map {
                 tectons.get(i).neighbours.add(tectons.get(i-1));
             if(!(rightBorder.contains(i)))
                 tectons.get(i).neighbours.add(tectons.get(i+1));
-            if(i >= 11)
-                tectons.get(i).neighbours.add(tectons.get(i-11));
-            if(i <= 32)
-                tectons.get(i).neighbours.add(tectons.get(i+11));
+            if (i == 14 || i == 28 || i == 42 || i == 56 || i == 70 || i == 84 || i == 98) {
+                tectons.get(i).neighbours.add(tectons.get(i-14));
+                tectons.get(i).neighbours.add(tectons.get(i+14));
+            }
+            if (i == 27 || i == 41 || i == 55 || i == 69 || i == 83 || i == 97 || i == 111) {
+                tectons.get(i).neighbours.add(tectons.get(i-14));
+                tectons.get(i).neighbours.add(tectons.get(i+14));
+            }
+            if (i == 0 || i == 13)
+                tectons.get(i).neighbours.add(tectons.get(i+14));
+            if (i == 112 || i == 125) 
+                tectons.get(i).neighbours.add(tectons.get(i-14));
         }
 
 

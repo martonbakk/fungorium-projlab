@@ -611,7 +611,7 @@ public class GameView extends AbstractGameView implements Listener {
             if (currentTectons == null || currentTectons.isEmpty()) return;
             tectons.addAll(currentTectons);
 
-            int radius = 20;
+            int radius = 30;
             int padding = 20;
             int diameter = radius * 2;
             int spacing = 10;
