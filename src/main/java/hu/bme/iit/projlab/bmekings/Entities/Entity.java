@@ -1,4 +1,6 @@
 package hu.bme.iit.projlab.bmekings.Entities;
+import java.io.Serializable;
+
 import hu.bme.iit.projlab.bmekings.Interface.Listener.Listener;
 import hu.bme.iit.projlab.bmekings.Map.Tecton.Tecton;
 
@@ -7,7 +9,8 @@ import hu.bme.iit.projlab.bmekings.Map.Tecton.Tecton;
  * Az entitások a játékban szereplő egyedeket reprezentálják, például gombatesteket, spórákat vagy rovarokat.
  * Implementálja a Listener interfészt, így minden leszármazottjának biztosítania kell az update() metódus implementációját.
  */
-public abstract class Entity implements Listener {
+public abstract class Entity implements Listener, Serializable{
+    private static final long serialVersionUID = 1L;
 
     protected String id;
     protected Tecton baseLocation=null;

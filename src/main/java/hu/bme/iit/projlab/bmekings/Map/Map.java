@@ -1,5 +1,6 @@
 package hu.bme.iit.projlab.bmekings.Map;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Random;
@@ -27,7 +28,9 @@ import hu.bme.iit.projlab.bmekings.Player.Mycologist.Mycologist;
  */
 
 @Loggable("Map")
-public class Map {
+public class Map implements Serializable{
+    private static final long serialVersionUID = 1L;
+    
     private ArrayList<Tecton> tectons = new ArrayList<>();
     private boolean generatedMap=false;
     
@@ -174,8 +177,8 @@ public class Map {
                         sp = new HungerSpore(baseTecton);
                         break;
                 }
-                baseTecton.addSpore(sp);
-                GameLogic.addEntity(sp);
+                
+                sp.spawnSpore();
             }
         }
         assignTectonPositions();

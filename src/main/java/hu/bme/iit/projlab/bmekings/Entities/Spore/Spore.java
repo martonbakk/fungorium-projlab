@@ -1,5 +1,6 @@
 package hu.bme.iit.projlab.bmekings.Entities.Spore;
 
+import java.io.Serializable;
 import java.util.Random;
 
 import hu.bme.iit.projlab.bmekings.Entities.Entity;

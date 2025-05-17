@@ -15,7 +15,7 @@ import hu.bme.iit.projlab.bmekings.Player.Player;
 import hu.bme.iit.projlab.bmekings.Program.Params;
 
 @Loggable("Mycologist")
-public class Mycologist extends Player{
+public class Mycologist extends Player {
     private ArrayList<FungalBody> controlledFunguses= new ArrayList<>();
     private ArrayList<Hyphal> hyphalList= new ArrayList<>();
     private FungalBody selectedFungus=null;
@@ -294,7 +294,6 @@ public class Mycologist extends Player{
         }
         System.out.println("Megvan");
         //if(targetTecton.getFlag().hyphalApproved || (targetTecton.getFlag().oneHyphalApproved&&targetTecton.getConnectedNeighbors().size()==0)){
-            // System.out.println("Megvan2");
             selectedHyphal.growHyphalFromHyphal(targetTecton);
             selectedHyphal = null;
             this.selectedFungus = null;

@@ -460,7 +460,9 @@ public class GameView extends AbstractGameView implements Listener {
                             Point2D p2 = edgePoint(to, from, TECTON_SIZE);
 
                             if (isPointNearLine(p1, p2, clickPoint, 5)) {
-                                System.out.println("Kattintottál fonálra: " + h.getId());
+                                selectedHyphalLabel.setText("Kiválasztott\nFonál: " + h.getId());
+                                GameLogic.getParams().selectedHyphal = h;
+                                selectedPlayer.SelectAction(2, GameLogic.getParams());
                                 return;
                             }
                         }
@@ -544,7 +546,6 @@ public class GameView extends AbstractGameView implements Listener {
                 g2d.setStroke(new BasicStroke(4));
                 Point2D centralPos = positions.get(centralTecton);
                 
-                System.out.println(centralTecton.getConnectedNeighbors().keySet().size());
                 for (Tecton connected : centralTecton.getConnectedNeighbors().keySet()) {
                     if (positions.containsKey(connected)) {
                         Point2D targetPos = positions.get(connected);

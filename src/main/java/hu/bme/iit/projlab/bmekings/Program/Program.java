@@ -1,5 +1,7 @@
 package hu.bme.iit.projlab.bmekings.Program;
 
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -66,8 +68,8 @@ public class Program {
 
     public static void initBasePlayers() {
         GameLogic.resetPlayers();
-        addEntomologist();
-        addMycologist();
+        //addEntomologist();
+        //addMycologist();
     }
 
     public static void consoleActions(String input) {
@@ -170,6 +172,58 @@ public class Program {
             case "exit":
                 System.out.println("Program leallitasa...");
                 break;
+
+            case "save":
+                if (gameLogic == null) {
+                    System.out.println("Nincs betöltött vagy létrehozott játék!");
+                break;
+                }
+                try {
+                     // Ellenőrzés mentés előtt
+                    System.out.println("Mentés előtti állapot:");
+                    System.out.println("Map: " + (gameLogic.map != null ? "Inicializált" : "Null"));
+                    System.out.println("TectonNum: " + gameLogic.getMap().getTectons().size()); 
+                    System.out.println("Entomologists: " + gameLogic.getEntomologists().size());
+                    System.out.println("Mycologists: " + gameLogic.getMycologists().size());
+                    
+                    System.out.println("Entities: " + gameLogic.getEntityList().size());
+                    
+                    
+                    //System.out.println("entitiy1: " + gameLogic.getEntityList().get(1).getId());
+
+
+                       String filePath = System.getProperty("user.home") + "\\Documents\\MyGame\\test.ser";
+                       gameLogic.saveGame(filePath);
+                      System.out.println("Játék sikeresen mentve: " + filePath);
+                } catch (IOException e) {
+                        System.err.println("Hiba a mentés során: " + e.getMessage());
+                         e.printStackTrace();
+                }
+                break;
+
+            case "load":
+                    try {
+                        String filePath = System.getProperty("user.home") + "\\Documents\\MyGame\\test.ser";
+                        gameLogic = GameLogic.loadGame(filePath);
+                        System.out.println("Játék sikeresen betöltve: " + filePath);
+                        // Ellenőrzés
+                       System.out.println("Mentés előtti állapot:");
+                    System.out.println("Map: " + (gameLogic.map != null ? "Inicializált" : "Null"));
+                    System.out.println("TectonNum: " + gameLogic.getMap().getTectons().size()); 
+                    System.out.println("Entomologists: " + gameLogic.getEntomologists().size());
+                    System.out.println("Mycologists: " + gameLogic.getMycologists().size());
+                    System.out.println("Entities: " + gameLogic.getEntityList().size());
+                    
+                    } catch (FileNotFoundException e) {
+                        System.err.println("Hiba: A mentett fájl nem található: " + e.getMessage());
+                    } catch (IOException e) {
+                        System.err.println("Hiba a betöltés során: " + e.getMessage());
+                        e.printStackTrace();
+                    } catch (ClassNotFoundException e) {
+                        System.err.println("Hiba: Az osztálydefiníciók nem egyeznek: " + e.getMessage());
+                        e.printStackTrace();
+                    }
+                    break;
             default:
                 System.out.println("Rossz input!");
         }

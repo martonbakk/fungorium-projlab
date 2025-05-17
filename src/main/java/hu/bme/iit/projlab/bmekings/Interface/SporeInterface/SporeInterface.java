@@ -1,6 +1,8 @@
 package hu.bme.iit.projlab.bmekings.Interface.SporeInterface;
 
 
+import java.io.Serializable;
+
 import hu.bme.iit.projlab.bmekings.Entities.Insect.Insect;
 import hu.bme.iit.projlab.bmekings.Map.Tecton.Tecton;
 /**
@@ -8,7 +10,7 @@ import hu.bme.iit.projlab.bmekings.Map.Tecton.Tecton;
  * Azok az osztályok, amelyek implementálják ezt az interfészt, kötelesek megvalósítani
  * a spórák hatásának aktiválására és létrehozására szolgáló metódusokat.
  */
-public interface SporeInterface {
+public interface SporeInterface extends Serializable {
 
     /**
      * Aktiválja a spóra hatását.
