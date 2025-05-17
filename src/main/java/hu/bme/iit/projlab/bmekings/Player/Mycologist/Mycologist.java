@@ -110,9 +110,6 @@ public class Mycologist extends Player {
             case 11:
                 levelUpFungalBody(selectedFungus);
                 break;
-            case 12:
-                growHyphal(params.fromTecton, params.selectedTecton);
-                break;
             default:
                 System.out.println("Invalid action type");
         }
@@ -121,7 +118,7 @@ public class Mycologist extends Player {
     @Override
     public List<String> getAvailableActions() {
         return Arrays.asList("Grow Fungal Body", "Speed Up Development", 
-            "Shoot Spore", "Eat Insect", "Grow Hyphal", "Grow Hyphal From Hyphal" , "Level Up", "Grow Hyphal Barni"); // Teszt adatok
+            "Shoot Spore", "Eat Insect", "Grow Hyphal", "Grow Hyphal From Hyphal" , "Level Up");
     }
 
     @Loggable
@@ -307,17 +304,6 @@ public class Mycologist extends Player {
         this.selectedHyphal.eatInsect(targetInsect);
         selectedHyphal = null;
         this.selectedFungus = null;
-    }
-
-
-    public void growHyphal(Tecton fromTecton, Tecton targetTecton) {
-        if(!(isTectonPart(fromTecton)))
-        {
-            return;
-        }
-
-        fromTecton.connectTecton(targetTecton,this);
-        
     }
 
     private boolean isTectonPart(Tecton searchedTecton){
