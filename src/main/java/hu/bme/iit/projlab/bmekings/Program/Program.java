@@ -1316,7 +1316,6 @@ public class Program {
                     t.setOccupiedByFungus(Boolean.parseBoolean(parts[4]));
                     t.getFlag().fungalApproved = Boolean.parseBoolean(parts[5]);
                     t.getFlag().hyphalApproved = Boolean.parseBoolean(parts[6]);
-                    t.getFlag().oneHyphalApproved = Boolean.parseBoolean(parts[7]);
                     tectonMap.put(parts[1], t);
                     if (gameLogic != null && gameLogic.map != null) {
                         gameLogic.map.addTecton(t);
@@ -1455,8 +1454,7 @@ public class Program {
                 for (Tecton t : gameLogic.map.getAllTectons()) {
                     writer.println("Tecton:" + t.getId() + ":" + t.getSplitChance() + ":" +
                             t.isOccupiedByInsect() + ":" + t.isOccupiedByFungus() + ":" +
-                            t.getFlag().fungalApproved + ":" + t.getFlag().hyphalApproved + ":" +
-                            t.getFlag().oneHyphalApproved);
+                            t.getFlag().fungalApproved + ":" + t.getFlag().hyphalApproved);
                 }
             }
 

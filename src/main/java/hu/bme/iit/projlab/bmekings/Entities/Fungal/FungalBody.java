@@ -221,7 +221,9 @@ public class FungalBody extends Entity {
         }
 
         for (Hyphal hyphal : hyphalSet) {
-            hyphal.setLifeTime(3);
+            if (!(hyphal.getBase().getFlag().onToxicTecton || hyphal.getConnectedTecton().getFlag().onToxicTecton)) {
+                hyphal.setLifeTime(4);
+            }
         }
     }
 
