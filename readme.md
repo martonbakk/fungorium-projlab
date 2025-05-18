@@ -1,4 +1,4 @@
-# FUNGORIUM_PROJLAB eng
+# FUNGORIUM_PROJLAB
 
 This document outlines the steps required to install and run the `FUNGORIUM_PROJLAB` project. Follow the instructions below to install Maven, run the code, and execute tests.
 
@@ -68,6 +68,10 @@ The project requires Maven for building and running. If Maven is not already ins
   - Runs the tests (`test`).
   - Packages the project into a JAR file (`package`).
 - Executes the generated JAR file: `target/fungorium-app-1.0-SNAPSHOT.jar`.
+
+
+
+
 
 # FUNGORIUM_PROJLAB hu
 
