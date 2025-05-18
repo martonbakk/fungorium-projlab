@@ -26,6 +26,7 @@ public abstract class Player implements Serializable{
         this.score = 0;
     }
 
+    
     public String getPlayerID() { return playerId; }
 
     public String getUserName(){return userName;}
@@ -42,5 +43,9 @@ public abstract class Player implements Serializable{
 
     public String getType() {
         return this.type;
+    }
+
+    public void increaseScore(){
+        score++;
     }
 };

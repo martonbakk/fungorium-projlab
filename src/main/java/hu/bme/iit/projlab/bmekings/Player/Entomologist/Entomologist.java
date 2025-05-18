@@ -90,7 +90,8 @@ public class Entomologist extends Player {
         }
         selectedInsect.eatSpore();
         selectedInsect=null;
-
+        
+        
     }
 
     @Loggable

@@ -245,8 +245,6 @@ public class Map implements Serializable {
         leftTecton.setBroken(true);
         Tecton rightTecton = new Tecton();
         rightTecton.setBroken(true);
-        tectons.add(leftTecton);
-        tectons.add(rightTecton);
 
         // Az első sorban tört egy tekton, de nem a szélén
         if (Integer.parseInt(splitId[1]) >= 02 && Integer.parseInt(splitId[1]) <= 13) {
