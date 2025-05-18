@@ -747,7 +747,7 @@ public class GameView extends AbstractGameView implements Listener {
 
                 // Define tectonCenters for this panel
                 Map<Tecton, int[]> tectonCenters = new HashMap<>();
-                int panelRadius = 75 / 2; // TECTON_SIZE / 2
+                int panelRadius = TECTON_SIZE / 2;
                 tectonCenters.put(centralTecton, new int[] { (int) center.getX(), (int) center.getY() });
                 for (int i = 0; i < maxNeighbors; i++) {
                     Tecton neighbor = neighbors.get(i);
@@ -890,14 +890,6 @@ public class GameView extends AbstractGameView implements Listener {
                         drawTecton(g2d, neighbor, positions.get(neighbor), TECTON_SIZE);
                     }
                 }
-                /* 
-                if (tectons.get(i) == selectedTecton) {
-                    g2d.setColor(Color.YELLOW);
-                    g2d.setStroke(new BasicStroke(2));
-                    g2d.drawOval(x, y, diameter, diameter);
-                    g2d.setStroke(new BasicStroke(1));
-                }
-                */
 
                 // Draw Spore
                 if (!centralTecton.getSpores().isEmpty()) {
@@ -968,14 +960,23 @@ public class GameView extends AbstractGameView implements Listener {
                 else if (tecton instanceof ToxicTecton) g2d.setColor(new Color(108, 108, 44));
                 else if (tecton instanceof WeakTecton) g2d.setColor(new Color(250, 250, 250));
                 else g2d.setColor(new Color(128, 254, 57));
-                int halfSize = size/2;
-                g2d.fillOval((int)(position.getX()-halfSize), (int)(position.getY()-halfSize), size, size);
+                
+                int halfSize = size / 2;
+                if (tecton.isBroken()) {
+                    g2d.fillArc((int)(position.getX()-halfSize), (int)(position.getY()-halfSize), size, size, 90, 180);
+                } else {
+                    g2d.fillOval((int)(position.getX()-halfSize), (int)(position.getY()-halfSize), size, size);
+                }
 
                 // Draw yellow outline if this is the selected tecton
                     if (tecton == GameLogic.getParams().selectedTecton) {
-                    g2d.setColor(Color.YELLOW);
-                    g2d.setStroke(new BasicStroke(2));
-                    g2d.drawOval((int)(position.getX() - halfSize), (int)(position.getY() - halfSize), size, size);
+                        g2d.setColor(Color.YELLOW);
+                        g2d.setStroke(new BasicStroke(2));
+                        if (tecton.isBroken()) {
+                            g2d.drawArc((int)(position.getX() - halfSize), (int)(position.getY() - halfSize), size, size, 90, 180);
+                        } else {
+                            g2d.drawOval((int)(position.getX() - halfSize), (int)(position.getY() - halfSize), size, size);
+                        }
                     g2d.setStroke(new BasicStroke(1));
                     selectedTecton = GameLogic.getParams().selectedTecton;
                 }
