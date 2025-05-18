@@ -486,7 +486,7 @@ public class GameView extends AbstractGameView implements Listener {
             private static final Color CENTRAL_COLOR = new Color(0, 100, 0);
             private static final Color NEIGHBOR_COLOR = new Color(128, 254, 57);
             private static final int TECTON_SIZE = 75;
-            private int FUNGUS_SIZE = 25;
+            private int FUNGUS_SIZE;
             private static final int INSECT_SIZE = 13;
             private static final int SPORE_SIZE = 15;
 
@@ -757,7 +757,15 @@ public class GameView extends AbstractGameView implements Listener {
                     BufferedImage fungalImage = subType != null ? mycologistSubTypeImages.get(subType) : null;
 
                     if (fungalImage != null) {
-                        FUNGUS_SIZE += 5 * fungalBody.getCurrLvl();
+                        if (fungalBody.getCurrLvl() == 1) {
+                            FUNGUS_SIZE = 25;
+                        }
+                        if (fungalBody.getCurrLvl() == 2) {
+                            FUNGUS_SIZE = 30;
+                        }
+                        if (fungalBody.getCurrLvl() == 3) {
+                            FUNGUS_SIZE = 35;
+                        }
                         int fungalRadius = FUNGUS_SIZE / 2;
                         int fungalDiameter = fungalRadius * 2;
                         int fungalX = (int)position.getX() - fungalRadius;
