@@ -68,19 +68,19 @@ public class Map implements Serializable {
             Tecton tc;
             switch (type) {
                 case 0:
-                    tc = new HyphalPreserverTecton(0, false, false);
+                    tc = new HyphalPreserverTecton(-1, false, false);
                     break;
                 case 1:
-                    tc = new NoFungusTecton(0, false, false);
+                    tc = new NoFungusTecton(-1, false, false);
                     break;
                 case 2:
-                    tc = new ToxicTecton(6, 0, false, false);
+                    tc = new ToxicTecton(6, -1, false, false);
                     break;
                 case 3:
-                    tc = new WeakTecton(false, 0, false, false);
+                    tc = new WeakTecton(false, -1, false, false);
                     break;
                 default:
-                    tc = new Tecton(0, false, false);
+                    tc = new Tecton(-1, false, false);
                     break;
             }
             tectons.add(tc);
@@ -106,10 +106,6 @@ public class Map implements Serializable {
             if (!(i == 0 || i == 1 || i == 2 || i == 3 || i == 4 || i == 5 || i == 6 || i == 7 || i == 8 || i == 9 || i == 10 || i == 11 || i == 12 || i == 13))
                     tectons.get(i).neighbours.add(tectons.get(i-14));
         }
-
-        tectons.get(8).setSplitChance(98);
-        tectons.get(124).setSplitChance(98);
-        tectons.get(66).setSplitChance(98);
 
         // Add FungalBodies
         for (Mycologist mycologist : mycologists) {
