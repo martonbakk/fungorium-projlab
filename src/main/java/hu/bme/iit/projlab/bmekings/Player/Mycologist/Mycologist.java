@@ -179,7 +179,7 @@ public class Mycologist extends Player {
     }
 
     @Loggable
-    private void shootSpore(Tecton selectedTecton){
+    private void shootSpore(Tecton selectedTecton) {
         if(checkControlledFungus()){
             return;
         }
