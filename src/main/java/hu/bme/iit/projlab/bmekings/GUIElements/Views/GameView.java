@@ -614,8 +614,32 @@ public class GameView extends AbstractGameView implements Listener {
                                 return;
                             }
                         }
+
+                        // Insect kiválasztása Mycologist esetén
+                        if (selectedPlayer instanceof Mycologist && clickedTecton.isOccupiedByInsect() && clickedTecton != null) {
+                            List<Insect> insects = clickedTecton.getInsects();
+                            JComboBox<Insect> insectsComboBox = new JComboBox<>();
+                            for (Insect insect : insects)
+                                insectsComboBox.addItem(insect);
+
+                            int result = JOptionPane.showConfirmDialog(
+                                null,
+                                insectsComboBox,
+                                "Válassz rovart",
+                                JOptionPane.OK_CANCEL_OPTION
+                            );
+
+                            if (result == JOptionPane.OK_OPTION) {
+                                Insect selectedInsect = (Insect) insectsComboBox.getSelectedItem();
+                                if (selectedInsect != null) {
+                                    GameLogic.getParams().selectedInsect = selectedInsect;
+                                    selectedInsectLabel.setText("Kiválaszott\nRovar: " + GameLogic.getParams().selectedInsect.getId());
+                                    return;   
+                                }
+                            }
+                        }
                         
-                        // Insect kiválasztás
+                        // Insect kiválasztás Entomolgist esetén
                         if (selectedPlayer instanceof Entomologist && clickedTecton.isOccupiedByInsect() && clickedTecton != null) {
                             Entomologist selectedEnt = (Entomologist) selectedPlayer;
                             List<Insect> insects = clickedTecton.getInsects();
@@ -908,7 +932,6 @@ public class GameView extends AbstractGameView implements Listener {
             for (int i = 0; i < controller.getGameLogic().getMycologists().size(); i++) {
                 Mycologist mycologist = controller.getGameLogic().getMycologists().get(i);
                 String type = mycologist.getType();
-                System.err.println("Mycologist type: " + type);
                 Color fadedColor = fadedColorMap.getOrDefault(type, defaultFadedColor);
 
                 // Offset a játékos indexe alapján (3 játékos)
@@ -920,7 +943,6 @@ public class GameView extends AbstractGameView implements Listener {
                 } else {
                     offsetX = 10.0; offsetY = 10.0; // Harmadik játékos: jobbra és lefelé
                 }
-                System.err.println("OffsetX: " + offsetX + ", OffsetY: " + offsetY);
 
                 for (Hyphal hyphal : mycologist.getHyphalList()) {
                     if (!hyphal.getDeveloped()) { // Nem fejlett vonalak

@@ -168,7 +168,7 @@ public class GameLogic implements Serializable{
             t.update();
         }
 
-        for (Entity e : entityList) {
+        for (Entity e : new ArrayList<>(entityList)) {
             e.update();
         }
     }
@@ -190,15 +190,15 @@ public class GameLogic implements Serializable{
         return entomologists;
     }
 
-    public static ArrayList<Mycologist> getMycologists(){
+    public static ArrayList<Mycologist> getMycologists() {
         return mycologists;
     }
 
-    public static ArrayList<Entity> getEntityList(){
+    public static ArrayList<Entity> getEntityList() {
         return entityList;
     }
 
-    public static void deleteEntity(Entity entity){
+    public static void deleteEntity(Entity entity) {
         entityList.remove(entity);
     }
 

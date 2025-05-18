@@ -108,7 +108,7 @@ public class Hyphal extends Entity {
     public void aging() {
         dying();
         developTime--;
-        if(developTime <= 0) {
+        if (developTime <= 0) {
             setDeveloped(true);
         }
     }
@@ -116,19 +116,24 @@ public class Hyphal extends Entity {
     @Loggable
     public void dying() {
         int n = lifeTime - 1;
-        // System.out.println("[" + this.getId() + "] [life] megvaltozott:");
-        // System.out.println("[" + lifeTime + "] -> [" + n + "]");
+        System.out.println("[" + this.getId() + "] [life] megvaltozott:");
+        System.out.println("[" + lifeTime + "] -> [" + n + "]");
         lifeTime--;
+        if (lifeTime <= 0) {
+            destroyHyphal();
+        }
     }
 
     @Loggable
     public void eatInsect(Insect stunnedInsect){
-        if(!((stunnedInsect.getBase()==this.baseLocation) || (stunnedInsect.getBase()==this.connectedTecton)))
-            return;
-
-        if (stunnedInsect.getStunTime()==0) {
-            return;
+        if(!((stunnedInsect.getBase() == this.baseLocation) || (stunnedInsect.getBase() == this.connectedTecton))) {
+            throw new RuntimeException("Ez a rovar nincs a fonál által összekötött Tektonokon!");
         }
+
+        if (stunnedInsect.getStunTime() == 0) {
+            throw new RuntimeException("Ez a rovar nincsen lebénítva!");
+        }
+        
         Tecton currLoc = stunnedInsect.getBase();
 
         stunnedInsect.DestroyInsect();

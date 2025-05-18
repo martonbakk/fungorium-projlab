@@ -112,7 +112,7 @@ public class FungalBody extends Entity {
     @Loggable
     public Boolean checkShootingRange(Tecton tecton) {
         if (baseLocation.equals(tecton)) {
-            return true;
+            return false;
         }
         Queue<Tecton> queue = new LinkedList<>();
         HashMap<Tecton, Integer> distances = new HashMap<>();

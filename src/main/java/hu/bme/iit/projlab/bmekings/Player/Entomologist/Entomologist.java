@@ -106,7 +106,7 @@ public class Entomologist extends Player {
     }
 
     @Loggable
-    public void deleteControlledInsect(Insect controlledInsect){
+    public void deleteControlledInsect(Insect controlledInsect) {
         controlledInsects.remove(controlledInsect);
     }
 
