@@ -18,6 +18,7 @@ public class DuplicateSpore extends Spore {
     
     @Override
     public void activateEffect(Insect targetInsect) {
+        System.out.println("Ate Dupe Spore");
         Insect newInsect = new Insect(targetInsect);
         newInsect.createInsect();
     }

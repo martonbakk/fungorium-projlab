@@ -143,7 +143,7 @@ public class Hyphal extends Entity {
     }
 
     @Loggable
-    public void destroyHyphal(){
+    public void destroyHyphal() {
         // entity
         GameLogic.deleteEntity(this);
         
@@ -153,7 +153,7 @@ public class Hyphal extends Entity {
         System.out.println("Hyphal torlodott id:["+ id +"]");
 
         owner.removeHyphal(this);
-        }
+    }
 
     @Loggable
     public Mycologist getOwner(){

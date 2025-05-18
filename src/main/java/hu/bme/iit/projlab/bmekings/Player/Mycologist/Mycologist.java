@@ -216,7 +216,7 @@ public class Mycologist extends Player {
     }
 
     @Loggable
-    public void selectHyphal(Hyphal hyphal){
+    public void selectHyphal(Hyphal hyphal) {
         for (Hyphal controlledHyphal : hyphalList) {
             if (controlledHyphal.getId().equals(hyphal.getId())) {
                 this.selectedHyphal = controlledHyphal;

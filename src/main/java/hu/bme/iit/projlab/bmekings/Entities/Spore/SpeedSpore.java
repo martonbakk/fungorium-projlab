@@ -24,6 +24,7 @@ public class SpeedSpore extends Spore {
 
     @Override
     public void activateEffect(Insect targetInsect) {
+        System.out.println("Ate Speed Spore");
         targetInsect.increaseMovingSpeed(10);
     }
 

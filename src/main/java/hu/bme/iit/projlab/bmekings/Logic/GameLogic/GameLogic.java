@@ -164,7 +164,6 @@ public class GameLogic implements Serializable{
     }
 
     public void tick() {
-        System.out.println("asd");
         for (Tecton t : map.getAllTectons()) {
             t.update();
         }

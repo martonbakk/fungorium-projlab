@@ -35,14 +35,9 @@ public class StunSpore extends Spore {
      */
     @Override
     public void activateEffect(Insect targetInsect) {
+        System.out.println("Ate Stun Spore");
         targetInsect.stunEffect(4);
     }
-
-    /**
-     * Létrehozza (spawnolja) a StunSpore-t a játékban.
-     * A metódus kiírja a konzolra, hogy a StunSpore létrejött.
-     */
-    //mostmar szülő osztalyban!!!
 
     /**
      * Frissíti a StunSpore állapotát.

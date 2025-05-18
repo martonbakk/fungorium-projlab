@@ -231,18 +231,23 @@ public class FungalBody extends Entity {
     public void update() {
         keepHyphalAlive();
         for (int i = 0; i < this.getCharacteristics().sporeProductionIntensity; i++) {
-            AddSpore();
+            AddSpore("stun");
         }
 
         this.shotSporesNum = 2; // A kilőhető spórák számát vissza kell állítani a kezdeti értékre
     }
 
     @Loggable
-    public void AddSpore() {
+    public void AddSpore(String type) {
         SporeInterface spore;
+        if (type.equals("stun")) {
+            spore = new StunSpore(baseLocation);
+            spores.add(spore);
+            return;
+        }
 
         Random random = new Random();
-        int sporeType = random.nextInt(11); 
+        int sporeType = random.nextInt(10); 
         // default a NormalSpore mert arra legyen a legtöbb esély
         
         switch (sporeType) {
@@ -260,6 +265,9 @@ public class FungalBody extends Entity {
                 break;
             case 4:
                 spore = new StunSpore(baseLocation); 
+                break;
+            case 5:
+                spore = new HyphalProtectorSpore(baseLocation); 
                 break;
             default:
                 spore = new NormalSpore(baseLocation); 

@@ -29,7 +29,7 @@ public class Insect extends Entity{
     private int currStomachFullness;
     private int cutCooldown;
     private int stunTime;
-    private Entomologist owner=null;
+    private Entomologist owner = null;
     private HashMap<Effect, Integer> activeEffects=new HashMap<>();
 
     @Loggable
@@ -59,9 +59,8 @@ public class Insect extends Entity{
 
 
     public void stunEffect(int cd){
-    System.out.println("[" + this.getId() + "] stunned for:" + cd);
-        
-        this.stunTime=cd;
+        System.out.println("[" + this.getId() + "] stunned for:" + cd);
+        this.stunTime = cd;
         this.movingCD = cd;
     }
 
@@ -80,12 +79,10 @@ public class Insect extends Entity{
     //rovarasz felvetel konstruktorba!!!
     public Insect(int movingSpeed, int movingCD, int stomachLimit, int currStomachFullness, int cutCooldown, Tecton baseLocation, Entomologist owner){
         super(IDGenerator.generateID("I"), baseLocation);
-
-        //this.id=IDGenerator.generateID("I");
         this.movingSpeed = movingSpeed;
         this.movingCD = movingCD;
         this.stomachLimit = stomachLimit;
-        this.stunTime=0;
+        this.stunTime = 0;
         this.currStomachFullness = currStomachFullness;
         this.cutCooldown = cutCooldown;
         this.owner=owner;
@@ -95,7 +92,6 @@ public class Insect extends Entity{
     public Insect(Insect parentInsect) {
         super(IDGenerator.generateID("I"), parentInsect.getBase());
 
-        //this.id=IDGenerator.generateID("I");
         this.movingSpeed = parentInsect.getMovingSpeed();
         this.movingCD = parentInsect.getMovingCD();
         this.stomachLimit = parentInsect.getStomachLimit();
@@ -131,6 +127,10 @@ public class Insect extends Entity{
 
     @Loggable
     public void move(Tecton targetTecton) {
+        if (stunTime != 0) {
+            throw new RuntimeException("Ez a rovar le van bénítva!");
+        }
+
         if (baseLocation.getConnectedNeighbors().containsKey(targetTecton)) {
             for (Hyphal h : baseLocation.getConnectedNeighbors().get(targetTecton)) {
                 if (h.getDeveloped()) {
@@ -144,7 +144,6 @@ public class Insect extends Entity{
                         this.baseLocation.addInsect(this);
                         this.baseLocation.setOccupiedByInsect(true);
 
-                        // TODO mennyi legyen?
                         movingCD = 2;
                         return;
                     } else {
@@ -160,8 +159,12 @@ public class Insect extends Entity{
 
     @Loggable
     public void eatSpore() {
+        if (stunTime != 0) {
+            throw new RuntimeException("Ez a rovar le van bénítva!");
+        }
+
         SporeInterface sporeToEat = this.baseLocation.getNextSporeToEat();
-        if(this.currStomachFullness+sporeToEat.getNutritionValue() < this.stomachLimit) {
+        if(this.currStomachFullness + sporeToEat.getNutritionValue() < this.stomachLimit) {
             this.feedInsect(sporeToEat.getNutritionValue());
             sporeToEat.activateEffect(this);
             sporeToEat.destroySpore();
@@ -170,14 +173,18 @@ public class Insect extends Entity{
 
     @Loggable
     public void feedInsect(int nutritionvalue) {
-        System.out.println("Insect nutrition changed");
+        System.out.print("Insect nutrition changed from: " + currStomachFullness);
         currStomachFullness += nutritionvalue;
-        if (currStomachFullness<0) 
+        System.out.print(" to: " + currStomachFullness + "\n");
+        if (currStomachFullness < 0)
             currStomachFullness=0;
     }
 
     @Loggable
     public void cutHyphal(Hyphal h) {
+        if (stunTime != 0) {
+            throw new RuntimeException("Ez a rovar le van bénítva");
+        }
         h.destroyHyphal();
     }
 
@@ -219,10 +226,10 @@ public class Insect extends Entity{
 
     @Loggable
     public void hungerEffectActivate(int stomachRateDecrease){
-        if (this.currStomachFullness-stomachRateDecrease<0){
-            this.currStomachFullness=0;
+        if (this.currStomachFullness - stomachRateDecrease < 0){
+            this.currStomachFullness = 0;
         }else{
-            this.currStomachFullness-=stomachRateDecrease;
+            this.currStomachFullness -= stomachRateDecrease;
         }
     }
 
@@ -236,8 +243,7 @@ public class Insect extends Entity{
         if (stunned) {
             this.movingCD = 10;
         } else {
-            // feltetel, hogy ne legyen minusz a sebesseg
-            this.movingSpeed=speed;
+            this.movingSpeed = speed;
         }
     }
 
