@@ -239,11 +239,6 @@ public class FungalBody extends Entity {
     @Loggable
     public void AddSpore() {
         SporeInterface spore;
-        if ("stun".equals("stun")) {
-            spore = new StunSpore(baseLocation);
-            spores.add(spore);
-            return;
-        }
 
         Random random = new Random();
         int sporeType = random.nextInt(10); 
