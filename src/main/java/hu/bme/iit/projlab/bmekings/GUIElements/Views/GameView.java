@@ -1236,7 +1236,17 @@ public class GameView extends AbstractGameView implements Listener {
                 if (tectons.get(i) == selectedTecton) {
                     g2d.setColor(Color.YELLOW);
                     g2d.setStroke(new BasicStroke(2));
-                    g2d.drawOval(x, y, diameter, diameter);
+                    if (tectons.get(i).isBroken()) {
+                        if (i != 0) {
+                            if (tectons.get(i - 1).isBroken()) {
+                                g2d.drawArc(x, y, diameter, diameter, 270, 180); // félkör (alsó félkör)
+                            } else {
+                                g2d.drawArc(x, y, diameter, diameter, 90, 180); // félkör (alsó félkör)
+                            }
+                        }
+                    } else {
+                        g2d.drawOval(x, y, diameter, diameter);
+                    }
                     g2d.setStroke(new BasicStroke(1));
                 }
 
