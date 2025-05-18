@@ -3,7 +3,6 @@ package hu.bme.iit.projlab.bmekings.GUIElements.Views;
 import java.awt.BasicStroke;
 import java.awt.BorderLayout;
 import java.awt.Color;
-import java.awt.Component;
 import java.awt.Dialog.ModalityType;
 import java.awt.Dimension;
 import java.awt.Font;
@@ -41,7 +40,6 @@ import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextArea;
-import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
 
 import hu.bme.iit.projlab.bmekings.Entities.Fungal.FungalBody;
@@ -245,8 +243,9 @@ public class GameView extends AbstractGameView implements Listener {
                     for (Player p : removedPlayers) {
                         playerComboBox.addItem(p);
                         // WE SIMULATE ONE GAME LIFECYCLE
-                        controller.getGameLogic().tick();
+                        
                     }
+                    controller.getGameLogic().tick();
                     removedPlayers.clear();
                 }
 

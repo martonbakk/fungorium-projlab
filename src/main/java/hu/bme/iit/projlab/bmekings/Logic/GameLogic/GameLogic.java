@@ -9,13 +9,9 @@ import java.io.Serializable;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.nio.file.Paths;
 import java.util.ArrayList;
 
-import javax.management.RuntimeErrorException;
-
 import hu.bme.iit.projlab.bmekings.Entities.Entity;
-import hu.bme.iit.projlab.bmekings.GUIElements.Views.GameView;
 import hu.bme.iit.projlab.bmekings.Interface.Listener.Listener;
 import hu.bme.iit.projlab.bmekings.Logic.Ticker.Ticker;
 import hu.bme.iit.projlab.bmekings.Map.Map;
@@ -153,6 +149,7 @@ public class GameLogic implements Serializable{
         this.maxTicks = TickInterval;
     }
 
+    @SuppressWarnings("static-access")
     public GameLogic(ArrayList<Entity> entities, ArrayList<Listener> listeners, Map map) {
         this.entityList = entities;
         this.listeners=listeners;
