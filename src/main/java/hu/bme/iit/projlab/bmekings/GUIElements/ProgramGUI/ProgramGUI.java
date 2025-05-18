@@ -20,17 +20,18 @@ public class ProgramGUI extends JFrame {
             List<String> insectTypes = new ArrayList<>(List.of("Insect1", "Insect2", "Insect3"));
             List<String> fungalTypes = new ArrayList<>(List.of("ms1", "ms2", "ms3"));
 
-
             List<String> insectImageList = new ArrayList<>(List.of(
                 "/Data/insect1.png",
                 "/Data/insect2.png",
                 "/Data/insect3.png"
             ));
+
             List<String> fungalImageList = new ArrayList<>(List.of(
                 "/Data/ms1.png",
                 "/Data/ms2.png",
                 "/Data/ms3.png"
             ));
+
             List<List<String>> textures = new ArrayList<>(List.of(insectImageList, fungalImageList));
             Controller controller = new Controller(gameLogic, frame, textures, insectTypes, fungalTypes);
             controller.switchView("StartView");
