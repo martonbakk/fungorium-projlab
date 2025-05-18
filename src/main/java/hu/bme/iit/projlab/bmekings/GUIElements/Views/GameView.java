@@ -768,6 +768,14 @@ public class GameView extends AbstractGameView implements Listener {
                         drawTecton(g2d, neighbor, positions.get(neighbor), TECTON_SIZE);
                     }
                 }
+                /* 
+                if (tectons.get(i) == selectedTecton) {
+                    g2d.setColor(Color.YELLOW);
+                    g2d.setStroke(new BasicStroke(2));
+                    g2d.drawOval(x, y, diameter, diameter);
+                    g2d.setStroke(new BasicStroke(1));
+                }
+                */
 
                 // Draw Spore
                 if (!centralTecton.getSpores().isEmpty()) {
@@ -840,6 +848,14 @@ public class GameView extends AbstractGameView implements Listener {
                 else g2d.setColor(new Color(128, 254, 57));
                 int halfSize = size/2;
                 g2d.fillOval((int)(position.getX()-halfSize), (int)(position.getY()-halfSize), size, size);
+
+                // Draw yellow outline if this is the selected tecton
+                    if (tecton == GameLogic.getParams().selectedTecton) {
+                    g2d.setColor(Color.YELLOW);
+                    g2d.setStroke(new BasicStroke(2));
+                    g2d.drawOval((int)(position.getX() - halfSize), (int)(position.getY() - halfSize), size, size);
+                    g2d.setStroke(new BasicStroke(1));
+                }
 
                 // Draw fungus
                 if (tecton.isOccupiedByFungus()) {
