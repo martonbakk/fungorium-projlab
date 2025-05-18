@@ -123,12 +123,14 @@ public class Hyphal extends Entity {
 
     @Loggable
     public void eatInsect(Insect stunnedInsect){
-        if(!((stunnedInsect.getBase()==this.baseLocation) || (stunnedInsect.getBase()==this.connectedTecton)))
-            return;
-
-        if (stunnedInsect.getStunTime()==0) {
-            return;
+        if(!((stunnedInsect.getBase() == this.baseLocation) || (stunnedInsect.getBase() == this.connectedTecton))) {
+            throw new RuntimeException("Ez a rovar nincs a fonál által összekötött Tektonokon!");
         }
+
+        if (stunnedInsect.getStunTime() == 0) {
+            throw new RuntimeException("Ez a rovar nincsen lebénítva!");
+        }
+        
         Tecton currLoc = stunnedInsect.getBase();
 
         stunnedInsect.DestroyInsect();

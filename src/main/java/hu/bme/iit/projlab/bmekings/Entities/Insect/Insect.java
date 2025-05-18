@@ -249,6 +249,8 @@ public class Insect extends Entity{
 
     @Loggable
     public void DestroyInsect() {
+        baseLocation.getInsects().remove(this);
+        baseLocation.setOccupiedByInsect(baseLocation.getInsects().isEmpty());
         owner.deleteControlledInsect(this);
         GameLogic.deleteEntity(this);
         System.out.println("Insect objektum torlodott id:["+ id +"]");
