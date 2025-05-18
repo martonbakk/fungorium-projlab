@@ -170,6 +170,8 @@ public class Tecton implements Listener, Serializable {
 
         player.addFungus(newfungalBody);
         
+        player.increaseScore();
+        
         return true;
     }
 
@@ -182,7 +184,9 @@ public class Tecton implements Listener, Serializable {
             throw new RuntimeException("Nincs elegendő spóra a gombatest létrehozásához!");
         spores.peek().destroySpore();
         spores.peek().destroySpore();           
-                               
+        
+        player.increaseScore();
+
         return createFungalBody(player);
     }
 
