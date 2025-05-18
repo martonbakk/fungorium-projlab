@@ -448,6 +448,7 @@ public class GameView extends AbstractGameView implements Listener {
 
                 @Override
                 public void mouseClicked(java.awt.event.MouseEvent e) {
+
                     int x = e.getX();
                     int y = e.getY();
                     Tecton clickedTecton = null;
@@ -457,32 +458,41 @@ public class GameView extends AbstractGameView implements Listener {
                             break;
                         }
                     }
-                    
+                    System.out.println("Clicked Tecton: " + clickedTecton);
+                    System.out.println("Clicked Prev Tecton: " + clickedPrev);
                     if (clickedTecton != null) {
-                        selectedTecton =  clickedTecton;
+
                         // selectedTecton = (selectedTecton == clickedTecton) ? null : clickedTecton;
-                        GameLogic.getParams().selectedTecton = selectedTecton;
-                        selectedTectonLabel.setText("Kiválasztott\nTekton: " + selectedTecton.getId());
+                        GameLogic.getParams().selectedTecton = clickedTecton;
+                        
+                        selectedTectonLabel.setText("Kiválasztott\nTekton: " + clickedTecton.getId());
+                        sporesOnTectonLabel.setText("A Tektonon lévő Spórák száma: " + clickedTecton.getSpores().size());
                         repaint();
-                        if (clickedFirst&&clickedPrev == clickedTecton){
+                        if (clickedFirst){
                             clickedFirst = false;
+                            selectedTecton = clickedTecton;
+                            clickedPrev =  clickedTecton;
                             return;
                         }
-                        sporesOnTectonLabel.setText("A Tektonon lévő Spórák száma: " + selectedTecton.getSpores().size());
-                        TectonPanel tectonPanel = new TectonPanel(selectedTecton);
-                        JFrame newFrame = new JFrame("Új ablak");
-                        newFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE); // csak az új ablak záródjon be
-                        newFrame.add(tectonPanel);
-                        newFrame.pack();  // automatikus méret a panelhez
-                        newFrame.setLocationRelativeTo(null);  // képernyő közepére
-                        newFrame.setVisible(true);
-                        clickedFirst = true;
+                        if (!clickedFirst && clickedPrev == clickedTecton && clickedTecton != null) {
+                            TectonPanel tectonPanel = new TectonPanel(selectedTecton);
+                            JFrame newFrame = new JFrame("Detailed Tecton View");
+                            newFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE); // csak az új ablak záródjon be
+                            newFrame.add(tectonPanel);
+                            newFrame.pack();  // automatikus méret a panelhez
+                            newFrame.setLocationRelativeTo(null);  // képernyő közepére
+                            newFrame.setVisible(true);
+                            clickedFirst = true;
+                        }
+                         clickedPrev =  clickedTecton;
                     } else {
                         selectedTecton = null;
                     }
                     if (selectedTecton == null) {
                         return;
                     }
+                    selectedTecton =  clickedTecton;
+
                     
                     repaint();
                 }
