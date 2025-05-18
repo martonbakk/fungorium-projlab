@@ -15,7 +15,6 @@ import hu.bme.iit.projlab.bmekings.Entities.Spore.HyphalProtectorSpore;
 import hu.bme.iit.projlab.bmekings.Entities.Spore.NormalSpore;
 import hu.bme.iit.projlab.bmekings.Entities.Spore.SlowSpore;
 import hu.bme.iit.projlab.bmekings.Entities.Spore.SpeedSpore;
-import hu.bme.iit.projlab.bmekings.Entities.Spore.Spore;
 import hu.bme.iit.projlab.bmekings.Entities.Spore.StunSpore;
 import hu.bme.iit.projlab.bmekings.Interface.SporeInterface.SporeInterface;
 import hu.bme.iit.projlab.bmekings.Logger.Loggable;
@@ -231,16 +230,16 @@ public class FungalBody extends Entity {
     public void update() {
         keepHyphalAlive();
         for (int i = 0; i < this.getCharacteristics().sporeProductionIntensity; i++) {
-            AddSpore("stun");
+            AddSpore();
         }
 
         this.shotSporesNum = 2; // A kilőhető spórák számát vissza kell állítani a kezdeti értékre
     }
 
     @Loggable
-    public void AddSpore(String type) {
+    public void AddSpore() {
         SporeInterface spore;
-        if (type.equals("stun")) {
+        if ("stun".equals("stun")) {
             spore = new StunSpore(baseLocation);
             spores.add(spore);
             return;

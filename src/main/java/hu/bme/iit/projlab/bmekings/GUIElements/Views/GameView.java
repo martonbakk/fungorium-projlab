@@ -443,6 +443,9 @@ public class GameView extends AbstractGameView implements Listener {
             }
 
             addMouseListener(new java.awt.event.MouseAdapter() {
+                boolean clickedFirst = true;
+                Tecton clickedPrev= null;
+
                 @Override
                 public void mouseClicked(java.awt.event.MouseEvent e) {
                     int x = e.getX();
@@ -454,10 +457,17 @@ public class GameView extends AbstractGameView implements Listener {
                             break;
                         }
                     }
+                    
                     if (clickedTecton != null) {
                         selectedTecton =  clickedTecton;
                         // selectedTecton = (selectedTecton == clickedTecton) ? null : clickedTecton;
-                        
+                        GameLogic.getParams().selectedTecton = selectedTecton;
+                        selectedTectonLabel.setText("Kiválasztott\nTekton: " + selectedTecton.getId());
+                        repaint();
+                        if (clickedFirst&&clickedPrev == clickedTecton){
+                            clickedFirst = false;
+                            return;
+                        }
                         sporesOnTectonLabel.setText("A Tektonon lévő Spórák száma: " + selectedTecton.getSpores().size());
                         TectonPanel tectonPanel = new TectonPanel(selectedTecton);
                         JFrame newFrame = new JFrame("Új ablak");
@@ -466,14 +476,14 @@ public class GameView extends AbstractGameView implements Listener {
                         newFrame.pack();  // automatikus méret a panelhez
                         newFrame.setLocationRelativeTo(null);  // képernyő közepére
                         newFrame.setVisible(true);
+                        clickedFirst = true;
                     } else {
                         selectedTecton = null;
                     }
                     if (selectedTecton == null) {
                         return;
                     }
-                    GameLogic.getParams().selectedTecton = selectedTecton;
-                    selectedTectonLabel.setText("Kiválasztott\nTekton: " + selectedTecton.getId());
+                    
                     repaint();
                 }
             });
