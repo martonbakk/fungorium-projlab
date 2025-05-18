@@ -37,7 +37,7 @@ public class GameLogic implements Serializable{
     private static ArrayList<Entomologist> entomologists = new ArrayList<>();
     private static ArrayList<Entity> entityList = new ArrayList<>();
     private static Params params = new Params(); 
-    public Map map;
+    public static Map map;
     private long elapsedTicks;
     private long maxTicks;
 
@@ -48,7 +48,7 @@ public class GameLogic implements Serializable{
 
     public ArrayList<Listener> getListeners() { return listeners; }
     
-    public Map getMap(){
+    public static Map getMap(){
         return map;
     } 
     
@@ -164,7 +164,7 @@ public class GameLogic implements Serializable{
     }
 
     public void tick() {
-        for (Tecton t : map.getAllTectons()) {
+        for (Tecton t : new ArrayList<>(map.getAllTectons())) {
             t.update();
         }
 

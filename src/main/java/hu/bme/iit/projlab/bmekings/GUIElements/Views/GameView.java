@@ -936,11 +936,11 @@ public class GameView extends AbstractGameView implements Listener {
             int diameter = radius * 2;
             int spacing = 10;
             int totalWidth = getWidth();
-
+            
             // Calculate number of columns
             int cols = Math.max(1, (totalWidth - padding * 2 + spacing) / (diameter + spacing));
 
-            // Map tectons to their center coordinates
+            // // Map tectons to their center coordinates
             Map<Tecton, int[]> tectonCenters = new HashMap<>();
             for (int i = 0; i < tectons.size(); i++) {
                 int row = i / cols;
@@ -1095,7 +1095,20 @@ public class GameView extends AbstractGameView implements Listener {
                 else if (tectons.get(i) instanceof WeakTecton) g2d.setColor(new Color(250, 250, 250));
                 else g2d.setColor(new Color(128, 254, 57));
 
-                g2d.fillOval(x, y, diameter, diameter);
+                if (tectons.get(i).isBroken()) {
+                    if (i != 0) {
+                        if (tectons.get(i - 1).isBroken()) {
+                            g2d.fillArc(x, y, diameter, diameter, 270, 180); // félkör (alsó félkör)
+                        } else {
+                            g2d.fillArc(x, y, diameter, diameter, 90, 180); // félkör (alsó félkör)
+                        }
+                    } else {
+                        g2d.fillArc(x, y, diameter, diameter, 90, 180); // félkör (alsó félkör)
+                    }
+                } else {
+                    // Teljes kör
+                    g2d.fillOval(x, y, diameter, diameter);
+                }
 
                 // Draw yellow outline if this is the selected tecton
                 if (tectons.get(i) == selectedTecton) {
