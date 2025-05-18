@@ -482,6 +482,7 @@ public class GameView extends AbstractGameView implements Listener {
                             newFrame.pack();  // automatikus méret a panelhez
                             newFrame.setLocationRelativeTo(null);  // képernyő közepére
                             newFrame.setVisible(true);
+                            newFrame.setResizable(false);
                             clickedFirst = true;
                         }
                          clickedPrev =  clickedTecton;
@@ -509,11 +510,33 @@ public class GameView extends AbstractGameView implements Listener {
             private int FUNGUS_SIZE;
             private static final int INSECT_SIZE = 13;
             private static final int SPORE_SIZE = 15;
+            
+            private JTextArea infoTextArea; // Új JTextArea az információkhoz
+            private JPanel infoPanel; // Új JPanel a szürke háttérhez
 
             public TectonPanel(Tecton centralTecton) {
-                this.centralTecton = centralTecton;
-                setPreferredSize(new Dimension(800, 800));
-                setBackground(new Color(128, 195, 255));
+            this.centralTecton = centralTecton;
+            setPreferredSize(new Dimension(800, 800));
+            setBackground(new Color(128, 195, 255));
+            setLayout(null); // Abszolút elrendezés a pontos pozícionáláshoz
+
+                                        // Információs panel létrehozása
+            infoPanel = new JPanel();
+            infoPanel.setBackground(Color.GRAY); // Szürke háttér
+            infoPanel.setBorder(BorderFactory.createLineBorder(Color.BLACK)); // Keret
+            infoPanel.setBounds(550, 10, 240, 150); // Jobb felső sarok, 240x150 méret
+
+            infoTextArea = new JTextArea("Kattints egy tectonra az információkért!");
+            infoTextArea.setFont(new Font("SansSerif", Font.PLAIN, 12));
+            infoTextArea.setForeground(Color.WHITE);
+            infoTextArea.setBackground(Color.GRAY); // Szürke háttér
+            infoTextArea.setEditable(false);
+            infoTextArea.setLineWrap(true);
+            infoTextArea.setWrapStyleWord(true);
+            infoTextArea.setFocusable(false); // Kurzor kikapcsolása
+            infoPanel.add(infoTextArea);
+
+            add(infoPanel);
                 addMouseListener(new java.awt.event.MouseAdapter() {
                     @Override
                     public void mouseClicked(java.awt.event.MouseEvent e) {
@@ -535,15 +558,16 @@ public class GameView extends AbstractGameView implements Listener {
                                 else if (clickedTecton instanceof WeakTecton) type = "WeakTecton";
                                 else type = "Tecton";
 
-                                StringBuilder message = new StringBuilder("Tecton ID: " + clickedTecton.getId() + "\nTípus: " + type + "\nSzomszédok:\n");
+                                StringBuilder message = new StringBuilder("Tecton ID: " + clickedTecton.getId() + "\nTípus: \n" + type + "\nSzomszédok:");
                                 for (Tecton neighbor : clickedTecton.getNeighbors()) {
-                                    message.append("- ").append(neighbor.getId()).append("\n");
+                                    message.append("\n- ").append(neighbor.getId());
                                 }
-                                information = message.toString();
+                                infoTextArea.setText(message.toString()); // Frissítjük a JTextArea tartalmát
                                 GameLogic.getParams().selectedTecton = clickedTecton;
                                 selectedTectonLabel.setText("Kiválasztott\nTekton: " + clickedTecton.getId());
-                            }
+                                }
                         }
+                    
                         
                         // Hyphal lista megszerzése
                         Set<Hyphal> hyphalList = new HashSet<>();
@@ -756,9 +780,12 @@ public class GameView extends AbstractGameView implements Listener {
                         drawSpore(g2d, targetPos, SPORE_SIZE);
                     }
                 }
+                
+
+                
 
                 // Draw Text
-                g2d.setColor(Color.WHITE);
+                g2d.setColor(Color.BLACK);
                 g2d.setFont(new Font("SansSerif", Font.PLAIN, 12));
 
                 // Átlátszó információs doboz a jobb felső sarokban
@@ -774,7 +801,7 @@ public class GameView extends AbstractGameView implements Listener {
                     }
                 }
                 else {
-                    g2d.drawString("Clcik on a Tecton to get information!", textX, textY + 15);
+                    ///g2d.drawString("Clcik on a Tecton to get information!", textX, textY + 15);
                 }
             }
 
