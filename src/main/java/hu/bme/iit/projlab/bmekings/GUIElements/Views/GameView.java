@@ -1242,18 +1242,19 @@ public class GameView extends AbstractGameView implements Listener {
                     
                     if (!hadBroken){
                         int leftCenterX = x-2;
-                        tectons.get(i).setPos(leftCenterX, y);
+                        tectons.get(i).setPosition(leftCenterX, y);
                         g2d.fillArc(leftCenterX, y, diameter, diameter, 90, 180); // 90°-tól 270°-ig
                         hadBroken = true;
                     }else{
                         int rightCenterX = x+2;
-                        tectons.get(i).setPos(rightCenterX, y);
+                        tectons.get(i).setPosition(rightCenterX, y);
                         g2d.fillArc(rightCenterX, y, diameter, diameter, 270, 180); // 270°-tól 90°-ig
 
                         hadBroken = false;
                     }
                 } else {
                     // Teljes kör
+                    tectons.get(i).setPosition(x, y);
                     g2d.fillOval(x, y, diameter, diameter);
                 }
 
