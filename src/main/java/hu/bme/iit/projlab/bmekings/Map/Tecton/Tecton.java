@@ -1,9 +1,12 @@
 package hu.bme.iit.projlab.bmekings.Map.Tecton;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Queue;
+
+import javax.management.RuntimeErrorException;
 
 import hu.bme.iit.projlab.bmekings.Entities.Fungal.FungalBody;
 import hu.bme.iit.projlab.bmekings.Entities.Fungal.Hyphal;
@@ -24,7 +27,9 @@ import hu.bme.iit.projlab.bmekings.Player.Mycologist.Mycologist;
  */
 
 @Loggable("Tecton")
-public class Tecton implements Listener{
+public class Tecton implements Listener, Serializable {
+    private static final long serialVersionUID = 1L;
+
     private Queue<SporeInterface> spores = new LinkedList<>();
     public ArrayList<Tecton> neighbours = new ArrayList<>();
     public HashMap<Tecton, ArrayList<Hyphal>> connectedNeighbours = new HashMap<>();
@@ -38,17 +43,40 @@ public class Tecton implements Listener{
 
     protected Flags flags;
 
-    public class Flags{
+    private int posX = -1;
+    private int posY = -1;
+    
+    public ArrayList<Insect> getInsects() { return insects; }
+
+    public void setPosition(int x, int y) {
+        this.posX = x;
+        this.posY = y;
+    }
+    
+    public int getPosX() {
+        return posX;
+    }
+    
+    public int getPosY() {
+        return posY;
+    }
+
+    public class Flags implements Serializable {
+        private static final long serialVersionUID = 1L;
+
+        
         public boolean fungalApproved;
         public boolean hyphalApproved;
-        public boolean oneHyphalApproved;
+        public boolean onToxicTecton;
 
-        public Flags(){
-            fungalApproved=false;
-            hyphalApproved=false;
-            oneHyphalApproved=false;
+        public Flags() {
+            fungalApproved = true;
+            hyphalApproved = true;
+            onToxicTecton = true;
         }
     }
+
+    public void setOccupiedByInsect(boolean value) { occupiedByInsect = value; }
 
     public Flags getFlag() { return flags; }
 
@@ -74,7 +102,7 @@ public class Tecton implements Listener{
     public HashMap<Tecton, ArrayList<Hyphal>> getConnectedNeighbors() { return connectedNeighbours; }
 
     @Loggable
-    public SporeInterface getNextSporeToEat() {  return spores.peek(); }
+    public SporeInterface getNextSporeToEat() { ;return spores.peek(); }
     
     @Loggable
     public FungalBody getFungalBody() { return fungalBody; }
@@ -111,18 +139,22 @@ public class Tecton implements Listener{
     @Loggable
     public void addSpore(SporeInterface spore) {
         spores.add(spore);
+        ///GameLogic.addEntity(spore);
     }
 
     @Loggable
     public boolean createFungalBody(Mycologist player) {
-        //if tectontype alllows
-
-        if(this.isOccupiedByFungus())
+        if (!this.flags.fungalApproved) {
             return false;
-                                 
-        FungalBody newfungalBody = new FungalBody(1, 0, player.getTypeCharacteristics(), this, player);
+        }
 
-        GameLogic.addEntity(fungalBody);
+        if(this.isOccupiedByFungus()) {
+            return false;
+        }
+
+        FungalBody newfungalBody = new FungalBody(1, 2, player.getTypeCharacteristics(), this, player);
+
+        GameLogic.addEntity(newfungalBody);
 
         occupiedByFungalBody=true;
 
@@ -139,14 +171,14 @@ public class Tecton implements Listener{
             return false;
 
         if (spores.size()<2)
-            return false;
+            throw new RuntimeException("Nincs elegendő spóra a gombatest létrehozásához!");
         spores.peek().destroySpore();
         spores.peek().destroySpore();           
                                
         return createFungalBody(player);
     }
 
-    /// hianyos
+    /// hianyos 
     @Loggable
     public void destroyFungalBody(){
         fungalBody=null;
@@ -156,8 +188,9 @@ public class Tecton implements Listener{
     @Loggable
     public ArrayList<SporeInterface> decreaseSpore(int sporesNeed) {
         ArrayList<SporeInterface> sporeList = null;
-        if (spores.size() < sporesNeed) return null; 
+        if (spores.size() < sporesNeed) return null;
 
+        sporeList = new ArrayList<>();
         for (int i = 0; i < sporesNeed; i++) {
             sporeList.add(spores.poll());
         }
@@ -189,40 +222,36 @@ public class Tecton implements Listener{
         // Ellenőrizzük, hogy a tc létezik-e a connectedNeighbours-ben
         ArrayList<Hyphal> hyphals = connectedNeighbours.get(tc);
         if (hyphals != null) {
-        // Töröljük a megadott hyphal-t a listából
+            // Töröljük a megadott hyphal-t a listából
             hyphals.remove(hyphal);
-        // Ha a lista üres lett, töröljük a Tecton kulcsot a HashMap-ből
+            // Ha a lista üres lett, töröljük a Tecton kulcsot a HashMap-ből
             if (hyphals.isEmpty()) {
-            connectedNeighbours.remove(tc);
+                connectedNeighbours.remove(tc);
             }
-        // Hívjuk meg a másik Tecton disconnectTecton metódusát (reciprok kapcsolat)
+            // Hívjuk meg a másik Tecton disconnectTecton metódusát (reciprok kapcsolat)
             tc.disconnectTecton(this, hyphal);
-        // Opcionálisan: hívjuk a Hyphal destroy metódusát, ha létezik
+            // Opcionálisan: hívjuk a Hyphal destroy metódusát, ha létezik
         }
     }
 
     @Loggable
     public void connectTecton(Tecton connected, Mycologist owner) {
-
-        // Szerintem így egy fokkal jobb, de még mindig nem jó az összekötés
         if (!connected.getNeighbors().contains(this)) {
-            System.out.println("Megkapott tekton nem szomszédos!");
-            return;
+            throw new RuntimeException("Megkapott tekton nem szomszédos!");
         }
-        Hyphal newHyphal = new Hyphal(connected, false, 3000, 3000, 300, this, owner);
-
+        Hyphal newHyphal = new Hyphal(connected, false, 2, 4, 4, this, owner);
         // Ellenőrizzük, hogy a két tekton össze van e már kötve
         ArrayList<Hyphal> hyphals = connectedNeighbours.get(connected);
         if (hyphals != null) {
             // Ha össze van frissítsük a hyphal listát
             hyphals.add(newHyphal);
-            //connectedNeighbours.put(connected, hyphals);
         }
         // Ha még nincs, vegyük fel a HashMapbe
         else {
             hyphals = new ArrayList<>();
             hyphals.add(newHyphal);
             connectedNeighbours.put(connected, hyphals);
+            connected.getConnectedNeighbors().put(this, hyphals);
         }
 
         owner.addHyphal(newHyphal);
@@ -233,22 +262,12 @@ public class Tecton implements Listener{
     public Flags runSpecialEffect() {
         return this.flags;
     }
-/*
-    // még nagyon nem végleges, csak a generateMaphez kell valami
-    public boolean createInsect(Entomologist player){
-        if(!occupiedByInsect){
-            // itt kreáljuk
-            return true;
-        } else {
-            // itt nem
-            return false;
-        }
-    }*/
 
     @Loggable
     public void addInsect(Insect insect){
         occupiedByInsect=true;
         insects.add(insect);
+        GameLogic.addEntity(insect);
     }
 
     @Loggable

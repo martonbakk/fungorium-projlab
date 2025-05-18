@@ -10,7 +10,7 @@ import hu.bme.iit.projlab.bmekings.Map.Tecton.Tecton;
  */
 public class HungerSpore extends Spore {
 
-    public HungerSpore() {
+    public HungerSpore(String id1, Tecton baseLocation1) {
         super();
     }
 
@@ -20,8 +20,7 @@ public class HungerSpore extends Spore {
 
     @Override
     public void activateEffect(Insect targetInsect) {
-        targetInsect.feedInsect(this.getNutritionValue());
-        targetInsect.feedInsect(this.getNutritionValue());
+        System.out.println("Ate Hunger Spore");
     }
 
     @Override

@@ -24,6 +24,7 @@ public class SlowSpore extends Spore {
 
     @Override
     public void activateEffect(Insect targetInsect) {
+        System.out.println("Ate Slow Spore");
         targetInsect.decreaseMovingSpeed(10);
     }
 

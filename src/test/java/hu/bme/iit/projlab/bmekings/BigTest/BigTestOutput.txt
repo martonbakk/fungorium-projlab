@@ -2,27 +2,16 @@ Uj objektum [T-01] letrejott!
 Uj objektum [T-02] letrejott!
 Uj objektum [T-03] letrejott!
 Uj objektum [T-04] letrejott!
-Uj objektum [FB-01] letrejott!
-Uj objektum [FB-02] letrejott!
-Uj objektum [H-01] letrejott!
-Uj objektum [I-01] letrejott!
-[I-01] [baseLocation] megvaltozott:
-[T-02] -> [T-03]
-Uj objektum [H-02] letrejott!
-Uj objektum [SP-01] letrejott!
-Uj objektum [SP-02] letrejott!
-[SP-01] [baseLocation] megvaltozott:
-[T-04] -> [T-04]
-[SP-02] [baseLocation] megvaltozott:
-[T-04] -> [T-04]
-Nincs több spóra a gombatestben!
-Nincs spóra a gombatestben!
-[I-01] [baseLocation] megvaltozott:
-[T-03] -> [T-04]
-Insect nutrition changed
-Uj objektum [I-02] letrejott!
-Spore objektum torlodott id:[SP-01]
-A tektonok nincsenek fonallal osszekotve.
+Nincs ilyen jatekos!
+Nincs ilyen jatekos!
+Nincs ilyen jatekos!
+Nincs ilyen jatekos!
+Rossz input!
+Rossz input!
+Nincs ilyen jatekos!
+Nincs ilyen jatekos!
+Nincs ilyen jatekos!
+Nincs ilyen jatekos!
 Tecton torlodott id: [T-03]
 Uj objektum [T-05] letrejott!
 Uj objektum [T-06] letrejott!

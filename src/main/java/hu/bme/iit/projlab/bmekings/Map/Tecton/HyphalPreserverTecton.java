@@ -26,7 +26,6 @@ public class HyphalPreserverTecton extends Tecton {
     @Loggable
     @Override
     public Flags runSpecialEffect() {
-        
         ArrayList<Hyphal> hyphals = connectedNeighbours.get(this);
             if (hyphals != null) {
                 for (Hyphal hyphal : hyphals) {

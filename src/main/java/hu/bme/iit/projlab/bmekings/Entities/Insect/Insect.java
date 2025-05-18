@@ -29,8 +29,13 @@ public class Insect extends Entity{
     private int currStomachFullness;
     private int cutCooldown;
     private int stunTime;
-    private Entomologist owner=null;
+    private Entomologist owner = null;
     private HashMap<Effect, Integer> activeEffects=new HashMap<>();
+
+    @Loggable
+    public Entomologist getOwner() {
+        return owner;
+    }
 
     @Loggable
     public void increaseMovingSpeed(int speed){
@@ -54,9 +59,8 @@ public class Insect extends Entity{
 
 
     public void stunEffect(int cd){
-    System.out.println("[" + this.getId() + "] stunned for:" + cd);
-        
-        this.stunTime=cd;
+        System.out.println("[" + this.getId() + "] stunned for:" + cd);
+        this.stunTime = cd;
         this.movingCD = cd;
     }
 
@@ -71,24 +75,23 @@ public class Insect extends Entity{
         this.cutCooldown = 0;
         this.activeEffects = new HashMap<>();
     }
-//rovarasz felvetel konstruktorba!!!
+
+    //rovarasz felvetel konstruktorba!!!
     public Insect(int movingSpeed, int movingCD, int stomachLimit, int currStomachFullness, int cutCooldown, Tecton baseLocation, Entomologist owner){
         super(IDGenerator.generateID("I"), baseLocation);
-
-        //this.id=IDGenerator.generateID("I");
         this.movingSpeed = movingSpeed;
         this.movingCD = movingCD;
         this.stomachLimit = stomachLimit;
-        this.stunTime=0;
+        this.stunTime = 0;
         this.currStomachFullness = currStomachFullness;
         this.cutCooldown = cutCooldown;
         this.owner=owner;
+        this.owner.addInsect(this);
     }
 
     public Insect(Insect parentInsect) {
         super(IDGenerator.generateID("I"), parentInsect.getBase());
 
-        //this.id=IDGenerator.generateID("I");
         this.movingSpeed = parentInsect.getMovingSpeed();
         this.movingCD = parentInsect.getMovingCD();
         this.stomachLimit = parentInsect.getStomachLimit();
@@ -124,22 +127,44 @@ public class Insect extends Entity{
 
     @Loggable
     public void move(Tecton targetTecton) {
-        
-        /// moving speed/tick/trun based?
+        if (stunTime != 0) {
+            throw new RuntimeException("Ez a rovar le van bénítva!");
+        }
 
-        if(baseLocation.getConnectedNeighbors().containsKey(targetTecton)){
-            if(movingCD == 0){
-                System.out.println("[" + this.getId() + "] [baseLocation] megvaltozott:");
-                System.out.println("[" + baseLocation.getId() + "] -> [" + targetTecton.getId() + "]");
-                this.baseLocation=targetTecton;
-            } else System.out.println("A mozgás cooldown-on van.");
-        } else System.out.println("A tektonok nincsenek fonallal osszekotve.");
+        if (baseLocation.getConnectedNeighbors().containsKey(targetTecton)) {
+            for (Hyphal h : baseLocation.getConnectedNeighbors().get(targetTecton)) {
+                if (h.getDeveloped()) {
+                    if (movingCD == 0) {
+                        System.out.println("[" + this.getId() + "] [baseLocation] megváltozott:");
+                        System.out.println("[" + baseLocation.getId() + "] -> [" + targetTecton.getId() + "]");
+                        
+                        this.baseLocation.getInsects().remove(this);
+                        this.baseLocation.setOccupiedByInsect(this.baseLocation.getInsects().size() > 0);
+                        this.baseLocation=targetTecton;
+                        this.baseLocation.addInsect(this);
+                        this.baseLocation.setOccupiedByInsect(true);
+
+                        movingCD = 2;
+                        return;
+                    } else {
+                        throw new RuntimeException("A mozgás cooldown-on van!");
+                    }
+                }
+            }
+            throw new RuntimeException("A két Tekton közötti fonál még nincs kifejlődve!");
+        } else {
+            throw new RuntimeException("A Tektonok nincsenek fonallal összekötve!");
+        }
     }
 
     @Loggable
     public void eatSpore() {
+        if (stunTime != 0) {
+            throw new RuntimeException("Ez a rovar le van bénítva!");
+        }
+
         SporeInterface sporeToEat = this.baseLocation.getNextSporeToEat();
-        if(this.currStomachFullness+sporeToEat.getNutritionValue() < this.stomachLimit) {
+        if(this.currStomachFullness + sporeToEat.getNutritionValue() < this.stomachLimit) {
             this.feedInsect(sporeToEat.getNutritionValue());
             sporeToEat.activateEffect(this);
             sporeToEat.destroySpore();
@@ -148,35 +173,45 @@ public class Insect extends Entity{
 
     @Loggable
     public void feedInsect(int nutritionvalue) {
-        System.out.println("Insect nutrition changed");
+        System.out.print("Insect nutrition changed from: " + currStomachFullness);
         currStomachFullness += nutritionvalue;
-        if (currStomachFullness<0) 
+        System.out.print(" to: " + currStomachFullness + "\n");
+        if (currStomachFullness < 0)
             currStomachFullness=0;
     }
 
     @Loggable
     public void cutHyphal(Hyphal h) {
+        if (stunTime != 0) {
+            throw new RuntimeException("Ez a rovar le van bénítva");
+        }
         h.destroyHyphal();
     }
 
     @Loggable
     @Override
     public void update() {
-        if(movingCD>0)
+        if(movingCD > 0)
             movingCD--;
-        if(stunTime>0)
+        if(stunTime > 0)
             stunTime--;
-        if (cutCooldown>0)     // 0 alá ne menjen
-            cutCooldown--;  // 0 alá ne menjen
+        if (cutCooldown > 0)
+            cutCooldown--;
         
+        // 0 alá ne menjen
+        if (cutCooldown < 0)
+            cutCooldown = 0;
+        else if (stunTime < 0)
+            stunTime = 0;
+
         if (currStomachFullness > 0) {
-            currStomachFullness-=5;
+            currStomachFullness -= 5;
             if(currStomachFullness < 0)
                 currStomachFullness=0;
         }
         
         // Kiszedes egy ido utan meg kell hogy valosuljon
-        for(Effect item: activeEffects.keySet()){
+        for (Effect item: activeEffects.keySet()){
             item.apply(this);
             if(activeEffects.get(item) <= 0){
                 activeEffects.remove(item);
@@ -191,30 +226,31 @@ public class Insect extends Entity{
 
     @Loggable
     public void hungerEffectActivate(int stomachRateDecrease){
-        if (this.currStomachFullness-stomachRateDecrease<0){
-            this.currStomachFullness=0;
+        if (this.currStomachFullness - stomachRateDecrease < 0){
+            this.currStomachFullness = 0;
         }else{
-            this.currStomachFullness-=stomachRateDecrease;
+            this.currStomachFullness -= stomachRateDecrease;
         }
     }
 
     @Loggable
     public void HyhalEffectActivate(int coolDown){
-        this.cutCooldown=coolDown;
+        this.cutCooldown = coolDown;
     }
 
     @Loggable
     public void SpeedEffectActivate(int speed, boolean stunned){
-        if(stunned){
-            this.movingCD=10;
-        }else{
-            // feltetel, hogy ne legyen minusz a sebesseg
-            this.movingSpeed=speed;
+        if (stunned) {
+            this.movingCD = 10;
+        } else {
+            this.movingSpeed = speed;
         }
     }
 
     @Loggable
     public void DestroyInsect() {
+        baseLocation.getInsects().remove(this);
+        baseLocation.setOccupiedByInsect(baseLocation.getInsects().isEmpty());
         owner.deleteControlledInsect(this);
         GameLogic.deleteEntity(this);
         System.out.println("Insect objektum torlodott id:["+ id +"]");
@@ -225,6 +261,11 @@ public class Insect extends Entity{
         GameLogic.addEntity(this);
         baseLocation.addInsect(this);
         owner.addInsect(this);
+    }
+
+    @Override
+    public String toString() {
+        return this.getId();
     }
 
 }

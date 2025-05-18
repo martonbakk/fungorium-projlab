@@ -24,6 +24,7 @@ public class NormalSpore extends Spore {
     }
     @Override
     public void activateEffect(Insect targetInsect) {
+        System.out.println("Ate Normal Spore");
     }
     
     @Override

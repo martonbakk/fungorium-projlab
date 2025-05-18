@@ -1,5 +1,7 @@
 package hu.bme.iit.projlab.bmekings.Entities.Fungal;
 
+import java.io.Serializable;
+
 import hu.bme.iit.projlab.bmekings.Entities.Entity;
 import hu.bme.iit.projlab.bmekings.Entities.Insect.Insect;
 import hu.bme.iit.projlab.bmekings.Logger.Loggable;
@@ -15,6 +17,7 @@ import hu.bme.iit.projlab.bmekings.Player.Mycologist.Mycologist;
  */
 @Loggable("Hyphal")
 public class Hyphal extends Entity {
+
     private Tecton connectedTecton=null;
     private boolean developed;
     private int developTime;
@@ -58,8 +61,8 @@ public class Hyphal extends Entity {
 
     @Loggable
     public void setDeveloped(boolean b) { 
-    System.out.println("[" + this.getId() + "] [developed] megvaltozott:");
-    System.out.println("[" + developed + "] -> [" + b + "]");
+    // System.out.println("[" + this.getId() + "] [developed] megvaltozott:");
+    // System.out.println("[" + developed + "] -> [" + b + "]");
     developed = b; 
     }
 
@@ -70,10 +73,7 @@ public class Hyphal extends Entity {
     developTime = newDevelopTime; }
 
     @Loggable
-    public void setLifeTime(int newLifeTime) { 
-    System.out.println("[" + this.getId() + "] [lifeTime] megvaltozott:");
-    System.out.println("[" + lifeTime + "] -> [" + newLifeTime + "]");  
-    lifeTime=newLifeTime; }
+    public void setLifeTime(int newLifeTime) { lifeTime=newLifeTime; }
 
     @Loggable
     public void setCutTime(int newCutTime) { 
@@ -94,11 +94,13 @@ public class Hyphal extends Entity {
 
     @Loggable
     public void speedUpDevelopment() {
-        if(baseLocation.decreaseSpore(2) != null){
-            developTime-=2;
-            if(developTime<=0){
-                developed=true;
+        if (connectedTecton.decreaseSpore(2) != null) {
+            developTime -= 2 ;
+            if (developTime <= 0) {
+                developed = true;
             }
+        } else {
+            throw new RuntimeException("Ezen a Tektonon nincs elég spóra a növekedés gyorsításához!");
         }
     }
 
@@ -106,32 +108,36 @@ public class Hyphal extends Entity {
     public void aging() {
         dying();
         developTime--;
-        if(developTime<=0){
-            developed=true;
+        if (developTime <= 0) {
+            setDeveloped(true);
         }
     }
 
     @Loggable
     public void dying() {
-        int szam = lifeTime-1 ;
+        int n = lifeTime - 1;
         System.out.println("[" + this.getId() + "] [life] megvaltozott:");
-        System.out.println("[" + lifeTime + "] -> [" + szam + "]");
+        System.out.println("[" + lifeTime + "] -> [" + n + "]");
         lifeTime--;
+        if (lifeTime <= 0) {
+            destroyHyphal();
+        }
     }
 
     @Loggable
     public void eatInsect(Insect stunnedInsect){
-        if(!((stunnedInsect.getBase()==this.baseLocation) || (stunnedInsect.getBase()==this.connectedTecton)))
-            return;
-
-        if (stunnedInsect.getStunTime()==0) {
-            return;
+        if(!((stunnedInsect.getBase() == this.baseLocation) || (stunnedInsect.getBase() == this.connectedTecton))) {
+            throw new RuntimeException("Ez a rovar nincs a fonál által összekötött Tektonokon!");
         }
+
+        if (stunnedInsect.getStunTime() == 0) {
+            throw new RuntimeException("Ez a rovar nincsen lebénítva!");
+        }
+        
         Tecton currLoc = stunnedInsect.getBase();
 
         stunnedInsect.DestroyInsect();
 
-        /// itt jon a growFungusFromInsect()
         growFungus(currLoc);
     }
 
@@ -142,7 +148,7 @@ public class Hyphal extends Entity {
     }
 
     @Loggable
-    public void destroyHyphal(){
+    public void destroyHyphal() {
         // entity
         GameLogic.deleteEntity(this);
         
@@ -152,7 +158,7 @@ public class Hyphal extends Entity {
         System.out.println("Hyphal torlodott id:["+ id +"]");
 
         owner.removeHyphal(this);
-        }
+    }
 
     @Loggable
     public Mycologist getOwner(){
@@ -173,8 +179,8 @@ public class Hyphal extends Entity {
     }
 
     @Loggable
-    public void growHyphalFromHyphal(Tecton targetTecton){
-        baseLocation.connectTecton(targetTecton, owner);
+    public void growHyphalFromHyphal(Tecton targetTecton) {
+        connectedTecton.connectTecton(targetTecton, owner);
     }
 
         

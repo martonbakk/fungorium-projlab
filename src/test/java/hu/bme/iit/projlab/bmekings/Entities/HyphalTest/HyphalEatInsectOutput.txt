@@ -1,10 +1,7 @@
 Uj objektum [T-01] letrejott!
 Uj objektum [T-02] letrejott!
-Uj objektum [I-01] letrejott!
-Uj objektum [FB-01] letrejott!
-Uj objektum [H-01] letrejott!
+Nincs ilyen jatekos!
+Nincs ilyen jatekos!
 Uj objektum [SP-01] letrejott!
-Insect nutrition changed
-[I-01] stunned for:4
-Spore objektum torlodott id:[SP-01]
-Insect objektum torlodott id:[I-01]
+Nincs ilyen jatekos!
+Nincs ilyen jatekos!

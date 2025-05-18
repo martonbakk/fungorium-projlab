@@ -25,7 +25,6 @@ public class NoFungusTecton extends Tecton {
 
     @Loggable
     public Flags runSpecialEffect() {
-        System.out.println("Jart itt");
         return this.flags;
     }
 }

@@ -1,6 +1,8 @@
 package hu.bme.iit.projlab.bmekings.Map;
 
+import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Random;
 
 import hu.bme.iit.projlab.bmekings.Entities.Fungal.Hyphal;
@@ -26,13 +28,19 @@ import hu.bme.iit.projlab.bmekings.Player.Mycologist.Mycologist;
  */
 
 @Loggable("Map")
-public class Map {
+public class Map implements Serializable {
+    private static final long serialVersionUID = 1L;
+    
     private ArrayList<Tecton> tectons = new ArrayList<>();
-    private boolean generatedMap=false;
+    private boolean generatedMap = false;
     
 
     public Map(){
 
+    }
+
+    public boolean isGeneratedMap() {
+        return generatedMap;
     }
 
     @Loggable
@@ -42,17 +50,21 @@ public class Map {
 
     @Loggable
     public void generateMap() {
+        System.out.println("Generating map...");
         if(generatedMap) {
-            return; // Map already generated
+            tectons.clear(); // Map already generated
         }
         generatedMap=true;
         ArrayList<Mycologist> mycologists = GameLogic.getMycologists();
         ArrayList<Entomologist> entomologists = GameLogic.getEntomologists();
         Random random = new Random();
     
+        System.err.println("Mycologists: " + mycologists.size() + ", Entomologists: " + entomologists.size());
         // Generate Tectons
-        for (int i = 0; i < (mycologists.size() + entomologists.size()) * 4; i++) {
-            int type = random.nextInt(5);
+        int tectonCount = 126;
+
+        for (int i = 0; i < tectonCount; i++) {
+            int type = random.nextInt(15);
             Tecton tc;
             switch (type) {
                 case 0:
@@ -65,7 +77,7 @@ public class Map {
                     tc = new ToxicTecton(6, 0, false, false);
                     break;
                 case 3:
-                    tc = new WeakTecton(false, 0, false, false); // Verify constructor signature
+                    tc = new WeakTecton(false, 0, false, false);
                     break;
                 default:
                     tc = new Tecton(0, false, false);
@@ -73,19 +85,30 @@ public class Map {
             }
             tectons.add(tc);
         }
-    
-        // Set up neighbors
-        for (int i = 0; i < tectons.size(); i++) {
-            for (int j = i + 1; j < tectons.size(); j++) {
-                if (random.nextInt(10) < 4) {
-                    Tecton tectonA = tectons.get(i);
-                    Tecton tectonB = tectons.get(j);
-                    tectonA.neighbours.add(tectonB);
-                    tectonB.neighbours.add(tectonA);
-                }
-            }
+
+        // Set up neighbors (dont judge)
+        Integer[] array1 = {0, 14, 28, 42, 56, 70, 84, 98, 112};
+        Integer[] array2 = {13, 27, 41, 55, 69, 83, 97, 111, 125}; 
+        ArrayList<Integer> leftBorder = new ArrayList<Integer>(Arrays.asList(array1));
+        ArrayList<Integer> rightBorder = new ArrayList<Integer>(Arrays.asList(array2));
+        for (Integer i = 0; i < tectons.size(); i++) {
+            // Order is important because of TectonPanel!!!!
+            // Add Right neighbor
+            if(!(rightBorder.contains(i)))
+                tectons.get(i).neighbours.add(tectons.get(i+1));
+            // Add Down neighbor
+            if (!(i == 112 || i == 113 || i == 114 || i == 115 || i == 116 || i == 117 || i == 118 || i == 119 || i == 120 || i == 121 || i == 122 || i == 123 || i == 124 || i == 125))
+                tectons.get(i).neighbours.add(tectons.get(i+14));
+            // Add Left Neighbor
+            if(!(leftBorder.contains(i)))
+                tectons.get(i).neighbours.add(tectons.get(i-1));
+            // Add Up neighbor
+            if (!(i == 0 || i == 1 || i == 2 || i == 3 || i == 4 || i == 5 || i == 6 || i == 7 || i == 8 || i == 9 || i == 10 || i == 11 || i == 12 || i == 13))
+                    tectons.get(i).neighbours.add(tectons.get(i-14));
         }
-    
+
+
+        // Add FungalBodies
         for (Mycologist mycologist : mycologists) {
             for (int j = 0; j < 2; j++) {
                 boolean success = false;
@@ -97,13 +120,18 @@ public class Map {
             }
         }
     
-        // Place insects on unique tectons using a copy
-        ArrayList<Tecton> availableTectons = new ArrayList<>(tectons); // Copy
+        // Place insects on tectons with a FungalBody using a copy
+        ArrayList<Tecton> availableTectons = new ArrayList<>();
+        tectons.forEach(e -> {
+            if (e.isOccupiedByFungus()) {
+                availableTectons.add(e);
+            }
+        });
         for (Entomologist entomologist : entomologists) {
             if (availableTectons.isEmpty()) break; // No available tectons
             int idx = random.nextInt(availableTectons.size());
             Tecton baseTecton = availableTectons.remove(idx);
-            Insect insect = new Insect(1, 1, 1, 1, 1, baseTecton, entomologist);
+            Insect insect = new Insect(1, 0, 100, 0, 3, baseTecton, entomologist);
             baseTecton.addInsect(insect);
         }
     
@@ -134,10 +162,52 @@ public class Map {
                         sp = new HungerSpore(baseTecton);
                         break;
                 }
-                baseTecton.addSpore(sp);
+                
+                sp.spawnSpore();
+            }
+        }
+        assignTectonPositions();
+    }
+    private void assignTectonPositions() {
+        int centerX = 500;
+        int centerY = 400;
+        int radius = 200;
+
+        boolean[] visited = new boolean[tectons.size()];
+        java.util.Map<Tecton, Integer> indexMap = new java.util.HashMap<>();
+        for (int i = 0; i < tectons.size(); i++) {
+            indexMap.put(tectons.get(i), i);
+        }
+
+        ArrayList<Tecton> queue = new ArrayList<>();
+        if (tectons.isEmpty()) return;
+
+        queue.add(tectons.get(0));
+        visited[0] = true;
+        tectons.get(0).setPosition(centerX, centerY);
+
+        while (!queue.isEmpty()) {
+            Tecton current = queue.remove(0);
+            int cx = current.getPosX();
+            int cy = current.getPosY();
+
+            ArrayList<Tecton> neighbors = current.getNeighbors();
+            int n = neighbors.size();
+            for (int i = 0; i < n; i++) {
+                Tecton neighbor = neighbors.get(i);
+                int idx = indexMap.get(neighbor);
+                if (!visited[idx]) {
+                    double angle = 2 * Math.PI * i / n;
+                    int nx = cx + (int) (120 * Math.cos(angle));
+                    int ny = cy + (int) (120 * Math.sin(angle));
+                    neighbor.setPosition(nx, ny);
+                    visited[idx] = true;
+                    queue.add(neighbor);
+                }
             }
         }
     }
+
 
     @Loggable
     public void splitTecton(Tecton tecton) {
@@ -175,6 +245,10 @@ public class Map {
         tectons.add(new Tecton());
         tectons.get(tectons.size() - 1).setNeighbors(newNeighbors2);
         
+    }
+
+    public ArrayList<Tecton> getTectons() {
+        return tectons;
     }
 
     @Loggable

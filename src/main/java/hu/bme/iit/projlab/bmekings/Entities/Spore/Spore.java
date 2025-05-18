@@ -1,5 +1,6 @@
 package hu.bme.iit.projlab.bmekings.Entities.Spore;
 
+import java.io.Serializable;
 import java.util.Random;
 
 import hu.bme.iit.projlab.bmekings.Entities.Entity;
@@ -77,5 +78,6 @@ public abstract class Spore extends Entity implements SporeInterface {
         return this.nutritionValue;
     }
 
-    public void activateEffect(Insect targetInsect) {}
+    public void activateEffect(Insect targetInsect) {
+    }
 }

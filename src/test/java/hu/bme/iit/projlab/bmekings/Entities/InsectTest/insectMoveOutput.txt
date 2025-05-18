@@ -1,7 +1,5 @@
 Uj objektum [T-01] letrejott!
 Uj objektum [T-02] letrejott!
-Uj objektum [FB-01] letrejott!
-Uj objektum [H-01] letrejott!
-Uj objektum [I-01] letrejott!
-[I-01] [baseLocation] megvaltozott:
-[T-01] -> [T-02]
+Nincs ilyen jatekos!
+Nincs ilyen jatekos!
+Nincs ilyen jatekos!

@@ -15,7 +15,6 @@ public class WeakTecton extends Tecton {
     public WeakTecton(){
         super();
         this.hyphalExistHere=false;
-        this.flags.oneHyphalApproved=true;
     }
 
     public WeakTecton(boolean hyphalExistHere, double splitChance, boolean occupiedByInsect, boolean occupiedByFungalBody) {
@@ -25,6 +24,12 @@ public class WeakTecton extends Tecton {
 
     @Loggable
     public Flags runSpecialEffect() {
+        if (!this.connectedNeighbours.isEmpty()) {
+            hyphalExistHere = true;
+        }
+        if (hyphalExistHere) {
+            this.flags.hyphalApproved = false;
+        }
         return this.flags;
-    }   
+    }
 }

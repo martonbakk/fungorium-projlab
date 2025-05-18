@@ -11,6 +11,7 @@ import java.util.Set;
 import hu.bme.iit.projlab.bmekings.Entities.Entity;
 import hu.bme.iit.projlab.bmekings.Entities.Spore.DuplicateSpore;
 import hu.bme.iit.projlab.bmekings.Entities.Spore.HungerSpore;
+import hu.bme.iit.projlab.bmekings.Entities.Spore.HyphalProtectorSpore;
 import hu.bme.iit.projlab.bmekings.Entities.Spore.NormalSpore;
 import hu.bme.iit.projlab.bmekings.Entities.Spore.SlowSpore;
 import hu.bme.iit.projlab.bmekings.Entities.Spore.SpeedSpore;
@@ -36,17 +37,15 @@ public class FungalBody extends Entity {
     private Queue<SporeInterface> spores = new LinkedList<>();
     private int currLevel;              // jelenlegi szint 
     private int shotSporesNum;          // a kiloheto sporak szama
-    private TypeCharacteristics characteristics=new TypeCharacteristics(0, 0, 0, 0);
+    private TypeCharacteristics characteristics = new TypeCharacteristics(0, 0, 0, 10);
     private int callNum;                // hívasok száma, ugye a leveUpnal mindig 3 hívás egyenlő egy szintel (currLevel)
     private Mycologist owner;
 
     //kosntrukktorba az owner felvetele!!!
     public FungalBody() {
-        super();  
-
-        //this.id=IDGenerator.generateID("FB");
+        super();
         this.currLevel = 1;
-        this.shotSporesNum = 0;
+        this.shotSporesNum = 2; // elején 2
         this.callNum = 0;
     }
 
@@ -57,19 +56,7 @@ public class FungalBody extends Entity {
         this.shotSporesNum = shotSporesNum;
         this.callNum = 0;
         this.owner=owner;
-        
     }
-/*
-    public FungalBody(String id, Tecton baseLocation, int currLevel, int shotSporesNum, int shootingRange, int sporeProductionIntensity, int startingHyphalNum, int sporeCapacity) {
-        super(id, baseLocation);
-        //this.id=IDGenerator.generateID("FB");
-        this.spores = new LinkedList<>();
-        this.characteristics = new TypeCharacteristics(shootingRange, sporeProductionIntensity, startingHyphalNum, sporeCapacity);
-        this.currLevel = currLevel;
-        this.shotSporesNum = shotSporesNum;
-        this.callNum = 0;
-        System.out.println("asd");
-    }*/
 
     /// occupiedByFungalbody-hoz kell
     public FungalBody(TypeCharacteristics characteristics, Tecton baseLocation){
@@ -87,6 +74,9 @@ public class FungalBody extends Entity {
 
     @Loggable
     public int getCurrLvl() { return currLevel; }
+
+    @Loggable
+    public int getCallNum() { return callNum; }
 
     @Loggable
     public int getShotSporesNum() { return shotSporesNum; }
@@ -122,7 +112,7 @@ public class FungalBody extends Entity {
     @Loggable
     public Boolean checkShootingRange(Tecton tecton) {
         if (baseLocation.equals(tecton)) {
-            return true;
+            return false;
         }
         Queue<Tecton> queue = new LinkedList<>();
         HashMap<Tecton, Integer> distances = new HashMap<>();
@@ -150,33 +140,28 @@ public class FungalBody extends Entity {
                 }
             }
         }
-        System.out.println("A gombatest nem tudja elérni a megadott tekton-t!");
-        return true; 
+        throw new RuntimeException("A gombatest nem tudja elérni a megadott tekton-t!");
     }
 
     // FLAG VALTOZAS AZ UML BEN PLUSZ PARAMÉTER
     @Loggable
     public void shootSpore(Tecton tecton) {
-        // if(checkShootingRange(tecton)) {
-        //     System.out.println("nincs rangeben");
-        //     return;
-        // }
-
-        if(this.spores.isEmpty()) {
-            System.out.println("Nincs spóra a gombatestben!");
+        if(checkShootingRange(tecton)) {
             return;
         }
-        for (int i=0; i<this.shotSporesNum; i++) {
+
+        if(this.spores.isEmpty()) {
+            throw new RuntimeException("Nincs spóra a gombatestben!");
+        }
+        
+        for (int i = 0; i < this.shotSporesNum; i++) {
+            // Ez kiveszi a Spore láncolt listából a legújabb spórát, amit az AddSpore random generált
             SporeInterface spore = this.spores.poll();
             spore.setBaseLocation(tecton);
             tecton.addSpore(spore);
-            this.shotSporesNum--;
-            if(this.spores.isEmpty()){
-                System.out.println("Nincs több spóra a gombatestben!");
-                break;
-            }
-            if (this.shotSporesNum == 0) {
-                System.out.println("Nem tudsz kilőni több spórát!");
+            
+            if (this.spores.isEmpty()) {
+                System.err.println("Nincs több spóra a gombatestben!");
                 break;
             }
         }
@@ -185,9 +170,7 @@ public class FungalBody extends Entity {
     @Loggable
     public void levelUp() {
         if (currLevel == 3) {
-            System.out.println("Elérted a maximális szintet (3)!");
-            this.shotSporesNum++;
-            return;
+            throw new RuntimeException("Elérted a maximális szintet (3)!");
         }
         
         this.callNum= this.callNum + 1;
@@ -200,23 +183,16 @@ public class FungalBody extends Entity {
             int nextlvl = currLevel + 1;
             this.setLevel(nextlvl);
         } else {
-            ///System.out.println("Még " + (3 - callNum) + " hívás kell a szintlépéshez. " + "Jelenlegi szint: " + currLevel);
+            System.out.println("Még " + (3 - callNum) + " hívás kell a szintlépéshez. " + "Jelenlegi szint: " + currLevel);
         }
     }
 
-    // MYCOLOGIST FOGJA KEZELNI A FONALAKAT ES A TESTEKET
-    /*
-     * Koncepció a következő:
-     * A fonál base és szomszéd tektonját elmentjük, végig megynük utána a szomszéd szomszédjával. 
-     */
     @Loggable
     public void keepHyphalAlive() {
         HashMap<Tecton, Set<Tecton>> neighbours = new HashMap<>();
         Set<Hyphal> hyphalSet = new HashSet<>();
         Set<Tecton> visited = new HashSet<>();
         Queue<Tecton> queue = new LinkedList<>();
-        
-        //Mycologist player  = this.getOwner();
         
         ArrayList<Hyphal> hyphalList = owner.getHyphalList();
 
@@ -245,9 +221,9 @@ public class FungalBody extends Entity {
         }
 
         for (Hyphal hyphal : hyphalSet) {
-            hyphal.setLifeTime(3);
-            System.out.println("[" + hyphal.getId() + "] [life] megvaltozott:");
-            System.out.println("[" + hyphal.getLifeTime() + "] -> [" + 3 + "]");
+            if (!(hyphal.getBase().getFlag().onToxicTecton || hyphal.getConnectedTecton().getFlag().onToxicTecton)) {
+                hyphal.setLifeTime(4);
+            }
         }
     }
 
@@ -255,23 +231,19 @@ public class FungalBody extends Entity {
     @Override
     public void update() {
         keepHyphalAlive();
-        AddSpore("");
+        for (int i = 0; i < this.getCharacteristics().sporeProductionIntensity; i++) {
+            AddSpore();
+        }
 
-        this.shotSporesNum=10; // A kilőhető spórák számát vissza kell állítani a kezdeti értékre DE NEM BIZTOS HOGY EZT ÍGY KÉNE
-        // egy adott idokozonkent majd amugy is termel sporat itt akkor random lehetne hozzaadogatni az AddSproe-val a sporakat
+        this.shotSporesNum = 2; // A kilőhető spórák számát vissza kell állítani a kezdeti értékre
     }
 
     @Loggable
-    public void AddSpore(String type) {
+    public void AddSpore() {
         SporeInterface spore;
-        if (type.equals("dupe")) {
-            spore = new DuplicateSpore(baseLocation);
-            spores.add(spore);
-            return;
-        }
 
         Random random = new Random();
-        int sporeType = random.nextInt(11); 
+        int sporeType = random.nextInt(10); 
         // default a NormalSpore mert arra legyen a legtöbb esély
         
         switch (sporeType) {
@@ -290,6 +262,9 @@ public class FungalBody extends Entity {
             case 4:
                 spore = new StunSpore(baseLocation); 
                 break;
+            case 5:
+                spore = new HyphalProtectorSpore(baseLocation); 
+                break;
             default:
                 spore = new NormalSpore(baseLocation); 
                 break;
@@ -306,16 +281,18 @@ public class FungalBody extends Entity {
     @Loggable
     public void growHyphal(Tecton connected) {
         if (this.baseLocation.connectedNeighbours.get(connected)!=null){
-            System.out.println("Ez a fonál már létezik!");
-            return;
+            throw new RuntimeException("Ez a fonál már létezik!");
         }
-        baseLocation.connectTecton(connected, owner);
+        if (this.baseLocation.getFlag().hyphalApproved) {
+            baseLocation.connectTecton(connected, owner);
+        } else {
+            throw new RuntimeException("Erről a Tektonról nem lehet több fonalat növeszteni!");
+        }
     }
 
     @Loggable
     public void destroyFungus(){
         // gombasz
-        //Mycologist owner = this.getOwner();
         owner.destroyFungus(this);
 
         // entity

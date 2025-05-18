@@ -1,5 +1,7 @@
 package hu.bme.iit.projlab.bmekings.Program;
 
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -66,8 +68,8 @@ public class Program {
 
     public static void initBasePlayers() {
         GameLogic.resetPlayers();
-        addEntomologist();
-        addMycologist();
+        //addEntomologist();
+        //addMycologist();
     }
 
     public static void consoleActions(String input) {
@@ -167,16 +169,44 @@ public class Program {
             case "/tick":
                 tick();
                 break;
-            case "/addSporeToFB":
-                addSporeToFungalBody(splitInput);
-                break;
             case "exit":
                 System.out.println("Program leallitasa...");
                 break;
+
+            case "save":
+                
+                break;
+
+            case "load":
+                    try {
+                        String filePath = System.getProperty("user.home") + "\\Documents\\MyGame\\test.ser";
+                        gameLogic = GameLogic.loadGame(filePath);
+                        System.out.println("Játék sikeresen betöltve: " + filePath);
+                        // Ellenőrzés
+                       System.out.println("Mentés előtti állapot:");
+                    System.out.println("Map: " + (gameLogic.map != null ? "Inicializált" : "Null"));
+                    System.out.println("TectonNum: " + gameLogic.getMap().getTectons().size()); 
+                    System.out.println("Entomologists: " + gameLogic.getEntomologists().size());
+                    System.out.println("Mycologists: " + gameLogic.getMycologists().size());
+                    System.out.println("Entities: " + gameLogic.getEntityList().size());
+                    
+                    } catch (FileNotFoundException e) {
+                        System.err.println("Hiba: A mentett fájl nem található: " + e.getMessage());
+                    } catch (IOException e) {
+                        System.err.println("Hiba a betöltés során: " + e.getMessage());
+                        e.printStackTrace();
+                    } catch (ClassNotFoundException e) {
+                        System.err.println("Hiba: Az osztálydefiníciók nem egyeznek: " + e.getMessage());
+                        e.printStackTrace();
+                    }
+                    break;
             default:
                 System.out.println("Rossz input!");
         }
     }
+
+    
+
     
     // ● [string]: torlendo Spore id-je
     private static void deleteSpore(String[] splitInput){
@@ -271,13 +301,12 @@ public class Program {
     //  ○ -lt [szám]: az élettartama
     //  ○ -ct [szám]: az az idő, ami után meghal, ha elvágták
 
-    // /addHyphal M-01 FB-01 T-01 T-02
     // fix sorrend a flageknek:
     // /addHyphal M-01 FB-01 T-01 T-02 -d true -lt [szám] -ct [szám]
     // fix sorrend a flageknek: 
     // /addHyphal M-01 FB-01 T-01 T-02 -d false -dt [szám] -lt [szám] -ct [szám]
     private static void addHyphal(String[] splitInput) {
-        if (splitInput.length < 4) return;
+        if (splitInput.length < 5) return;
 
         Mycologist player = null;
         for (Mycologist m : mycologistPlayers) {
@@ -291,59 +320,37 @@ public class Program {
             return;
         }
 
-        if (splitInput.length == 4) {
-            Tecton baseTecton = null;
-            Tecton connectTecton = null;
+        Tecton baseTecton = null;
+        Tecton connectTecton = null;
 
-            for (Tecton t : gameLogic.map.getAllTectons()) {
-                if (t.getId().equals(splitInput[2])) {
-                    baseTecton = t;
-                }
-                if (t.getId().equals(splitInput[3])) {
-                    connectTecton = t;
-                }
+        for (Tecton t : gameLogic.map.getAllTectons()) {
+            if (t.getId().equals(splitInput[3])) {
+                baseTecton = t;
             }
-
-            if (baseTecton == null || connectTecton == null) {
-                System.out.println("Nincs ilyen Tekton!");
-                return;
+            if (t.getId().equals(splitInput[4])) {
+                connectTecton = t;
             }
-
-            baseTecton.connectTecton(connectTecton, player);
         }
-        else if (splitInput.length == 5) {
-            Tecton baseTecton = null;
-            Tecton connectTecton = null;
 
-            for (Tecton t : gameLogic.map.getAllTectons()) {
-                if (t.getId().equals(splitInput[3])) {
-                    baseTecton = t;
-                }
-                if (t.getId().equals(splitInput[4])) {
-                    connectTecton = t;
-                }
-            }
-
-            if (baseTecton == null || connectTecton == null) {
-                System.out.println("Nincs ilyen Tekton!");
-                return;
-            }
-
-            FungalBody fungalBody = null;
-
-            for (FungalBody fb : player.getControlledFunguses()) {
-                if (fb.getId().equals(splitInput[2])) {
-                    fungalBody = fb;
-                }
-            }
-    
-            if (fungalBody == null) {
-                System.out.println("Nincs ilyen gombatest!");
-                return;
-            }
-            
-            fungalBody.growHyphal(connectTecton);
+        if (baseTecton == null || connectTecton == null) {
+            System.out.println("Nincs ilyen Tekton!");
+            return;
         }
+
+        FungalBody fungalBody = null;
+
+        for (FungalBody fb : player.getControlledFunguses()) {
+            if (fb.getId().equals(splitInput[2])) {
+                fungalBody = fb;
+            }
+        }
+
+        if (fungalBody == null) {
+            System.out.println("Nincs ilyen gombatest!");
+            return;
+        }
+        
+        fungalBody.growHyphal(connectTecton);
 
         if (splitInput.length < 11) return;
 
@@ -579,7 +586,6 @@ public class Program {
     // ● [string]: a gombatest id-je
     // ● [string]: az egyik tekton id-je
     // ● [string]: a másik tekton id-je
-    // ● (opcionális, csak a dupe jó) [string]: type
     private static void shootSpore(String[] splitInput) {
         if (splitInput.length < 5) {
             System.out.println("Tul keves parameter!");
@@ -617,7 +623,7 @@ public class Program {
             if (t.getId().equals(splitInput[3])) {
                 tecton1 = t;
             }
-            if (t.getId().equals(splitInput[4])) {
+            else if (t.getId().equals(splitInput[4])) {
                 tecton2 = t;
             }
         }
@@ -636,38 +642,6 @@ public class Program {
         player.SelectAction(7, params);
     }
 
-    // /addSporeToFB M-01 FB-01 dupe
-    private static void addSporeToFungalBody(String[] splitInput) {
-        if (splitInput.length < 4) return;
-
-        Mycologist player = null;
-
-        for (Mycologist m : mycologistPlayers) {
-            if (m.getPlayerID().equals(splitInput[1]))
-                player = m;
-        }
-
-        if (player == null) {
-            System.out.println("Nincs ilyen jatekos!");
-            return;
-        }
-
-        FungalBody fungalBody = null;
-
-        for (FungalBody fb : player.getControlledFunguses()) {
-            if (fb.getId().equals(splitInput[2])) {
-                fungalBody = fb;
-            }
-        }
-
-        if (fungalBody == null) {
-            System.out.println("Nincs ilyen gombaetest!");
-            return;
-        }
-
-        fungalBody.AddSpore(splitInput[3]);
-    }
-
     // ● [string]: a játékos id-je
     // ● [string]: a fonál id-je
     // Grow fungalBody
@@ -684,18 +658,8 @@ public class Program {
             return;
         }
 
-        Hyphal hyphal = null;
-        for (Hyphal h : player.getHyphalList()) {
-            if (h.getId().equals(splitInput[2]))
-                hyphal = h;
-        }
+        // TODO
 
-        if (hyphal == null) {
-            System.out.println("Nincs ilyen fonal!");
-            return;
-        }
-
-        params.selectedTecton = hyphal.getConnectedTecton();
         player.SelectAction(3, params);
     }
 
@@ -843,14 +807,14 @@ public class Program {
             return;
         }
 
-        player.selectInsect(insect);
-        params.selectedTecton = targetTecton;           
+        insect.move(targetTecton);                 
         player.SelectAction(2, params);
     }
 
     
     // ● [string]: a játékos id-je
     // ● [string]: a rovar id-je
+    // ● [string]: a spóra id-je
     private static void eatSp(String[] splitInput) {
         Entomologist player = null;
 
@@ -876,7 +840,17 @@ public class Program {
             return;
         }
 
-        player.selectInsect(eaterInsect);
+        SporeInterface spore;
+
+        if(splitInput[3].equals(eaterInsect.getBase().getNextSporeToEat())){
+            spore = eaterInsect.getBase().getNextSporeToEat();
+        } else {
+             System.out.println("Nincs ilyen rovar!");
+            return;
+            }
+        
+        //eaterInsect.eatSpore();
+
         player.SelectAction(3, params);
 
     }
@@ -890,10 +864,10 @@ public class Program {
             return;
         }
 
-        Mycologist player = null;
+        Entomologist player = null;
     
         // Find the Mycologist player by ID
-        for (Mycologist m : mycologistPlayers) {
+        for (Entomologist m : entomologistPlayers) {
             if (m.getPlayerID().equals(splitInput[1])) {
                 player = m;
             }
@@ -906,11 +880,9 @@ public class Program {
         Insect insect = null;
     
         // Find the Insect by ID
-        for (Entomologist e : entomologistPlayers) {
-            for (Insect i : e.getControlledInsects()) {
-                if (i.getId().equals(splitInput[3])) {
-                    insect = i;
-                }
+        for (Insect i : player.getControlledInsects()) {
+            if (i instanceof Insect && i.getId().equals(splitInput[3])) {
+                insect = (Insect) i;
             }
         }
     
@@ -920,9 +892,13 @@ public class Program {
         }
     
         Hyphal hyphal = null;
-        for (Hyphal h : player.getHyphalList()) {
-            if (h.getId().equals(splitInput[2])) {
-                hyphal = h;
+
+        // Find the Hyphal by ID
+        for (int i=0; i< gameLogic.map.getAllTectons().size(); i++){
+            for (Hyphal h : gameLogic.map.getAllTectons().get(i).getConnectedNeighbors().get(insect.getBase())) {
+                if (h.getId().equals(splitInput[2])) {
+                    hyphal = h;
+                }
             }
         }
     
@@ -931,17 +907,17 @@ public class Program {
             return;
         }
 
-        // // Perform the "eat" action
-        // if (hyphal.getBase().equals(insect.getBase())) {
-        //     hyphal.eatInsect(insect);
-        //     System.out.println("A fonal megette a rovart!");
-        // } else {
-        //     System.out.println("A fonal es a rovar nem ugyanazon a Tektonon vannak!");
-        // }
-        
-        player.selectHyphal(hyphal);
-        params.selectedInsect = insect;
+        // Perform the "eat" action
+        if (hyphal.getBase().equals(insect.getBase())) {
+            hyphal.eatInsect(insect);
+            System.out.println("A fonal megette a rovart!");
+        } else {
+            System.out.println("A fonal es a rovar nem ugyanazon a Tektonon vannak!");
+        }
+
         player.SelectAction(10, params);
+
+
     }
 
     // ● [string]: a játékos id-je
@@ -980,13 +956,11 @@ public class Program {
         }
 
         Hyphal hyphal = null;
-        for (Tecton t : gameLogic.map.getAllTectons()) {
-            ArrayList<Hyphal> hyphals = t.getConnectedNeighbors().get(insect.getBase());
-            if (hyphals != null) {
-                for (Hyphal h : hyphals) {
-                    if (h.getId().equals(splitInput[2])) {
-                        hyphal = h;
-                    }
+
+       for (int i=0; i< gameLogic.map.getAllTectons().size(); i++){
+            for (Hyphal h : gameLogic.map.getAllTectons().get(i).getConnectedNeighbors().get(insect.getBase())) {
+                if (h.getId().equals(splitInput[2])) {
+                    hyphal = h;
                 }
             }
         }
@@ -1041,9 +1015,9 @@ public class Program {
     // ● -sl [szám]: a Rovar telítettségének maximális értéke
     // ● -ccd [szám]: a fonalvágás cooldown-ja
 
-    // /addInsect E-01 T-01 -mcd 0
+    // /addInsect E-01 T-01
     private static void addInsect(String[] splitInput) {
-        if (splitInput.length < 3) return;
+        if (splitInput.length < 4) return;
 
         Entomologist player = null;
         for (Entomologist e : entomologistPlayers) {
@@ -1067,16 +1041,8 @@ public class Program {
             System.out.println("Nincs ilyen Tekton!");
             return;
         }
-        
-        Insect insect = null;
 
-        if (splitInput.length == 5 && splitInput[3].equals("-mcd")) {
-            insect = new Insect(1, Integer.parseInt(splitInput[4]), 100, 1, 1, baseLocation, player);
-        }
-        else {
-            insect = new Insect(1, 0, 100, 1, 1, baseLocation, player);
-        }
-
+        Insect insect = new Insect(1, 1, 1, 1, 1, baseLocation, player);
         insect.createInsect();
 
     }
@@ -1094,6 +1060,8 @@ public class Program {
             System.out.println("Túl kevés paraméter!");
             return;
         }
+
+        
     }
 
     // --------------TECTON----------------
@@ -1113,7 +1081,7 @@ public class Program {
         }
 
         double sc = 0;
-        double hdt = 2;
+        double hdt = 6;
 
         if (splitInput.length > 3) {
             sc = Integer.parseInt(splitInput[3]);
@@ -1123,27 +1091,22 @@ public class Program {
             case "normal":
                 Tecton nTecton = new Tecton(sc, false, false);
                 gameLogic.map.addTecton(nTecton);
-                gameLogic.addListener(nTecton);
                 break;
             case "toxic":
                 ToxicTecton tTecton = new ToxicTecton(hdt, sc, false, false);
                 gameLogic.map.addTecton(tTecton);
-                gameLogic.addListener(tTecton);
                 break;
             case "weak":
                 WeakTecton wTecton = new WeakTecton(false, sc, false, false);
                 gameLogic.map.addTecton(wTecton);
-                gameLogic.addListener(wTecton);
                 break;
             case "nofungus":
                 NoFungusTecton nfTecton = new NoFungusTecton(sc, false, false);
                 gameLogic.map.addTecton(nfTecton);
-                gameLogic.addListener(nfTecton);
                 break;
             case "hyphalpres":
                 HyphalPreserverTecton hpTecton = new HyphalPreserverTecton(sc, false, false);
                 gameLogic.map.addTecton(hpTecton);
-                gameLogic.addListener(hpTecton);
                 break;
         }
     }
@@ -1213,8 +1176,7 @@ public class Program {
         String[] commands = {
         "/addMycologist",
         "/addEntomologist",
-        "/addFungalBody",
-        "/addHyphal",
+        "/addfungus",
         "/addinsect",
         "/addspore",
         "/addTecton",
@@ -1354,7 +1316,6 @@ public class Program {
                     t.setOccupiedByFungus(Boolean.parseBoolean(parts[4]));
                     t.getFlag().fungalApproved = Boolean.parseBoolean(parts[5]);
                     t.getFlag().hyphalApproved = Boolean.parseBoolean(parts[6]);
-                    t.getFlag().oneHyphalApproved = Boolean.parseBoolean(parts[7]);
                     tectonMap.put(parts[1], t);
                     if (gameLogic != null && gameLogic.map != null) {
                         gameLogic.map.addTecton(t);
@@ -1395,25 +1356,25 @@ public class Program {
         SporeInterface spore;
         switch (type) {
             case "SlowSpore":
-                spore = new SlowSpore(baseLocation);
+                spore = new SlowSpore(id, baseLocation);
                 break;
             case "NormalSpore":
-                spore = new NormalSpore(baseLocation);
+                spore = new NormalSpore(id, baseLocation);
                 break;
             case "DuplicateSpore":
-                spore = new DuplicateSpore(baseLocation);
+                spore = new DuplicateSpore(id, baseLocation);
                 break;
             case "HungerSpore":
-                spore = new HungerSpore(baseLocation);
+                spore = new HungerSpore(id, baseLocation);
                 break;
             case "SpeedSpore":
-                spore = new SpeedSpore(baseLocation);
+                spore = new SpeedSpore(id, baseLocation);
                 break;
             case "StunSpore":
-                spore = new StunSpore(baseLocation);
+                spore = new StunSpore(id, baseLocation);
                 break;
             default:
-                spore = new NormalSpore(baseLocation); // Alapértelmezett típus
+                spore = new NormalSpore(id, baseLocation); // Alapértelmezett típus
                 break;
         }
         return spore;
@@ -1493,8 +1454,7 @@ public class Program {
                 for (Tecton t : gameLogic.map.getAllTectons()) {
                     writer.println("Tecton:" + t.getId() + ":" + t.getSplitChance() + ":" +
                             t.isOccupiedByInsect() + ":" + t.isOccupiedByFungus() + ":" +
-                            t.getFlag().fungalApproved + ":" + t.getFlag().hyphalApproved + ":" +
-                            t.getFlag().oneHyphalApproved);
+                            t.getFlag().fungalApproved + ":" + t.getFlag().hyphalApproved);
                 }
             }
 
@@ -1593,10 +1553,10 @@ public class Program {
                                 System.out.println("BaseLocation: " + fb.getBase().getId());
                                 System.out.println("CurrentLevel: " + fb.getCurrLvl());
                                 System.out.println("ShotSporesNum: " + fb.getShotSporesNum());
-                                System.out.println("ShootingRange: " + fb.getCharacteristics().getShootingRange());
-                                System.out.println("SporeCapacity: " + fb.getCharacteristics().getSporeCapacity());
-                                System.out.println("SporeProductionIntensity: " + fb.getCharacteristics().getSporeProductionIntensity());
-                                System.out.println("StartingHyphalNum: " + fb.getCharacteristics().getStartingHyphalNum());
+                                System.out.println("ShootingRange: " + fb.getCharacteristics().shootingRange);
+                                System.out.println("SporeCapacity: " + fb.getCharacteristics().sporeCapacity);
+                                System.out.println("SporeProductionIntensity: " + fb.getCharacteristics().sporeProductionIntensity);
+                                System.out.println("StartingHyphalNum: " + fb.getCharacteristics().startingHyphalNum);
                             }
                         }
                         break;
