@@ -807,6 +807,8 @@ public class GameView extends AbstractGameView implements Listener {
             }
         }
 
+        
+
         @Override
         protected void paintComponent(Graphics g) {
             super.paintComponent(g);
@@ -842,43 +844,45 @@ public class GameView extends AbstractGameView implements Listener {
                 tectonCenters.put(tectons.get(i), new int[]{centerX, centerY});
             }
 
-           Map<String, Color> typeColorMap = new HashMap<>();
-            typeColorMap.put("ms1", new Color(255, 0, 0, 255)); // Piros, teljesen átlátszatlan
+            Map<String, Color> typeColorMap = new HashMap<>();
+            typeColorMap.put("ms1", new Color(255, 0, 0, 255)); // Piros
             typeColorMap.put("ms2", new Color(0, 0, 255, 255)); // Kék
             typeColorMap.put("ms3", new Color(0, 255, 0, 255)); // Zöld
-            Color defaultColor = new Color(128, 128, 128, 255); // Szürke ismeretlen típusokhoz
-        
+            Color defaultColor = new Color(128, 128, 128, 255); // Szürke
+
             // Halvány színek nem fejlett vonalakhoz
             Map<String, Color> fadedColorMap = new HashMap<>();
-            fadedColorMap.put("ms1", new Color(255, 0, 0, 100)); // Halvány piros
-            fadedColorMap.put("ms2", new Color(0, 0, 255, 100)); // Halvány kék
-            fadedColorMap.put("ms3", new Color(0, 255, 0, 100)); // Halvány zöld
-            Color defaultFadedColor = new Color(128, 128, 128, 100); // Halvány szürke
-        
+            fadedColorMap.put("ms1", new Color(255, 0, 0, 80)); // Nagyon halvány piros
+            fadedColorMap.put("ms2", new Color(0, 0, 255, 80)); // Nagyon halvány kék
+            fadedColorMap.put("ms3", new Color(0, 255, 0, 80)); // Nagyon halvány zöld
+            Color defaultFadedColor = new Color(128, 128, 128, 80); // Halvány szürke
+
             // Vonalstílusok
             BasicStroke solidStroke = new BasicStroke(5f); // Fejlett: 5px vastag
             BasicStroke thinStroke = new BasicStroke(3f); // Nem fejlett: 3px vékony
-        
+
             // Először nem fejlett vonalak rajzolása
-            for (Mycologist mycologist : controller.getGameLogic().getMycologists()) {
+            for (int i = 0; i < controller.getGameLogic().getMycologists().size(); i++) {
+                Mycologist mycologist = controller.getGameLogic().getMycologists().get(i);
                 String type = mycologist.getType();
+                System.err.println("Mycologist type: " + type);
                 Color fadedColor = fadedColorMap.getOrDefault(type, defaultFadedColor);
-                int typeIndex = new ArrayList<>(typeColorMap.keySet()).indexOf(type);
-                if (typeIndex == -1) typeIndex = typeColorMap.size();
-        
+
+                // Offset a játékos indexe alapján (3 játékos: -10, 0, +10)
+                double offset = (i == 0) ? -10.0 : (i == 1) ? 0.0 : 10.0;
+                System.err.println("Offset: " + offset);
+
                 for (Hyphal hyphal : mycologist.getHyphalList()) {
                     if (!hyphal.getDeveloped()) { // Nem fejlett vonalak
                         g2d.setColor(fadedColor);
                         g2d.setStroke(thinStroke);
-        
+
                         Tecton base = hyphal.getBase();
                         Tecton connected = hyphal.getConnectedTecton();
                         if (base != null && connected != null) {
                             int[] baseCenter = tectonCenters.get(base);
                             int[] connectedCenter = tectonCenters.get(connected);
                             if (baseCenter != null && connectedCenter != null) {
-                                // Offset: 3 játékoshoz igazítva (-6, 0, +6 pixel)
-                                double offset = (typeIndex == 0) ? -6.0 : (typeIndex == 1) ? 0.0 : 6.0;
                                 double dx = connectedCenter[0] - baseCenter[0];
                                 double dy = connectedCenter[1] - baseCenter[1];
                                 double length = Math.sqrt(dx * dx + dy * dy);
@@ -895,27 +899,27 @@ public class GameView extends AbstractGameView implements Listener {
                     }
                 }
             }
-        
+
             // Másodszor fejlett vonalak rajzolása
-            for (Mycologist mycologist : controller.getGameLogic().getMycologists()) {
+            for (int i = 0; i < controller.getGameLogic().getMycologists().size(); i++) {
+                Mycologist mycologist = controller.getGameLogic().getMycologists().get(i);
                 String type = mycologist.getType();
                 Color baseColor = typeColorMap.getOrDefault(type, defaultColor);
-                int typeIndex = new ArrayList<>(typeColorMap.keySet()).indexOf(type);
-                if (typeIndex == -1) typeIndex = typeColorMap.size();
-        
+
+                // Offset a játékos indexe alapján (3 játékos: -10, 0, +10)
+                double offset = (i == 0) ? -10.0 : (i == 1) ? 0.0 : 10.0;
+
                 for (Hyphal hyphal : mycologist.getHyphalList()) {
                     if (hyphal.getDeveloped()) { // Fejlett vonalak
                         g2d.setColor(baseColor);
                         g2d.setStroke(solidStroke);
-        
+
                         Tecton base = hyphal.getBase();
                         Tecton connected = hyphal.getConnectedTecton();
                         if (base != null && connected != null) {
                             int[] baseCenter = tectonCenters.get(base);
                             int[] connectedCenter = tectonCenters.get(connected);
                             if (baseCenter != null && connectedCenter != null) {
-                                // Offset: 3 játékoshoz igazítva (-6, 0, +6 pixel)
-                                double offset = (typeIndex == 0) ? -6.0 : (typeIndex == 1) ? 0.0 : 6.0;
                                 double dx = connectedCenter[0] - baseCenter[0];
                                 double dy = connectedCenter[1] - baseCenter[1];
                                 double length = Math.sqrt(dx * dx + dy * dy);
