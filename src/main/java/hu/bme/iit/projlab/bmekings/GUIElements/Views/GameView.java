@@ -828,6 +828,8 @@ public class GameView extends AbstractGameView implements Listener {
             }
         }
 
+        
+
         @Override
         protected void paintComponent(Graphics g) {
             super.paintComponent(g);
@@ -863,28 +865,134 @@ public class GameView extends AbstractGameView implements Listener {
                 tectonCenters.put(tectons.get(i), new int[]{centerX, centerY});
             }
 
-            // Draw Hyphal connections
-            ArrayList<Mycologist> mycologists = controller.getGameLogic().getMycologists();
-            for (Mycologist mycologist : mycologists) {
+            // Draw Hyphals
+            // Színleképezés a típusokhoz (3 játékos: ms1, ms2, ms3)
+            Map<String, Color> typeColorMap = new HashMap<>();
+            typeColorMap.put("ms1", new Color(255, 0, 0, 255)); // Piros
+            typeColorMap.put("ms2", new Color(0, 0, 255, 255)); // Kék
+            typeColorMap.put("ms3", new Color(0, 255, 0, 255)); // Zöld
+            Color defaultColor = new Color(128, 128, 128, 255); // Szürke
+
+            // Halvány színek nem fejlett vonalakhoz
+            Map<String, Color> fadedColorMap = new HashMap<>();
+            fadedColorMap.put("ms1", new Color(255, 0, 0, 80)); // Nagyon halvány piros
+            fadedColorMap.put("ms2", new Color(0, 0, 255, 80)); // Nagyon halvány kék
+            fadedColorMap.put("ms3", new Color(0, 255, 0, 80)); // Nagyon halvány zöld
+            Color defaultFadedColor = new Color(128, 128, 128, 80); // Halvány szürke
+
+            // Vonalstílusok
+            BasicStroke solidStroke = new BasicStroke(5f); // Fejlett: 5px vastag
+            BasicStroke thinStroke = new BasicStroke(5f); // Fejlett: 5px vastag
+
+            // Először nem fejlett vonalak rajzolása
+            for (int i = 0; i < controller.getGameLogic().getMycologists().size(); i++) {
+                Mycologist mycologist = controller.getGameLogic().getMycologists().get(i);
+                String type = mycologist.getType();
+                System.err.println("Mycologist type: " + type);
+                Color fadedColor = fadedColorMap.getOrDefault(type, defaultFadedColor);
+
+                // Offset a játékos indexe alapján (3 játékos)
+                double offsetX, offsetY;
+                if (i == 0) {
+                    offsetX = -10.0; offsetY = -10.0; // Első játékos: balra és felfelé
+                } else if (i == 1) {
+                    offsetX = 0.0; offsetY = 0.0; // Második játékos: középen
+                } else {
+                    offsetX = 10.0; offsetY = 10.0; // Harmadik játékos: jobbra és lefelé
+                }
+                System.err.println("OffsetX: " + offsetX + ", OffsetY: " + offsetY);
+
                 for (Hyphal hyphal : mycologist.getHyphalList()) {
-                    if (hyphal.getDeveloped()) {
-                        g2d.setColor(Color.BLACK);
-                        g2d.setStroke(new BasicStroke(5));
-                    } else {
-                        g2d.setColor(Color.RED);
-                        g2d.setStroke(new BasicStroke(3));
-                    }
-                    Tecton base = hyphal.getBase();
-                    Tecton connected = hyphal.getConnectedTecton();
-                    if (base != null && connected != null) {
-                        int[] baseCenter = tectonCenters.get(base);
-                        int[] connectedCenter = tectonCenters.get(connected);
-                        if (baseCenter != null && connectedCenter != null) {
-                            g2d.drawLine(baseCenter[0], baseCenter[1], connectedCenter[0], connectedCenter[1]);
+                    if (!hyphal.getDeveloped()) { // Nem fejlett vonalak
+                        g2d.setColor(fadedColor);
+                        g2d.setStroke(thinStroke);
+
+                        Tecton base = hyphal.getBase();
+                        Tecton connected = hyphal.getConnectedTecton();
+                        if (base != null && connected != null) {
+                            int[] baseCenter = tectonCenters.get(base);
+                            int[] connectedCenter = tectonCenters.get(connected);
+                            if (baseCenter != null && connectedCenter != null) {
+                                double dx = connectedCenter[0] - baseCenter[0];
+                                double dy = connectedCenter[1] - baseCenter[1];
+                                double length = Math.sqrt(dx * dx + dy * dy);
+                                if (length > 0) {
+                                    // Vonal orientációjának ellenőrzése
+                                    double angle = Math.abs(Math.atan2(dy, dx) * 180 / Math.PI);
+                                    if (angle > 45 && angle < 135) {
+                                        // Függőleges vonal: nagyobb X offset
+                                        g2d.drawLine(
+                                            (int)(baseCenter[0] + offsetX), (int)(baseCenter[1]),
+                                            (int)(connectedCenter[0] + offsetX), (int)(connectedCenter[1])
+                                        );
+                                    } else {
+                                        // Vízszintes vonal: nagyobb Y offset
+                                        g2d.drawLine(
+                                            (int)(baseCenter[0]), (int)(baseCenter[1] + offsetY),
+                                            (int)(connectedCenter[0]), (int)(connectedCenter[1] + offsetY)
+                                        );
+                                    }
+                                }
+                            }
                         }
                     }
                 }
             }
+
+            // Másodszor fejlett vonalak rajzolása
+            for (int i = 0; i < controller.getGameLogic().getMycologists().size(); i++) {
+                Mycologist mycologist = controller.getGameLogic().getMycologists().get(i);
+                String type = mycologist.getType();
+                Color baseColor = typeColorMap.getOrDefault(type, defaultColor);
+
+                // Offset a játékos indexe alapján (3 játékos)
+                double offsetX, offsetY;
+                if (i == 0) {
+                    offsetX = -10.0; offsetY = -10.0; // Első játékos: balra és felfelé
+                } else if (i == 1) {
+                    offsetX = 0.0; offsetY = 0.0; // Második játékos: középen
+                } else {
+                    offsetX = 10.0; offsetY = 10.0; // Harmadik játékos: jobbra és lefelé
+                }
+
+                for (Hyphal hyphal : mycologist.getHyphalList()) {
+                    if (hyphal.getDeveloped()) { // Fejlett vonalak
+                        g2d.setColor(baseColor);
+                        g2d.setStroke(solidStroke);
+
+                        Tecton base = hyphal.getBase();
+                        Tecton connected = hyphal.getConnectedTecton();
+                        if (base != null && connected != null) {
+                            int[] baseCenter = tectonCenters.get(base);
+                            int[] connectedCenter = tectonCenters.get(connected);
+                            if (baseCenter != null && connectedCenter != null) {
+                                double dx = connectedCenter[0] - baseCenter[0];
+                                double dy = connectedCenter[1] - baseCenter[1];
+                                double length = Math.sqrt(dx * dx + dy * dy);
+                                if (length > 0) {
+                                    // Vonal orientációjának ellenőrzése
+                                    double angle = Math.abs(Math.atan2(dy, dx) * 180 / Math.PI);
+                                    if (angle > 45 && angle < 135) {
+                                        // Függőleges vonal: nagyobb X offset
+                                        g2d.drawLine(
+                                            (int)(baseCenter[0] + offsetX), (int)(baseCenter[1]),
+                                            (int)(connectedCenter[0] + offsetX), (int)(connectedCenter[1])
+                                        );
+                                    } else {
+                                        // Vízszintes vonal: nagyobb Y offset
+                                        g2d.drawLine(
+                                            (int)(baseCenter[0]), (int)(baseCenter[1] + offsetY),
+                                            (int)(connectedCenter[0]), (int)(connectedCenter[1] + offsetY)
+                                        );
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+
+
 
             // Draw tectons, fungal bodies, insects, spores, and selection outline
             for (int i = 0; i < tectons.size(); i++) {
@@ -987,11 +1095,6 @@ public class GameView extends AbstractGameView implements Listener {
                 }
                 tectonPolygons.add(polygon);
             }
-        }
-
-        @Override
-        public Dimension getPreferredSize() {
-            return new Dimension(0, 400);
         }
     }
 }

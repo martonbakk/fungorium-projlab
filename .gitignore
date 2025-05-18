@@ -7,6 +7,8 @@ target/
 dependency-reduced-pom.xml
 method_calls.log
 *.lck
+*.idea/
+.idea/
 
 ### IntelliJ IDEA ###
 .idea/modules.xml
