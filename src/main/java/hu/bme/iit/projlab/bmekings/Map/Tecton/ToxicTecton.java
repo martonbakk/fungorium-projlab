@@ -31,19 +31,6 @@ public class ToxicTecton extends Tecton {
 
     @Loggable
     public Flags runSpecialEffect() {
-        // Hyphal lista megszerzése
-        Set<Hyphal> hyphalList = new HashSet<>();
-        for (Map.Entry<Tecton, ArrayList<Hyphal>> entry : this.connectedNeighbours.entrySet()) {
-            hyphalList.addAll(entry.getValue());
-        }
-        
-        List<Hyphal> hyphals = new ArrayList<>(hyphalList);
-        if (!hyphals.isEmpty()) {
-            for (Hyphal hyphal : hyphals) {
-                hyphal.dying();
-                System.out.println(getId() + "\t" + hyphal.getId() + "\t" + hyphal.getLifeTime());
-            }
-        }
         return this.flags;
     }
 }

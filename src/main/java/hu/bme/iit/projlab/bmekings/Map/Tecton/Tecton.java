@@ -67,12 +67,12 @@ public class Tecton implements Listener, Serializable {
         
         public boolean fungalApproved;
         public boolean hyphalApproved;
-        public boolean oneHyphalApproved;
+        public boolean onToxicTecton;
 
         public Flags() {
             fungalApproved = true;
             hyphalApproved = true;
-            oneHyphalApproved = true;
+            onToxicTecton = true;
         }
     }
 
