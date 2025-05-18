@@ -221,7 +221,7 @@ public class FungalBody extends Entity {
         }
 
         for (Hyphal hyphal : hyphalSet) {
-            hyphal.setLifeTime(3);
+            hyphal.setLifeTime(4);
         }
     }
 
