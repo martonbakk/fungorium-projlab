@@ -108,7 +108,7 @@ public class Hyphal extends Entity {
     public void aging() {
         dying();
         developTime--;
-        if(developTime <= 0) {
+        if (developTime <= 0) {
             setDeveloped(true);
         }
     }
@@ -116,9 +116,12 @@ public class Hyphal extends Entity {
     @Loggable
     public void dying() {
         int n = lifeTime - 1;
-        // System.out.println("[" + this.getId() + "] [life] megvaltozott:");
-        // System.out.println("[" + lifeTime + "] -> [" + n + "]");
+        System.out.println("[" + this.getId() + "] [life] megvaltozott:");
+        System.out.println("[" + lifeTime + "] -> [" + n + "]");
         lifeTime--;
+        if (lifeTime <= 0) {
+            destroyHyphal();
+        }
     }
 
     @Loggable
