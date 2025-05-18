@@ -28,11 +28,11 @@ import hu.bme.iit.projlab.bmekings.Player.Mycologist.Mycologist;
  */
 
 @Loggable("Map")
-public class Map implements Serializable{
+public class Map implements Serializable {
     private static final long serialVersionUID = 1L;
     
     private ArrayList<Tecton> tectons = new ArrayList<>();
-    private boolean generatedMap=false;
+    private boolean generatedMap = false;
     
 
     public Map(){
@@ -108,6 +108,7 @@ public class Map implements Serializable{
         }
 
 
+        // Add FungalBodies
         for (Mycologist mycologist : mycologists) {
             for (int j = 0; j < 2; j++) {
                 boolean success = false;

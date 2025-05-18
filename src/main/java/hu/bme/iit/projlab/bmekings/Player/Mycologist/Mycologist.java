@@ -114,18 +114,13 @@ public class Mycologist extends Player {
 
     @Override
     public List<String> getAvailableActions() {
-        return Arrays.asList("Grow Fungal Body", "Speed Up Development", 
-            "Shoot Spore", "Eat Insect", "Grow Hyphal", "Grow Hyphal From Hyphal" , "Level Up");
+        return Arrays.asList("Grow Fungal Body", "Shoot Spore", "Grow Hyphal", "Grow Hyphal From Hyphal", "Eat Insect", "Speed Up Development", "Level Up", "Skip");
     }
 
     @Loggable
     private void levelUpFungalBody(FungalBody selectedFungus) {
         if (checkControlledFungus()) {
             return;
-        }
-
-        if(selectedFungus==null){
-            throw new RuntimeException("selectedfungus null");
         }
         selectedFungus.levelUp();
         selectedFungus = null;
@@ -160,8 +155,8 @@ public class Mycologist extends Player {
     }
 
     @Loggable
-    private boolean checkSelectedHyhpal(){
-        boolean checkControlledFungus= this.selectedHyphal == null;
+    private boolean checkSelectedHyhpal() {
+        boolean checkControlledFungus = this.selectedHyphal == null;
         if (checkControlledFungus) {
            throw new RuntimeException("Nem választottál ki fonalat...");
         }
@@ -173,8 +168,13 @@ public class Mycologist extends Player {
         if (checkSelectedHyhpal()){
             return;
         }
-        this.selectedHyphal.speedUpDevelopment();
-        this.selectedHyphal=null;
+        if (!selectedHyphal.getDeveloped()) {
+            this.selectedHyphal.speedUpDevelopment();
+            this.selectedHyphal = null;
+        } else {
+           throw new RuntimeException("Ez a fonál már ki van fejlődve!");
+        }
+        
     }
 
     @Loggable
@@ -195,21 +195,24 @@ public class Mycologist extends Player {
         }
         if (tecton.getFlag().fungalApproved) {
             tecton.createFungalBody(this);
-        }
-        else {
-            throw new RuntimeException("Erre a tektonra nem lehet gombatestet noveszteni!");
+        } else {
+            throw new RuntimeException("Erre a tektonra nem lehet gombatestet növeszteni!");
         }
     }
 
     @Loggable
     public void growFungalBodyFromSpore(Tecton tecton){
-        if (checkControlledFungus()){
+        if (checkControlledFungus()) {
             return;
         }
         if (!tecton.getConnectedNeighbors().containsKey(this.selectedFungus.getBase())){
-            throw new RuntimeException("Erre a tektonra nem lehet gombatestet noveszteni, még nincs összekötve!");
+            throw new RuntimeException("Erre a tektonra nem lehet gombatestet növeszteni, még nincs összekötve!");
         }
-        tecton.createFungalBodyFromSpore(this);
+        if (tecton.getFlag().fungalApproved) {
+            tecton.createFungalBodyFromSpore(this);
+        } else {
+            throw new RuntimeException("Erre a tektonra nem lehet gombatestet növeszteni!");
+        }
     }
 
     @Loggable
@@ -237,12 +240,17 @@ public class Mycologist extends Player {
     }
 
     @Loggable
-    public void growHyphalAction(Tecton tecton){
+    public void growHyphalAction(Tecton tecton) {
         if (checkControlledFungus()){
             return;
         }
-        this.selectedFungus.growHyphal(tecton);
-        this.selectedFungus=null;
+        if (tecton.getFlag().hyphalApproved) {
+            this.selectedFungus.growHyphal(tecton);
+            this.selectedFungus=null;
+        } else {
+            throw new RuntimeException("Erre a tektonra nem lehet fonalat növeszteni!");
+        }
+        
     }
 
     @Loggable
@@ -277,12 +285,18 @@ public class Mycologist extends Player {
         if (checkControlledFungus()){
             return;
         }
-        System.out.println("Megvan");
-        //if(targetTecton.getFlag().hyphalApproved || (targetTecton.getFlag().oneHyphalApproved&&targetTecton.getConnectedNeighbors().size()==0)){
-            selectedHyphal.growHyphalFromHyphal(targetTecton);
-            selectedHyphal = null;
-            this.selectedFungus = null;
-        //}
+        if (targetTecton.getFlag().hyphalApproved) {
+            if (selectedHyphal.getDeveloped()) {
+                selectedHyphal.growHyphalFromHyphal(targetTecton);
+                selectedHyphal = null;
+                this.selectedFungus = null;
+            } else {
+                throw new RuntimeException("Erről a fonálról még nem tudsz növeszteni új fonalat, mivel még nem fejlődött ki!");
+            }
+            
+        } else {
+            throw new RuntimeException("Erre a tektonra nem lehet fonalat növeszteni! (Weak Tecton)");
+        }
     }
 
     public void hyphalEatInsect(Insect targetInsect){

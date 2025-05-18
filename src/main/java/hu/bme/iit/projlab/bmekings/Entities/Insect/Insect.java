@@ -2,6 +2,8 @@ package hu.bme.iit.projlab.bmekings.Entities.Insect;
 
 import java.util.HashMap;
 
+import javax.management.RuntimeErrorException;
+
 import hu.bme.iit.projlab.bmekings.Effects.Effect.Effect;
 import hu.bme.iit.projlab.bmekings.Entities.Entity;
 import hu.bme.iit.projlab.bmekings.Entities.Fungal.Hyphal;
@@ -131,21 +133,30 @@ public class Insect extends Entity{
 
     @Loggable
     public void move(Tecton targetTecton) {
-        
-        /// moving speed/tick/trun based?
+        if (baseLocation.getConnectedNeighbors().containsKey(targetTecton)) {
+            for (Hyphal h : baseLocation.getConnectedNeighbors().get(targetTecton)) {
+                if (h.getDeveloped()) {
+                    if (movingCD == 0) {
+                        System.out.println("[" + this.getId() + "] [baseLocation] megváltozott:");
+                        System.out.println("[" + baseLocation.getId() + "] -> [" + targetTecton.getId() + "]");
+                        this.baseLocation.setOccupiedByInsect(false);
+                        this.baseLocation.getInsects().remove(this);
+                        this.baseLocation=targetTecton;
+                        this.baseLocation.addInsect(this);
+                        this.baseLocation.setOccupiedByInsect(true);
 
-        if(baseLocation.getConnectedNeighbors().containsKey(targetTecton)){
-            if(movingCD == 0){
-                System.out.println("[" + this.getId() + "] [baseLocation] megvaltozott:");
-                System.out.println("[" + baseLocation.getId() + "] -> [" + targetTecton.getId() + "]");
-                this.baseLocation.setOccupiedByInsect(false);
-                this.baseLocation.getInsects().remove(this);
-                this.baseLocation=targetTecton;
-                this.baseLocation.addInsect(this);
-                this.baseLocation.setOccupiedByInsect(true);
-
-            } else System.out.println("A mozgás cooldown-on van.");
-        } else System.out.println("A tektonok nincsenek fonallal osszekotve.");
+                        // TODO mennyi legyen?
+                        movingCD = 2;
+                        return;
+                    } else {
+                        throw new RuntimeException("A mozgás cooldown-on van!");
+                    }
+                }
+            }
+            throw new RuntimeException("A két Tekton közötti fonál még nincs kifejlődve!");
+        } else {
+            throw new RuntimeException("A Tektonok nincsenek fonallal összekötve!");
+        }
     }
 
     @Loggable
@@ -174,21 +185,27 @@ public class Insect extends Entity{
     @Loggable
     @Override
     public void update() {
-        if(movingCD>0)
+        if(movingCD > 0)
             movingCD--;
-        if(stunTime>0)
+        if(stunTime > 0)
             stunTime--;
-        if (cutCooldown>0)     // 0 alá ne menjen
-            cutCooldown--;  // 0 alá ne menjen
+        if (cutCooldown > 0)
+            cutCooldown--;
         
+        // 0 alá ne menjen
+        if (cutCooldown < 0)
+            cutCooldown = 0;
+        else if (stunTime < 0)
+            stunTime = 0;
+
         if (currStomachFullness > 0) {
-            currStomachFullness-=5;
+            currStomachFullness -= 5;
             if(currStomachFullness < 0)
                 currStomachFullness=0;
         }
         
         // Kiszedes egy ido utan meg kell hogy valosuljon
-        for(Effect item: activeEffects.keySet()){
+        for (Effect item: activeEffects.keySet()){
             item.apply(this);
             if(activeEffects.get(item) <= 0){
                 activeEffects.remove(item);
@@ -212,14 +229,14 @@ public class Insect extends Entity{
 
     @Loggable
     public void HyhalEffectActivate(int coolDown){
-        this.cutCooldown=coolDown;
+        this.cutCooldown = coolDown;
     }
 
     @Loggable
     public void SpeedEffectActivate(int speed, boolean stunned){
-        if(stunned){
-            this.movingCD=10;
-        }else{
+        if (stunned) {
+            this.movingCD = 10;
+        } else {
             // feltetel, hogy ne legyen minusz a sebesseg
             this.movingSpeed=speed;
         }

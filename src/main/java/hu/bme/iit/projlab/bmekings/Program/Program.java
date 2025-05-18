@@ -1555,10 +1555,10 @@ public class Program {
                                 System.out.println("BaseLocation: " + fb.getBase().getId());
                                 System.out.println("CurrentLevel: " + fb.getCurrLvl());
                                 System.out.println("ShotSporesNum: " + fb.getShotSporesNum());
-                                System.out.println("ShootingRange: " + fb.getCharacteristics().getShootingRange());
-                                System.out.println("SporeCapacity: " + fb.getCharacteristics().getSporeCapacity());
-                                System.out.println("SporeProductionIntensity: " + fb.getCharacteristics().getSporeProductionIntensity());
-                                System.out.println("StartingHyphalNum: " + fb.getCharacteristics().getStartingHyphalNum());
+                                System.out.println("ShootingRange: " + fb.getCharacteristics().shootingRange);
+                                System.out.println("SporeCapacity: " + fb.getCharacteristics().sporeCapacity);
+                                System.out.println("SporeProductionIntensity: " + fb.getCharacteristics().sporeProductionIntensity);
+                                System.out.println("StartingHyphalNum: " + fb.getCharacteristics().startingHyphalNum);
                             }
                         }
                         break;

@@ -1,6 +1,10 @@
 package hu.bme.iit.projlab.bmekings.Map.Tecton;
 
 import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 import hu.bme.iit.projlab.bmekings.Entities.Fungal.Hyphal;
 import hu.bme.iit.projlab.bmekings.Logger.Loggable;
@@ -27,10 +31,17 @@ public class ToxicTecton extends Tecton {
 
     @Loggable
     public Flags runSpecialEffect() {
-        ArrayList<Hyphal> hyphals = connectedNeighbours.get(this);
-            if (hyphals != null) {
-                for (Hyphal hyphal : hyphals) {
-                    hyphal.dying();
+        // Hyphal lista megszerzése
+        Set<Hyphal> hyphalList = new HashSet<>();
+        for (Map.Entry<Tecton, ArrayList<Hyphal>> entry : this.connectedNeighbours.entrySet()) {
+            hyphalList.addAll(entry.getValue());
+        }
+        
+        List<Hyphal> hyphals = new ArrayList<>(hyphalList);
+        if (!hyphals.isEmpty()) {
+            for (Hyphal hyphal : hyphals) {
+                hyphal.dying();
+                System.out.println(getId() + "\t" + hyphal.getId() + "\t" + hyphal.getLifeTime());
             }
         }
         return this.flags;

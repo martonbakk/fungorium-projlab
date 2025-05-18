@@ -17,18 +17,9 @@ public class Entomologist extends Player{
     private ArrayList<Insect> controlledInsects = new ArrayList<>();
     private Insect selectedInsect = null;
 
-    //public Entomologist(String id) {
-    //    super(id);
-    //    System.out.println("Uj objektum [" + getPlayerID() + "] hozzaadva!");
-    //}
     public Entomologist() {
         super("E");
         System.out.println("Uj objektum [" + getPlayerID() + "] hozzaadva!");
-    }
-
-    @Override
-    public List<String> getAvailableActions() {
-        return Arrays.asList("Eat Spore", "Move", "Cut Hyphal"); // Teszt adatok
     }
 
     public Entomologist(String userName, String type) {
@@ -44,6 +35,10 @@ public class Entomologist extends Player{
         this.type = null;
         System.out.println("Uj objektum [" + getPlayerID() + "] hozzaadva!");
     }
+
+    @Override
+    public List<String> getAvailableActions() { return Arrays.asList("Eat Spore", "Move", "Cut Hyphal", "Skip"); }
+
     public List<Insect> getControlledInsects() { return controlledInsects; }
 
     public Insect getSelectedInsect() { return selectedInsect; }
@@ -56,15 +51,12 @@ public class Entomologist extends Player{
                 selectInsect(param.selectedInsect);
                 break;
             case 2:
-                // selectTecton
-                break;
-            case 3:
                 MoveInsect(param.selectedTecton);
                 break;
-            case 4:
+            case 3:
                 EatSpore();
                 break;
-            case 5:
+            case 4:
                 CutHyphalInsect(param.selectedHyphal);
                 break;
             default:

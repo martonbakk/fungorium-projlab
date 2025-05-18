@@ -19,6 +19,7 @@ import hu.bme.iit.projlab.bmekings.GUIElements.Views.GameView;
 import hu.bme.iit.projlab.bmekings.Interface.Listener.Listener;
 import hu.bme.iit.projlab.bmekings.Logic.Ticker.Ticker;
 import hu.bme.iit.projlab.bmekings.Map.Map;
+import hu.bme.iit.projlab.bmekings.Map.Tecton.Tecton;
 import hu.bme.iit.projlab.bmekings.Player.Entomologist.Entomologist;
 import hu.bme.iit.projlab.bmekings.Player.Mycologist.Mycologist;
 import hu.bme.iit.projlab.bmekings.Program.Params;
@@ -166,6 +167,11 @@ public class GameLogic implements Serializable{
     }
 
     public void tick() {
+        System.out.println("asd");
+        for (Tecton t : map.getAllTectons()) {
+            t.update();
+        }
+
         for (Entity e : entityList) {
             e.update();
         }

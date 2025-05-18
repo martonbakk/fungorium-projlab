@@ -44,8 +44,6 @@ public class Hyphal extends Entity {
         this.owner=owner;
     }
 
-    
-
     @Loggable
     public Tecton getConnectedTecton() { return connectedTecton; }
 
@@ -63,8 +61,8 @@ public class Hyphal extends Entity {
 
     @Loggable
     public void setDeveloped(boolean b) { 
-    System.out.println("[" + this.getId() + "] [developed] megvaltozott:");
-    System.out.println("[" + developed + "] -> [" + b + "]");
+    // System.out.println("[" + this.getId() + "] [developed] megvaltozott:");
+    // System.out.println("[" + developed + "] -> [" + b + "]");
     developed = b; 
     }
 
@@ -96,11 +94,13 @@ public class Hyphal extends Entity {
 
     @Loggable
     public void speedUpDevelopment() {
-        if(baseLocation.decreaseSpore(2) != null){
-            developTime-=2;
-            if(developTime<=0){
-                developed=true;
+        if (connectedTecton.decreaseSpore(2) != null) {
+            developTime -= 2 ;
+            if (developTime <= 0) {
+                developed = true;
             }
+        } else {
+            throw new RuntimeException("Ezen a Tektonon nincs elég spóra a növekedés gyorsításához!");
         }
     }
 
@@ -108,16 +108,16 @@ public class Hyphal extends Entity {
     public void aging() {
         dying();
         developTime--;
-        if(developTime<=0){
+        if(developTime <= 0) {
             setDeveloped(true);
         }
     }
 
     @Loggable
     public void dying() {
-        int szam = lifeTime - 1;
-        System.out.println("[" + this.getId() + "] [life] megvaltozott:");
-        System.out.println("[" + lifeTime + "] -> [" + szam + "]");
+        int n = lifeTime - 1;
+        // System.out.println("[" + this.getId() + "] [life] megvaltozott:");
+        // System.out.println("[" + lifeTime + "] -> [" + n + "]");
         lifeTime--;
     }
 
@@ -133,7 +133,6 @@ public class Hyphal extends Entity {
 
         stunnedInsect.DestroyInsect();
 
-        /// itt jon a growFungusFromInsect()
         growFungus(currLoc);
     }
 

@@ -282,12 +282,6 @@ public class GameView extends AbstractGameView implements Listener {
                 // ("Eat Spore", "Move", "Cut Hyphal")
 
                 switch (selectedAction) {
-                    case "Select Fungus":
-                        selectedPlayer.SelectAction(1, GameLogic.getParams());
-                        break;
-                    case "Select Hyphal":
-                        selectedPlayer.SelectAction(2, GameLogic.getParams());
-                        break;
                     case "Grow Fungal Body":
                         selectedPlayer.SelectAction(3, GameLogic.getParams());
                         break;
@@ -312,6 +306,8 @@ public class GameView extends AbstractGameView implements Listener {
                     case "Level Up":
                         selectedPlayer.SelectAction(10, GameLogic.getParams());
                         break;
+                    case "Skip":
+                        break;
                     default:
                         System.out.println("Invalid action type");
                 }
@@ -321,20 +317,16 @@ public class GameView extends AbstractGameView implements Listener {
                 
                 //  ("Eat Spore", "Move", "Cut Hyphal"); // Teszt adatok
                 switch (selectedAction) {
-                    case "Select Insect":
-                        selectedPlayer.SelectAction(1, GameLogic.getParams());
-                        break;
-                    case "Select Tecton":
+                    case "Move":
                         selectedPlayer.SelectAction(2, GameLogic.getParams());
                         break;
-                    case "Move":
+                    case "Eat Spore":
                         selectedPlayer.SelectAction(3, GameLogic.getParams());
                         break;
-                    case "Eat Spore":
+                    case "Cut Hyphal":
                         selectedPlayer.SelectAction(4, GameLogic.getParams());
                         break;
-                    case "Cut Hyphal":
-                        selectedPlayer.SelectAction(5, GameLogic.getParams());
+                    case "Skip":
                         break;
                     default:
                         System.out.println("Invalid action type");
@@ -466,9 +458,7 @@ public class GameView extends AbstractGameView implements Listener {
                     if (clickedTecton != null) {
                         selectedTecton =  clickedTecton;
                         // selectedTecton = (selectedTecton == clickedTecton) ? null : clickedTecton;
-                        if (selectedTecton == null){
-                            return;
-                        }
+                        
                         sporesOnTectonLabel.setText("A Tektonon lévő Spórák száma: " + selectedTecton.getSpores().size());
                         TectonPanel tectonPanel = new TectonPanel(selectedTecton);
                         JFrame newFrame = new JFrame("Új ablak");
@@ -480,8 +470,11 @@ public class GameView extends AbstractGameView implements Listener {
                     } else {
                         selectedTecton = null;
                     }
+                    if (selectedTecton == null) {
+                        return;
+                    }
                     GameLogic.getParams().selectedTecton = selectedTecton;
-                    selectedTectonLabel.setText("Kiválasztott\nTekton: " + clickedTecton.getId());
+                    selectedTectonLabel.setText("Kiválasztott\nTekton: " + selectedTecton.getId());
                     repaint();
                 }
             });
@@ -494,7 +487,7 @@ public class GameView extends AbstractGameView implements Listener {
             private static final Color CENTRAL_COLOR = new Color(0, 100, 0);
             private static final Color NEIGHBOR_COLOR = new Color(128, 254, 57);
             private static final int TECTON_SIZE = 75;
-            private static final int FUNGUS_SIZE = 30;
+            private int FUNGUS_SIZE = 25;
             private static final int INSECT_SIZE = 13;
             private static final int SPORE_SIZE = 15;
 
@@ -563,6 +556,11 @@ public class GameView extends AbstractGameView implements Listener {
                                     }
                                 }
                             }
+                        }
+
+                        // if the click isn't on a Tecton or Hyphal return;
+                        if (clickedTecton == null) {
+                            return;
                         }
 
                         // FungalBody kiválasztás
@@ -760,6 +758,7 @@ public class GameView extends AbstractGameView implements Listener {
                     BufferedImage fungalImage = subType != null ? mycologistSubTypeImages.get(subType) : null;
 
                     if (fungalImage != null) {
+                        FUNGUS_SIZE += 5 * fungalBody.getCurrLvl();
                         int fungalRadius = FUNGUS_SIZE / 2;
                         int fungalDiameter = fungalRadius * 2;
                         int fungalX = (int)position.getX() - fungalRadius;
@@ -902,6 +901,7 @@ public class GameView extends AbstractGameView implements Listener {
                     BufferedImage fungalImage = subType != null ? mycologistSubTypeImages.get(subType) : null;
                     if (fungalImage != null) {
                         int fungalRadius = radius / 2;
+                        fungalRadius += 5 * (fungalBody.getCurrLvl() - 1);
                         int fungalDiameter = fungalRadius * 2;
                         int fungalX = x + (radius - fungalRadius);
                         int fungalY = y + (radius - fungalRadius);
