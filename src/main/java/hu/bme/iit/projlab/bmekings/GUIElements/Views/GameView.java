@@ -844,6 +844,8 @@ public class GameView extends AbstractGameView implements Listener {
                 tectonCenters.put(tectons.get(i), new int[]{centerX, centerY});
             }
 
+            // Draw Hyphals
+            // Színleképezés a típusokhoz (3 játékos: ms1, ms2, ms3)
             Map<String, Color> typeColorMap = new HashMap<>();
             typeColorMap.put("ms1", new Color(255, 0, 0, 255)); // Piros
             typeColorMap.put("ms2", new Color(0, 0, 255, 255)); // Kék
@@ -859,7 +861,7 @@ public class GameView extends AbstractGameView implements Listener {
 
             // Vonalstílusok
             BasicStroke solidStroke = new BasicStroke(5f); // Fejlett: 5px vastag
-            BasicStroke thinStroke = new BasicStroke(3f); // Nem fejlett: 3px vékony
+            BasicStroke thinStroke = new BasicStroke(5f); // Fejlett: 5px vastag
 
             // Először nem fejlett vonalak rajzolása
             for (int i = 0; i < controller.getGameLogic().getMycologists().size(); i++) {
@@ -868,9 +870,16 @@ public class GameView extends AbstractGameView implements Listener {
                 System.err.println("Mycologist type: " + type);
                 Color fadedColor = fadedColorMap.getOrDefault(type, defaultFadedColor);
 
-                // Offset a játékos indexe alapján (3 játékos: -10, 0, +10)
-                double offset = (i == 0) ? -10.0 : (i == 1) ? 0.0 : 10.0;
-                System.err.println("Offset: " + offset);
+                // Offset a játékos indexe alapján (3 játékos)
+                double offsetX, offsetY;
+                if (i == 0) {
+                    offsetX = -10.0; offsetY = -10.0; // Első játékos: balra és felfelé
+                } else if (i == 1) {
+                    offsetX = 0.0; offsetY = 0.0; // Második játékos: középen
+                } else {
+                    offsetX = 10.0; offsetY = 10.0; // Harmadik játékos: jobbra és lefelé
+                }
+                System.err.println("OffsetX: " + offsetX + ", OffsetY: " + offsetY);
 
                 for (Hyphal hyphal : mycologist.getHyphalList()) {
                     if (!hyphal.getDeveloped()) { // Nem fejlett vonalak
@@ -887,12 +896,21 @@ public class GameView extends AbstractGameView implements Listener {
                                 double dy = connectedCenter[1] - baseCenter[1];
                                 double length = Math.sqrt(dx * dx + dy * dy);
                                 if (length > 0) {
-                                    double offsetX = -dy * offset / length;
-                                    double offsetY = dx * offset / length;
-                                    g2d.drawLine(
-                                        (int)(baseCenter[0] + offsetX), (int)(baseCenter[1] + offsetY),
-                                        (int)(connectedCenter[0] + offsetX), (int)(connectedCenter[1] + offsetY)
-                                    );
+                                    // Vonal orientációjának ellenőrzése
+                                    double angle = Math.abs(Math.atan2(dy, dx) * 180 / Math.PI);
+                                    if (angle > 45 && angle < 135) {
+                                        // Függőleges vonal: nagyobb X offset
+                                        g2d.drawLine(
+                                            (int)(baseCenter[0] + offsetX), (int)(baseCenter[1]),
+                                            (int)(connectedCenter[0] + offsetX), (int)(connectedCenter[1])
+                                        );
+                                    } else {
+                                        // Vízszintes vonal: nagyobb Y offset
+                                        g2d.drawLine(
+                                            (int)(baseCenter[0]), (int)(baseCenter[1] + offsetY),
+                                            (int)(connectedCenter[0]), (int)(connectedCenter[1] + offsetY)
+                                        );
+                                    }
                                 }
                             }
                         }
@@ -906,8 +924,15 @@ public class GameView extends AbstractGameView implements Listener {
                 String type = mycologist.getType();
                 Color baseColor = typeColorMap.getOrDefault(type, defaultColor);
 
-                // Offset a játékos indexe alapján (3 játékos: -10, 0, +10)
-                double offset = (i == 0) ? -10.0 : (i == 1) ? 0.0 : 10.0;
+                // Offset a játékos indexe alapján (3 játékos)
+                double offsetX, offsetY;
+                if (i == 0) {
+                    offsetX = -10.0; offsetY = -10.0; // Első játékos: balra és felfelé
+                } else if (i == 1) {
+                    offsetX = 0.0; offsetY = 0.0; // Második játékos: középen
+                } else {
+                    offsetX = 10.0; offsetY = 10.0; // Harmadik játékos: jobbra és lefelé
+                }
 
                 for (Hyphal hyphal : mycologist.getHyphalList()) {
                     if (hyphal.getDeveloped()) { // Fejlett vonalak
@@ -924,18 +949,28 @@ public class GameView extends AbstractGameView implements Listener {
                                 double dy = connectedCenter[1] - baseCenter[1];
                                 double length = Math.sqrt(dx * dx + dy * dy);
                                 if (length > 0) {
-                                    double offsetX = -dy * offset / length;
-                                    double offsetY = dx * offset / length;
-                                    g2d.drawLine(
-                                        (int)(baseCenter[0] + offsetX), (int)(baseCenter[1] + offsetY),
-                                        (int)(connectedCenter[0] + offsetX), (int)(connectedCenter[1] + offsetY)
-                                    );
+                                    // Vonal orientációjának ellenőrzése
+                                    double angle = Math.abs(Math.atan2(dy, dx) * 180 / Math.PI);
+                                    if (angle > 45 && angle < 135) {
+                                        // Függőleges vonal: nagyobb X offset
+                                        g2d.drawLine(
+                                            (int)(baseCenter[0] + offsetX), (int)(baseCenter[1]),
+                                            (int)(connectedCenter[0] + offsetX), (int)(connectedCenter[1])
+                                        );
+                                    } else {
+                                        // Vízszintes vonal: nagyobb Y offset
+                                        g2d.drawLine(
+                                            (int)(baseCenter[0]), (int)(baseCenter[1] + offsetY),
+                                            (int)(connectedCenter[0]), (int)(connectedCenter[1] + offsetY)
+                                        );
+                                    }
                                 }
                             }
                         }
                     }
                 }
             }
+
 
 
             // Draw tectons, fungal bodies, insects, spores, and selection outline
