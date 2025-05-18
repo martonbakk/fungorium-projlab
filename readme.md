@@ -73,7 +73,7 @@ The project requires Maven for building and running. If Maven is not already ins
 
 
 
-# FUNGORIUM_PROJLAB hu
+# Hungarian documentation 
 
 Ez a dokumentum a `FUNGORIUM_PROJLAB` projekt telepítéséhez és futtatásához szükséges lépéseket tartalmazza. Kövesd az alábbi utasításokat a Maven telepítéséhez, valamint a kód futtatásához és teszteléséhez.
 
