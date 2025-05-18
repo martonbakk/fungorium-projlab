@@ -283,10 +283,10 @@ public class Mycologist extends Player {
 
     @Loggable
     public void growHyphalFromHyphalAciton(Tecton targetTecton) {
-        if (checkControlledFungus()){
+        if (checkControlledFungus()) {
             return;
         }
-        if (targetTecton.getFlag().hyphalApproved) {
+        if (selectedHyphal.getConnectedTecton().getFlag().hyphalApproved && targetTecton.getFlag().hyphalApproved) {
             if (selectedHyphal.getDeveloped()) {
                 selectedHyphal.growHyphalFromHyphal(targetTecton);
                 selectedHyphal = null;
@@ -294,7 +294,6 @@ public class Mycologist extends Player {
             } else {
                 throw new RuntimeException("Erről a fonálról még nem tudsz növeszteni új fonalat, mivel még nem fejlődött ki!");
             }
-            
         } else {
             throw new RuntimeException("Erre a tektonra nem lehet fonalat növeszteni! (Weak Tecton)");
         }
