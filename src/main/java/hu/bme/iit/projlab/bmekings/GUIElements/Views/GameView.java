@@ -1202,11 +1202,23 @@ public class GameView extends AbstractGameView implements Listener {
             }
 
 
-
+           
             // Draw tectons, fungal bodies, insects, spores, and selection outline
+            boolean hadBroken= false;
+            int countBroken = 0;
+            int row = 0;
+            int col = 0;
+            int wholeTectNum = -1;
             for (int i = 0; i < tectons.size(); i++) {
-                int row = i / cols;
-                int col = i % cols;
+                if(tectons.get(i).isBroken()&&!hadBroken){
+                    wholeTectNum += 1;
+                } else if(!tectons.get(i).isBroken()){
+                    wholeTectNum +=1;
+                }
+                
+                row = wholeTectNum / cols;
+                col = wholeTectNum % cols;
+                
 
                 // Alap koordináták
                 int x = padding + col * (diameter + spacing);
@@ -1223,14 +1235,22 @@ public class GameView extends AbstractGameView implements Listener {
                 else if (tectons.get(i) instanceof WeakTecton) g2d.setColor(new Color(250, 250, 250));
                 else g2d.setColor(new Color(128, 254, 57));
 
+                
                 // Broken Tecton esetén két félkör, egyébként teljes kör
                 if (tectons.get(i).isBroken()) {
                     // Bal oldali félkör (balra nyílik, mint "C")
-                    int leftCenterX = x+5;
-                    g2d.fillArc(leftCenterX, y, diameter, diameter, 270, 180); // 90°-tól 270°-ig
-                    // Jobb oldali félkör (jobbra nyílik, mint fordított "C")
-                    int rightCenterX = x-5;
-                    g2d.fillArc(rightCenterX, y, diameter, diameter, 90, 180); // 270°-tól 90°-ig
+                    
+                    if (!hadBroken){
+                        int leftCenterX = x-2;
+
+                        g2d.fillArc(leftCenterX, y, diameter, diameter, 90, 180); // 90°-tól 270°-ig
+                        hadBroken = true;
+                    }else{
+                        int rightCenterX = x+2;
+                        g2d.fillArc(rightCenterX, y, diameter, diameter, 270, 180); // 270°-tól 90°-ig
+
+                        hadBroken = false;
+                    }
                 } else {
                     // Teljes kör
                     g2d.fillOval(x, y, diameter, diameter);
@@ -1242,16 +1262,66 @@ public class GameView extends AbstractGameView implements Listener {
                     g2d.setStroke(new BasicStroke(2));
                     if (tectons.get(i).isBroken()) {
                         // Bal oldali félkör körvonala
-                        int leftCenterX = x -5;
+                        if (hadBroken){
+                        int leftCenterX = x -2;
                         g2d.drawArc(leftCenterX, y, diameter, diameter, 90, 180);
+                        }else{
                         // Jobb oldali félkör körvonala
-                        int rightCenterX = x +5;
-                        g2d.drawArc(rightCenterX, y, diameter, diameter, 270, 180);
+                            int rightCenterX = x +2;
+                            g2d.drawArc(rightCenterX, y, diameter, diameter, 270, 180);
+                        }
+                       
                     } else {
                         g2d.drawOval(x, y, diameter, diameter);
                     }
                     g2d.setStroke(new BasicStroke(1));
                 }
+
+                // Poligon létrehozása egérkattintás-érzékeléshez
+                Polygon polygon = new Polygon();
+                int sides = 20;
+                if (tectons.get(i).isBroken()) {
+                    // Téglalap poligon a két félkört és a térközt lefedve
+                    
+                    // bal oldal
+                    //tectons.get(i).isBroken()&&!hadBroken
+                    
+                    // jobb oldal
+    	            //!(tectons.get(i).isBroken()&&!hadBroken) && tectons.get(i).isBroken()
+
+                    if (hadBroken){
+                        // bal oldali félkör
+                        int leftX = x ;
+                        int rightX = x + diameter / 2; // csak a félkört fedjük le
+                        int topY = y;
+                        int bottomY = y + diameter;
+
+                        polygon.addPoint(leftX, topY);
+                        polygon.addPoint(rightX, topY);
+                        polygon.addPoint(rightX, bottomY);
+                        polygon.addPoint(leftX, bottomY);
+                    }else{
+                        // jobb oldali félkör VAMOOOOOS
+                        int leftX = x + diameter / 2;
+                        int rightX = x + shift + diameter / 2 -5;
+                        int topY = y;
+                        int bottomY = y + diameter;
+
+                        polygon.addPoint(leftX, topY);
+                        polygon.addPoint(rightX, topY);
+                        polygon.addPoint(rightX, bottomY);
+                        polygon.addPoint(leftX, bottomY);
+                    }
+                } else {
+                    // Kör poligon nem broken esetén
+                    for (int j = 0; j < sides; j++) {
+                        double angle = 2 * Math.PI * j / sides;
+                        int px = (int) (x + radius + radius * Math.cos(angle));
+                        int py = (int) (y + radius + radius * Math.sin(angle));
+                        polygon.addPoint(px, py);
+                    }
+                }
+                tectonPolygons.add(polygon);
 
                 // Spóra rajzolása
                 if (!tectons.get(i).getSpores().isEmpty()) {
@@ -1316,29 +1386,7 @@ public class GameView extends AbstractGameView implements Listener {
                     }
                 }
 
-                // Poligon létrehozása egérkattintás-érzékeléshez
-                Polygon polygon = new Polygon();
-                int sides = 20;
-                if (tectons.get(i).isBroken()) {
-                    // Téglalap poligon a két félkört és a térközt lefedve
-                    int leftX = x - shift - diameter / 2;
-                    int rightX = x + shift + diameter / 2;
-                    int topY = y;
-                    int bottomY = y + diameter;
-                    polygon.addPoint(leftX, topY);
-                    polygon.addPoint(rightX, topY);
-                    polygon.addPoint(rightX, bottomY);
-                    polygon.addPoint(leftX, bottomY);
-                } else {
-                    // Kör poligon nem broken esetén
-                    for (int j = 0; j < sides; j++) {
-                        double angle = 2 * Math.PI * j / sides;
-                        int px = (int) (x + radius + radius * Math.cos(angle));
-                        int py = (int) (y + radius + radius * Math.sin(angle));
-                        polygon.addPoint(px, py);
-                    }
-                }
-                tectonPolygons.add(polygon);
+                
             }
         }
     }
