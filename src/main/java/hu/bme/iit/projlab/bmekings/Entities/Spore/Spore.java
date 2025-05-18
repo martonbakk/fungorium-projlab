@@ -78,5 +78,6 @@ public abstract class Spore extends Entity implements SporeInterface {
         return this.nutritionValue;
     }
 
-    public void activateEffect(Insect targetInsect) {}
+    public void activateEffect(Insect targetInsect) {
+    }
 }

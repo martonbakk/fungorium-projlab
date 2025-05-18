@@ -13,7 +13,7 @@ import hu.bme.iit.projlab.bmekings.Player.Player;
 import hu.bme.iit.projlab.bmekings.Program.Params;
 
 @Loggable("Entomologist")
-public class Entomologist extends Player{
+public class Entomologist extends Player {
     private ArrayList<Insect> controlledInsects = new ArrayList<>();
     private Insect selectedInsect = null;
 
@@ -98,9 +98,11 @@ public class Entomologist extends Player{
         if (checkSelectedInsect()) {
             return;
         }
-        System.out.println("Cutting hyphal: " + hyphalToCut.getId() + " with insect: " + this.getPlayerID());
+        if (hyphalToCut == null) {
+            throw new RuntimeException("Nem választottál ki fonalat!");
+        }
         selectedInsect.cutHyphal(hyphalToCut);
-        selectedInsect=null;
+        selectedInsect = null;        
     }
 
     @Loggable

@@ -102,7 +102,7 @@ public class Tecton implements Listener, Serializable {
     public HashMap<Tecton, ArrayList<Hyphal>> getConnectedNeighbors() { return connectedNeighbours; }
 
     @Loggable
-    public SporeInterface getNextSporeToEat() {  return spores.peek(); }
+    public SporeInterface getNextSporeToEat() { ;return spores.peek(); }
     
     @Loggable
     public FungalBody getFungalBody() { return fungalBody; }
@@ -239,7 +239,7 @@ public class Tecton implements Listener, Serializable {
         if (!connected.getNeighbors().contains(this)) {
             throw new RuntimeException("Megkapott tekton nem szomszédos!");
         }
-        Hyphal newHyphal = new Hyphal(connected, false, 4, 4, 4, this, owner);
+        Hyphal newHyphal = new Hyphal(connected, false, 2, 4, 4, this, owner);
         // Ellenőrizzük, hogy a két tekton össze van e már kötve
         ArrayList<Hyphal> hyphals = connectedNeighbours.get(connected);
         if (hyphals != null) {

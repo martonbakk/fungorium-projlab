@@ -20,8 +20,7 @@ public class HungerSpore extends Spore {
 
     @Override
     public void activateEffect(Insect targetInsect) {
-        targetInsect.feedInsect(this.getNutritionValue());
-        targetInsect.feedInsect(this.getNutritionValue());
+        System.out.println("Ate Hunger Spore");
     }
 
     @Override

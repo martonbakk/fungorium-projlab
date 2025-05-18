@@ -544,7 +544,7 @@ public class GameView extends AbstractGameView implements Listener {
                         }
                         List<Hyphal> hyphals = new ArrayList<>(hyphalList);
 
-                        // Hyphal detektálás
+                        // Hyphal detektálás Mycologist esetén
                         if (selectedPlayer instanceof Mycologist) {
                             Mycologist selectedMyc = (Mycologist) selectedPlayer;
                             for (Hyphal h : hyphals) {
@@ -560,7 +560,28 @@ public class GameView extends AbstractGameView implements Listener {
                                     if (answer == 0) {
                                         selectedHyphalLabel.setText("Kiválasztott\nFonál: " + h.getId());
                                         GameLogic.getParams().selectedHyphal = h;
-                                        selectedPlayer.SelectAction(2, GameLogic.getParams());
+                                        selectedMyc.SelectAction(2, GameLogic.getParams());
+                                        return;
+                                    }
+                                }
+                            }
+                        }
+
+                        if (selectedPlayer instanceof Entomologist) {
+                            Entomologist selectedEnt = (Entomologist) selectedPlayer;
+                            for (Hyphal h : hyphals) {
+                                Point2D from = positions.get(h.getBase());
+                                Point2D to = positions.get(h.getConnectedTecton());
+                                if (from == null || to == null) continue;
+
+                                Point2D p1 = edgePoint(from, to, TECTON_SIZE);
+                                Point2D p2 = edgePoint(to, from, TECTON_SIZE);
+
+                                if (isPointNearLine(p1, p2, clickPoint, 5)) {
+                                    int answer = JOptionPane.showConfirmDialog(null, "Do you want to Select [" + h.getId() + "]", "Hyphal", JOptionPane.YES_NO_OPTION);
+                                    if (answer == 0) {
+                                        selectedHyphalLabel.setText("Kiválasztott\nFonál: " + h.getId());
+                                        GameLogic.getParams().selectedHyphal = h;
                                         return;
                                     }
                                 }
