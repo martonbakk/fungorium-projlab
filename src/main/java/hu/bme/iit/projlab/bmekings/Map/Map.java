@@ -241,9 +241,31 @@ public class Map implements Serializable {
         ArrayList<Integer> leftBorder = new ArrayList<Integer>(Arrays.asList(leftArray));
         ArrayList<Integer> rightBorder = new ArrayList<Integer>(Arrays.asList(rightArray));
 
-        Tecton leftTecton = new Tecton();
+        Tecton leftTecton;
+        Tecton rightTecton;
+
+        if (tecton instanceof HyphalPreserverTecton) {
+            leftTecton = new HyphalPreserverTecton();
+            rightTecton = new HyphalPreserverTecton();
+        }
+        else if (tecton instanceof NoFungusTecton) {
+            leftTecton = new NoFungusTecton();
+            rightTecton = new NoFungusTecton();
+        }
+        else if (tecton instanceof ToxicTecton) {
+            leftTecton = new ToxicTecton();
+            rightTecton = new ToxicTecton();
+        }
+        else if (tecton instanceof WeakTecton) {
+            leftTecton = new WeakTecton();
+            rightTecton = new WeakTecton();
+        }
+        else {
+            leftTecton = new Tecton();
+            rightTecton = new Tecton();
+        }
+
         leftTecton.setBroken(true);
-        Tecton rightTecton = new Tecton();
         rightTecton.setBroken(true);
 
         // Az első sorban tört egy tekton, de nem a szélén
