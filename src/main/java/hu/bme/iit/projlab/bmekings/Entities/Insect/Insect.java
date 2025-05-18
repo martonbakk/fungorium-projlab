@@ -239,4 +239,9 @@ public class Insect extends Entity{
         owner.addInsect(this);
     }
 
+    @Override
+    public String toString() {
+        return this.getId();
+    }
+
 }

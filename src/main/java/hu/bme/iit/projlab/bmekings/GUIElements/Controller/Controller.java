@@ -39,13 +39,11 @@ public class Controller {
     }
 
     private void initializeViews() {
-        GameView gameView = new GameView(this, this.textures, this.insectTypes, this.fungalTypes);
         views.put("StartView", new StartView(this)); //StartView
         views.put("PlayerAddView", new PlayerAddView(this, this.insectTypes, this.fungalTypes)); //PlayerAddView
-        views.put("GameView", gameView);
+        views.put("GameView", new GameView(this, this.textures, this.insectTypes, this.fungalTypes));
         views.put("LoadView", new LoadView(this));
         views.put("SaveView", new SaveView(this));
-        gameLogic.addListener(gameView);
     }
 
     public void switchView(String viewName) {

@@ -50,7 +50,11 @@ import hu.bme.iit.projlab.bmekings.Entities.Insect.Insect;
 import hu.bme.iit.projlab.bmekings.GUIElements.Controller.Controller;
 import hu.bme.iit.projlab.bmekings.Interface.Listener.Listener;
 import hu.bme.iit.projlab.bmekings.Logic.GameLogic.GameLogic;
+import hu.bme.iit.projlab.bmekings.Map.Tecton.HyphalPreserverTecton;
+import hu.bme.iit.projlab.bmekings.Map.Tecton.NoFungusTecton;
 import hu.bme.iit.projlab.bmekings.Map.Tecton.Tecton;
+import hu.bme.iit.projlab.bmekings.Map.Tecton.ToxicTecton;
+import hu.bme.iit.projlab.bmekings.Map.Tecton.WeakTecton;
 import hu.bme.iit.projlab.bmekings.Player.Entomologist.Entomologist;
 import hu.bme.iit.projlab.bmekings.Player.Mycologist.Mycologist;
 import hu.bme.iit.projlab.bmekings.Player.Player;
@@ -490,8 +494,9 @@ public class GameView extends AbstractGameView implements Listener {
             private static final Color CENTRAL_COLOR = new Color(0, 100, 0);
             private static final Color NEIGHBOR_COLOR = new Color(128, 254, 57);
             private static final int TECTON_SIZE = 75;
-            private static final int FUNGUS_SIZE = 25;
-            private static final int INSECT_SIZE = 15;
+            private static final int FUNGUS_SIZE = 30;
+            private static final int INSECT_SIZE = 13;
+            private static final int SPORE_SIZE = 15;
 
             public TectonPanel(Tecton centralTecton) {
                 this.centralTecton = centralTecton;
@@ -510,7 +515,15 @@ public class GameView extends AbstractGameView implements Listener {
                                 if (clickedTecton == null) {
                                     return;
                                 }
-                                StringBuilder message = new StringBuilder("Tecton ID: " + clickedTecton.getId() + "\nSzomszédok:\n");
+                                String type;
+
+                                if (clickedTecton instanceof HyphalPreserverTecton) type = "HyphalPreserverTecton";
+                                else if (clickedTecton instanceof NoFungusTecton) type = "NoFungusTecton";
+                                else if (clickedTecton instanceof ToxicTecton) type = "ToxicTecton";
+                                else if (clickedTecton instanceof WeakTecton) type = "WeakTecton";
+                                else type = "Tecton";
+
+                                StringBuilder message = new StringBuilder("Tecton ID: " + clickedTecton.getId() + "\nTípus: " + type + "\nSzomszédok:\n");
                                 for (Tecton neighbor : clickedTecton.getNeighbors()) {
                                     message.append("- ").append(neighbor.getId()).append("\n");
                                 }
@@ -519,14 +532,15 @@ public class GameView extends AbstractGameView implements Listener {
                                 selectedTectonLabel.setText("Kiválasztott\nTekton: " + clickedTecton.getId());
                             }
                         }
-
-                        Set<Hyphal> result = new HashSet<>();
+                        
+                        // Hyphal lista megszerzése
+                        Set<Hyphal> hyphalList = new HashSet<>();
                         for (Tecton t : positions.keySet()) {
                             for (Map.Entry<Tecton, ArrayList<Hyphal>> entry : t.getConnectedNeighbors().entrySet()) {
-                                result.addAll(entry.getValue());
+                                hyphalList.addAll(entry.getValue());
                             }
                         }
-                        List<Hyphal> hyphals = new ArrayList<>(result);
+                        List<Hyphal> hyphals = new ArrayList<>(hyphalList);
 
                         // Hyphal detektálás
                         if (selectedPlayer instanceof Mycologist) {
@@ -550,29 +564,46 @@ public class GameView extends AbstractGameView implements Listener {
                                 }
                             }
                         }
-                        if (clickedTecton == null){
-                            return;
-                        }
+
+                        // FungalBody kiválasztás
                         if (selectedPlayer instanceof Mycologist && clickedTecton.isOccupiedByFungus() && clickedTecton.getFungalBody().getOwner() == selectedPlayer && clickedTecton != null) {
                             Mycologist selectedMyc = (Mycologist) selectedPlayer;
                             int answer = JOptionPane.showConfirmDialog(null, "Do you want to Select [" + clickedTecton.getFungalBody().getId() + "]", "Fungal Body Chooser", JOptionPane.YES_NO_OPTION);
                             if (answer == 0) {
                                 GameLogic.getParams().selectedFungus = clickedTecton.getFungalBody();
                                 selectedMyc.SelectAction(1, GameLogic.getParams());
-                                System.out.println(GameLogic.getParams().selectedFungus.getId());
                                 selectedFungusLabel.setText("Kiválasztott\nGombatest: " + GameLogic.getParams().selectedFungus.getId());
                                 return;
                             }
                         }
                         
+                        // Insect kiválasztás
                         if (selectedPlayer instanceof Entomologist && clickedTecton.isOccupiedByInsect() && clickedTecton != null) {
-                            clickedTecton.getInsects().forEach(i -> {
                             Entomologist selectedEnt = (Entomologist) selectedPlayer;
-                            selectedEnt.selectInsect(i);
-                            if (selectedEnt.getSelectedInsect() != null)
-                                selectedInsectLabel.setText("Kiválaszott\nRovar: " + selectedEnt.getSelectedInsect().getId());
-                                return;
-                            });
+                            List<Insect> insects = clickedTecton.getInsects();
+                            JComboBox<Insect> insectsComboBox = new JComboBox<>();
+                            for (Insect insect : insects)
+                                insectsComboBox.addItem(insect);
+
+                            int result = JOptionPane.showConfirmDialog(
+                                null,
+                                insectsComboBox,
+                                "Válassz rovart",
+                                JOptionPane.OK_CANCEL_OPTION
+                            );
+
+                            if (result == JOptionPane.OK_OPTION) {
+                                Insect selectedInsect = (Insect) insectsComboBox.getSelectedItem();
+                                if (selectedInsect != null) {
+                                    selectedEnt.selectInsect(selectedInsect);
+                                    if (selectedEnt.getSelectedInsect() != null) {
+                                        selectedInsectLabel.setText("Kiválaszott\nRovar: " + selectedEnt.getSelectedInsect().getId());
+                                        return;
+                                    }
+                                        
+                                }
+                            }
+ 
                         }
                         repaint();
                     }
@@ -630,11 +661,15 @@ public class GameView extends AbstractGameView implements Listener {
 
                 // Draw connections
                 g2d.setColor(Color.RED);
-                g2d.setStroke(new BasicStroke(4));
+                g2d.setStroke(new BasicStroke(3));
                 Point2D centralPos = positions.get(centralTecton);
                 
                 for (Tecton connected : centralTecton.getConnectedNeighbors().keySet()) {
                     if (positions.containsKey(connected)) {
+                        if (centralTecton.getConnectedNeighbors().get(connected).get(0).getDeveloped()) {
+                            g2d.setColor(Color.BLACK);
+                            g2d.setStroke(new BasicStroke(5));
+                        }
                         Point2D targetPos = positions.get(connected);
                         drawConnection(g2d, centralPos, targetPos, TECTON_SIZE);
                     }
@@ -645,6 +680,18 @@ public class GameView extends AbstractGameView implements Listener {
                 for (Tecton neighbor : neighbors) {
                     if (positions.containsKey(neighbor)) {
                         drawTecton(g2d, neighbor, positions.get(neighbor), TECTON_SIZE);
+                    }
+                }
+
+                // Draw Spore
+                if (!centralTecton.getSpores().isEmpty()) {
+                    drawSpore(g2d, centralPos, SPORE_SIZE);
+                }
+
+                for (Tecton neighbor : neighbors) {
+                    if (!neighbor.getSpores().isEmpty()) {
+                        Point2D targetPos = positions.get(neighbor);
+                        drawSpore(g2d, targetPos, SPORE_SIZE);
                     }
                 }
 
@@ -661,12 +708,20 @@ public class GameView extends AbstractGameView implements Listener {
                 if (information != null) {
                     String[] lines = information.split("\n");
                     for (int i = 0; i < lines.length; i++) {
-                        g2d.drawString(lines[i], textX, textY + 15);
+                        g2d.drawString(lines[i], textX, textY + (15 * i));
                     }
                 }
                 else {
                     g2d.drawString("Clcik on a Tecton to get information!", textX, textY + 15);
                 }
+            }
+
+            private void drawSpore(Graphics2D g2d, Point2D central, int size) {
+                int x = (int) central.getX() + 8;
+                int y = (int) central.getY() + 12;
+
+                g2d.setColor(Color.RED);
+                g2d.fillOval(x, y, size, size);
             }
 
             private void drawConnection(Graphics2D g2d, Point2D start, Point2D end, int size) {
@@ -688,8 +743,12 @@ public class GameView extends AbstractGameView implements Listener {
             }
 
             private void drawTecton(Graphics2D g2d, Tecton tecton, Point2D position, int size) {
-                // Draw main body
-                g2d.setColor(tecton == centralTecton ? CENTRAL_COLOR : NEIGHBOR_COLOR);
+                // Draw tecton (color by type)
+                if (tecton instanceof HyphalPreserverTecton) g2d.setColor(new Color(128, 254, 170));
+                else if (tecton instanceof NoFungusTecton) g2d.setColor(new Color(254, 254, 57));
+                else if (tecton instanceof ToxicTecton) g2d.setColor(new Color(108, 108, 44));
+                else if (tecton instanceof WeakTecton) g2d.setColor(new Color(250, 250, 250));
+                else g2d.setColor(new Color(128, 254, 57));
                 int halfSize = size/2;
                 g2d.fillOval((int)(position.getX()-halfSize), (int)(position.getY()-halfSize), size, size);
 
@@ -707,14 +766,9 @@ public class GameView extends AbstractGameView implements Listener {
                         int fungalY = (int)position.getY() - fungalRadius;
                         g2d.drawImage(fungalImage, fungalX, fungalY, fungalDiameter, fungalDiameter, null);
                     } else {
-                        // Fallback to red circle
-                        g2d.setColor(Color.RED);
-                        int fungalRadius = FUNGUS_SIZE / 2;
-                        int fungalDiameter = fungalRadius * 2;
-                        int fungalX = (int)position.getX() - fungalRadius;
-                        int fungalY = (int)position.getY() - fungalRadius;
-                        g2d.fillOval(fungalX, fungalY, fungalDiameter, fungalDiameter);
+                        System.err.println("Nem található a gombatest képe!");
                     }
+                    
                 }
 
                 // Draw insects
@@ -742,13 +796,7 @@ public class GameView extends AbstractGameView implements Listener {
                     int insectY = (int) position.getY() + (INSECT_SIZE - insectRadius) - insectRadius;
                     g2d.drawImage(insectImage, insectX, insectY, insectDiameter, insectDiameter, null);
                 } else {
-                    // Fallback to yellow circle
-                    g2d.setColor(Color.YELLOW);
-                    int insectRadius = INSECT_SIZE / 3;
-                    int insectDiameter = insectRadius * 2;
-                    int insectX = (int) position.getX() + (INSECT_SIZE - insectRadius) - insectRadius;
-                    int insectY = (int)position.getY() + (INSECT_SIZE - insectRadius) - insectRadius;
-                    g2d.fillOval(insectX, insectY, insectDiameter, insectDiameter);
+                    System.err.println("Nem található a rovar képe!");
                 }
             }
         }
@@ -789,10 +837,16 @@ public class GameView extends AbstractGameView implements Listener {
             }
 
             // Draw Hyphal connections
-            g2d.setColor(Color.BLACK);
             ArrayList<Mycologist> mycologists = controller.getGameLogic().getMycologists();
             for (Mycologist mycologist : mycologists) {
                 for (Hyphal hyphal : mycologist.getHyphalList()) {
+                    if (hyphal.getDeveloped()) {
+                        g2d.setColor(Color.BLACK);
+                        g2d.setStroke(new BasicStroke(5));
+                    } else {
+                        g2d.setColor(Color.RED);
+                        g2d.setStroke(new BasicStroke(3));
+                    }
                     Tecton base = hyphal.getBase();
                     Tecton connected = hyphal.getConnectedTecton();
                     if (base != null && connected != null) {
@@ -805,7 +859,7 @@ public class GameView extends AbstractGameView implements Listener {
                 }
             }
 
-            // Draw tectons, fungal bodies, insects, and selection outline
+            // Draw tectons, fungal bodies, insects, spores, and selection outline
             for (int i = 0; i < tectons.size(); i++) {
                 int row = i / cols;
                 int col = i % cols;
@@ -813,8 +867,13 @@ public class GameView extends AbstractGameView implements Listener {
                 int x = padding + col * (diameter + spacing);
                 int y = padding + row * (diameter + spacing);
 
-                // Draw tecton (green circle)
-                g2d.setColor(new Color(128, 254, 57));
+                // Draw tecton (color by type)
+                if (tectons.get(i) instanceof HyphalPreserverTecton) g2d.setColor(new Color(128, 254, 170));
+                else if (tectons.get(i) instanceof NoFungusTecton) g2d.setColor(new Color(254, 254, 57));
+                else if (tectons.get(i) instanceof ToxicTecton) g2d.setColor(new Color(108, 108, 44));
+                else if (tectons.get(i) instanceof WeakTecton) g2d.setColor(new Color(250, 250, 250));
+                else g2d.setColor(new Color(128, 254, 57));
+
                 g2d.fillOval(x, y, diameter, diameter);
 
                 // Draw yellow outline if this is the selected tecton
@@ -825,16 +884,15 @@ public class GameView extends AbstractGameView implements Listener {
                     g2d.setStroke(new BasicStroke(1));
                 }
 
-                // Create polygon for mouse click detection
-                Polygon polygon = new Polygon();
-                int sides = 20;
-                for (int j = 0; j < sides; j++) {
-                    double angle = 2 * Math.PI * j / sides;
-                    int px = (int) (x + radius + radius * Math.cos(angle));
-                    int py = (int) (y + radius + radius * Math.sin(angle));
-                    polygon.addPoint(px, py);
+                // Draw spore
+                if (!tectons.get(i).getSpores().isEmpty()) {
+                    g2d.setColor(Color.RED);
+                    int sporeRadius = radius / 5;
+                    int sporeDiameter = sporeRadius * 2;
+                    int sporeX = x + (radius - sporeRadius) + 10;
+                    int sporeY = y + (radius - sporeRadius) + 12;
+                    g2d.fillOval(sporeX, sporeY, sporeDiameter, sporeDiameter);
                 }
-                tectonPolygons.add(polygon);
 
                 // Draw FungalBody if present
                 FungalBody fungalBody = tectons.get(i).getFungalBody();
@@ -861,34 +919,45 @@ public class GameView extends AbstractGameView implements Listener {
 
                 // Draw Insect image if present
                 if (tectons.get(i).isOccupiedByInsect()) {
-                    List<Entomologist> insectOwners = new ArrayList<>();
                     ArrayList<Insect> insects = tectons.get(i).getInsects();
-                    for (Insect insect : insects) {
-                        if (insect.getOwner() != null) {
-                            insectOwners.add(insect.getOwner());
-                        }
-                    }
+                    
+                    int insectCount = insects.size();
+                    if (insectCount > 0) {
+                        int insectRadius = radius / 3;
+                        int insectDiameter = insectRadius * 2;
 
-                    for (Entomologist owner : insectOwners) {
-                        String subType = owner != null ? owner.getType() : null;
-                        BufferedImage insectImage = subType != null ? entomologistSubTypeImages.get(subType) : null;
-                        if (insectImage != null) {
-                            int insectRadius = radius / 3;
-                            int insectDiameter = insectRadius * 2;
-                            int insectX = x + (radius - insectRadius) - insectRadius;
-                            int insectY = y + (radius - insectRadius) - insectRadius;
-                            g2d.drawImage(insectImage, insectX, insectY, insectDiameter, insectDiameter, null);
-                        } else {
-                            // Fallback to yellow circle
-                            g2d.setColor(Color.YELLOW);
-                            int insectRadius = radius / 3;
-                            int insectDiameter = insectRadius * 2;
-                            int insectX = x + (radius - insectRadius) - insectRadius;
-                            int insectY = y + (radius - insectRadius) - insectRadius;
-                            g2d.fillOval(insectX, insectY, insectDiameter, insectDiameter);
+                        // Kezdő x koordináta úgy, hogy középre legyen igazítva
+                        int startX = x;
+                        int yOffset = y + 5;
+
+                        for (int j = 0; j < insectCount; j++) {
+                            Insect insect = insects.get(j);
+                            Entomologist owner = insect.getOwner();
+                            String subType = owner != null ? owner.getType() : null;
+                            BufferedImage insectImage = subType != null ? entomologistSubTypeImages.get(subType) : null;
+
+                            int insectX = startX + j * insectDiameter + 10;
+
+                            if (insectImage != null) {
+                                g2d.drawImage(insectImage, insectX, yOffset, insectDiameter, insectDiameter, null);
+                            } else {
+                                g2d.setColor(Color.YELLOW);
+                                g2d.fillOval(insectX, yOffset, insectDiameter, insectDiameter);
+                            }
                         }
                     }
                 }
+
+                // Create polygon for mouse click detection
+                Polygon polygon = new Polygon();
+                int sides = 20;
+                for (int j = 0; j < sides; j++) {
+                    double angle = 2 * Math.PI * j / sides;
+                    int px = (int) (x + radius + radius * Math.cos(angle));
+                    int py = (int) (y + radius + radius * Math.sin(angle));
+                    polygon.addPoint(px, py);
+                }
+                tectonPolygons.add(polygon);
             }
         }
 

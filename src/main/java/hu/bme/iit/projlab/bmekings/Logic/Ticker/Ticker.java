@@ -7,7 +7,9 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
+import hu.bme.iit.projlab.bmekings.GUIElements.Views.GameView;
 import hu.bme.iit.projlab.bmekings.Interface.Listener.Listener;
+import hu.bme.iit.projlab.bmekings.Logic.GameLogic.GameLogic;
 
 public class Ticker implements Serializable {
     private static final long serialVersionUID = 1L;
@@ -40,7 +42,12 @@ public class Ticker implements Serializable {
 
     public void start() {
         if (gameObList == null) {
+            System.out.println("gameObList was null");
             gameObList = new ArrayList<>();
+        }
+        System.out.println(gameObList.size());
+        for (Listener l : gameObList) {
+            System.out.println(l.getClass());
         }
         if (running) return;
         running = true;

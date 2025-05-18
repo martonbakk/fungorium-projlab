@@ -75,10 +75,7 @@ public class Hyphal extends Entity {
     developTime = newDevelopTime; }
 
     @Loggable
-    public void setLifeTime(int newLifeTime) { 
-    System.out.println("[" + this.getId() + "] [lifeTime] megvaltozott:");
-    System.out.println("[" + lifeTime + "] -> [" + newLifeTime + "]");  
-    lifeTime=newLifeTime; }
+    public void setLifeTime(int newLifeTime) { lifeTime=newLifeTime; }
 
     @Loggable
     public void setCutTime(int newCutTime) { 
@@ -112,13 +109,13 @@ public class Hyphal extends Entity {
         dying();
         developTime--;
         if(developTime<=0){
-            developed=true;
+            setDeveloped(true);
         }
     }
 
     @Loggable
     public void dying() {
-        int szam = lifeTime-1 ;
+        int szam = lifeTime - 1;
         System.out.println("[" + this.getId() + "] [life] megvaltozott:");
         System.out.println("[" + lifeTime + "] -> [" + szam + "]");
         lifeTime--;

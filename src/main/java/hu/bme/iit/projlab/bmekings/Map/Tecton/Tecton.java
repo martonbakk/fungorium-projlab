@@ -236,7 +236,7 @@ public class Tecton implements Listener, Serializable{
             System.out.println("Megkapott tekton nem szomszédos!");
             return;
         }
-        Hyphal newHyphal = new Hyphal(connected, false, 3000, 3000, 300, this, owner);
+        Hyphal newHyphal = new Hyphal(connected, false, 3, 3, 3, this, owner);
         // Ellenőrizzük, hogy a két tekton össze van e már kötve
         ArrayList<Hyphal> hyphals = connectedNeighbours.get(connected);
         if (hyphals != null) {

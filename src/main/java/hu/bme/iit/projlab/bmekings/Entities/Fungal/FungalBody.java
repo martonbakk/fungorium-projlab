@@ -48,10 +48,8 @@ public class FungalBody extends Entity {
 
         //this.id=IDGenerator.generateID("FB");
         this.currLevel = 1;
-        this.shotSporesNum = 2; // ELEJEN 
+        this.shotSporesNum = 2; // elején 8
         this.callNum = 0;
-        this.AddSpore("dupe");
-        this.AddSpore("dupe");
     }
 
     public FungalBody(int currLevel, int shotSporesNum, TypeCharacteristics characteristics, Tecton baseLocation, Mycologist owner){
@@ -61,20 +59,7 @@ public class FungalBody extends Entity {
         this.shotSporesNum = shotSporesNum;
         this.callNum = 0;
         this.owner=owner;
-        this.AddSpore("dupe");
-        this.AddSpore("dupe");
     }
-/*
-    public FungalBody(String id, Tecton baseLocation, int currLevel, int shotSporesNum, int shootingRange, int sporeProductionIntensity, int startingHyphalNum, int sporeCapacity) {
-        super(id, baseLocation);
-        //this.id=IDGenerator.generateID("FB");
-        this.spores = new LinkedList<>();
-        this.characteristics = new TypeCharacteristics(shootingRange, sporeProductionIntensity, startingHyphalNum, sporeCapacity);
-        this.currLevel = currLevel;
-        this.shotSporesNum = shotSporesNum;
-        this.callNum = 0;
-        System.out.println("asd");
-    }*/
 
     /// occupiedByFungalbody-hoz kell
     public FungalBody(TypeCharacteristics characteristics, Tecton baseLocation){
@@ -170,18 +155,15 @@ public class FungalBody extends Entity {
             
         }
         
-        for (int i=0; i<this.shotSporesNum; i++) {
+        for (int i = 0; i < this.shotSporesNum; i++) {
             // Ez kiveszi a Spore láncolt listából a legújabb spórát, amit az AddSpore random generált
             SporeInterface spore = this.spores.poll();
             spore.setBaseLocation(tecton);
             tecton.addSpore(spore);
-            this.shotSporesNum--;
             
-            if(this.spores.isEmpty()){
-                throw new RuntimeException("Nincs több spóra a gombatestben!");
-            }
-            if (this.shotSporesNum == 0) {
-                throw new RuntimeException("Nem tudsz kilőni több spórát!");
+            if (this.spores.isEmpty()) {
+                System.err.println("Nincs több spóra a gombatestben!");
+                break;
             }
         }
     }
@@ -244,24 +226,18 @@ public class FungalBody extends Entity {
             this.characteristics.sporeCapacity += 5; 
             int nextlvl = currLevel + 1;
             this.setLevel(nextlvl);
-        } else {
-            ///System.out.println("Még " + (3 - callNum) + " hívás kell a szintlépéshez. " + "Jelenlegi szint: " + currLevel);
         }
+        // else {
+        //     System.out.println("Még " + (3 - callNum) + " hívás kell a szintlépéshez. " + "Jelenlegi szint: " + currLevel);
+        // }
     }
 
-    // MYCOLOGIST FOGJA KEZELNI A FONALAKAT ES A TESTEKET
-    /*
-     * Koncepció a következő:
-     * A fonál base és szomszéd tektonját elmentjük, végig megynük utána a szomszéd szomszédjával. 
-     */
     @Loggable
     public void keepHyphalAlive() {
         HashMap<Tecton, Set<Tecton>> neighbours = new HashMap<>();
         Set<Hyphal> hyphalSet = new HashSet<>();
         Set<Tecton> visited = new HashSet<>();
         Queue<Tecton> queue = new LinkedList<>();
-        
-        //Mycologist player  = this.getOwner();
         
         ArrayList<Hyphal> hyphalList = owner.getHyphalList();
 
@@ -291,8 +267,6 @@ public class FungalBody extends Entity {
 
         for (Hyphal hyphal : hyphalSet) {
             hyphal.setLifeTime(3);
-            System.out.println("[" + hyphal.getId() + "] [life] megvaltozott:");
-            System.out.println("[" + hyphal.getLifeTime() + "] -> [" + 3 + "]");
         }
     }
 
@@ -300,20 +274,14 @@ public class FungalBody extends Entity {
     @Override
     public void update() {
         keepHyphalAlive();
-        AddSpore("");
+        AddSpore();
 
-        this.shotSporesNum=10; // A kilőhető spórák számát vissza kell állítani a kezdeti értékre DE NEM BIZTOS HOGY EZT ÍGY KÉNE
-        // egy adott idokozonkent majd amugy is termel sporat itt akkor random lehetne hozzaadogatni az AddSproe-val a sporakat
+        this.shotSporesNum = 10; // A kilőhető spórák számát vissza kell állítani a kezdeti értékre
     }
 
     @Loggable
-    public void AddSpore(String type) {
+    public void AddSpore() {
         SporeInterface spore;
-        if (type.equals("dupe")) {
-            spore = new DuplicateSpore(baseLocation);
-            spores.add(spore);
-            return;
-        }
 
         Random random = new Random();
         int sporeType = random.nextInt(11); 

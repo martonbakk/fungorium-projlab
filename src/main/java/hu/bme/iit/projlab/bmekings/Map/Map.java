@@ -63,17 +63,8 @@ public class Map implements Serializable{
         // Generate Tectons
         int tectonCount = 126;
 
-        // if(((mycologists.size() + entomologists.size()) >= 2) && ((mycologists.size() + entomologists.size()) < 6)){
-        //     tectonCount = 44;
-        // }else if (((mycologists.size() + entomologists.size()) >= 6) && ((mycologists.size() + entomologists.size()) <= 12)){
-        //     tectonCount = 88;
-        // }else{
-        //     System.err.println("Invalid number of players. Map generation failed.");
-        // }
-
-
         for (int i = 0; i < tectonCount; i++) {
-            int type = random.nextInt(5);
+            int type = random.nextInt(15);
             Tecton tc;
             switch (type) {
                 case 0:
@@ -86,7 +77,7 @@ public class Map implements Serializable{
                     tc = new ToxicTecton(6, 0, false, false);
                     break;
                 case 3:
-                    tc = new WeakTecton(false, 0, false, false); // Verify constructor signature
+                    tc = new WeakTecton(false, 0, false, false);
                     break;
                 default:
                     tc = new Tecton(0, false, false);
@@ -94,26 +85,14 @@ public class Map implements Serializable{
             }
             tectons.add(tc);
         }
-        /*
-        // Set up neighbors
-        for (int i = 0; i < tectons.size(); i++) {
-            for (int j = i + 1; j < tectons.size(); j++) {
-                if (random.nextInt(10) < 2) {
-                    Tecton tectonA = tectons.get(i);
-                    Tecton tectonB = tectons.get(j);
-                    tectonA.neighbours.add(tectonB);
-                    tectonB.neighbours.add(tectonA);
-                }
-            }
-        }
-        */
 
-        //temporary neighbor logic
+        // Set up neighbors (dont judge)
         Integer[] array1 = {0, 14, 28, 42, 56, 70, 84, 98, 112};
         Integer[] array2 = {13, 27, 41, 55, 69, 83, 97, 111, 125}; 
         ArrayList<Integer> leftBorder = new ArrayList<Integer>(Arrays.asList(array1));
         ArrayList<Integer> rightBorder = new ArrayList<Integer>(Arrays.asList(array2));
         for (Integer i = 0; i < tectons.size(); i++) {
+            // Order is important because of TectonPanel!!!!
             // Add Right neighbor
             if(!(rightBorder.contains(i)))
                 tectons.get(i).neighbours.add(tectons.get(i+1));
@@ -140,14 +119,21 @@ public class Map implements Serializable{
             }
         }
     
-        // Place insects on unique tectons using a copy
-        ArrayList<Tecton> availableTectons = new ArrayList<>(tectons); // Copy
+        // Place insects on tectons with a FungalBody using a copy
+        ArrayList<Tecton> availableTectons = new ArrayList<>();
+        tectons.forEach(e -> {
+            if (e.isOccupiedByFungus()) {
+                availableTectons.add(e);
+            }
+        });
         for (Entomologist entomologist : entomologists) {
             if (availableTectons.isEmpty()) break; // No available tectons
             int idx = random.nextInt(availableTectons.size());
             Tecton baseTecton = availableTectons.remove(idx);
             Insect insect = new Insect(1, 0, 1, 1, 1, baseTecton, entomologist);
             baseTecton.addInsect(insect);
+            Insect insect2 = new Insect(1, 0, 1, 1, 1, baseTecton, entomologist);
+            baseTecton.addInsect(insect2);
         }
     
         // Add spores for each entomologist (3 per entomologist)

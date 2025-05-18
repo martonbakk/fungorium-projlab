@@ -83,10 +83,6 @@ public class Mycologist extends Player {
             case 2:
                 selectHyphal(params.selectedHyphal);
                 break;
-            // Ez itt szerintem nem kell, a sima growFungalBody-t szerintem csak akkor használjuk, ha fonál megeszik egy rovart
-            // case 3:
-            //     growFungalBody(params.selectedTecton);
-            //     break;
             case 3:
                 growFungalBodyFromSpore(params.selectedTecton);
                 break;
@@ -191,17 +187,6 @@ public class Mycologist extends Player {
         
         this.selectedFungus=null;
     }
-    
-    /*
-    public void growFungalBody(FungalBody fungus){
-        if (fungus.getBase().isOccupiedByFungus()){
-            System.out.println("Tecton already has a fungus...");
-            return;
-        }else{
-            fungus.getBase().setOccupiedByFungus(true);
-            this.controlledFunguses.add(fungus);
-        }
-    }*/
 
     @Loggable
     public void growFungalBody(Tecton tecton){

@@ -12,7 +12,10 @@ import java.nio.file.Paths;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 
+import javax.management.RuntimeErrorException;
+
 import hu.bme.iit.projlab.bmekings.Entities.Entity;
+import hu.bme.iit.projlab.bmekings.GUIElements.Views.GameView;
 import hu.bme.iit.projlab.bmekings.Interface.Listener.Listener;
 import hu.bme.iit.projlab.bmekings.Logic.Ticker.Ticker;
 import hu.bme.iit.projlab.bmekings.Map.Map;
@@ -83,18 +86,6 @@ public class GameLogic implements Serializable{
     }
     }
 
-    /// C:/valamilyenmappa/metés.ser
-/*
-    public void saveGame(String name) throws IOException {
-        String path;
-        ///path=
-
-        validateState();
-        try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(path))) {
-            oos.writeObject(this);
-        }
-    }*/
-
     public void saveGame(String name) throws IOException {
     // Érvényes fájlnév ellenőrzése
     if (name == null || name.trim().isEmpty() || name.matches(".*[\\\\/:*?\"<>|].*")) {
@@ -144,16 +135,6 @@ public class GameLogic implements Serializable{
         
         try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream(path))) {
             GameLogic loadedGame = (GameLogic) ois.readObject();
-            /*loadedGame.validateState();
-            // Ticker újrainicializálása
-            loadedGame.ticker = new Ticker(loadedGame.ticker.getIntervalMillis());
-            for (Listener l : loadedGame.listeners) {
-                loadedGame.ticker.addListener(l);
-            }
-            // Ellenőrizzük, hogy a játék lejárt-e
-            if (loadedGame.ticker.getElapsedTicks() >= loadedGame.maxTicks) {
-                loadedGame.stopGame(); // Játék leállítása, ha az idő lejárt
-            }*/
             return loadedGame;
         }
     }
@@ -164,10 +145,6 @@ public class GameLogic implements Serializable{
         if (entomologists == null) throw new IllegalStateException("Entomologists list is null");
         if (entityList == null) throw new IllegalStateException("Entity list is null");
     }
-
-
-
-
 
     public GameLogic(int TickInterval, int playerNum) {
         ticker = new Ticker(TickInterval);
@@ -188,7 +165,6 @@ public class GameLogic implements Serializable{
         ticker.start();
     }
 
-    // kéne a teszteléshez egy olyan függvény, ami csak 1, vagy több tick-et hajt végre
     public void tick() {
         for (Entity e : entityList) {
             e.update();
