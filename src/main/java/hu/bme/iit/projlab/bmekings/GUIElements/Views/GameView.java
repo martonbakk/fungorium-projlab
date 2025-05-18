@@ -350,13 +350,13 @@ public class GameView extends AbstractGameView implements Listener {
 
         for (Mycologist mycologist : mycologists) {
             scoreText.append(mycologist.getUserName()).append(": ").append(mycologist.getScore());
-            if (currentIndex < totalPlayers - 1) scoreText.append(" | ");
+            if (currentIndex < totalPlayers - 1) scoreText.append(" \n ");
             currentIndex++;
         }
 
         for (Entomologist entomologist : entomologists) {
             scoreText.append(entomologist.getUserName()).append(": ").append(entomologist.getScore());
-            if (currentIndex < totalPlayers - 1) scoreText.append(" | ");
+            if (currentIndex < totalPlayers - 1) scoreText.append("\n ");
             currentIndex++;
         }
 
