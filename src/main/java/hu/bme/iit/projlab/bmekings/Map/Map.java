@@ -68,19 +68,19 @@ public class Map implements Serializable {
             Tecton tc;
             switch (type) {
                 case 0:
-                    tc = new HyphalPreserverTecton(0, false, false);
+                    tc = new HyphalPreserverTecton(-1, false, false);
                     break;
                 case 1:
-                    tc = new NoFungusTecton(0, false, false);
+                    tc = new NoFungusTecton(-1, false, false);
                     break;
                 case 2:
-                    tc = new ToxicTecton(6, 0, false, false);
+                    tc = new ToxicTecton(6, -1, false, false);
                     break;
                 case 3:
-                    tc = new WeakTecton(false, 0, false, false);
+                    tc = new WeakTecton(false, -1, false, false);
                     break;
                 default:
-                    tc = new Tecton(0, false, false);
+                    tc = new Tecton(-1, false, false);
                     break;
             }
             tectons.add(tc);
@@ -107,7 +107,6 @@ public class Map implements Serializable {
                     tectons.get(i).neighbours.add(tectons.get(i-14));
         }
 
-
         // Add FungalBodies
         for (Mycologist mycologist : mycologists) {
             for (int j = 0; j < 2; j++) {
@@ -116,6 +115,7 @@ public class Map implements Serializable {
                     int idx = random.nextInt(tectons.size());
                     Tecton baseTecton = tectons.get(idx);
                     success = baseTecton.createFungalBody(mycologist);
+                    System.out.println(baseTecton.getId());
                 }
             }
         }
@@ -224,27 +224,292 @@ public class Map implements Serializable {
                 connected.disconnectTecton(tecton, hyphal);
             }
         }
-        for(Tecton neighbor : tecton.getNeighbors()){
+        for(Tecton neighbor : tecton.getNeighbors()) {
             neighbor.removeNeighbor(tecton);
         }
-        tectons.remove(tecton);
-        System.out.println("Tecton torlodott id: ["+ tecton.getId() +"]");
         Random random = new Random();
-        ArrayList<Tecton> newNeighbors1 = new ArrayList<>();
-        ArrayList<Tecton> newNeighbors2 = new ArrayList<>();
+        ArrayList<Tecton> leftTectonNeighbors = new ArrayList<>();
+        ArrayList<Tecton> rightTectonNeighbors = new ArrayList<>();
+        
+        String[] splitId = tecton.getId().split("-");
 
-        for (Tecton neighbor : tecton.getNeighbors()) {
-            if (random.nextBoolean()) {
-                newNeighbors1.add(neighbor);
-            } else {
-                newNeighbors2.add(neighbor);
+        Integer[] leftArray = {15, 29, 43, 57, 71, 85, 99};
+        Integer[] rightArray = {28, 42, 56, 70, 84, 98, 112};
+        ArrayList<Integer> leftBorder = new ArrayList<Integer>(Arrays.asList(leftArray));
+        ArrayList<Integer> rightBorder = new ArrayList<Integer>(Arrays.asList(rightArray));
+
+        Tecton leftTecton;
+        Tecton rightTecton;
+
+        if (tecton instanceof HyphalPreserverTecton) {
+            leftTecton = new HyphalPreserverTecton();
+            rightTecton = new HyphalPreserverTecton();
+        }
+        else if (tecton instanceof NoFungusTecton) {
+            leftTecton = new NoFungusTecton();
+            rightTecton = new NoFungusTecton();
+        }
+        else if (tecton instanceof ToxicTecton) {
+            leftTecton = new ToxicTecton();
+            rightTecton = new ToxicTecton();
+        }
+        else if (tecton instanceof WeakTecton) {
+            leftTecton = new WeakTecton();
+            rightTecton = new WeakTecton();
+        }
+        else {
+            leftTecton = new Tecton();
+            rightTecton = new Tecton();
+        }
+
+        leftTecton.setBroken(true);
+        rightTecton.setBroken(true);
+
+        // Az első sorban tört egy tekton, de nem a szélén
+        if (Integer.parseInt(splitId[1]) >= 02 && Integer.parseInt(splitId[1]) <= 13) {
+            for (Tecton t : tectons) {
+                String[] splitT = t.getId().split("-");
+
+                // Bal Tekton szomszédjainak meghatározása (-1 és +14)
+                if (Integer.parseInt(splitT[1]) == Integer.parseInt(splitId[1]) - 1) {
+                    leftTectonNeighbors.add(t);
+                    t.addNeighbor(leftTecton);
+                }
+                if (Integer.parseInt(splitT[1]) == Integer.parseInt(splitId[1]) + 14) {
+                    leftTectonNeighbors.add(t);
+                    t.addNeighbor(leftTecton);
+                }
+
+                // Jobb Tekton szomszédainak meghatározása (+1 és +14)
+                if (Integer.parseInt(splitT[1]) == Integer.parseInt(splitId[1]) + 1) {
+                    rightTectonNeighbors.add(t);
+                    t.addNeighbor(rightTecton);
+                }
+                if (Integer.parseInt(splitT[1]) == Integer.parseInt(splitId[1]) + 14) {
+                    rightTectonNeighbors.add(t);
+                    t.addNeighbor(rightTecton);
+                }
             }
         }
-        tectons.add(new Tecton());
-        tectons.get(tectons.size() - 1).setNeighbors(newNeighbors1);
-        tectons.add(new Tecton());
-        tectons.get(tectons.size() - 1).setNeighbors(newNeighbors2);
+        // Az utolsó sorban tört egy tekton, de nem a szélén
+        else if (Integer.parseInt(splitId[1]) >= 114 && Integer.parseInt(splitId[1]) <= 125) {
+            for (Tecton t : tectons) {
+                String[] splitT = t.getId().split("-");
+
+                // Bal Tekton szomszédjainak meghatározása (-1 és -14)
+                if (Integer.parseInt(splitT[1]) == Integer.parseInt(splitId[1]) - 1) {
+                    leftTectonNeighbors.add(t);
+                    t.addNeighbor(leftTecton);
+                }
+                if (Integer.parseInt(splitT[1]) == Integer.parseInt(splitId[1]) - 14) {
+                    leftTectonNeighbors.add(t);
+                    t.addNeighbor(leftTecton);
+                }
+
+                // Jobb Tekton szomszédainak meghatározása (+1 és -14)
+                if (Integer.parseInt(splitT[1]) == Integer.parseInt(splitId[1]) + 1) {
+                    rightTectonNeighbors.add(t);
+                    t.addNeighbor(rightTecton);
+                }
+                if (Integer.parseInt(splitT[1]) == Integer.parseInt(splitId[1]) - 14) {
+                    rightTectonNeighbors.add(t);
+                    t.addNeighbor(rightTecton);
+                }
+            }
+        }
+        // Az első sor első tektonja tört
+        else if (Integer.parseInt(splitId[1]) == 01) {
+            for (Tecton t : tectons) {
+                String[] splitT = t.getId().split("-");
+
+                // Bal Tekton szomszédjainak meghatározása (csak +14)
+                if (Integer.parseInt(splitT[1]) == Integer.parseInt(splitId[1]) + 14) {
+                    leftTectonNeighbors.add(t);
+                    t.addNeighbor(leftTecton);
+                }
+
+                // Jobb Tekton szomszédainak meghatározása (+1 és +14)
+                if (Integer.parseInt(splitT[1]) == Integer.parseInt(splitId[1]) + 1) {
+                    rightTectonNeighbors.add(t);
+                    t.addNeighbor(rightTecton);
+                }
+                if (Integer.parseInt(splitT[1]) == Integer.parseInt(splitId[1]) + 14) {
+                    rightTectonNeighbors.add(t);
+                    t.addNeighbor(rightTecton);
+                }
+            }
+        }
+        // Az első sor utolsó tektonja tört
+        else if (Integer.parseInt(splitId[1]) == 14) {
+            for (Tecton t : tectons) {
+                String[] splitT = t.getId().split("-");
+
+                // Bal Tekton szomszédjainak meghatározása (-1 és +14)
+                if (Integer.parseInt(splitT[1]) == Integer.parseInt(splitId[1]) - 1) {
+                    leftTectonNeighbors.add(t);
+                    t.addNeighbor(leftTecton);
+                }
+                if (Integer.parseInt(splitT[1]) == Integer.parseInt(splitId[1]) + 14) {
+                    leftTectonNeighbors.add(t);
+                    t.addNeighbor(leftTecton);
+                }
+
+                // Jobb Tekton szomszédainak meghatározása (csak +14)
+                if (Integer.parseInt(splitT[1]) == Integer.parseInt(splitId[1]) + 14) {
+                    rightTectonNeighbors.add(t);
+                    t.addNeighbor(rightTecton);
+                }
+            }
+        }
+        // Az utolsó sor első tektonja tört
+        else if (Integer.parseInt(splitId[1]) == 113) {
+            for (Tecton t : tectons) {
+                String[] splitT = t.getId().split("-");
+
+                // Bal Tekton szomszédjainak meghatározása (csak -14)
+                if (Integer.parseInt(splitT[1]) == Integer.parseInt(splitId[1]) - 14) {
+                    leftTectonNeighbors.add(t);
+                    t.addNeighbor(leftTecton);
+                }
+
+                // Jobb Tekton szomszédainak meghatározása (+1 és -14)
+                if (Integer.parseInt(splitT[1]) == Integer.parseInt(splitId[1]) + 1) {
+                    rightTectonNeighbors.add(t);
+                    t.addNeighbor(rightTecton);
+                }
+                if (Integer.parseInt(splitT[1]) == Integer.parseInt(splitId[1]) - 14) {
+                    rightTectonNeighbors.add(t);
+                    t.addNeighbor(rightTecton);
+                }
+            }
+        }
+        // Az utolsó sor utolsó tektonja tört
+        else if (Integer.parseInt(splitId[1]) == 126) {
+            for (Tecton t : tectons) {
+                String[] splitT = t.getId().split("-");
+
+                // Bal Tekton szomszédjainak meghatározása (-1 és -14)
+                if (Integer.parseInt(splitT[1]) == Integer.parseInt(splitId[1]) - 1) {
+                    leftTectonNeighbors.add(t);
+                    t.addNeighbor(leftTecton);
+                }
+                if (Integer.parseInt(splitT[1]) == Integer.parseInt(splitId[1]) - 14) {
+                    leftTectonNeighbors.add(t);
+                    t.addNeighbor(rightTecton);
+                }
+
+                // Jobb Tekton szomszédainak meghatározása (csak -14)
+                if (Integer.parseInt(splitT[1]) == Integer.parseInt(splitId[1]) - 14) {
+                    rightTectonNeighbors.add(t);
+                    t.addNeighbor(rightTecton);
+                }
+            }
+        }
+        // Bal szélső tekton tört
+        else if (leftBorder.contains(Integer.parseInt(splitId[1]))) {
+            for (Tecton t : tectons) {
+                String[] splitT = t.getId().split("-");
+
+                // Bal Tekton szomszédjainak meghatározása (-14 és +14)
+                if (Integer.parseInt(splitT[1]) == Integer.parseInt(splitId[1]) - 14) {
+                    leftTectonNeighbors.add(t);
+                    t.addNeighbor(leftTecton);
+                }
+                if (Integer.parseInt(splitT[1]) == Integer.parseInt(splitId[1]) + 14) {
+                    leftTectonNeighbors.add(t);
+                    t.addNeighbor(leftTecton);
+                }
+
+                // Jobb Tekton szomszédainak meghatározása (+1 és -14 és +14)
+                if (Integer.parseInt(splitT[1]) == Integer.parseInt(splitId[1]) + 1) {
+                    rightTectonNeighbors.add(t);
+                    t.addNeighbor(rightTecton);
+                }
+                if (Integer.parseInt(splitT[1]) == Integer.parseInt(splitId[1]) - 14) {
+                    rightTectonNeighbors.add(t);
+                    t.addNeighbor(rightTecton);
+                }
+                if (Integer.parseInt(splitT[1]) == Integer.parseInt(splitId[1]) + 14) {
+                    rightTectonNeighbors.add(t);
+                    t.addNeighbor(rightTecton);
+                }
+            }
+        }
+        // Jobb szélső tekton tört
+        else if (rightBorder.contains(Integer.parseInt(splitId[1]))) {
+            for (Tecton t : tectons) {
+                String[] splitT = t.getId().split("-");
+
+                // Bal Tekton szomszédjainak meghatározása (-1 és -14 és +14)
+                if (Integer.parseInt(splitT[1]) == Integer.parseInt(splitId[1]) - 1) {
+                    leftTectonNeighbors.add(t);
+                    t.addNeighbor(leftTecton);
+                }
+                if (Integer.parseInt(splitT[1]) == Integer.parseInt(splitId[1]) - 14) {
+                    leftTectonNeighbors.add(t);
+                    t.addNeighbor(leftTecton);
+                }
+                if (Integer.parseInt(splitT[1]) == Integer.parseInt(splitId[1]) + 14) {
+                    leftTectonNeighbors.add(t);
+                    t.addNeighbor(leftTecton);
+                }
+
+                // Jobb Tekton szomszédainak meghatározása (-14 és +14)
+                if (Integer.parseInt(splitT[1]) == Integer.parseInt(splitId[1]) - 14) {
+                    rightTectonNeighbors.add(t);
+                    t.addNeighbor(rightTecton);
+                }
+                if (Integer.parseInt(splitT[1]) == Integer.parseInt(splitId[1]) + 14) {
+                    rightTectonNeighbors.add(t);
+                    t.addNeighbor(rightTecton);
+                }
+            }
+        } else {
+            // Középen történt a törés
+            for (Tecton t : tectons) {
+                String[] splitT = t.getId().split("-");
+
+                // Bal Tekton szomszédjainak meghatározása (-1 és -14 és +14)
+                if (Integer.parseInt(splitT[1]) == Integer.parseInt(splitId[1]) - 1) {
+                    leftTectonNeighbors.add(t);
+                    t.addNeighbor(leftTecton);
+                }
+                if (Integer.parseInt(splitT[1]) == Integer.parseInt(splitId[1]) - 14) {
+                    leftTectonNeighbors.add(t);
+                    t.addNeighbor(leftTecton);
+                }
+                if (Integer.parseInt(splitT[1]) == Integer.parseInt(splitId[1]) + 14) {
+                    leftTectonNeighbors.add(t);
+                    t.addNeighbor(leftTecton);
+                }
+
+                // Jobb Tekton szomszédainak meghatározása (+1 és -14 és +14)
+                if (Integer.parseInt(splitT[1]) == Integer.parseInt(splitId[1]) + 1) {
+                    rightTectonNeighbors.add(t);
+                    t.addNeighbor(rightTecton);
+                }
+                if (Integer.parseInt(splitT[1]) == Integer.parseInt(splitId[1]) - 14) {
+                    rightTectonNeighbors.add(t);
+                    t.addNeighbor(rightTecton);
+                }
+                if (Integer.parseInt(splitT[1]) == Integer.parseInt(splitId[1]) + 14) {
+                    rightTectonNeighbors.add(t);
+                    t.addNeighbor(rightTecton);
+                }
+            }
+        }
         
+        leftTectonNeighbors.add(rightTecton);
+        rightTectonNeighbors.add(leftTecton);
+
+        leftTecton.setNeighbors(leftTectonNeighbors);
+        rightTecton.setNeighbors(rightTectonNeighbors);
+        
+
+        tectons.add(tectons.indexOf(tecton), leftTecton);
+        tectons.add(tectons.indexOf(tecton) + 1, rightTecton);
+        tectons.remove(tecton);
+        System.out.println("Tecton torlodott id: ["+ tecton.getId() +"]");       
     }
 
     public ArrayList<Tecton> getTectons() {

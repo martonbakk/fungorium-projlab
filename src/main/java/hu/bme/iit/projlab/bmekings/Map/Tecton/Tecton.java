@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Queue;
+import java.util.Random;
 
 import javax.management.RuntimeErrorException;
 
@@ -40,6 +41,7 @@ public class Tecton implements Listener, Serializable {
     private boolean occupiedByInsect;
     private boolean occupiedByFungalBody; 
     private FungalBody fungalBody;
+    private boolean broken;
 
     protected Flags flags;
 
@@ -60,6 +62,10 @@ public class Tecton implements Listener, Serializable {
     public int getPosY() {
         return posY;
     }
+
+    public boolean isBroken() { return broken; }
+
+    public void setBroken(boolean b) { broken = b; }
 
     public class Flags implements Serializable {
         private static final long serialVersionUID = 1L;
@@ -119,19 +125,21 @@ public class Tecton implements Listener, Serializable {
 
     public Tecton() {
         this.id=IDGenerator.generateID("T"); 
-        this.splitChance=0;
-        this.occupiedByInsect=false;
-        this.occupiedByFungalBody=false;
-        this.flags=new Flags();
+        this.splitChance = 0;
+        this.occupiedByInsect = false;
+        this.occupiedByFungalBody = false;
+        this.flags = new Flags();
+        this.broken = false;
         System.out.println("Uj objektum [" + id + "] letrejott!");
     }
 
     public Tecton(double splitChance, boolean occupiedByInsect, boolean occupiedByFungalBody) {
         this.id=IDGenerator.generateID("T");
-        this.splitChance=splitChance;
-        this.occupiedByInsect=occupiedByInsect;
-        this.occupiedByFungalBody=occupiedByFungalBody;
-        this.flags=new Flags();
+        this.splitChance = splitChance;
+        this.occupiedByInsect = occupiedByInsect;
+        this.occupiedByFungalBody = occupiedByFungalBody;
+        this.flags = new Flags();
+        this.broken = false;
 
         System.out.println("Uj objektum [" + id + "] letrejott!");
     }
@@ -162,6 +170,8 @@ public class Tecton implements Listener, Serializable {
 
         player.addFungus(newfungalBody);
         
+        player.increaseScore();
+        
         return true;
     }
 
@@ -174,7 +184,9 @@ public class Tecton implements Listener, Serializable {
             throw new RuntimeException("Nincs elegendő spóra a gombatest létrehozásához!");
         spores.peek().destroySpore();
         spores.peek().destroySpore();           
-                               
+        
+        player.increaseScore();
+
         return createFungalBody(player);
     }
 
@@ -196,26 +208,6 @@ public class Tecton implements Listener, Serializable {
         }
         return sporeList;
     }
-    /*
-    public void disconnectTecton(Tecton tc, Hyphal hyphal) {
-        for (HashMap.Entry<Tecton, ArrayList<Hyphal>> entry : connectedNeighbours.entrySet()) {
-            Tecton key = entry.getKey();
-            ArrayList<Hyphal> value = entry.getValue();
-
-            if (key.equals(tc)) {
-                // Itt történik valami, ha a Tecton kulcs megegyezik a tc-vel
-                System.out.println("Találtunk egyezést: " + tc);
-                for (Hyphal h : value) {
-                    if (hyphal.equals(h)){
-                        /// Ezt kell törölni
-                        /// Kell a hyphalnak is egy destroy függvény
-                        key.disconnectTecton(this,hyphal);
-                        this.connectedNeighbours.remove(key,h);
-                    }
-                }
-            }
-        }
-    }*/
 
     @Loggable
     public void disconnectTecton(Tecton tc, Hyphal hyphal) {
@@ -284,9 +276,21 @@ public class Tecton implements Listener, Serializable {
     public void setNeighbors(ArrayList<Tecton> newNeighbors){
         neighbours = newNeighbors;
     }
+
+    public void addNeighbor(Tecton newNeighbor) {
+        neighbours.add(newNeighbor);
+    }
     
     public void update() {
         runSpecialEffect();
+
+        Random r = new Random();
+        int rIdx = r.nextInt(100);
+        if (rIdx <= splitChance) {
+            System.out.println(rIdx + " " + splitChance);
+            if (!broken)
+                GameLogic.getMap().splitTecton(this);
+        }
     }
 
 }

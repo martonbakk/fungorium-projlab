@@ -32,6 +32,7 @@ public class Insect extends Entity{
     private Entomologist owner = null;
     private HashMap<Effect, Integer> activeEffects=new HashMap<>();
 
+
     @Loggable
     public Entomologist getOwner() {
         return owner;
@@ -168,6 +169,7 @@ public class Insect extends Entity{
             this.feedInsect(sporeToEat.getNutritionValue());
             sporeToEat.activateEffect(this);
             sporeToEat.destroySpore();
+            owner.increaseScore();
         }
     }
 

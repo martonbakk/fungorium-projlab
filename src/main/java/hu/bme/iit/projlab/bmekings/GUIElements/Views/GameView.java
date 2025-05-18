@@ -350,13 +350,13 @@ public class GameView extends AbstractGameView implements Listener {
 
         for (Mycologist mycologist : mycologists) {
             scoreText.append(mycologist.getUserName()).append(": ").append(mycologist.getScore());
-            if (currentIndex < totalPlayers - 1) scoreText.append(" | ");
+            if (currentIndex < totalPlayers - 1) scoreText.append(" \n ");
             currentIndex++;
         }
 
         for (Entomologist entomologist : entomologists) {
             scoreText.append(entomologist.getUserName()).append(": ").append(entomologist.getScore());
-            if (currentIndex < totalPlayers - 1) scoreText.append(" | ");
+            if (currentIndex < totalPlayers - 1) scoreText.append("\n ");
             currentIndex++;
         }
 
@@ -747,7 +747,7 @@ public class GameView extends AbstractGameView implements Listener {
 
                 // Define tectonCenters for this panel
                 Map<Tecton, int[]> tectonCenters = new HashMap<>();
-                int panelRadius = 75 / 2; // TECTON_SIZE / 2
+                int panelRadius = TECTON_SIZE / 2;
                 tectonCenters.put(centralTecton, new int[] { (int) center.getX(), (int) center.getY() });
                 for (int i = 0; i < maxNeighbors; i++) {
                     Tecton neighbor = neighbors.get(i);
@@ -890,14 +890,6 @@ public class GameView extends AbstractGameView implements Listener {
                         drawTecton(g2d, neighbor, positions.get(neighbor), TECTON_SIZE);
                     }
                 }
-                /* 
-                if (tectons.get(i) == selectedTecton) {
-                    g2d.setColor(Color.YELLOW);
-                    g2d.setStroke(new BasicStroke(2));
-                    g2d.drawOval(x, y, diameter, diameter);
-                    g2d.setStroke(new BasicStroke(1));
-                }
-                */
 
                 // Draw Spore
                 if (!centralTecton.getSpores().isEmpty()) {
@@ -968,14 +960,23 @@ public class GameView extends AbstractGameView implements Listener {
                 else if (tecton instanceof ToxicTecton) g2d.setColor(new Color(108, 108, 44));
                 else if (tecton instanceof WeakTecton) g2d.setColor(new Color(250, 250, 250));
                 else g2d.setColor(new Color(128, 254, 57));
-                int halfSize = size/2;
-                g2d.fillOval((int)(position.getX()-halfSize), (int)(position.getY()-halfSize), size, size);
+                
+                int halfSize = size / 2;
+                if (tecton.isBroken()) {
+                    g2d.fillArc((int)(position.getX()-halfSize), (int)(position.getY()-halfSize), size, size, 90, 180);
+                } else {
+                    g2d.fillOval((int)(position.getX()-halfSize), (int)(position.getY()-halfSize), size, size);
+                }
 
                 // Draw yellow outline if this is the selected tecton
                     if (tecton == GameLogic.getParams().selectedTecton) {
-                    g2d.setColor(Color.YELLOW);
-                    g2d.setStroke(new BasicStroke(2));
-                    g2d.drawOval((int)(position.getX() - halfSize), (int)(position.getY() - halfSize), size, size);
+                        g2d.setColor(Color.YELLOW);
+                        g2d.setStroke(new BasicStroke(2));
+                        if (tecton.isBroken()) {
+                            g2d.drawArc((int)(position.getX() - halfSize), (int)(position.getY() - halfSize), size, size, 90, 180);
+                        } else {
+                            g2d.drawOval((int)(position.getX() - halfSize), (int)(position.getY() - halfSize), size, size);
+                        }
                     g2d.setStroke(new BasicStroke(1));
                     selectedTecton = GameLogic.getParams().selectedTecton;
                 }
@@ -1058,11 +1059,11 @@ public class GameView extends AbstractGameView implements Listener {
             int diameter = radius * 2;
             int spacing = 10;
             int totalWidth = getWidth();
-
+            
             // Calculate number of columns
             int cols = Math.max(1, (totalWidth - padding * 2 + spacing) / (diameter + spacing));
 
-            // Map tectons to their center coordinates
+            // // Map tectons to their center coordinates
             Map<Tecton, int[]> tectonCenters = new HashMap<>();
             for (int i = 0; i < tectons.size(); i++) {
                 int row = i / cols;
@@ -1201,33 +1202,130 @@ public class GameView extends AbstractGameView implements Listener {
             }
 
 
-
+           
             // Draw tectons, fungal bodies, insects, spores, and selection outline
+            boolean hadBroken= false;
+            int countBroken = 0;
+            int row = 0;
+            int col = 0;
+            int wholeTectNum = -1;
             for (int i = 0; i < tectons.size(); i++) {
-                int row = i / cols;
-                int col = i % cols;
+                if(tectons.get(i).isBroken()&&!hadBroken){
+                    wholeTectNum += 1;
+                } else if(!tectons.get(i).isBroken()){
+                    wholeTectNum +=1;
+                }
+                
+                row = wholeTectNum / cols;
+                col = wholeTectNum % cols;
+                
 
+                // Alap koordináták
                 int x = padding + col * (diameter + spacing);
                 int y = padding + row * (diameter + spacing);
 
-                // Draw tecton (color by type)
+                // Térköz a félkörök között
+                int gap = diameter / 4;
+                int shift = diameter / 2 + gap / 2; // Eltolás a középponttól
+
+                // Szín a Tecton típusa alapján
                 if (tectons.get(i) instanceof HyphalPreserverTecton) g2d.setColor(new Color(128, 254, 170));
                 else if (tectons.get(i) instanceof NoFungusTecton) g2d.setColor(new Color(254, 254, 57));
                 else if (tectons.get(i) instanceof ToxicTecton) g2d.setColor(new Color(108, 108, 44));
                 else if (tectons.get(i) instanceof WeakTecton) g2d.setColor(new Color(250, 250, 250));
                 else g2d.setColor(new Color(128, 254, 57));
 
-                g2d.fillOval(x, y, diameter, diameter);
+                
+                // Broken Tecton esetén két félkör, egyébként teljes kör
+                if (tectons.get(i).isBroken()) {
+                    // Bal oldali félkör (balra nyílik, mint "C")
+                    
+                    if (!hadBroken){
+                        int leftCenterX = x-2;
+                        tectons.get(i).setPosition(leftCenterX, y);
+                        g2d.fillArc(leftCenterX, y, diameter, diameter, 90, 180); // 90°-tól 270°-ig
+                        hadBroken = true;
+                    }else{
+                        int rightCenterX = x+2;
+                        tectons.get(i).setPosition(rightCenterX, y);
+                        g2d.fillArc(rightCenterX, y, diameter, diameter, 270, 180); // 270°-tól 90°-ig
 
-                // Draw yellow outline if this is the selected tecton
+                        hadBroken = false;
+                    }
+                } else {
+                    // Teljes kör
+                    tectons.get(i).setPosition(x, y);
+                    g2d.fillOval(x, y, diameter, diameter);
+                }
+
+                // Sárga körvonal, ha ez a kiválasztott Tecton
                 if (tectons.get(i) == selectedTecton) {
                     g2d.setColor(Color.YELLOW);
                     g2d.setStroke(new BasicStroke(2));
-                    g2d.drawOval(x, y, diameter, diameter);
+                    if (tectons.get(i).isBroken()) {
+                        // Bal oldali félkör körvonala
+                        if (hadBroken){
+                        int leftCenterX = x -2;
+                        g2d.drawArc(leftCenterX, y, diameter, diameter, 90, 180);
+                        }else{
+                        // Jobb oldali félkör körvonala
+                            int rightCenterX = x +2;
+                            g2d.drawArc(rightCenterX, y, diameter, diameter, 270, 180);
+                        }
+                       
+                    } else {
+                        g2d.drawOval(x, y, diameter, diameter);
+                    }
                     g2d.setStroke(new BasicStroke(1));
                 }
 
-                // Draw spore
+                // Poligon létrehozása egérkattintás-érzékeléshez
+                Polygon polygon = new Polygon();
+                int sides = 20;
+                if (tectons.get(i).isBroken()) {
+                    // Téglalap poligon a két félkört és a térközt lefedve
+                    
+                    // bal oldal
+                    //tectons.get(i).isBroken()&&!hadBroken
+                    
+                    // jobb oldal
+    	            //!(tectons.get(i).isBroken()&&!hadBroken) && tectons.get(i).isBroken()
+
+                    if (hadBroken){
+                        // bal oldali félkör
+                        int leftX = x ;
+                        int rightX = x + diameter / 2; // csak a félkört fedjük le
+                        int topY = y;
+                        int bottomY = y + diameter;
+
+                        polygon.addPoint(leftX, topY);
+                        polygon.addPoint(rightX, topY);
+                        polygon.addPoint(rightX, bottomY);
+                        polygon.addPoint(leftX, bottomY);
+                    }else{
+                        // jobb oldali félkör VAMOOOOOS
+                        int leftX = x + diameter / 2;
+                        int rightX = x + shift + diameter / 2 -5;
+                        int topY = y;
+                        int bottomY = y + diameter;
+
+                        polygon.addPoint(leftX, topY);
+                        polygon.addPoint(rightX, topY);
+                        polygon.addPoint(rightX, bottomY);
+                        polygon.addPoint(leftX, bottomY);
+                    }
+                } else {
+                    // Kör poligon nem broken esetén
+                    for (int j = 0; j < sides; j++) {
+                        double angle = 2 * Math.PI * j / sides;
+                        int px = (int) (x + radius + radius * Math.cos(angle));
+                        int py = (int) (y + radius + radius * Math.sin(angle));
+                        polygon.addPoint(px, py);
+                    }
+                }
+                tectonPolygons.add(polygon);
+
+                // Spóra rajzolása
                 if (!tectons.get(i).getSpores().isEmpty()) {
                     g2d.setColor(Color.RED);
                     int sporeRadius = radius / 5;
@@ -1237,7 +1335,7 @@ public class GameView extends AbstractGameView implements Listener {
                     g2d.fillOval(sporeX, sporeY, sporeDiameter, sporeDiameter);
                 }
 
-                // Draw FungalBody if present
+                // Gombatest rajzolása, ha van
                 FungalBody fungalBody = tectons.get(i).getFungalBody();
                 if (fungalBody != null) {
                     Mycologist owner = fungalBody.getOwner();
@@ -1251,7 +1349,7 @@ public class GameView extends AbstractGameView implements Listener {
                         int fungalY = y + (radius - fungalRadius);
                         g2d.drawImage(fungalImage, fungalX, fungalY, fungalDiameter, fungalDiameter, null);
                     } else {
-                        // Fallback to red circle
+                        // Visszaesés piros körre
                         g2d.setColor(Color.RED);
                         int fungalRadius = radius / 2;
                         int fungalDiameter = fungalRadius * 2;
@@ -1261,17 +1359,15 @@ public class GameView extends AbstractGameView implements Listener {
                     }
                 }
 
-                // Draw Insect image if present
+                // Rovar kép rajzolása, ha van
                 if (tectons.get(i).isOccupiedByInsect()) {
                     ArrayList<Insect> insects = tectons.get(i).getInsects();
-                    
                     int insectCount = insects.size();
                     if (insectCount > 0) {
                         int insectRadius = radius / 3;
                         int insectDiameter = insectRadius * 2;
-
-                        // Kezdő x koordináta úgy, hogy középre legyen igazítva
-                        int startX = x;
+                        // Kezdő X koordináta a két félkör között, középre igazítva
+                        int startX = x - (insectCount * insectDiameter) / 2;
                         int yOffset = y + 5;
 
                         for (int j = 0; j < insectCount; j++) {
@@ -1280,7 +1376,7 @@ public class GameView extends AbstractGameView implements Listener {
                             String subType = owner != null ? owner.getType() : null;
                             BufferedImage insectImage = subType != null ? entomologistSubTypeImages.get(subType) : null;
 
-                            int insectX = startX + j * insectDiameter + 10;
+                            int insectX = startX + j * insectDiameter;
 
                             if (insectImage != null) {
                                 g2d.drawImage(insectImage, insectX, yOffset, insectDiameter, insectDiameter, null);
@@ -1292,16 +1388,7 @@ public class GameView extends AbstractGameView implements Listener {
                     }
                 }
 
-                // Create polygon for mouse click detection
-                Polygon polygon = new Polygon();
-                int sides = 20;
-                for (int j = 0; j < sides; j++) {
-                    double angle = 2 * Math.PI * j / sides;
-                    int px = (int) (x + radius + radius * Math.cos(angle));
-                    int py = (int) (y + radius + radius * Math.sin(angle));
-                    polygon.addPoint(px, py);
-                }
-                tectonPolygons.add(polygon);
+                
             }
         }
     }
