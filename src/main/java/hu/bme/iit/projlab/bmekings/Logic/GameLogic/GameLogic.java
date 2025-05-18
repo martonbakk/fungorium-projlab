@@ -66,10 +66,8 @@ public class GameLogic implements Serializable{
         synchronized (entityList) {
             serializedEntityList = new ArrayList<>(entityList);
         }
-        synchronized (map) {
-            mapSave = map;
-        }
-
+        
+        mapSave = map;
 
         oos.defaultWriteObject(); // Szerializálja az összes nem statikus mezőt
     }
@@ -89,8 +87,7 @@ public class GameLogic implements Serializable{
         entityList.addAll(serializedEntityList);
     }
     synchronized (map) {
-        mapSave=null;
-        mapSave = map;
+        map = mapSave;
     }
 
     }
