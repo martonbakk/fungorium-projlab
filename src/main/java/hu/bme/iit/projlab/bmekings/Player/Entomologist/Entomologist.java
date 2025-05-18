@@ -37,7 +37,7 @@ public class Entomologist extends Player{
     }
 
     @Override
-    public List<String> getAvailableActions() { return Arrays.asList("Eat Spore", "Move", "Cut Hyphal", "Skip"); }
+    public List<String> getAvailableActions() { return Arrays.asList("Skip","Eat Spore", "Move", "Cut Hyphal"); }
 
     public List<Insect> getControlledInsects() { return controlledInsects; }
 

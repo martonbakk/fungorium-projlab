@@ -2,8 +2,6 @@ package hu.bme.iit.projlab.bmekings.Entities.Insect;
 
 import java.util.HashMap;
 
-import javax.management.RuntimeErrorException;
-
 import hu.bme.iit.projlab.bmekings.Effects.Effect.Effect;
 import hu.bme.iit.projlab.bmekings.Entities.Entity;
 import hu.bme.iit.projlab.bmekings.Entities.Fungal.Hyphal;
@@ -139,8 +137,9 @@ public class Insect extends Entity{
                     if (movingCD == 0) {
                         System.out.println("[" + this.getId() + "] [baseLocation] megváltozott:");
                         System.out.println("[" + baseLocation.getId() + "] -> [" + targetTecton.getId() + "]");
-                        this.baseLocation.setOccupiedByInsect(false);
+                        
                         this.baseLocation.getInsects().remove(this);
+                        this.baseLocation.setOccupiedByInsect(this.baseLocation.getInsects().size() > 0);
                         this.baseLocation=targetTecton;
                         this.baseLocation.addInsect(this);
                         this.baseLocation.setOccupiedByInsect(true);

@@ -114,7 +114,7 @@ public class Mycologist extends Player {
 
     @Override
     public List<String> getAvailableActions() {
-        return Arrays.asList("Grow Fungal Body", "Shoot Spore", "Grow Hyphal", "Grow Hyphal From Hyphal", "Eat Insect", "Speed Up Development", "Level Up", "Skip");
+        return Arrays.asList("Skip", "Grow Fungal Body", "Shoot Spore", "Grow Hyphal", "Grow Hyphal From Hyphal", "Eat Insect", "Speed Up Development", "Level Up");
     }
 
     @Loggable

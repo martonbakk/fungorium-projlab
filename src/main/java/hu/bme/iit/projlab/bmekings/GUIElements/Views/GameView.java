@@ -216,7 +216,7 @@ public class GameView extends AbstractGameView implements Listener {
                 }
             }
         });
-
+        
         JPanel comboPanel = new JPanel(new GridLayout(2, 1, 5, 5));
         comboPanel.add(playerComboBox);
         comboPanel.add(actionComboBox);
