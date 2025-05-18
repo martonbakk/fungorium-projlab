@@ -855,6 +855,7 @@ public class GameView extends AbstractGameView implements Listener {
                     g2d.setStroke(new BasicStroke(2));
                     g2d.drawOval((int)(position.getX() - halfSize), (int)(position.getY() - halfSize), size, size);
                     g2d.setStroke(new BasicStroke(1));
+                    selectedTecton = GameLogic.getParams().selectedTecton;
                 }
 
                 // Draw fungus
