@@ -132,8 +132,7 @@ public class Map implements Serializable{
             Tecton baseTecton = availableTectons.remove(idx);
             Insect insect = new Insect(1, 0, 1, 1, 1, baseTecton, entomologist);
             baseTecton.addInsect(insect);
-            Insect insect2 = new Insect(1, 0, 1, 1, 1, baseTecton, entomologist);
-            baseTecton.addInsect(insect2);
+
         }
     
         // Add spores for each entomologist (3 per entomologist)
