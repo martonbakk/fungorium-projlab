@@ -287,7 +287,9 @@ public class Tecton implements Listener, Serializable {
         Random r = new Random();
         int rIdx = r.nextInt(100);
         if (rIdx <= splitChance) {
-            GameLogic.getMap().splitTecton(this);
+            System.out.println(rIdx + " " + splitChance);
+            if (!broken)
+                GameLogic.getMap().splitTecton(this);
         }
     }
 

@@ -119,6 +119,7 @@ public class Map implements Serializable {
                     int idx = random.nextInt(tectons.size());
                     Tecton baseTecton = tectons.get(idx);
                     success = baseTecton.createFungalBody(mycologist);
+                    System.out.println(baseTecton.getId());
                 }
             }
         }
